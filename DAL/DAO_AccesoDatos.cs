@@ -6,11 +6,25 @@ namespace DAL
     {
         private readonly string _cadenaConexion;
 
+        // La eleccion se hace en tiempo de instalacion via variable de entorno
+        // CINEGEST_ENTORNO ("UAI" o "CASA"). Si no esta seteada, se usa CASA.
+        private const string CADENA_CASA =
+            @"Data Source=localhost\SQLEXPRESS;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+
+        private const string CADENA_UAI =
+            @"Data Source=.;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+
+
         public DAO_AccesoDatos()
         {
-            _cadenaConexion = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+            var entorno = Environment.GetEnvironmentVariable("CINEGEST_ENTORNO");
+            _cadenaConexion = entorno?.ToUpperInvariant() switch
+            {
+                "UAI" => CADENA_UAI,
+                "CASA" => CADENA_CASA,
+                _ => CADENA_CASA  // fallback si la variable no esta seteada
+            };
         }
-        // en la uai hay que cambiar la cadena el data source = localhost/SQLEXPRESS por "Data Source =." ;
 
         public SqlConnection ObtenerConexion()
         {
