@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DAL
 {
@@ -14,6 +15,10 @@ namespace DAL
         private const string CADENA_UAI =
             @"Data Source=.;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
+        private const string CADENA_SEBA =
+             @"Data Source = PC_SEBI\MSSQLSERVER01;Initial Catalog = CineGestDB; Integrated Security = True; Trust Server Certificate=True";
+
+
 
         public DAO_AccesoDatos()
         {
@@ -22,6 +27,7 @@ namespace DAL
             {
                 "UAI" => CADENA_UAI,
                 "CASA" => CADENA_CASA,
+                "SEBA" => CADENA_SEBA,
                 _ => CADENA_CASA  // fallback si la variable no esta seteada
             };
         }
