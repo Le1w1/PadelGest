@@ -197,7 +197,7 @@
   "Errores.CuentaInactiva": "The account is inactive. Contact the Administrator.",
   "Errores.CuentaBloqueada": "The account is locked. Contact the Administrator.",
   "Errores.CuentaBloqueadaIntentos": "The account was locked due to too many failed attempts.",
-  "Errores.SesionActivaExistente": "Valid credentials, but there is already an active session in the system.",
+  "Errores.SesionActivaExistente": "There is already an active session in the system.",
   "Errores.NoHaySesionParaReLogin": "There is no active session for Re-Login.",
   "Errores.NoHaySesionParaCerrar": "There is no active session to close.",
   "Errores.NoHaySesionActiva": "There is no active session.",

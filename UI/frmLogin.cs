@@ -169,57 +169,70 @@ namespace UI
             }
             catch (IntegridadComprometidaException ex)
             {
-                // Integridad rota: modo reparacion acotado. Solo un admin con permisos de respaldo puede entrar.
-               
-                //   1) Validar credenciales minimas.
-                //   2) Cargar los roles del usuario desde una base potencialmente corrupta. Este es el riesgo asumido de la Salida "modo reparacion". 
-                //   3) Si es admin: abrir frmRepararIntegridad como modal.
-                //   4) Si no es admin: informar y no dejar entrar.
-
-                // NO se toca SM aca. La sesion (si es que se termina iniciando) la maneja frmRepararIntegridad internamente cuando el admin apreta
-                // el boton de restaurar, y se descarta con el Application.Restart() al finalizar la reparacion.
-                
-                Usuario adminReparador = _usuarioBLL.ValidarCredencialesMinimo(email, contrasenia);
-                System.Collections.Generic.List<Rol> rolesAdmin =_rolBLL.ListarRolesDeUsuario(adminReparador.IdUsuario);
-                bool esAdmin = false;
-
-                foreach (Rol rol in rolesAdmin)
+                try
                 {
-                  if (rol != null && rol.TienePermiso("BAK_GESTIONAR"))
-                  {
-                    esAdmin = true;
-                    break;
-                  }
-                }
+                    // Integridad rota: modo reparacion acotado. Solo un admin con permisos de respaldo puede entrar.
 
-                if (!esAdmin)
+                    //   1) Validar credenciales minimas.
+                    //   2) Cargar los roles del usuario desde una base potencialmente corrupta. Este es el riesgo asumido de la Salida "modo reparacion". 
+                    //   3) Si es admin: abrir frmRepararIntegridad como modal.
+                    //   4) Si no es admin: informar y no dejar entrar.
+
+                    // NO se toca SM aca. La sesion (si es que se termina iniciando) la maneja frmRepararIntegridad internamente cuando el admin apreta
+                    // el boton de restaurar, y se descarta con el Application.Restart() al finalizar la reparacion.
+
+                    Usuario adminReparador = _usuarioBLL.ValidarCredencialesMinimo(email, contrasenia);
+                    System.Collections.Generic.List<Rol> rolesAdmin = _rolBLL.ListarRolesDeUsuario(adminReparador.IdUsuario);
+                    bool esAdmin = false;
+
+                    foreach (Rol rol in rolesAdmin)
+                    {
+                        if (rol != null && rol.TienePermiso("BAK_GESTIONAR"))
+                        {
+                            esAdmin = true;
+                            break;
+                        }
+                    }
+
+                    if (!esAdmin)
+                    {
+                        // El sistema queda inaccesible hasta que entre alguien con permisos.
+                        MessageBox.Show(t.Traducir("frmLogin.MsgIntegridadSinPermiso"), t.Traducir("frmLogin.LblSubtitulo"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        txtContrasenia.Clear();
+                        txtEmail.Focus();
+                        return;
+                    }
+
+                    // Es admin: abrir la pantalla de reparacion como modal.
+                    using (var formReparar = new frmRepararIntegridad(adminReparador, rolesAdmin, ex.Inconsistencias))
+                    {
+                        formReparar.ShowDialog(this);
+                    }
+
+                    // Si el admin reparo con exito, Application.Restart() ya se ejecuto y estas lineas no corren.
+                    txtContrasenia.Clear();
+                    txtEmail.Focus();
+
+                }
+                catch (Exception credencialesEx)
                 {
-                  // El sistema queda inaccesible hasta que entre alguien con permisos.
-                  MessageBox.Show(t.Traducir("frmLogin.MsgIntegridadSinPermiso"),t.Traducir("frmLogin.LblSubtitulo"),MessageBoxButtons.OK,MessageBoxIcon.Error);
-                  txtContrasenia.Clear();
-                  txtEmail.Focus();
-                  return;
+                    // Las credenciales que ingreso no son validas.
+                    // No damos pistas sobre si la corrupcion es real o si el usuario no existe:
+                    // mostramos el mensaje generico del intento.
+                    lblMensaje.Text = credencialesEx.Message;
+                    MessageBox.Show(credencialesEx.Message, t.Traducir("frmLogin.LblSubtitulo"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-
-                // Es admin: abrir la pantalla de reparacion como modal.
-                using (var formReparar = new frmRepararIntegridad(adminReparador, rolesAdmin, ex.Inconsistencias))
-                {
-                  formReparar.ShowDialog(this);
-                }
-
-                // Si el admin reparo con exito, Application.Restart() ya se ejecuto y estas lineas no corren.
+            }
+            catch (Exception ex)
+            {
+                // Captura excepciones del login normal (credenciales incorrectas, cuenta inactiva, bloqueada, etc.)
+                lblMensaje.Text = ex.Message;
+                MessageBox.Show(ex.Message, t.Traducir("frmLogin.LblSubtitulo"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtContrasenia.Clear();
                 txtEmail.Focus();
             }
-            catch (Exception credencialesEx)
-            {
-                // Las credenciales que ingreso no son validas.
-                // No damos pistas sobre si la corrupcion es real o si el usuario no existe:
-                // mostramos el mensaje generico del intento.
-                lblMensaje.Text = credencialesEx.Message;
-                MessageBox.Show(credencialesEx.Message,t.Traducir("frmLogin.LblSubtitulo"),MessageBoxButtons.OK,MessageBoxIcon.Warning);
-            }
         }
+        
        
         private void btnSalir_Click(object sender, EventArgs e)
         {

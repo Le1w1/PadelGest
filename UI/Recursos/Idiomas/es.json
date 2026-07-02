@@ -197,7 +197,7 @@
   "Errores.CuentaInactiva": "La cuenta se encuentra inactiva. Contacte al Administrador.",
   "Errores.CuentaBloqueada": "La cuenta se encuentra bloqueada. Contacte al Administrador.",
   "Errores.CuentaBloqueadaIntentos": "La cuenta fue bloqueada por superar la cantidad de intentos permitidos.",
-  "Errores.SesionActivaExistente": "Credenciales válidas, pero ya existe una sesión activa en el sistema.",
+  "Errores.SesionActivaExistente": "Ya existe una sesión activa en el sistema.",
   "Errores.NoHaySesionParaReLogin": "No hay una sesión activa para realizar Re-Login.",
   "Errores.NoHaySesionParaCerrar": "No hay una sesión activa para cerrar.",
   "Errores.NoHaySesionActiva": "No hay una sesión activa.",
