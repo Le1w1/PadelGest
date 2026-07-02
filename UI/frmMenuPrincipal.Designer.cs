@@ -41,6 +41,7 @@
             usuariosToolStripMenuItem = new ToolStripMenuItem();
             bitacoraEventosToolStripMenuItem = new ToolStripMenuItem();
             gestionarPerfilToolStripMenuItem = new ToolStripMenuItem();
+            gestionDeRespaldoToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             lblUsuarioSesion = new ToolStripStatusLabel();
             lblEstadoSesion = new ToolStripStatusLabel();
@@ -48,7 +49,6 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             lblDescripcionInicio = new Label();
             lblTituloInicio = new Label();
-            gestionDeRespaldoToolStripMenuItem = new ToolStripMenuItem();
             menuPrincipal.SuspendLayout();
             statusStrip1.SuspendLayout();
             pnlInicio.SuspendLayout();
@@ -147,6 +147,13 @@
             gestionarPerfilToolStripMenuItem.Text = "Gestion de Roles y Familias";
             gestionarPerfilToolStripMenuItem.Click += gestionarPerfilToolStripMenuItem_Click;
             // 
+            // gestionDeRespaldoToolStripMenuItem
+            // 
+            gestionDeRespaldoToolStripMenuItem.Name = "gestionDeRespaldoToolStripMenuItem";
+            gestionDeRespaldoToolStripMenuItem.Size = new Size(219, 22);
+            gestionDeRespaldoToolStripMenuItem.Text = "Gestion de Respaldo";
+            gestionDeRespaldoToolStripMenuItem.Click += gestionDeRespaldoToolStripMenuItem_Click;
+            // 
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(20, 20);
@@ -223,18 +230,12 @@
             lblTituloInicio.Text = "Bienvenido a Cinegest";
             lblTituloInicio.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // gestionDeRespaldoToolStripMenuItem
-            // 
-            gestionDeRespaldoToolStripMenuItem.Name = "gestionDeRespaldoToolStripMenuItem";
-            gestionDeRespaldoToolStripMenuItem.Size = new Size(219, 22);
-            gestionDeRespaldoToolStripMenuItem.Text = "Gestion de Respaldo";
-            gestionDeRespaldoToolStripMenuItem.Click += gestionDeRespaldoToolStripMenuItem_Click;
-            // 
             // frmMenuPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            ControlBox = false;
             Controls.Add(pnlInicio);
             Controls.Add(statusStrip1);
             Controls.Add(menuPrincipal);
