@@ -8,8 +8,8 @@ namespace DAL
         private readonly string _cadenaConexion;
 
         // La eleccion se hace en tiempo de instalacion via variable de entorno
-        // CINEGEST_ENTORNO ("UAI" o "CASA"). Si no esta seteada, se usa CASA.
-        private const string CADENA_CASA =
+        // CINEGEST_ENTORNO ("UAI" "SEBA" o "LEO").
+        private const string CADENA_LEO =
          @"Data Source=localhost\SQLEXPRESS;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
         private const string CADENA_UAI =
@@ -26,7 +26,7 @@ namespace DAL
             _cadenaConexion = entorno?.ToUpperInvariant() switch
             {
                 "UAI" => CADENA_UAI,
-                "CASA" => CADENA_CASA,
+                "LEO" => CADENA_LEO,
                 "SEBA" => CADENA_SEBA,
                 _ => throw new InvalidOperationException($"Variable de entorno CINEGEST_ENTORNO no definida o inválida. Valor leído: '{entorno ?? "NULL"}'. Reinstale la aplicación o contacte al administrador.") // fallback si la variable no esta seteada
             };
