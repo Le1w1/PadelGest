@@ -10,13 +10,13 @@ namespace DAL
         // La eleccion se hace en tiempo de instalacion via variable de entorno
         // CINEGEST_ENTORNO ("UAI" o "CASA"). Si no esta seteada, se usa CASA.
         private const string CADENA_CASA =
-            @"Data Source=localhost\SQLEXPRESS;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+         @"Data Source=localhost\SQLEXPRESS;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
         private const string CADENA_UAI =
-            @"Data Source=.;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+         @"Data Source=.;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
         private const string CADENA_SEBA =
-             @"Data Source = PC_SEBI\MSSQLSERVER01;Initial Catalog = CineGestDB; Integrated Security = True; Trust Server Certificate=True";
+         @"Data Source = PC_SEBI\MSSQLSERVER01;Initial Catalog = CineGestDB; Integrated Security = True; Trust Server Certificate=True";
 
 
 
@@ -28,7 +28,7 @@ namespace DAL
                 "UAI" => CADENA_UAI,
                 "CASA" => CADENA_CASA,
                 "SEBA" => CADENA_SEBA,
-                _ => CADENA_CASA  // fallback si la variable no esta seteada
+                _ => throw new InvalidOperationException($"Variable de entorno CINEGEST_ENTORNO no definida o inválida. Valor leído: '{entorno ?? "NULL"}'. Reinstale la aplicación o contacte al administrador.") // fallback si la variable no esta seteada
             };
         }
 
