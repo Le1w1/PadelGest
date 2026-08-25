@@ -1,7 +1,7 @@
 [LEEME.md](https://github.com/user-attachments/files/29397174/LEEME.md)
-# AirPadel
+# PadelGest
 
-Sistema integral de gestión para un cine de atención presencial.
+Sistema integral de gestión para un club de padel.
 
 ---
 
