@@ -40,6 +40,7 @@
             usuariosToolStripMenuItem = new ToolStripMenuItem();
             bitacoraEventosToolStripMenuItem = new ToolStripMenuItem();
             gestionarPerfilToolStripMenuItem = new ToolStripMenuItem();
+            gestionDeRespaldoToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             lblUsuarioSesion = new ToolStripStatusLabel();
             lblEstadoSesion = new ToolStripStatusLabel();
@@ -115,7 +116,7 @@
             // 
             // mnuAdministrador
             // 
-            mnuAdministrador.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, bitacoraEventosToolStripMenuItem, gestionarPerfilToolStripMenuItem });
+            mnuAdministrador.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, bitacoraEventosToolStripMenuItem, gestionarPerfilToolStripMenuItem, gestionDeRespaldoToolStripMenuItem });
             mnuAdministrador.Name = "mnuAdministrador";
             mnuAdministrador.Size = new Size(95, 20);
             mnuAdministrador.Text = "Administrador";
@@ -140,6 +141,13 @@
             gestionarPerfilToolStripMenuItem.Size = new Size(219, 22);
             gestionarPerfilToolStripMenuItem.Text = "Gestion de Roles y Familias";
             gestionarPerfilToolStripMenuItem.Click += gestionarPerfilToolStripMenuItem_Click;
+            // 
+            // gestionDeRespaldoToolStripMenuItem
+            // 
+            gestionDeRespaldoToolStripMenuItem.Name = "gestionDeRespaldoToolStripMenuItem";
+            gestionDeRespaldoToolStripMenuItem.Size = new Size(219, 22);
+            gestionDeRespaldoToolStripMenuItem.Text = "Gestion de Respaldo";
+            gestionDeRespaldoToolStripMenuItem.Click += gestionDeRespaldoToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
@@ -234,6 +242,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            ControlBox = false;
             Controls.Add(pnlInicio);
             Controls.Add(statusStrip1);
             Controls.Add(menuPrincipal);

@@ -34,7 +34,7 @@ namespace UI
 
         /// Recorre los items del menu y los habilita/deshabilita segun los permisos del usuario logueado. 
         /// Excepcion: "Cerrar Sesion" SIEMPRE habilitado por seguridad operativa, sin importar los permisos del rol.
-        
+
         private void AplicarPermisos()
         {
             var sm = SM.Instancia;
@@ -46,22 +46,22 @@ namespace UI
             cerrarSesionToolStripMenuItem.Enabled = true; // siempre habilitado
 
             // --- Menu Boleteria ---
-            empleadoDeBoleteríaToolStripMenuItem.Enabled = sm.TienePermiso("BOL_VENDER")|| sm.TienePermiso("BOL_DEVOLVER")|| sm.TienePermiso("BOL_CONSULTAR");
+            empleadoDeBoleteríaToolStripMenuItem.Enabled = sm.TienePermiso("BOL_VENDER") || sm.TienePermiso("BOL_DEVOLVER") || sm.TienePermiso("BOL_CONSULTAR");
 
             // --- Menu Cartelera ---
-            gerenciaToolStripMenuItem.Enabled =sm.TienePermiso("CART_VER")|| sm.TienePermiso("CART_CREAR_FUNCION")|| sm.TienePermiso("CART_MODIFICAR_FUNCION")|| sm.TienePermiso("CART_ELIMINAR_FUNCION")|| sm.TienePermiso("CART_GESTIONAR_PELICULAS");
+            gerenciaToolStripMenuItem.Enabled = sm.TienePermiso("CART_VER") || sm.TienePermiso("CART_CREAR_FUNCION") || sm.TienePermiso("CART_MODIFICAR_FUNCION") || sm.TienePermiso("CART_ELIMINAR_FUNCION") || sm.TienePermiso("CART_GESTIONAR_PELICULAS");
 
            
 
             // --- Menu Administrador ---
-            usuariosToolStripMenuItem.Enabled =sm.TienePermiso("USR_LISTAR")|| sm.TienePermiso("USR_CREAR")|| sm.TienePermiso("USR_MODIFICAR");
+            usuariosToolStripMenuItem.Enabled = sm.TienePermiso("USR_LISTAR") || sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
 
             bitacoraEventosToolStripMenuItem.Enabled = sm.TienePermiso("BIT_AUDITAR");
 
-            gestionarPerfilToolStripMenuItem.Enabled =sm.TienePermiso("ROL_GESTIONAR")|| sm.TienePermiso("FAM_GESTIONAR");
+            gestionarPerfilToolStripMenuItem.Enabled = sm.TienePermiso("ROL_GESTIONAR") || sm.TienePermiso("FAM_GESTIONAR");
 
             // Menus padre: deshabilitados si TODOS sus hijos estan deshabilitados 
-            mnuAdministrador.Enabled = usuariosToolStripMenuItem.Enabled|| bitacoraEventosToolStripMenuItem.Enabled|| gestionarPerfilToolStripMenuItem.Enabled;
+            mnuAdministrador.Enabled = usuariosToolStripMenuItem.Enabled || bitacoraEventosToolStripMenuItem.Enabled || gestionarPerfilToolStripMenuItem.Enabled;
 
         }
 
@@ -124,7 +124,7 @@ namespace UI
         {
             var t = Traductor.Instancia;
 
-            DialogResult respuesta = MessageBox.Show(t.Traducir("frmMenuPrincipal.ConfirmarCerrarSesion"),t.Traducir("frmMenuPrincipal.CerrarSesionTitulo"),MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            DialogResult respuesta = MessageBox.Show(t.Traducir("frmMenuPrincipal.ConfirmarCerrarSesion"), t.Traducir("frmMenuPrincipal.CerrarSesionTitulo"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta == DialogResult.Yes)
             {
@@ -176,5 +176,10 @@ namespace UI
             formGestionar.ShowDialog();
         }
 
+        private void gestionDeRespaldoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmGestionarRespaldo formGestionarRespaldo = new frmGestionarRespaldo();
+            formGestionarRespaldo.ShowDialog();
+        }
     }
 }

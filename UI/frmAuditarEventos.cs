@@ -164,6 +164,7 @@ namespace UI
             cmbModulo.Items.Add("Usuario");
             cmbModulo.Items.Add("Administrador");
             cmbModulo.Items.Add("Idioma");
+            cmbModulo.Items.Add("Respaldo");
             cmbModulo.SelectedIndex = 0;
 
             cmbAccion.Items.Clear();
@@ -181,6 +182,8 @@ namespace UI
             cmbAccion.Items.Add("Cambio de idioma");
             cmbAccion.Items.Add("Persistir idioma");
             cmbAccion.Items.Add("Imprimir PDF");
+            cmbAccion.Items.Add("Crear Backup");
+            cmbAccion.Items.Add("Restaurar Backup");
             cmbAccion.SelectedIndex = 0;
 
             cmbCriticidad.Items.Clear();
