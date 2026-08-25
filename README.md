@@ -9,7 +9,7 @@ Sistema integral de gestión para un club de padel.
 
 | Dato | Valor |
 |---|---|
-| **Nombre del sistema** | AirPadel |
+| **Nombre del sistema** | PadelGest |
 | **Materia** | Trabajo de Diploma |
 | **Comisión** | 3-B |
 | **Turno** | Mañana |
