@@ -1,5 +1,5 @@
 [LEEME.md](https://github.com/user-attachments/files/29397174/LEEME.md)
-# CineGest
+# AirPadel
 
 Sistema integral de gestión para un cine de atención presencial.
 
@@ -9,9 +9,9 @@ Sistema integral de gestión para un cine de atención presencial.
 
 | Dato | Valor |
 |---|---|
-| **Nombre del sistema** | CineGest |
-| **Materia** | Ingeniería de Software |
-| **Comisión** | 3-A |
+| **Nombre del sistema** | AirPadel |
+| **Materia** | Trabajo de Diploma |
+| **Comisión** | 3-B |
 | **Turno** | Mañana |
 | **Sede** | Centro |
 | **Año de cursada** | 2026 |
@@ -20,12 +20,10 @@ Sistema integral de gestión para un cine de atención presencial.
 ### Integrantes
 
 - Rodríguez Leonel Jesús
-- Riccio Sebastián Gael
-
+- 
 ### Docentes
 
-- Pereyra Jorge Agustín
-- Silvestro Lucas Agustín
+- Leonel Jimenez Gamboa
 
 ---
 
@@ -52,7 +50,6 @@ El sistema sigue una **arquitectura en cuatro capas** sin uso de frameworks de p
 | Acceso a Datos | `DAL` | Operaciones SQL y transacciones |
 | Servicios | `Servicios` | Entidades del dominio + servicios transversales (SM, Traductor, Cripto, IObservadorIdioma) |
 
-**Nota**: En este proyecto **NO se utiliza una capa BE separada**. Las entidades del dominio residen en la capa `Servicios` junto con los servicios compartidos.
 
 ### Patrones de diseño aplicados
 
@@ -73,12 +70,6 @@ El sistema sigue una **arquitectura en cuatro capas** sin uso de frameworks de p
 | **Cambio de Idioma** | Patrón Observer. Soporte para Español e Inglés. Persistencia del idioma del usuario al cerrar sesión |
 | **Bitácora y Auditoría** | Registro automático de eventos sensibles. Consulta filtrada por usuario, fecha, módulo, criticidad y resultado. Exportación a PDF |
 
-### Módulos planificados para próximas entregas
-
-- Boletería (venta de entradas y productos de concesionaria)
-- Cartelera (gestión de películas, funciones y salas)
-- Gerencia (consultas comerciales y de ocupación)
-- Dígitos Verificadores (control de integridad de datos)
 
 ---
 
