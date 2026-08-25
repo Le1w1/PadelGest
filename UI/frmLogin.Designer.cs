@@ -52,7 +52,7 @@
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(136, 37);
             lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "CineGest";
+            lblTitulo.Text = "PadelGest";
             //
             // lblSubtitulo
             //
@@ -192,7 +192,7 @@
             MaximizeBox = false;
             Name = "frmLogin";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "CineGest - Incio de Sesion";
+            Text = "PadelGest - Incio de Sesion";
             ((System.ComponentModel.ISupportInitialize)errorProviderLogin).EndInit();
             ResumeLayout(false);
             PerformLayout();

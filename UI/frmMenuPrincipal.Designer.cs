@@ -219,7 +219,7 @@
             lblTituloInicio.Name = "lblTituloInicio";
             lblTituloInicio.Size = new Size(794, 60);
             lblTituloInicio.TabIndex = 0;
-            lblTituloInicio.Text = "Bienvenido a Cinegest";
+            lblTituloInicio.Text = "Bienvenido a Padelgest";
             lblTituloInicio.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frmMenuPrincipal
@@ -234,7 +234,7 @@
             MainMenuStrip = menuPrincipal;
             Name = "frmMenuPrincipal";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "CineGest - Menú Principal";
+            Text = "PadelGest - Menú Principal";
             WindowState = FormWindowState.Maximized;
             FormClosed += frmMenuPrincipal_FormClosed;
             Load += frmMenuPrincipal_Load;

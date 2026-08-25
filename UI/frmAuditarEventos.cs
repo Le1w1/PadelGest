@@ -242,7 +242,7 @@ namespace UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "CineGest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "PadelGest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -416,7 +416,7 @@ namespace UI
                 ITextFont fuenteCabecera = new ITextFont(baseFont, 8, ITextFont.BOLD);
                 ITextFont fuenteCelda = new ITextFont(baseFont, 8, ITextFont.NORMAL);
 
-                ITextParagraph titulo = new ITextParagraph("CineGest - Auditoría de Eventos", fuenteTitulo);
+                ITextParagraph titulo = new ITextParagraph("PadelGest - Auditoría de Eventos", fuenteTitulo);
                 titulo.Alignment = ITextElement.ALIGN_CENTER;
                 titulo.SpacingAfter = 10;
                 documento.Add(titulo);

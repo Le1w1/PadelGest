@@ -63,7 +63,7 @@ namespace UI
             {
                 _usuarioBLL.CambiarClave(txtClaveActual.Text, txtNuevaClave.Text, txtConfirmarClave.Text);
 
-                MessageBox.Show(t.Traducir("frmCambiarClave.MsgExito"),"CineGest",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show(t.Traducir("frmCambiarClave.MsgExito"),"PadelGest",MessageBoxButtons.OK,MessageBoxIcon.Information);
 
                 this.Close();
             }

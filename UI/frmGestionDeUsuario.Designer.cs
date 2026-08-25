@@ -373,7 +373,7 @@
             Name = "frmGestionDeUsuario";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
-            Text = "CineGest - Gestion de Usuarios";
+            Text = "PadelGest - Gestion de Usuarios";
             gbFiltros.ResumeLayout(false);
             gbFiltros.PerformLayout();
             gbDatosUsuario.ResumeLayout(false);

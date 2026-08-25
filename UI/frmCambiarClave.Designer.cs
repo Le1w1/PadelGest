@@ -189,7 +189,7 @@
             MinimizeBox = false;
             Name = "frmCambiarClave";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "CineGest - Cambiar Clave";
+            Text = "PadelGest - Cambiar Clave";
             ((System.ComponentModel.ISupportInitialize)errorProviderCambiarClave).EndInit();
             ResumeLayout(false);
             PerformLayout();

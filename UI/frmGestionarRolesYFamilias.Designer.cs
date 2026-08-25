@@ -265,7 +265,7 @@
             MinimizeBox = false;
             Name = "frmGestionarRolesYFamilias";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "CineGest - Gestión de Roles y Familias";
+            Text = "PadelGest - Gestión de Roles y Familias";
             gbDisponibles.ResumeLayout(false);
             gbComposicion.ResumeLayout(false);
             gbDatos.ResumeLayout(false);

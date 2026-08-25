@@ -1,5 +1,5 @@
 {
-  "frmMenuPrincipal.Title": "CineGest - Menú Principal",
+  "frmMenuPrincipal.Title": "PadelGest - Menú Principal",
   "frmMenuPrincipal.MenuUsuario": "Usuario",
   "frmMenuPrincipal.MenuReLogin": "Re-Login",
   "frmMenuPrincipal.MenuCambiarClave": "Cambiar Clave",
@@ -12,7 +12,7 @@
   "frmMenuPrincipal.MenuUsuarios": "Usuarios",
   "frmMenuPrincipal.MenuBitacora": "Bitácora de Eventos",
   "frmMenuPrincipal.MenuGestionPerfiles": "Gestión de Roles y Familias",
-  "frmMenuPrincipal.Titulo": "Bienvenido a CineGest",
+  "frmMenuPrincipal.Titulo": "Bienvenido a PadelGest",
   "frmMenuPrincipal.Descripcion": "Seleccione un módulo desde el menú superior para comenzar.",
   "frmMenuPrincipal.UsuarioLabel": "Usuario:",
   "frmMenuPrincipal.UsuarioLabelSinSesion": "Usuario: Sin sesión",
@@ -28,8 +28,8 @@
   "frmCambiarIdioma.MsgCambioExitoso": "Idioma cambiado correctamente.",
   "frmCambiarIdioma.MsgSeleccioneIdioma": "Debe seleccionar un idioma.",
 
-  "frmLogin.Title": "CineGest - Inicio de Sesión",
-  "frmLogin.LblTitulo": "CineGest",
+  "frmLogin.Title": "PadelGest - Inicio de Sesión",
+  "frmLogin.LblTitulo": "PadelGest",
   "frmLogin.LblSubtitulo": "Inicio de Sesión",
   "frmLogin.LblEmail": "Email",
   "frmLogin.LblContrasenia": "Contraseña",
@@ -45,7 +45,7 @@
   "frmLogin.TitleCambioClave": "Cambio de contraseña recomendado",
   "frmLogin.MsgCambioClaveRecomendado": "Está utilizando una contraseña inicial. Se recomienda cambiarla por seguridad.\n\n¿Desea cambiarla ahora?",
 
-  "frmSesion.Title": "CineGest - Sesión",
+  "frmSesion.Title": "PadelGest - Sesión",
   "frmSesion.LblTitulo": "Sesión",
   "frmSesion.LblOpciones": "Opciones de la sesión Actual",
   "frmSesion.LblEmail": "Email:",
@@ -58,7 +58,7 @@
   "frmSesion.CerrarSesionTitulo": "Cerrar sesión",
   "frmSesion.MsgReLoginExitoso": "Re-Login realizado correctamente.",
 
-  "frmCambiarClave.Title": "CineGest - Cambiar Clave",
+  "frmCambiarClave.Title": "PadelGest - Cambiar Clave",
   "frmCambiarClave.LblTitulo": "Cambiar Clave",
   "frmCambiarClave.LblClaveActual": "Clave Actual:",
   "frmCambiarClave.LblNuevaClave": "Nueva Clave",
@@ -74,7 +74,7 @@
   "frmCambiarClave.MsgNoCoinciden": "La nueva clave y la confirmación no coinciden.",
   "frmCambiarClave.MsgRevise": "Revise los datos ingresados.",
 
-  "frmAdministrador.Title": "CineGest - Gestión de Usuarios",
+  "frmAdministrador.Title": "PadelGest - Gestión de Usuarios",
   "frmAdministrador.LblTitulo": "GESTIÓN DE USUARIOS",
   "frmAdministrador.GbFiltros": "Filtros de Usuarios",
   "frmAdministrador.RbActivos": "Activos",
@@ -207,7 +207,7 @@
   "Errores.RBAC.FamiliaEnUso": "La Familia no se puede eliminar porque está siendo usada por uno o más Roles u otras Familias. Quitala de ellos primero.",
   "Errores.RBAC.RolEnUso": "El Rol no se puede eliminar porque está asignado a uno o más Usuarios. Cambiá el Rol de esos usuarios primero.",
 
-  "frmGestionarRolesYFamilias.Title": "CineGest - Gestión de Roles y Familias",
+  "frmGestionarRolesYFamilias.Title": "PadelGest - Gestión de Roles y Familias",
   "frmGestionarRolesYFamilias.LblTitulo": "Gestión de Roles y Familias",
   "frmGestionarRolesYFamilias.LblRolFamilia": "Rol - Familia:",
   "frmGestionarRolesYFamilias.GbDisponibles": "Disponibles (Permisos y Familias)",

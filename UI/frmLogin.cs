@@ -109,7 +109,7 @@ namespace UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "CineGest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "PadelGest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

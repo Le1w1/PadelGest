@@ -1,5 +1,5 @@
 {
-  "frmMenuPrincipal.Title": "CineGest - Main Menu",
+  "frmMenuPrincipal.Title": "PadelGest - Main Menu",
   "frmMenuPrincipal.MenuUsuario": "User",
   "frmMenuPrincipal.MenuReLogin": "Re-Login",
   "frmMenuPrincipal.MenuCambiarClave": "Change Password",
@@ -12,7 +12,7 @@
   "frmMenuPrincipal.MenuUsuarios": "Users",
   "frmMenuPrincipal.MenuBitacora": "Event Log",
   "frmMenuPrincipal.MenuGestionPerfiles": "Roles and Families Management",
-  "frmMenuPrincipal.Titulo": "Welcome to CineGest",
+  "frmMenuPrincipal.Titulo": "Welcome to PadelGest",
   "frmMenuPrincipal.Descripcion": "Select a module from the top menu to begin.",
   "frmMenuPrincipal.UsuarioLabel": "User:",
   "frmMenuPrincipal.UsuarioLabelSinSesion": "User: No session",
@@ -28,8 +28,8 @@
   "frmCambiarIdioma.MsgCambioExitoso": "Language changed successfully.",
   "frmCambiarIdioma.MsgSeleccioneIdioma": "You must select a language.",
 
-  "frmLogin.Title": "CineGest - Login",
-  "frmLogin.LblTitulo": "CineGest",
+  "frmLogin.Title": "PadelGest - Login",
+  "frmLogin.LblTitulo": "PadelGest",
   "frmLogin.LblSubtitulo": "Login",
   "frmLogin.LblEmail": "Email",
   "frmLogin.LblContrasenia": "Password",
@@ -45,7 +45,7 @@
   "frmLogin.TitleCambioClave": "Password change recommended",
   "frmLogin.MsgCambioClaveRecomendado": "You are using an initial password. It is recommended to change it for security.\n\nDo you want to change it now?",
 
-  "frmSesion.Title": "CineGest - Session",
+  "frmSesion.Title": "PadelGest - Session",
   "frmSesion.LblTitulo": "Session",
   "frmSesion.LblOpciones": "Current session options",
   "frmSesion.LblEmail": "Email:",
@@ -58,7 +58,7 @@
   "frmSesion.CerrarSesionTitulo": "Logout",
   "frmSesion.MsgReLoginExitoso": "Re-Login completed successfully.",
 
-  "frmCambiarClave.Title": "CineGest - Change Password",
+  "frmCambiarClave.Title": "PadelGest - Change Password",
   "frmCambiarClave.LblTitulo": "Change Password",
   "frmCambiarClave.LblClaveActual": "Current Password:",
   "frmCambiarClave.LblNuevaClave": "New Password",
@@ -74,7 +74,7 @@
   "frmCambiarClave.MsgNoCoinciden": "The new password and confirmation do not match.",
   "frmCambiarClave.MsgRevise": "Please check the entered data.",
 
-  "frmAdministrador.Title": "CineGest - User Management",
+  "frmAdministrador.Title": "PadelGest - User Management",
   "frmAdministrador.LblTitulo": "USER MANAGEMENT",
   "frmAdministrador.GbFiltros": "User Filters",
   "frmAdministrador.RbActivos": "Active",
@@ -207,7 +207,7 @@
   "Errores.RBAC.FamiliaEnUso": "The Family cannot be deleted because it is being used by one or more Roles or other Families. Remove those references first.",
   "Errores.RBAC.RolEnUso": "The Role cannot be deleted because it is assigned to one or more Users. Change the Role of those users first.",
 
-  "frmGestionarRolesYFamilias.Title": "CineGest - Manage Roles and Families",
+  "frmGestionarRolesYFamilias.Title": "PadelGest - Manage Roles and Families",
   "frmGestionarRolesYFamilias.LblTitulo": "Manage Roles and Families",
   "frmGestionarRolesYFamilias.LblRolFamilia": "Role - Family:",
   "frmGestionarRolesYFamilias.GbDisponibles": "Available (Permissions and Families)",
