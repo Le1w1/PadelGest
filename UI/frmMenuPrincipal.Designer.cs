@@ -36,7 +36,6 @@
             cerrarSesionToolStripMenuItem = new ToolStripMenuItem();
             empleadoDeBoleteríaToolStripMenuItem = new ToolStripMenuItem();
             gerenciaToolStripMenuItem = new ToolStripMenuItem();
-            gerenciaToolStripMenuItem1 = new ToolStripMenuItem();
             mnuAdministrador = new ToolStripMenuItem();
             usuariosToolStripMenuItem = new ToolStripMenuItem();
             bitacoraEventosToolStripMenuItem = new ToolStripMenuItem();
@@ -48,6 +47,8 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             lblDescripcionInicio = new Label();
             lblTituloInicio = new Label();
+            encargadoDeCanchasToolStripMenuItem = new ToolStripMenuItem();
+            dueñoToolStripMenuItem = new ToolStripMenuItem();
             menuPrincipal.SuspendLayout();
             statusStrip1.SuspendLayout();
             pnlInicio.SuspendLayout();
@@ -58,7 +59,7 @@
             // 
             menuPrincipal.BackColor = Color.LightSkyBlue;
             menuPrincipal.ImageScalingSize = new Size(20, 20);
-            menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, empleadoDeBoleteríaToolStripMenuItem, gerenciaToolStripMenuItem, gerenciaToolStripMenuItem1, mnuAdministrador });
+            menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, empleadoDeBoleteríaToolStripMenuItem, gerenciaToolStripMenuItem, encargadoDeCanchasToolStripMenuItem, dueñoToolStripMenuItem, mnuAdministrador });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
             menuPrincipal.Size = new Size(800, 24);
@@ -75,48 +76,42 @@
             // reLoginToolStripMenuItem
             // 
             reLoginToolStripMenuItem.Name = "reLoginToolStripMenuItem";
-            reLoginToolStripMenuItem.Size = new Size(159, 22);
+            reLoginToolStripMenuItem.Size = new Size(180, 22);
             reLoginToolStripMenuItem.Text = "Re-Login";
             reLoginToolStripMenuItem.Click += reLoginToolStripMenuItem_Click;
             // 
             // cambiarClaveToolStripMenuItem
             // 
             cambiarClaveToolStripMenuItem.Name = "cambiarClaveToolStripMenuItem";
-            cambiarClaveToolStripMenuItem.Size = new Size(159, 22);
+            cambiarClaveToolStripMenuItem.Size = new Size(180, 22);
             cambiarClaveToolStripMenuItem.Text = "Cambiar Clave";
             cambiarClaveToolStripMenuItem.Click += cambiarClaveToolStripMenuItem_Click;
             // 
             // cambiarIdiomaToolStripMenuItem
             // 
             cambiarIdiomaToolStripMenuItem.Name = "cambiarIdiomaToolStripMenuItem";
-            cambiarIdiomaToolStripMenuItem.Size = new Size(159, 22);
+            cambiarIdiomaToolStripMenuItem.Size = new Size(180, 22);
             cambiarIdiomaToolStripMenuItem.Text = "Cambiar Idioma";
             cambiarIdiomaToolStripMenuItem.Click += cambiarIdiomaToolStripMenuItem_Click;
             // 
             // cerrarSesionToolStripMenuItem
             // 
             cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
-            cerrarSesionToolStripMenuItem.Size = new Size(159, 22);
+            cerrarSesionToolStripMenuItem.Size = new Size(180, 22);
             cerrarSesionToolStripMenuItem.Text = "Cerrar Sesion";
             cerrarSesionToolStripMenuItem.Click += cerrarSesionToolStripMenuItem_Click;
             // 
             // empleadoDeBoleteríaToolStripMenuItem
             // 
             empleadoDeBoleteríaToolStripMenuItem.Name = "empleadoDeBoleteríaToolStripMenuItem";
-            empleadoDeBoleteríaToolStripMenuItem.Size = new Size(65, 20);
-            empleadoDeBoleteríaToolStripMenuItem.Text = "Boletería";
+            empleadoDeBoleteríaToolStripMenuItem.Size = new Size(69, 20);
+            empleadoDeBoleteríaToolStripMenuItem.Text = "Vendedor";
             // 
             // gerenciaToolStripMenuItem
             // 
             gerenciaToolStripMenuItem.Name = "gerenciaToolStripMenuItem";
-            gerenciaToolStripMenuItem.Size = new Size(66, 20);
-            gerenciaToolStripMenuItem.Text = "Cartelera";
-            // 
-            // gerenciaToolStripMenuItem1
-            // 
-            gerenciaToolStripMenuItem1.Name = "gerenciaToolStripMenuItem1";
-            gerenciaToolStripMenuItem1.Size = new Size(65, 20);
-            gerenciaToolStripMenuItem1.Text = "Gerencia";
+            gerenciaToolStripMenuItem.Size = new Size(92, 20);
+            gerenciaToolStripMenuItem.Text = "Recepcionista";
             // 
             // mnuAdministrador
             // 
@@ -222,6 +217,18 @@
             lblTituloInicio.Text = "Bienvenido a Padelgest";
             lblTituloInicio.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // encargadoDeCanchasToolStripMenuItem
+            // 
+            encargadoDeCanchasToolStripMenuItem.Name = "encargadoDeCanchasToolStripMenuItem";
+            encargadoDeCanchasToolStripMenuItem.Size = new Size(139, 20);
+            encargadoDeCanchasToolStripMenuItem.Text = "Encargado de Canchas";
+            // 
+            // dueñoToolStripMenuItem
+            // 
+            dueñoToolStripMenuItem.Name = "dueñoToolStripMenuItem";
+            dueñoToolStripMenuItem.Size = new Size(54, 20);
+            dueñoToolStripMenuItem.Text = "Dueño";
+            // 
             // frmMenuPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -254,7 +261,6 @@
         private ToolStripMenuItem mnuSesion;
         private ToolStripMenuItem empleadoDeBoleteríaToolStripMenuItem;
         private ToolStripMenuItem gerenciaToolStripMenuItem;
-        private ToolStripMenuItem gerenciaToolStripMenuItem1;
         private ToolStripMenuItem mnuAdministrador;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblUsuarioSesion;
@@ -270,5 +276,7 @@
         private ToolStripMenuItem usuariosToolStripMenuItem;
         private ToolStripMenuItem bitacoraEventosToolStripMenuItem;
         private ToolStripMenuItem gestionarPerfilToolStripMenuItem;
+        private ToolStripMenuItem encargadoDeCanchasToolStripMenuItem;
+        private ToolStripMenuItem dueñoToolStripMenuItem;
     }
 }

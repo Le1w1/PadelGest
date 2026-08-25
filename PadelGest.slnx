@@ -1,6 +1,6 @@
 <Solution>
-  <Folder Name="/Scripts/">
-    <File Path="CineGestDB.sql" />
+  <Folder Name="/Script/">
+    <File Path="Script/PadelGestDB.sql" />
   </Folder>
   <Project Path="BE/BE.csproj" Id="e7f82989-8908-4919-9472-14b6ce9d9b1a" />
   <Project Path="BLL/BLL.csproj" Id="0f7ae0c2-3063-493f-bb4e-fa2760d79694">

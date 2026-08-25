@@ -51,8 +51,7 @@ namespace UI
             // --- Menu Cartelera ---
             gerenciaToolStripMenuItem.Enabled =sm.TienePermiso("CART_VER")|| sm.TienePermiso("CART_CREAR_FUNCION")|| sm.TienePermiso("CART_MODIFICAR_FUNCION")|| sm.TienePermiso("CART_ELIMINAR_FUNCION")|| sm.TienePermiso("CART_GESTIONAR_PELICULAS");
 
-            // --- Menu Gerencia ---
-            gerenciaToolStripMenuItem1.Enabled =sm.TienePermiso("GER_REPORTES")|| sm.TienePermiso("GER_DASHBOARD")|| sm.TienePermiso("GER_EXPORTAR_DATOS");
+           
 
             // --- Menu Administrador ---
             usuariosToolStripMenuItem.Enabled =sm.TienePermiso("USR_LISTAR")|| sm.TienePermiso("USR_CREAR")|| sm.TienePermiso("USR_MODIFICAR");
@@ -88,7 +87,6 @@ namespace UI
             // Menus principales
             empleadoDeBoleteríaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuBoleteria");
             gerenciaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuCartelera");
-            gerenciaToolStripMenuItem1.Text = t.Traducir("frmMenuPrincipal.MenuGerencia");
 
             // Menu Administrador
             mnuAdministrador.Text = t.Traducir("frmMenuPrincipal.MenuAdministrador");
