@@ -95,12 +95,12 @@ namespace BLL
 
        
         /// Genera un nombre de archivo con timestamp ordenable alfabeticamente.
-        /// Formato: CineGestDB_Backup_yyyyMMdd_HHmmss.bak
-        /// Ej: CineGestDB_Backup_20260701_143045.bak
+        /// Formato: PadelGestDB_Backup_yyyyMMdd_HHmmss.bak
+        /// Ej: PadelGestDB_Backup_20260701_143045.bak
         
         private string GenerarNombreArchivoBackup(DateTime fechaHora)
         {
-            return $"CineGestDB_Backup_{fechaHora:yyyyMMdd_HHmmss}.bak";
+            return $"PadelGestDB_Backup_{fechaHora:yyyyMMdd_HHmmss}.bak";
         }
 
         private void ValidarPermiso()

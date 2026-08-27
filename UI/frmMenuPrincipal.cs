@@ -49,9 +49,8 @@ namespace UI
             empleadoDeBoleteríaToolStripMenuItem.Enabled = sm.TienePermiso("BOL_VENDER") || sm.TienePermiso("BOL_DEVOLVER") || sm.TienePermiso("BOL_CONSULTAR");
 
             // --- Menu Cartelera ---
-            gerenciaToolStripMenuItem.Enabled = sm.TienePermiso("CART_VER") || sm.TienePermiso("CART_CREAR_FUNCION") || sm.TienePermiso("CART_MODIFICAR_FUNCION") || sm.TienePermiso("CART_ELIMINAR_FUNCION") || sm.TienePermiso("CART_GESTIONAR_PELICULAS");
+            RecepcionistaToolStripMenuItem.Enabled = sm.TienePermiso("CART_VER") || sm.TienePermiso("CART_CREAR_FUNCION") || sm.TienePermiso("CART_MODIFICAR_FUNCION") || sm.TienePermiso("CART_ELIMINAR_FUNCION") || sm.TienePermiso("CART_GESTIONAR_PELICULAS");
 
-           
 
             // --- Menu Administrador ---
             usuariosToolStripMenuItem.Enabled = sm.TienePermiso("USR_LISTAR") || sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
@@ -86,7 +85,7 @@ namespace UI
 
             // Menus principales
             empleadoDeBoleteríaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuBoleteria");
-            gerenciaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuCartelera");
+            RecepcionistaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuCartelera");
 
             // Menu Administrador
             mnuAdministrador.Text = t.Traducir("frmMenuPrincipal.MenuAdministrador");
@@ -181,5 +180,7 @@ namespace UI
             frmGestionarRespaldo formGestionarRespaldo = new frmGestionarRespaldo();
             formGestionarRespaldo.ShowDialog();
         }
+
+       
     }
 }
