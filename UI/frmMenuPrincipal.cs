@@ -57,9 +57,8 @@ namespace UI
             // Encargado de Canchas
             encargadoDeCanchasToolStripMenuItem.Enabled = sm.TienePermiso("CAN_CONSULTAR_AGENDA");
 
-            // Dueño
-            dueñoToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR") || sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("CAN_CONSULTAR_AGENDA");
-
+            // Dueño Hecho Privisorio
+            dueñoToolStripMenuItem.Enabled =sm.TienePermiso("RES_CREAR") &&sm.TienePermiso("BUF_VENDER") && sm.TienePermiso("CAN_CONSULTAR_AGENDA");
             // --- Menu Administrador ---
             usuariosToolStripMenuItem.Enabled = sm.TienePermiso("USR_LISTAR") || sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
 
