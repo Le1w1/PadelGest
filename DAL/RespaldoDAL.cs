@@ -41,7 +41,7 @@ namespace DAL
             string rutaEscapada = EscaparComillas(rutaArchivo);
 
             string sql = $"BACKUP DATABASE [{nombreBase}] TO DISK = N'{rutaEscapada}' " +
-                         $"WITH FORMAT, INIT, NAME = N'CineGest Full Backup', SKIP, STATS = 10";
+                         $"WITH FORMAT, INIT, NAME = N'PadelGest Full Backup', SKIP, STATS = 10";
 
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             using (SqlCommand comando = new SqlCommand(sql, conexion))
@@ -54,7 +54,7 @@ namespace DAL
 
         /// Ejecuta RESTORE DATABASE desde el archivo indicado.
         /// Secuencia:
-        ///   1) Conectar a [master] (no se puede restaurar CineGestDB desde una conexion contra CineGestDB).
+        ///   1) Conectar a [master] (no se puede restaurar PadelGestDB desde una conexion contra PadelGestDB).
         ///   2) SET SINGLE_USER WITH ROLLBACK IMMEDIATE: fuerza a la base a
         ///      un solo usuario y desconecta a todos los demas (incluida
         ///      esta misma app si tenia otras conexiones abiertas).

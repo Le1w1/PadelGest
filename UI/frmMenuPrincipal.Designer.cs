@@ -34,10 +34,8 @@
             cambiarClaveToolStripMenuItem = new ToolStripMenuItem();
             cambiarIdiomaToolStripMenuItem = new ToolStripMenuItem();
             cerrarSesionToolStripMenuItem = new ToolStripMenuItem();
-            empleadoDeBoleteríaToolStripMenuItem = new ToolStripMenuItem();
-            RecepcionistaToolStripMenuItem = new ToolStripMenuItem();   
+            RecepcionistaToolStripMenuItem = new ToolStripMenuItem();
             vendedorBuffetToolStripMenuItem = new ToolStripMenuItem();
-
             encargadoDeCanchasToolStripMenuItem = new ToolStripMenuItem();
             dueñoToolStripMenuItem = new ToolStripMenuItem();
             mnuAdministrador = new ToolStripMenuItem();
@@ -79,41 +77,42 @@
             // reLoginToolStripMenuItem
             // 
             reLoginToolStripMenuItem.Name = "reLoginToolStripMenuItem";
-            reLoginToolStripMenuItem.Size = new Size(180, 22);
+            reLoginToolStripMenuItem.Size = new Size(159, 22);
             reLoginToolStripMenuItem.Text = "Re-Login";
             reLoginToolStripMenuItem.Click += reLoginToolStripMenuItem_Click;
             // 
             // cambiarClaveToolStripMenuItem
             // 
             cambiarClaveToolStripMenuItem.Name = "cambiarClaveToolStripMenuItem";
-            cambiarClaveToolStripMenuItem.Size = new Size(180, 22);
+            cambiarClaveToolStripMenuItem.Size = new Size(159, 22);
             cambiarClaveToolStripMenuItem.Text = "Cambiar Clave";
             cambiarClaveToolStripMenuItem.Click += cambiarClaveToolStripMenuItem_Click;
             // 
             // cambiarIdiomaToolStripMenuItem
             // 
             cambiarIdiomaToolStripMenuItem.Name = "cambiarIdiomaToolStripMenuItem";
-            cambiarIdiomaToolStripMenuItem.Size = new Size(180, 22);
+            cambiarIdiomaToolStripMenuItem.Size = new Size(159, 22);
             cambiarIdiomaToolStripMenuItem.Text = "Cambiar Idioma";
             cambiarIdiomaToolStripMenuItem.Click += cambiarIdiomaToolStripMenuItem_Click;
             // 
             // cerrarSesionToolStripMenuItem
             // 
             cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
-            cerrarSesionToolStripMenuItem.Size = new Size(180, 22);
+            cerrarSesionToolStripMenuItem.Size = new Size(159, 22);
             cerrarSesionToolStripMenuItem.Text = "Cerrar Sesion";
             cerrarSesionToolStripMenuItem.Click += cerrarSesionToolStripMenuItem_Click;
-            // 
-            // empleadoDeBoleteríaToolStripMenuItem
-            // 
-            empleadoDeBoleteríaToolStripMenuItem.Name = "empleadoDeBoleteríaToolStripMenuItem";
-            empleadoDeBoleteríaToolStripMenuItem.Size = new Size(12, 20);
             // 
             // RecepcionistaToolStripMenuItem
             // 
             RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
             RecepcionistaToolStripMenuItem.Size = new Size(92, 20);
             RecepcionistaToolStripMenuItem.Text = "Recepcionista";
+            // 
+            // vendedorBuffetToolStripMenuItem
+            // 
+            vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
+            vendedorBuffetToolStripMenuItem.Size = new Size(104, 20);
+            vendedorBuffetToolStripMenuItem.Text = "Vendedor Buffet";
             // 
             // encargadoDeCanchasToolStripMenuItem
             // 
@@ -161,7 +160,6 @@
             gestionDeRespaldoToolStripMenuItem.Size = new Size(219, 22);
             gestionDeRespaldoToolStripMenuItem.Text = "Gestion de Respaldo";
             gestionDeRespaldoToolStripMenuItem.Click += gestionDeRespaldoToolStripMenuItem_Click;
-            // 
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(20, 20);
@@ -238,12 +236,6 @@
             lblTituloInicio.Text = "Bienvenido a Padelgest";
             lblTituloInicio.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // vendedorBuffetToolStripMenuItem
-            // 
-            vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
-            vendedorBuffetToolStripMenuItem.Size = new Size(104, 20);
-            vendedorBuffetToolStripMenuItem.Text = "Vendedor Buffet";
-            // 
             // frmMenuPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -275,7 +267,6 @@
 
         private MenuStrip menuPrincipal;
         private ToolStripMenuItem mnuSesion;
-        private ToolStripMenuItem empleadoDeBoleteríaToolStripMenuItem;
         private ToolStripMenuItem RecepcionistaToolStripMenuItem;
         private ToolStripMenuItem mnuAdministrador;
         private StatusStrip statusStrip1;

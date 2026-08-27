@@ -46,19 +46,19 @@ namespace UI
             cerrarSesionToolStripMenuItem.Enabled = true; // siempre habilitado
 
             // Vendedor de Buffet
-            vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") ||sm.TienePermiso("BUF_CONSULTAR_STOCK");
+            vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("BUF_CONSULTAR_STOCK");
 
             // Recepcionista
             RecepcionistaToolStripMenuItem.Enabled =
-                sm.TienePermiso("RES_CREAR") || sm.TienePermiso("RES_CONSULTAR") ||sm.TienePermiso("RES_CONFIRMAR") ||
+                sm.TienePermiso("RES_CREAR") || sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
                 sm.TienePermiso("RES_REPROGRAMAR") || sm.TienePermiso("RES_CANCELAR") || sm.TienePermiso("CLI_CONSULTAR") ||
                 sm.TienePermiso("CLI_REGISTRAR") || sm.TienePermiso("CLI_MODIFICAR");
 
             // Encargado de Canchas
-            encargadoDeCanchasToolStripMenuItem.Enabled =sm.TienePermiso("CAN_CONSULTAR_AGENDA");
+            encargadoDeCanchasToolStripMenuItem.Enabled = sm.TienePermiso("CAN_CONSULTAR_AGENDA");
 
             // Dueño
-            dueñoToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR") ||sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("CAN_CONSULTAR_AGENDA");
+            dueñoToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR") || sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("CAN_CONSULTAR_AGENDA");
 
             // --- Menu Administrador ---
             usuariosToolStripMenuItem.Enabled = sm.TienePermiso("USR_LISTAR") || sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
@@ -67,8 +67,10 @@ namespace UI
 
             gestionarPerfilToolStripMenuItem.Enabled = sm.TienePermiso("ROL_GESTIONAR") || sm.TienePermiso("FAM_GESTIONAR");
 
+            gestionDeRespaldoToolStripMenuItem.Enabled = sm.TienePermiso("BAK_GESTIONAR");
+
             // Menus padre: deshabilitados si TODOS sus hijos estan deshabilitados 
-            mnuAdministrador.Enabled = usuariosToolStripMenuItem.Enabled || bitacoraEventosToolStripMenuItem.Enabled || gestionarPerfilToolStripMenuItem.Enabled;
+            mnuAdministrador.Enabled = usuariosToolStripMenuItem.Enabled || bitacoraEventosToolStripMenuItem.Enabled || gestionarPerfilToolStripMenuItem.Enabled || gestionDeRespaldoToolStripMenuItem.Enabled;
 
         }
 
@@ -92,7 +94,6 @@ namespace UI
             cerrarSesionToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuCerrarSesion");
 
             // Menus principales
-            empleadoDeBoleteríaToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuVendedor");
             RecepcionistaToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuRecepcionista");
             encargadoDeCanchasToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuEncargadoCanchas");
             dueñoToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuDueño");
@@ -103,7 +104,7 @@ namespace UI
             usuariosToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuUsuarios");
             bitacoraEventosToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuBitacora");
             gestionarPerfilToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGestionPerfiles");
-
+            gestionDeRespaldoToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGestionRespaldo");
             // Panel central
             lblTituloInicio.Text = t.Traducir("frmMenuPrincipal.Titulo");
             lblDescripcionInicio.Text = t.Traducir("frmMenuPrincipal.Descripcion");
