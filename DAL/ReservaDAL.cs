@@ -22,7 +22,7 @@ namespace DAL
             ReservaBE reserva,
             FacturaBE factura,
             PagoBE pago,
-            BitacoraEvento evento)
+            Servicios.BitacoraEvento evento)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
