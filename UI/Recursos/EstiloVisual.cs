@@ -81,6 +81,7 @@ namespace UI
                     case MenuStrip menu:
                         menu.BackColor = Superficie;
                         menu.ForeColor = TextoClaro;
+                        menu.Renderer = new AirPadelMenuRenderer();
                         EstilizarItemsMenu(menu.Items);
                         break;
                     case StatusStrip status:
@@ -103,6 +104,48 @@ namespace UI
                 if (control.HasChildren)
                     AplicarControles(control.Controls);
             }
+        }
+
+        private sealed class AirPadelMenuRenderer : ToolStripProfessionalRenderer
+        {
+            public AirPadelMenuRenderer()
+                : base(new AirPadelColorTable())
+            {
+            }
+
+            protected override void OnRenderItemText(
+                ToolStripItemTextRenderEventArgs e)
+            {
+                e.TextColor =
+                    e.Item.Selected || e.Item.Pressed
+                        ? TextoOscuro
+                        : TextoClaro;
+
+                base.OnRenderItemText(e);
+            }
+        }
+
+        private sealed class AirPadelColorTable : ProfessionalColorTable
+        {
+            public override Color MenuStripGradientBegin => Superficie;
+            public override Color MenuStripGradientEnd => Superficie;
+
+            public override Color MenuItemSelected => Primario;
+            public override Color MenuItemSelectedGradientBegin => Primario;
+            public override Color MenuItemSelectedGradientEnd => Primario;
+
+            public override Color MenuItemPressedGradientBegin => Primario;
+            public override Color MenuItemPressedGradientMiddle => Primario;
+            public override Color MenuItemPressedGradientEnd => Primario;
+
+            public override Color ToolStripDropDownBackground => Superficie;
+
+            public override Color ImageMarginGradientBegin => Superficie;
+            public override Color ImageMarginGradientMiddle => Superficie;
+            public override Color ImageMarginGradientEnd => Superficie;
+
+            public override Color MenuBorder => Borde;
+            public override Color MenuItemBorder => Primario;
         }
 
         private static void EstilizarItemsMenu(ToolStripItemCollection items)
