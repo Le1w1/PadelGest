@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL
+namespace DAL.Servicios
 {
     /// Acceso a datos del Digito Verificador.
 

@@ -1,9 +1,10 @@
 ﻿using DAL;
+using DAL.Servicios;
 using Servicios;
 using Servicios.DigitoVerificador;
 using System.Text.RegularExpressions;
 
-namespace BLL
+namespace BLL.Servicios
 {
     public class UsuarioBLL
     {

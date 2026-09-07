@@ -1,4 +1,4 @@
-﻿using BLL;
+﻿using BLL.Servicios;
 using iTextSharp.text.pdf;
 using Servicios;
 using System.Data;

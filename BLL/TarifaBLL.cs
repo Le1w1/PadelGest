@@ -13,10 +13,8 @@ namespace BLL
             _tarifaDAL = new TarifaDAL();
         }
 
-        /// <summary>
         /// Obtiene la tarifa activa correspondiente al horario seleccionado
         /// durante el proceso de reserva.
-        /// </summary>
         public TarifaBE ObtenerTarifa(TimeSpan horario)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");

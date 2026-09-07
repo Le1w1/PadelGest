@@ -1,4 +1,5 @@
 using BE;
+using DAL.Servicios;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -13,26 +14,17 @@ namespace DAL
             _conexionDAL = new DAO_AccesoDatos();
         }
 
-        /// <summary>
         /// Obtiene la tarifa activa correspondiente al horario seleccionado.
         /// El rango se interpreta como HoraDesde inclusiva y HoraHasta exclusiva.
-        /// </summary>
         public TarifaBE? ObtenerTarifa(TimeSpan horario)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
                 string query = @"
-                    SELECT TOP 1
-                        IdTarifa,
-                        TipoTarifa,
-                        Importe,
-                        HoraDesde,
-                        HoraHasta,
-                        Activo
-                    FROM Tarifa
+                    SELECT TOP 1 IdTarifa,TipoTarifa,Importe,HoraDesde,HoraHasta,Activo 
+                    FROM Tarifa 
                     WHERE Activo = 1
-                      AND @Horario >= HoraDesde
-                      AND @Horario < HoraHasta
+                    AND @Horario >= HoraDesde AND @Horario < HoraHasta
                     ORDER BY HoraDesde DESC";
 
                 using (SqlCommand comando = new SqlCommand(query, conexion))

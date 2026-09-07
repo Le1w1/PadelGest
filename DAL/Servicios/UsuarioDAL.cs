@@ -3,7 +3,7 @@ using Servicios;
 using System.Data;
 
 
-namespace DAL
+namespace DAL.Servicios
 {
     public class UsuarioDAL
     {

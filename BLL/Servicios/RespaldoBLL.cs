@@ -1,8 +1,8 @@
-﻿using DAL;
+﻿using DAL.Servicios;
 using Servicios;
 
 
-namespace BLL
+namespace BLL.Servicios
 {
     public class RespaldoBLL
     {

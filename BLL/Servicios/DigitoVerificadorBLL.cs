@@ -1,4 +1,4 @@
-﻿using DAL;
+﻿using DAL.Servicios;
 using Servicios.DigitoVerificador;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL
+namespace BLL.Servicios
 {
     /// Logica de negocio del Digito Verificador. Orquesta las tres piezas:
     ///   - DigitoVerificador (Servicios): la formula (concatenar + hashear).

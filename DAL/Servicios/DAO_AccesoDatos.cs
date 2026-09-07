@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 
-namespace DAL
+namespace DAL.Servicios
 {
     public class DAO_AccesoDatos
     {

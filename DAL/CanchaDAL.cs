@@ -1,4 +1,5 @@
 using BE;
+using DAL.Servicios;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -25,9 +26,7 @@ namespace DAL
             };
         }
 
-        /// <summary>
         /// Obtiene todas las canchas registradas.
-        /// </summary>
         public List<CanchaBE> ObtenerCanchas()
         {
             List<CanchaBE> canchas = new List<CanchaBE>();
@@ -53,11 +52,9 @@ namespace DAL
             return canchas;
         }
 
-        /// <summary>
         /// Obtiene las canchas disponibles para una fecha y horario determinados.
         /// Una cancha debe encontrarse disponible y no poseer una reserva vigente
         /// para la misma fecha y horario.
-        /// </summary>
         public List<CanchaBE> ObtenerCanchasDisponibles(DateTime fecha, TimeSpan horario)
         {
             List<CanchaBE> canchas = new List<CanchaBE>();
