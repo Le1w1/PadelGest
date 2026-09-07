@@ -13,6 +13,7 @@ namespace UI
         public frmLogin(bool esReLogin = false)
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
             _usuarioBLL = new UsuarioBLL();
             _esReLogin = esReLogin;
             _rolBLL = new RolBLL();

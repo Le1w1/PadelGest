@@ -43,6 +43,10 @@ namespace UI
             lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitulo.Location = new Point(20, 18);
             lblTitulo.Name = "lblTitulo";
+            // AirPadel style preview BEGIN
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
+            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            // AirPadel style preview END
             lblTitulo.Size = new Size(700, 45);
             lblTitulo.Text = "Registrar Reserva";
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
@@ -64,6 +68,11 @@ namespace UI
             gbDatos.Controls.Add(lblClienteTitulo);
             gbDatos.Location = new Point(20, 80);
             gbDatos.Name = "gbDatos";
+            // AirPadel style preview BEGIN
+            gbDatos.BackColor = Color.FromArgb(24, 70, 138);
+            gbDatos.ForeColor = Color.White;
+            gbDatos.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            // AirPadel style preview END
             gbDatos.Size = new Size(700, 275);
             gbDatos.TabStop = false;
             gbDatos.Text = "Datos de la Reserva";
@@ -129,21 +138,41 @@ namespace UI
             lblMensaje.ForeColor = Color.DarkRed;
             lblMensaje.Location = new Point(20, 370);
             lblMensaje.Name = "lblMensaje";
+            // AirPadel style preview BEGIN
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
+            // AirPadel style preview END
             lblMensaje.Size = new Size(700, 45);
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
             // Registrar
             btnRegistrar.Location = new Point(560, 430);
             btnRegistrar.Name = "btnRegistrar";
+            // AirPadel style preview BEGIN
+            btnRegistrar.FlatStyle = FlatStyle.Flat;
+            btnRegistrar.FlatAppearance.BorderSize = 0;
+            btnRegistrar.BackColor = Color.FromArgb(214, 246, 36);
+            btnRegistrar.ForeColor = Color.FromArgb(18, 18, 18);
+            btnRegistrar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnRegistrar.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnRegistrar.Size = new Size(160, 34);
             btnRegistrar.Text = "Registrar Reserva";
-            btnRegistrar.UseVisualStyleBackColor = true;
+            btnRegistrar.UseVisualStyleBackColor = false;
             btnRegistrar.Click += btnRegistrar_Click;
             // Volver
             btnVolver.Location = new Point(440, 430);
             btnVolver.Name = "btnVolver";
+            // AirPadel style preview BEGIN
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.FlatAppearance.BorderSize = 1;
+            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
+            btnVolver.ForeColor = Color.White;
+            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnVolver.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnVolver.Size = new Size(100, 34);
             btnVolver.Text = "Volver";
-            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.UseVisualStyleBackColor = false;
             btnVolver.Click += btnVolver_Click;
             // Form
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -159,6 +188,11 @@ namespace UI
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmRegistrarReserva";
+            // AirPadel style preview BEGIN
+            BackColor = Color.FromArgb(14, 43, 92);
+            ForeColor = Color.White;
+            Font = new Font("Segoe UI", 9.5F);
+            // AirPadel style preview END
             StartPosition = FormStartPosition.CenterParent;
             Text = "PadelGest - Registrar Reserva";
             FormClosed += frmRegistrarReserva_FormClosed;

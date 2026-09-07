@@ -1,4 +1,4 @@
-﻿using BLL.Servicios;
+using BLL.Servicios;
 using Servicios;
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,7 @@ namespace UI
         public frmCambiarClave()
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
             _usuarioBLL = new UsuarioBLL();
 
             // Traducir antes de que el form se cargue.

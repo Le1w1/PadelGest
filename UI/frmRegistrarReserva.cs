@@ -22,6 +22,7 @@ namespace UI
         public frmRegistrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
 
             _reservaBLL = new ReservaBLL();
             _cliente = cliente;
