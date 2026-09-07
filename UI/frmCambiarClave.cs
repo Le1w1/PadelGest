@@ -19,8 +19,7 @@ namespace UI
         public frmCambiarClave()
         {
             InitializeComponent();
-            EstiloVisual.Aplicar(this);
-            _usuarioBLL = new UsuarioBLL();
+_usuarioBLL = new UsuarioBLL();
 
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();

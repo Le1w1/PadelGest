@@ -19,9 +19,7 @@ namespace UI
         public frmMenuPrincipal()
         {
             InitializeComponent();
-            EstiloVisual.Aplicar(this);
-
-            // Traducir antes de que el form se cargue.
+// Traducir antes de que el form se cargue.
             ActualizarIdioma();
         }
 
