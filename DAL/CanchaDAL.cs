@@ -52,6 +52,7 @@ namespace DAL
             return canchas;
         }
 
+
         /// Obtiene las canchas disponibles para una fecha y horario determinados.
         /// Una cancha debe encontrarse disponible y no poseer una reserva vigente
         /// para la misma fecha y horario.
@@ -92,7 +93,6 @@ namespace DAL
                     }
                 }
             }
-
             return canchas;
         }
     }
