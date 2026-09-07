@@ -9,11 +9,13 @@ namespace BLL
     {
         private readonly ReservaDAL _reservaDAL;
         private readonly DigitoVerificadorBLL _digitoVerificadorBLL;
+        private readonly BitacoraEventoBLL _bitacoraEventoBLL;
 
         public ReservaBLL()
         {
             _reservaDAL = new ReservaDAL();
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
+            _bitacoraEventoBLL = new BitacoraEventoBLL();
         }
 
         private static string T(string clave) =>
@@ -107,6 +109,14 @@ namespace BLL
                 _digitoVerificadorBLL.RecalcularDV("Pago");
                 _digitoVerificadorBLL.RecalcularDV("Reserva");
 
+                RegistrarBitacoraReserva(
+                    registrada,
+                    cliente,
+                    cancha,
+                    facturaPagada,
+                    cantidadPaletas,
+                    cantidadPelotas);
+
                 return registrada;
             }
             catch (InvalidOperationException ex)
@@ -128,6 +138,40 @@ namespace BLL
                     T("Errores.Equipamiento.StockInsuficienteRegistro"),
                     T("Equipamiento.Pelota")));
             }
+        }
+
+        private void RegistrarBitacoraReserva(
+            ReservaBE reserva,
+            ClienteBE cliente,
+            CanchaBE cancha,
+            FacturaBE factura,
+            int cantidadPaletas,
+            int cantidadPelotas)
+        {
+            Usuario usuario = SM.Instancia.UsuarioActual;
+
+            if (usuario == null)
+            {
+                return;
+            }
+
+            string descripcion =
+                $"Reserva {reserva.Codigo} registrada para el Cliente DNI {cliente.DNI}. " +
+                $"Cancha: {cancha.Nombre}. " +
+                $"Fecha: {reserva.Fecha:dd/MM/yyyy}. " +
+                $"Horario: {reserva.Horario:hh\\:mm}. " +
+                $"Paletas: {cantidadPaletas}. " +
+                $"Pelotas: {cantidadPelotas}. " +
+                $"Importe abonado: {factura.ImporteTotal:C}.";
+
+            _bitacoraEventoBLL.Registrar(
+                usuario.IdUsuario,
+                usuario.NombreUsuario,
+                "Reserva",
+                "Registrar reserva",
+                "Alta",
+                "Exitoso",
+                descripcion);
         }
 
         private string GenerarCodigoReserva(DateTime fecha)
