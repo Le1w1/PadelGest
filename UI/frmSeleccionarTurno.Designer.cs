@@ -47,6 +47,7 @@ namespace UI
             lblFechaSelTitulo = new Label();
             lblMensaje = new Label();
             btnContinuar = new Button();
+            btnCobrarReserva = new Button();
             btnVolver = new Button();
             errorProvider = new ErrorProvider(components);
             gbBusqueda.SuspendLayout();
@@ -287,9 +288,18 @@ namespace UI
             lblMensaje.Size = new Size(540, 40);
             lblMensaje.TabIndex = 4;
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
+            // btnCobrarReserva
+            btnCobrarReserva.Enabled = false;
+            btnCobrarReserva.Location = new Point(700, 605);
+            btnCobrarReserva.Name = "btnCobrarReserva";
+            btnCobrarReserva.Size = new Size(160, 34);
+            btnCobrarReserva.TabIndex = 7;
+            btnCobrarReserva.Text = "Cobrar Reserva";
+            btnCobrarReserva.UseVisualStyleBackColor = true;
+            btnCobrarReserva.Click += btnCobrarReserva_Click;
             // btnContinuar
             btnContinuar.Enabled = false;
-            btnContinuar.Location = new Point(700, 605);
+            btnContinuar.Location = new Point(520, 605);
             btnContinuar.Name = "btnContinuar";
             btnContinuar.Size = new Size(160, 34);
             btnContinuar.TabIndex = 5;
@@ -297,7 +307,7 @@ namespace UI
             btnContinuar.UseVisualStyleBackColor = true;
             btnContinuar.Click += btnContinuar_Click;
             // btnVolver
-            btnVolver.Location = new Point(580, 605);
+            btnVolver.Location = new Point(400, 605);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(100, 34);
             btnVolver.TabIndex = 6;
@@ -312,6 +322,7 @@ namespace UI
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(880, 660);
             Controls.Add(btnVolver);
+            Controls.Add(btnCobrarReserva);
             Controls.Add(btnContinuar);
             Controls.Add(lblMensaje);
             Controls.Add(gbSeleccionado);
@@ -368,6 +379,7 @@ namespace UI
         private Button btnAgregarEquipamiento;
         private Label lblMensaje;
         private Button btnContinuar;
+        private Button btnCobrarReserva;
         private Button btnVolver;
         private ErrorProvider errorProvider;
     }

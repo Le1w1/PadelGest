@@ -18,6 +18,8 @@ namespace UI
         public int CantidadPelotas { get; private set; }
         public decimal ImporteEquipamiento { get; private set; }
         public ClienteBE? ClienteSeleccionado { get; private set; }
+        public FacturaBE? FacturaPagada { get; private set; }
+        public PagoBE? PagoAprobado { get; private set; }
 
         public frmSeleccionarTurno()
         {
@@ -72,6 +74,7 @@ namespace UI
             lblTarifaSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblTarifa");
             lblEquipamientoSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblEquipamiento");
             btnAgregarEquipamiento.Text = t.Traducir("frmSeleccionarTurno.BtnAgregarEquipamiento");
+            btnCobrarReserva.Text = t.Traducir("frmSeleccionarTurno.BtnCobrarReserva");
             ActualizarResumenEquipamiento();
 
             btnContinuar.Text = t.Traducir("frmSeleccionarTurno.BtnContinuar");
@@ -269,7 +272,57 @@ namespace UI
                     ClienteSeleccionado.DNI,
                     ClienteSeleccionado.Nombre,
                     ClienteSeleccionado.Apellido);
+
+                btnCobrarReserva.Enabled = true;
             }
+        }
+
+        private void btnCobrarReserva_Click(object sender, EventArgs e)
+        {
+            if (ClienteSeleccionado == null ||
+                CanchaSeleccionada == null ||
+                TarifaSeleccionada == null)
+            {
+                lblMensaje.Text =
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosCobro");
+                return;
+            }
+
+            using frmCobrarReserva formCobro = new frmCobrarReserva(
+                ClienteSeleccionado,
+                CanchaSeleccionada,
+                TarifaSeleccionada,
+                FechaSeleccionada,
+                HorarioSeleccionado,
+                CantidadPaletas,
+                CantidadPelotas,
+                ImporteEquipamiento);
+
+            if (formCobro.ShowDialog(this) == DialogResult.OK &&
+                formCobro.FacturaPagada != null &&
+                formCobro.PagoAprobado != null)
+            {
+                FacturaPagada = formCobro.FacturaPagada;
+                PagoAprobado = formCobro.PagoAprobado;
+
+                lblMensaje.Text =
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgPagoAprobado");
+
+                BloquearDatosLuegoDelPago();
+            }
+        }
+
+        private void BloquearDatosLuegoDelPago()
+        {
+            dtpFecha.Enabled = false;
+            cboHorario.Enabled = false;
+            btnBuscar.Enabled = false;
+            dgvCanchas.Enabled = false;
+            btnSeleccionar.Enabled = false;
+            btnAgregarEquipamiento.Enabled = false;
+            btnCobrarReserva.Enabled = false;
+            btnContinuar.Enabled = false;
+            btnCobrarReserva.Enabled = false;
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
@@ -297,6 +350,8 @@ namespace UI
             CantidadPelotas = 0;
             ImporteEquipamiento = 0;
             ClienteSeleccionado = null;
+            FacturaPagada = null;
+            PagoAprobado = null;
 
             lblFechaSelValor.Text = "-";
             lblHorarioSelValor.Text = "-";

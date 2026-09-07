@@ -98,6 +98,17 @@ namespace Servicios.DigitoVerificador
                 new[] { "IdCliente", "DNI", "Nombre", "Apellido", "Telefono", "CorreoElectronico" },
                 new[] { "IdCliente" }),
 
+            new TablaProtegida("Factura",
+                new[] { "IdFactura", "IdCliente", "IdCancha", "IdTarifa", "FechaHoraEmision",
+                        "FechaReserva", "Horario", "CantidadPaletas", "CantidadPelotas",
+                        "ImporteTarifa", "ImporteEquipamiento", "ImporteTotal", "Estado" },
+                new[] { "IdFactura" }),
+
+            new TablaProtegida("Pago",
+                new[] { "IdPago", "IdFactura", "Banco", "Ultimos4Tarjeta", "Importe",
+                        "FechaHora", "Estado", "CodigoAutorizacion" },
+                new[] { "IdPago" }),
+
             // ----- Tablas puente (PK compuesta) -----
             // Sus unicas columnas son las dos FK: son a la vez su PK y todo su
             // contenido, por eso ColumnasDatos == ColumnasPk.
