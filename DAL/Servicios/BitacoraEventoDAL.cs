@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Servicios;
 using System;
 using System.Collections.Generic;
@@ -18,34 +18,95 @@ namespace DAL.Servicios
             _conexionDAL = new DAO_AccesoDatos();
         }
 
-        //Registrar un evento en la bitácora
+        // Registrar un evento en la bitácora.
         public void Registrar(BitacoraEvento evento)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
-                string query = @"
-                    INSERT INTO BitacoraEvento(IdUsuario,Usuario,FechaHora,Modulo,Accion,Criticidad,Resultado,Descripcion)
-                    VALUES(@IdUsuario,@Usuario,@FechaHora,@Modulo,@Accion,@Criticidad,@Resultado,@Descripcion)";
+                conexion.Open();
+                Registrar(evento, conexion, null);
+            }
+        }
 
-                using (SqlCommand comando = new SqlCommand(query, conexion))
+        // Variante transaccional: permite que la bitácora forme parte de la
+        // misma unidad atómica que la operación de negocio.
+        public void Registrar(
+            BitacoraEvento evento,
+            SqlConnection conexion,
+            SqlTransaction? transaccion)
+        {
+            const string query = @"
+                INSERT INTO BitacoraEvento
+                (
+                    IdUsuario,
+                    Usuario,
+                    FechaHora,
+                    Modulo,
+                    Accion,
+                    Criticidad,
+                    Resultado,
+                    Descripcion
+                )
+                VALUES
+                (
+                    @IdUsuario,
+                    @Usuario,
+                    @FechaHora,
+                    @Modulo,
+                    @Accion,
+                    @Criticidad,
+                    @Resultado,
+                    @Descripcion
+                )";
+
+            using (SqlCommand comando =
+                new SqlCommand(query, conexion, transaccion))
+            {
+                comando.Parameters.Add(
+                    "@IdUsuario",
+                    SqlDbType.Int).Value =
+                    evento.IdUsuario <= 0
+                        ? DBNull.Value
+                        : evento.IdUsuario;
+
+                comando.Parameters.Add(
+                    "@Usuario",
+                    SqlDbType.NVarChar,
+                    150).Value = evento.Usuario;
+
+                comando.Parameters.Add(
+                    "@FechaHora",
+                    SqlDbType.DateTime2).Value = evento.FechaHora;
+
+                comando.Parameters.Add(
+                    "@Modulo",
+                    SqlDbType.NVarChar,
+                    100).Value = evento.Modulo;
+
+                comando.Parameters.Add(
+                    "@Accion",
+                    SqlDbType.NVarChar,
+                    150).Value = evento.Accion;
+
+                comando.Parameters.Add(
+                    "@Criticidad",
+                    SqlDbType.NVarChar,
+                    50).Value = evento.Criticidad;
+
+                comando.Parameters.Add(
+                    "@Resultado",
+                    SqlDbType.NVarChar,
+                    50).Value = evento.Resultado;
+
+                comando.Parameters.Add(
+                    "@Descripcion",
+                    SqlDbType.NVarChar,
+                    500).Value = evento.Descripcion;
+
+                if (comando.ExecuteNonQuery() != 1)
                 {
-                    if (evento.IdUsuario <= 0) comando.Parameters.Add("@IdUsuario", SqlDbType.Int).Value = DBNull.Value;
-
-                    else
-                    {
-                        comando.Parameters.Add("@IdUsuario", SqlDbType.Int).Value = evento.IdUsuario;
-                    }
-
-                    comando.Parameters.Add("@Usuario", SqlDbType.NVarChar, 150).Value = evento.Usuario;
-                    comando.Parameters.Add("@FechaHora", SqlDbType.DateTime2).Value = evento.FechaHora;
-                    comando.Parameters.Add("@Modulo", SqlDbType.NVarChar, 100).Value = evento.Modulo;
-                    comando.Parameters.Add("@Accion", SqlDbType.NVarChar, 150).Value = evento.Accion;
-                    comando.Parameters.Add("@Criticidad", SqlDbType.NVarChar, 50).Value = evento.Criticidad;
-                    comando.Parameters.Add("@Resultado", SqlDbType.NVarChar, 50).Value = evento.Resultado;
-                    comando.Parameters.Add("@Descripcion", SqlDbType.NVarChar, 500).Value = evento.Descripcion;
-
-                    conexion.Open();
-                    comando.ExecuteNonQuery();
+                    throw new Exception(
+                        "No se pudo registrar el evento en la bitácora.");
                 }
             }
         }

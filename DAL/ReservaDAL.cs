@@ -8,16 +8,21 @@ namespace DAL
     public class ReservaDAL
     {
         private readonly DAO_AccesoDatos _conexionDAL;
+        private readonly DigitoVerificadorDAL _digitoVerificadorDAL;
+        private readonly BitacoraEventoDAL _bitacoraEventoDAL;
 
         public ReservaDAL()
         {
             _conexionDAL = new DAO_AccesoDatos();
+            _digitoVerificadorDAL = new DigitoVerificadorDAL();
+            _bitacoraEventoDAL = new BitacoraEventoDAL();
         }
 
         public ReservaBE RegistrarReserva(
             ReservaBE reserva,
             FacturaBE factura,
-            PagoBE pago)
+            PagoBE pago,
+            BitacoraEvento evento)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
@@ -61,6 +66,32 @@ namespace DAL
 
                         int idReserva =
                             InsertarReserva(conexion, transaccion, reserva);
+
+                        // Los DV de las tablas modificadas se generan dentro
+                        // de la misma transacción. Si cualquiera falla, no se
+                        // confirma Factura, Pago ni Reserva.
+                        _digitoVerificadorDAL.RecalcularDVEnTransaccion(
+                            "Factura",
+                            conexion,
+                            transaccion);
+
+                        _digitoVerificadorDAL.RecalcularDVEnTransaccion(
+                            "Pago",
+                            conexion,
+                            transaccion);
+
+                        _digitoVerificadorDAL.RecalcularDVEnTransaccion(
+                            "Reserva",
+                            conexion,
+                            transaccion);
+
+                        // El evento de auditoría también forma parte del mismo
+                        // COMMIT para que nunca exista una Reserva exitosa sin
+                        // su correspondiente registro en BitacoraEvento.
+                        _bitacoraEventoDAL.Registrar(
+                            evento,
+                            conexion,
+                            transaccion);
 
                         transaccion.Commit();
 

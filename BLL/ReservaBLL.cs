@@ -8,14 +8,10 @@ namespace BLL
     public class ReservaBLL
     {
         private readonly ReservaDAL _reservaDAL;
-        private readonly DigitoVerificadorBLL _digitoVerificadorBLL;
-        private readonly BitacoraEventoBLL _bitacoraEventoBLL;
 
         public ReservaBLL()
         {
             _reservaDAL = new ReservaDAL();
-            _digitoVerificadorBLL = new DigitoVerificadorBLL();
-            _bitacoraEventoBLL = new BitacoraEventoBLL();
         }
 
         private static string T(string clave) =>
@@ -97,27 +93,22 @@ namespace BLL
                 Estado = "Reservada"
             };
 
-            try
-            {
-                ReservaBE registrada =
-                    _reservaDAL.RegistrarReserva(
-                        reserva,
-                        facturaPagada,
-                        pagoAprobado);
-
-                _digitoVerificadorBLL.RecalcularDV("Factura");
-                _digitoVerificadorBLL.RecalcularDV("Pago");
-                _digitoVerificadorBLL.RecalcularDV("Reserva");
-
-                RegistrarBitacoraReserva(
-                    registrada,
+            BitacoraEvento evento =
+                CrearEventoBitacora(
+                    reserva,
                     cliente,
                     cancha,
                     facturaPagada,
                     cantidadPaletas,
                     cantidadPelotas);
 
-                return registrada;
+            try
+            {
+                return _reservaDAL.RegistrarReserva(
+                    reserva,
+                    facturaPagada,
+                    pagoAprobado,
+                    evento);
             }
             catch (InvalidOperationException ex)
                 when (ex.Message == "TURNO_NO_DISPONIBLE")
@@ -140,7 +131,7 @@ namespace BLL
             }
         }
 
-        private void RegistrarBitacoraReserva(
+        private BitacoraEvento CrearEventoBitacora(
             ReservaBE reserva,
             ClienteBE cliente,
             CanchaBE cancha,
@@ -152,7 +143,8 @@ namespace BLL
 
             if (usuario == null)
             {
-                return;
+                throw new Exception(
+                    "No hay un usuario activo para registrar la reserva.");
             }
 
             string descripcion =
@@ -164,14 +156,17 @@ namespace BLL
                 $"Pelotas: {cantidadPelotas}. " +
                 $"Importe abonado: {factura.ImporteTotal:C}.";
 
-            _bitacoraEventoBLL.Registrar(
-                usuario.IdUsuario,
-                usuario.NombreUsuario,
-                "Reserva",
-                "Registrar reserva",
-                "Alta",
-                "Exitoso",
-                descripcion);
+            return new BitacoraEvento
+            {
+                IdUsuario = usuario.IdUsuario,
+                Usuario = usuario.NombreUsuario,
+                FechaHora = DateTime.Now,
+                Modulo = "Reserva",
+                Accion = "Registrar reserva",
+                Criticidad = "Alta",
+                Resultado = "Exitoso",
+                Descripcion = descripcion
+            };
         }
 
         private string GenerarCodigoReserva(DateTime fecha)

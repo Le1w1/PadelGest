@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Servicios.DigitoVerificador;
 using System;
 using System.Collections.Generic;
@@ -99,6 +99,139 @@ namespace DAL.Servicios
 
                 conexion.Open();
                 comando.ExecuteNonQuery();
+            }
+        }
+
+        /// Recalcula DVH y DVV usando una conexión y transacción ya abiertas.
+        /// Se utiliza cuando la operación de negocio debe quedar atómica junto
+        /// con sus dígitos verificadores.
+        public void RecalcularDVEnTransaccion(
+            string nombreTabla,
+            SqlConnection conexion,
+            SqlTransaction transaccion)
+        {
+            TablaProtegida tabla =
+                TablasProtegidas.Todas.FirstOrDefault(
+                    t => t.Nombre.Equals(
+                        nombreTabla,
+                        StringComparison.OrdinalIgnoreCase));
+
+            if (tabla == null)
+            {
+                throw new Exception(
+                    "La tabla '" + nombreTabla +
+                    "' no está registrada como tabla protegida.");
+            }
+
+            DigitoVerificador digitoVerificador = new DigitoVerificador();
+
+            string columnas =
+                string.Join(", ", tabla.ColumnasDatos) + ", DVH";
+            string orderBy =
+                string.Join(", ", tabla.ColumnasPk);
+
+            string queryLectura =
+                "SELECT " + columnas +
+                " FROM " + tabla.Nombre +
+                " ORDER BY " + orderBy;
+
+            List<Dictionary<string, object>> registros =
+                new List<Dictionary<string, object>>();
+
+            using (SqlCommand comandoLectura =
+                new SqlCommand(queryLectura, conexion, transaccion))
+            using (SqlDataReader reader = comandoLectura.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Dictionary<string, object> registro =
+                        new Dictionary<string, object>();
+
+                    foreach (string col in tabla.ColumnasDatos)
+                    {
+                        registro[col] = reader[col];
+                    }
+
+                    registros.Add(registro);
+                }
+            }
+
+            List<string> dvhCalculados = new List<string>();
+
+            foreach (Dictionary<string, object> registro in registros)
+            {
+                IEnumerable<object> valores =
+                    tabla.ColumnasDatos.Select(col => registro[col]);
+
+                string dvh =
+                    digitoVerificador.CalcularDVH(valores);
+
+                dvhCalculados.Add(dvh);
+
+                List<string> condiciones = new List<string>();
+
+                for (int i = 0; i < tabla.ColumnasPk.Count; i++)
+                {
+                    condiciones.Add(
+                        tabla.ColumnasPk[i] + " = @pk" + i);
+                }
+
+                string queryUpdate =
+                    "UPDATE " + tabla.Nombre +
+                    " SET DVH = @DVH WHERE " +
+                    string.Join(" AND ", condiciones);
+
+                using (SqlCommand comandoUpdate =
+                    new SqlCommand(
+                        queryUpdate,
+                        conexion,
+                        transaccion))
+                {
+                    comandoUpdate.Parameters.AddWithValue(
+                        "@DVH",
+                        dvh);
+
+                    for (int i = 0; i < tabla.ColumnasPk.Count; i++)
+                    {
+                        comandoUpdate.Parameters.AddWithValue(
+                            "@pk" + i,
+                            registro[tabla.ColumnasPk[i]]);
+                    }
+
+                    if (comandoUpdate.ExecuteNonQuery() != 1)
+                    {
+                        throw new Exception(
+                            "No se pudo actualizar el DVH de " +
+                            tabla.Nombre + ".");
+                    }
+                }
+            }
+
+            string dvv =
+                digitoVerificador.CalcularDVV(dvhCalculados);
+
+            const string queryDvv = @"
+                UPDATE DigitoVerificador
+                SET DVV = @DVV
+                WHERE NombreTabla = @NombreTabla";
+
+            using (SqlCommand comandoDvv =
+                new SqlCommand(
+                    queryDvv,
+                    conexion,
+                    transaccion))
+            {
+                comandoDvv.Parameters.AddWithValue("@DVV", dvv);
+                comandoDvv.Parameters.AddWithValue(
+                    "@NombreTabla",
+                    tabla.Nombre);
+
+                if (comandoDvv.ExecuteNonQuery() != 1)
+                {
+                    throw new Exception(
+                        "No se pudo actualizar el DVV de " +
+                        tabla.Nombre + ".");
+                }
             }
         }
 
