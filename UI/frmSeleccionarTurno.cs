@@ -17,6 +17,7 @@ namespace UI
         public int CantidadPaletas { get; private set; }
         public int CantidadPelotas { get; private set; }
         public decimal ImporteEquipamiento { get; private set; }
+        public ClienteBE? ClienteSeleccionado { get; private set; }
 
         public frmSeleccionarTurno()
         {
@@ -256,8 +257,19 @@ namespace UI
                 return;
             }
 
-            DialogResult = DialogResult.OK;
-            Close();
+            using frmSeleccionarCliente formCliente = new frmSeleccionarCliente();
+
+            if (formCliente.ShowDialog(this) == DialogResult.OK &&
+                formCliente.ClienteSeleccionado != null)
+            {
+                ClienteSeleccionado = formCliente.ClienteSeleccionado;
+
+                lblMensaje.Text = string.Format(
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgClienteSeleccionado"),
+                    ClienteSeleccionado.DNI,
+                    ClienteSeleccionado.Nombre,
+                    ClienteSeleccionado.Apellido);
+            }
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
@@ -284,6 +296,7 @@ namespace UI
             CantidadPaletas = 0;
             CantidadPelotas = 0;
             ImporteEquipamiento = 0;
+            ClienteSeleccionado = null;
 
             lblFechaSelValor.Text = "-";
             lblHorarioSelValor.Text = "-";

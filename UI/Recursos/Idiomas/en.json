@@ -320,5 +320,22 @@
   "frmSeleccionarTurno.LblEquipamiento": "Equipment:",
   "frmSeleccionarTurno.BtnAgregarEquipamiento": "Add Equipment",
   "frmSeleccionarTurno.SinEquipamiento": "No additional equipment",
-  "frmSeleccionarTurno.ResumenEquipamiento": "Paddles: {0} | Balls: {1} | Amount: {2:C}"
+  "frmSeleccionarTurno.ResumenEquipamiento": "Paddles: {0} | Balls: {1} | Amount: {2:C}",
+  "Errores.Cliente.DNIObligatorio": "You must enter the Client's ID number.",
+  "Errores.Cliente.DNIInvalido": "The ID number must contain only digits and be between 7 and 8 digits long.",
+  "frmSeleccionarCliente.Title": "PadelGest - Select Client",
+  "frmSeleccionarCliente.LblTitulo": "SELECT CLIENT",
+  "frmSeleccionarCliente.GbBusqueda": "Search by ID number",
+  "frmSeleccionarCliente.LblDNI": "ID Number:",
+  "frmSeleccionarCliente.BtnBuscar": "Select",
+  "frmSeleccionarCliente.GbDatos": "Client Data",
+  "frmSeleccionarCliente.LblNombre": "First Name:",
+  "frmSeleccionarCliente.LblApellido": "Last Name:",
+  "frmSeleccionarCliente.LblTelefono": "Phone:",
+  "frmSeleccionarCliente.LblCorreo": "Email:",
+  "frmSeleccionarCliente.BtnConfirmar": "Confirm Client",
+  "frmSeleccionarCliente.BtnVolver": "Back",
+  "frmSeleccionarCliente.MsgNoRegistrado": "The Client is not registered. The Client must be registered to continue.",
+  "frmSeleccionarCliente.MsgDebeBuscar": "You must search for and select a registered Client.",
+  "frmSeleccionarTurno.MsgClienteSeleccionado": "Selected Client: ID {0} - {1} {2}."
 }

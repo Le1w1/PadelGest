@@ -318,5 +318,22 @@
   "frmSeleccionarTurno.LblEquipamiento": "Equipamiento:",
   "frmSeleccionarTurno.BtnAgregarEquipamiento": "Agregar Equipamiento",
   "frmSeleccionarTurno.SinEquipamiento": "Sin equipamiento adicional",
-  "frmSeleccionarTurno.ResumenEquipamiento": "Paletas: {0} | Pelotas: {1} | Importe: {2:C}"
+  "frmSeleccionarTurno.ResumenEquipamiento": "Paletas: {0} | Pelotas: {1} | Importe: {2:C}",
+  "Errores.Cliente.DNIObligatorio": "Debe ingresar el DNI del Cliente.",
+  "Errores.Cliente.DNIInvalido": "El DNI debe contener únicamente números y tener entre 7 y 8 dígitos.",
+  "frmSeleccionarCliente.Title": "PadelGest - Seleccionar Cliente",
+  "frmSeleccionarCliente.LblTitulo": "SELECCIONAR CLIENTE",
+  "frmSeleccionarCliente.GbBusqueda": "Búsqueda por DNI",
+  "frmSeleccionarCliente.LblDNI": "DNI:",
+  "frmSeleccionarCliente.BtnBuscar": "Seleccionar",
+  "frmSeleccionarCliente.GbDatos": "Datos del Cliente",
+  "frmSeleccionarCliente.LblNombre": "Nombre:",
+  "frmSeleccionarCliente.LblApellido": "Apellido:",
+  "frmSeleccionarCliente.LblTelefono": "Teléfono:",
+  "frmSeleccionarCliente.LblCorreo": "Correo electrónico:",
+  "frmSeleccionarCliente.BtnConfirmar": "Confirmar Cliente",
+  "frmSeleccionarCliente.BtnVolver": "Volver",
+  "frmSeleccionarCliente.MsgNoRegistrado": "El Cliente no se encuentra registrado. Debe registrarlo para continuar.",
+  "frmSeleccionarCliente.MsgDebeBuscar": "Debe buscar y seleccionar un Cliente registrado.",
+  "frmSeleccionarTurno.MsgClienteSeleccionado": "Cliente seleccionado: DNI {0} - {1} {2}."
 }
