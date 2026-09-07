@@ -24,6 +24,7 @@ namespace BLL
         public List<CanchaBE> ObtenerCanchasDisponibles(DateTime fecha, TimeSpan horario)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
+            ReglasReserva.ValidarFechaYHorario(fecha, horario);
 
             return _canchaDAL.ObtenerCanchasDisponibles(fecha, horario);
         }
