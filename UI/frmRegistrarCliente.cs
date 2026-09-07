@@ -15,6 +15,7 @@ namespace UI
         public frmRegistrarCliente(string dniInicial = "")
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
 
             _clienteBLL = new ClienteBLL();
             _dniInicial = (dniInicial ?? string.Empty).Trim();

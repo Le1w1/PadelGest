@@ -14,6 +14,7 @@ namespace UI
         public frmSeleccionarCliente()
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
             _clienteBLL = new ClienteBLL();
             ActualizarIdioma();
         }
