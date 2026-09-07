@@ -24,7 +24,7 @@ namespace BLL
 
             if (tarifa == null)
             {
-                throw new Exception("No existe una tarifa activa para el horario seleccionado.");
+                throw new Exception(Traductor.Instancia.Traducir("Errores.Reserva.TarifaNoDisponible"));
             }
 
             return tarifa;

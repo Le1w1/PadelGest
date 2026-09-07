@@ -4,6 +4,8 @@ namespace BLL
 {
     internal static class ReglasReserva
     {
+        public const int DiasAnticipacionMaxima = 7;
+
         private static readonly TimeSpan[] HorariosValidos =
         {
             new TimeSpan(8, 30, 0),
@@ -22,8 +24,19 @@ namespace BLL
 
         public static void ValidarFechaYHorario(DateTime fecha, TimeSpan horario)
         {
+            ValidarFecha(fecha);
             ValidarHorario(horario);
 
+            DateTime inicioTurno = fecha.Date.Add(horario);
+
+            if (inicioTurno <= DateTime.Now)
+            {
+                throw new Exception(T("Errores.Reserva.TurnoIniciado"));
+            }
+        }
+
+        public static void ValidarFecha(DateTime fecha)
+        {
             DateTime fechaSeleccionada = fecha.Date;
             DateTime hoy = DateTime.Today;
 
@@ -32,16 +45,9 @@ namespace BLL
                 throw new Exception(T("Errores.Reserva.FechaPasada"));
             }
 
-            if (fechaSeleccionada > hoy.AddDays(7))
+            if (fechaSeleccionada > hoy.AddDays(DiasAnticipacionMaxima))
             {
                 throw new Exception(T("Errores.Reserva.FechaFueraAnticipacion"));
-            }
-
-            DateTime inicioTurno = fechaSeleccionada.Add(horario);
-
-            if (inicioTurno <= DateTime.Now)
-            {
-                throw new Exception(T("Errores.Reserva.TurnoIniciado"));
             }
         }
 
@@ -51,6 +57,17 @@ namespace BLL
             {
                 throw new Exception(T("Errores.Reserva.HorarioInvalido"));
             }
+        }
+
+        public static List<TimeSpan> ObtenerHorariosDisponibles(DateTime fecha)
+        {
+            ValidarFecha(fecha);
+
+            DateTime fechaSeleccionada = fecha.Date;
+
+            return HorariosValidos
+                .Where(horario => fechaSeleccionada.Add(horario) > DateTime.Now)
+                .ToList();
         }
     }
 }

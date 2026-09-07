@@ -19,6 +19,15 @@ namespace BLL
             return _canchaDAL.ObtenerCanchas();
         }
 
+        /// Obtiene los horarios de reserva válidos que todavía pueden seleccionarse
+        /// para la fecha indicada.
+        public List<TimeSpan> ObtenerHorariosDisponibles(DateTime fecha)
+        {
+            SM.Instancia.RequierePermiso("RES_CREAR");
+
+            return ReglasReserva.ObtenerHorariosDisponibles(fecha);
+        }
+
         /// Obtiene las canchas disponibles para la fecha y horario seleccionados
         /// durante el proceso de reserva.
         public List<CanchaBE> ObtenerCanchasDisponibles(DateTime fecha, TimeSpan horario)

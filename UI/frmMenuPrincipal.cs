@@ -1,4 +1,4 @@
-﻿using Servicios;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,8 +49,11 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("BUF_CONSULTAR_STOCK");
 
             // Recepcionista
+            seleccionarTurnoToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
+
             RecepcionistaToolStripMenuItem.Enabled =
-                sm.TienePermiso("RES_CREAR") || sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
+                seleccionarTurnoToolStripMenuItem.Enabled ||
+                sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
                 sm.TienePermiso("RES_REPROGRAMAR") || sm.TienePermiso("RES_CANCELAR") || sm.TienePermiso("CLI_CONSULTAR") ||
                 sm.TienePermiso("CLI_REGISTRAR") || sm.TienePermiso("CLI_MODIFICAR");
 
@@ -94,6 +97,7 @@ namespace UI
 
             // Menus principales
             RecepcionistaToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuRecepcionista");
+            seleccionarTurnoToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuSeleccionarTurno");
             encargadoDeCanchasToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuEncargadoCanchas");
             dueñoToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuDueño");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
@@ -166,6 +170,12 @@ namespace UI
         {
             frmCambiarIdioma cambiarIdioma = new frmCambiarIdioma();
             cambiarIdioma.ShowDialog();
+        }
+
+        private void seleccionarTurnoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmSeleccionarTurno formSeleccionarTurno = new frmSeleccionarTurno();
+            formSeleccionarTurno.ShowDialog();
         }
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)

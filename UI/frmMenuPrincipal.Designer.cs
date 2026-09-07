@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class frmMenuPrincipal
     {
@@ -35,6 +35,7 @@
             cambiarIdiomaToolStripMenuItem = new ToolStripMenuItem();
             cerrarSesionToolStripMenuItem = new ToolStripMenuItem();
             RecepcionistaToolStripMenuItem = new ToolStripMenuItem();
+            seleccionarTurnoToolStripMenuItem = new ToolStripMenuItem();
             vendedorBuffetToolStripMenuItem = new ToolStripMenuItem();
             encargadoDeCanchasToolStripMenuItem = new ToolStripMenuItem();
             dueñoToolStripMenuItem = new ToolStripMenuItem();
@@ -104,9 +105,17 @@
             // 
             // RecepcionistaToolStripMenuItem
             // 
+            RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { seleccionarTurnoToolStripMenuItem });
             RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
             RecepcionistaToolStripMenuItem.Size = new Size(92, 20);
             RecepcionistaToolStripMenuItem.Text = "Recepcionista";
+            // 
+            // seleccionarTurnoToolStripMenuItem
+            // 
+            seleccionarTurnoToolStripMenuItem.Name = "seleccionarTurnoToolStripMenuItem";
+            seleccionarTurnoToolStripMenuItem.Size = new Size(180, 22);
+            seleccionarTurnoToolStripMenuItem.Text = "Seleccionar Turno";
+            seleccionarTurnoToolStripMenuItem.Click += seleccionarTurnoToolStripMenuItem_Click;
             // 
             // vendedorBuffetToolStripMenuItem
             // 
@@ -268,6 +277,7 @@
         private MenuStrip menuPrincipal;
         private ToolStripMenuItem mnuSesion;
         private ToolStripMenuItem RecepcionistaToolStripMenuItem;
+        private ToolStripMenuItem seleccionarTurnoToolStripMenuItem;
         private ToolStripMenuItem mnuAdministrador;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblUsuarioSesion;
