@@ -25,6 +25,7 @@ namespace UI
         public frmSeleccionarTurno()
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
 
             _canchaBLL = new CanchaBLL();
             _tarifaBLL = new TarifaBLL();
