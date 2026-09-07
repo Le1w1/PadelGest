@@ -19,8 +19,7 @@ namespace UI
         public frmCambiarIdioma()
         {
             InitializeComponent();
-            EstiloVisual.Aplicar(this);
-            _idiomaBLL = new IdiomaBLL();
+_idiomaBLL = new IdiomaBLL();
 
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();

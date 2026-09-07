@@ -22,9 +22,7 @@ namespace UI
         public frmAuditarEventos()
         {
             InitializeComponent();
-            EstiloVisual.Aplicar(this);
-
-            _bitacoraEventoBLL = new BitacoraEventoBLL();
+_bitacoraEventoBLL = new BitacoraEventoBLL();
 
             // Traducir  los labels/botones, antes de que el form se cargue.
             // Las cabeceras de la grilla se traducen mas abajo, despues del BuscarEventos.

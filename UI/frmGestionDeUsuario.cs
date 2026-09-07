@@ -21,8 +21,7 @@ namespace UI
         public frmGestionDeUsuario()
         {
             InitializeComponent();
-            EstiloVisual.Aplicar(this);
-            dgvUsuarios.ClearSelection();
+dgvUsuarios.ClearSelection();
             txtNombre.Focus();
             _usuarioBLL = new UsuarioBLL();
             _rolBLL = new RolBLL();

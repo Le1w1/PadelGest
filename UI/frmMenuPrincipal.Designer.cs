@@ -65,12 +65,19 @@ namespace UI
             menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, RecepcionistaToolStripMenuItem, vendedorBuffetToolStripMenuItem, encargadoDeCanchasToolStripMenuItem, dueñoToolStripMenuItem, mnuAdministrador });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
+            // AirPadel style preview BEGIN
+            menuPrincipal.BackColor = Color.FromArgb(24, 70, 138);
+            menuPrincipal.ForeColor = Color.White;
+            // AirPadel style preview END
             menuPrincipal.Size = new Size(800, 24);
             menuPrincipal.TabIndex = 0;
             menuPrincipal.Text = "menuStrip1";
             // 
             // mnuSesion
             // 
+            mnuSesion.DropDownItems.AddRange(new ToolStripItem[] { reLoginToolStripMenuItem, cambiarClaveToolStripMenuItem, cambiarIdiomaToolStripMenuItem, cerrarSesionToolStripMenuItem });
+            mnuSesion.Name = "mnuSesion";
+            // AirPadel style preview BEGIN
             mnuSesion.BackColor = Color.FromArgb(24, 70, 138);
             mnuSesion.DropDownItems.AddRange(new ToolStripItem[] { reLoginToolStripMenuItem, cambiarClaveToolStripMenuItem, cambiarIdiomaToolStripMenuItem, cerrarSesionToolStripMenuItem });
             mnuSesion.ForeColor = Color.White;
@@ -116,6 +123,9 @@ namespace UI
             // 
             // RecepcionistaToolStripMenuItem
             // 
+            RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { seleccionarTurnoToolStripMenuItem });
+            RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
+            // AirPadel style preview BEGIN
             RecepcionistaToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { seleccionarTurnoToolStripMenuItem });
             RecepcionistaToolStripMenuItem.ForeColor = Color.White;
@@ -134,6 +144,8 @@ namespace UI
             // 
             // vendedorBuffetToolStripMenuItem
             // 
+            vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
+            // AirPadel style preview BEGIN
             vendedorBuffetToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             vendedorBuffetToolStripMenuItem.ForeColor = Color.White;
             vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
@@ -142,6 +154,8 @@ namespace UI
             // 
             // encargadoDeCanchasToolStripMenuItem
             // 
+            encargadoDeCanchasToolStripMenuItem.Name = "encargadoDeCanchasToolStripMenuItem";
+            // AirPadel style preview BEGIN
             encargadoDeCanchasToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             encargadoDeCanchasToolStripMenuItem.ForeColor = Color.White;
             encargadoDeCanchasToolStripMenuItem.Name = "encargadoDeCanchasToolStripMenuItem";
@@ -151,11 +165,17 @@ namespace UI
             // dueñoToolStripMenuItem
             // 
             dueñoToolStripMenuItem.Name = "dueñoToolStripMenuItem";
+            dueñoToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dueñoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            dueñoToolStripMenuItem.ForeColor = Color.White;
             dueñoToolStripMenuItem.Size = new Size(54, 20);
             dueñoToolStripMenuItem.Text = "Dueño";
             // 
             // mnuAdministrador
             // 
+            mnuAdministrador.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, bitacoraEventosToolStripMenuItem, gestionarPerfilToolStripMenuItem, gestionDeRespaldoToolStripMenuItem });
+            mnuAdministrador.Name = "mnuAdministrador";
+            // AirPadel style preview BEGIN
             mnuAdministrador.BackColor = Color.FromArgb(24, 70, 138);
             mnuAdministrador.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, bitacoraEventosToolStripMenuItem, gestionarPerfilToolStripMenuItem, gestionDeRespaldoToolStripMenuItem });
             mnuAdministrador.ForeColor = Color.White;
@@ -310,6 +330,70 @@ namespace UI
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
+        }
+
+        private sealed class AirPadelMenuRenderer : ToolStripProfessionalRenderer
+        {
+            public AirPadelMenuRenderer()
+                : base(new AirPadelColorTable())
+            {
+            }
+
+            protected override void OnRenderItemText(
+                ToolStripItemTextRenderEventArgs e)
+            {
+                e.TextColor =
+                    e.Item.Selected || e.Item.Pressed
+                        ? Color.FromArgb(18, 18, 18)
+                        : Color.White;
+
+                base.OnRenderItemText(e);
+            }
+        }
+
+        private sealed class AirPadelColorTable : ProfessionalColorTable
+        {
+            public override Color MenuStripGradientBegin =>
+                Color.FromArgb(24, 70, 138);
+
+            public override Color MenuStripGradientEnd =>
+                Color.FromArgb(24, 70, 138);
+
+            public override Color MenuItemSelected =>
+                Color.FromArgb(214, 246, 36);
+
+            public override Color MenuItemSelectedGradientBegin =>
+                Color.FromArgb(214, 246, 36);
+
+            public override Color MenuItemSelectedGradientEnd =>
+                Color.FromArgb(214, 246, 36);
+
+            public override Color MenuItemPressedGradientBegin =>
+                Color.FromArgb(214, 246, 36);
+
+            public override Color MenuItemPressedGradientMiddle =>
+                Color.FromArgb(214, 246, 36);
+
+            public override Color MenuItemPressedGradientEnd =>
+                Color.FromArgb(214, 246, 36);
+
+            public override Color ToolStripDropDownBackground =>
+                Color.FromArgb(24, 70, 138);
+
+            public override Color ImageMarginGradientBegin =>
+                Color.FromArgb(24, 70, 138);
+
+            public override Color ImageMarginGradientMiddle =>
+                Color.FromArgb(24, 70, 138);
+
+            public override Color ImageMarginGradientEnd =>
+                Color.FromArgb(24, 70, 138);
+
+            public override Color MenuBorder =>
+                Color.FromArgb(64, 103, 166);
+
+            public override Color MenuItemBorder =>
+                Color.FromArgb(214, 246, 36);
         }
 
         #endregion

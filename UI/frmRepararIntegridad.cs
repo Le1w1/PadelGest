@@ -37,9 +37,7 @@ namespace UI
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
 
             InitializeComponent();
-            EstiloVisual.Aplicar(this);
-
-            ActualizarIdioma();
+ActualizarIdioma();
             CargarInconsistenciasEnGrilla();
 
             this.Load += frmRepararIntegridad_Load;
