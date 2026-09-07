@@ -1,9 +1,8 @@
-﻿using DAL.Servicios;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Servicios;
 using System.Data;
 
-namespace DAL
+namespace DAL.Servicios
 {
     public class FamiliaDAL
     {
