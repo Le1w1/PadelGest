@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace UI.Recursos
+namespace UI
 {
     public static class EstiloVisual
     {
@@ -94,10 +94,7 @@ namespace UI.Recursos
                         panel.BackColor = Superficie;
                         break;
                     case Label etiqueta:
-                        etiqueta.ForeColor =
-                            etiqueta.Name is "lblTitulo" or "lblMensaje"
-                                ? Primario
-                                : TextoClaro;
+                        etiqueta.ForeColor =etiqueta.Name is "lblTitulo" or "lblMensaje"? Primario: TextoClaro;
                         if (etiqueta.Name == "lblTitulo")
                             etiqueta.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
                         break;
