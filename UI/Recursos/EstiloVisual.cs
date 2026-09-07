@@ -87,11 +87,11 @@ namespace UI.Recursos
                         status.BackColor = Superficie;
                         status.ForeColor = TextoClaro;
                         break;
-                    case Panel panel:
-                        panel.BackColor = Superficie;
-                        break;
                     case TableLayoutPanel tabla:
                         tabla.BackColor = Superficie;
+                        break;
+                    case Panel panel:
+                        panel.BackColor = Superficie;
                         break;
                     case Label etiqueta:
                         etiqueta.ForeColor =
