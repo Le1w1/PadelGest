@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class frmAuditarEventos
     {
@@ -97,6 +97,7 @@
             // 
             // cmbAccion
             // 
+            cmbAccion.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAccion.FormattingEnabled = true;
             cmbAccion.Location = new Point(110, 191);
             cmbAccion.Margin = new Padding(3, 2, 3, 2);
@@ -124,6 +125,7 @@
             // 
             // cmbResultado
             // 
+            cmbResultado.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbResultado.FormattingEnabled = true;
             cmbResultado.Location = new Point(110, 159);
             cmbResultado.Margin = new Padding(3, 2, 3, 2);
@@ -142,6 +144,7 @@
             // 
             // cmbCriticidad
             // 
+            cmbCriticidad.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCriticidad.FormattingEnabled = true;
             cmbCriticidad.Location = new Point(110, 126);
             cmbCriticidad.Margin = new Padding(3, 2, 3, 2);
@@ -160,6 +163,7 @@
             // 
             // cmbModulo
             // 
+            cmbModulo.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbModulo.FormattingEnabled = true;
             cmbModulo.Location = new Point(110, 88);
             cmbModulo.Margin = new Padding(3, 2, 3, 2);

@@ -1,4 +1,4 @@
-﻿using BLL.Servicios;
+using BLL.Servicios;
 using iTextSharp.text.pdf;
 using Servicios;
 using System.Data;
@@ -165,6 +165,7 @@ namespace UI
             cmbModulo.Items.Add("Administrador");
             cmbModulo.Items.Add("Idioma");
             cmbModulo.Items.Add("Respaldo");
+            cmbModulo.Items.Add("Reserva");
             cmbModulo.SelectedIndex = 0;
 
             cmbAccion.Items.Clear();
@@ -184,6 +185,7 @@ namespace UI
             cmbAccion.Items.Add("Imprimir PDF");
             cmbAccion.Items.Add("Crear Backup");
             cmbAccion.Items.Add("Restaurar Backup");
+            cmbAccion.Items.Add("Registrar reserva");
             cmbAccion.SelectedIndex = 0;
 
             cmbCriticidad.Items.Clear();
