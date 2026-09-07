@@ -300,9 +300,7 @@ namespace UI
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvEventos.DefaultCellStyle = dataGridViewCellStyle2;
 
-            // Estilo explícito de filas.
-            // El formulario usa ForeColor blanco, por eso la grilla debe
-            // definir su propio color para evitar que las filas hereden blanco.
+            
             dgvEventos.ForeColor = Color.FromArgb(18, 18, 18);
 
             dgvEventos.RowsDefaultCellStyle.BackColor = Color.White;
