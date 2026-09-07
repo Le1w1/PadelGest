@@ -64,6 +64,7 @@ namespace UI
             menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, RecepcionistaToolStripMenuItem, vendedorBuffetToolStripMenuItem, encargadoDeCanchasToolStripMenuItem, dueñoToolStripMenuItem, mnuAdministrador });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
+            menuPrincipal.Renderer = EstiloVisual.CrearMenuRenderer();
             // AirPadel style preview BEGIN
             menuPrincipal.BackColor = Color.FromArgb(24, 70, 138);
             menuPrincipal.ForeColor = Color.White;
@@ -76,6 +77,7 @@ namespace UI
             // 
             mnuSesion.DropDownItems.AddRange(new ToolStripItem[] { reLoginToolStripMenuItem, cambiarClaveToolStripMenuItem, cambiarIdiomaToolStripMenuItem, cerrarSesionToolStripMenuItem });
             mnuSesion.Name = "mnuSesion";
+            mnuSesion.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             // AirPadel style preview BEGIN
             mnuSesion.BackColor = Color.FromArgb(24, 70, 138);
             mnuSesion.ForeColor = Color.White;
@@ -131,6 +133,7 @@ namespace UI
             // 
             RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { seleccionarTurnoToolStripMenuItem });
             RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
+            RecepcionistaToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             // AirPadel style preview BEGIN
             RecepcionistaToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             RecepcionistaToolStripMenuItem.ForeColor = Color.White;
@@ -152,6 +155,7 @@ namespace UI
             // vendedorBuffetToolStripMenuItem
             // 
             vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
+            vendedorBuffetToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             // AirPadel style preview BEGIN
             vendedorBuffetToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             vendedorBuffetToolStripMenuItem.ForeColor = Color.White;
@@ -162,6 +166,7 @@ namespace UI
             // encargadoDeCanchasToolStripMenuItem
             // 
             encargadoDeCanchasToolStripMenuItem.Name = "encargadoDeCanchasToolStripMenuItem";
+            encargadoDeCanchasToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             // AirPadel style preview BEGIN
             encargadoDeCanchasToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             encargadoDeCanchasToolStripMenuItem.ForeColor = Color.White;
@@ -172,6 +177,9 @@ namespace UI
             // dueñoToolStripMenuItem
             // 
             dueñoToolStripMenuItem.Name = "dueñoToolStripMenuItem";
+            dueñoToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dueñoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            dueñoToolStripMenuItem.ForeColor = Color.White;
             dueñoToolStripMenuItem.Size = new Size(54, 20);
             dueñoToolStripMenuItem.Text = "Dueño";
             // 
@@ -179,6 +187,7 @@ namespace UI
             // 
             mnuAdministrador.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, bitacoraEventosToolStripMenuItem, gestionarPerfilToolStripMenuItem, gestionDeRespaldoToolStripMenuItem });
             mnuAdministrador.Name = "mnuAdministrador";
+            mnuAdministrador.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             // AirPadel style preview BEGIN
             mnuAdministrador.BackColor = Color.FromArgb(24, 70, 138);
             mnuAdministrador.ForeColor = Color.White;

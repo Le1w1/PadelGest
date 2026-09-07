@@ -81,7 +81,7 @@ namespace UI
                     case MenuStrip menu:
                         menu.BackColor = Superficie;
                         menu.ForeColor = TextoClaro;
-                        menu.Renderer = new AirPadelMenuRenderer();
+                        menu.Renderer = CrearMenuRenderer();
                         EstilizarItemsMenu(menu.Items);
                         break;
                     case StatusStrip status:
@@ -104,6 +104,11 @@ namespace UI
                 if (control.HasChildren)
                     AplicarControles(control.Controls);
             }
+        }
+
+        public static ToolStripRenderer CrearMenuRenderer()
+        {
+            return new AirPadelMenuRenderer();
         }
 
         private sealed class AirPadelMenuRenderer : ToolStripProfessionalRenderer
