@@ -16,6 +16,8 @@ namespace UI
     public partial class frmAuditarEventos : Form, IObservadorIdioma
     {
         private readonly BitacoraEventoBLL _bitacoraEventoBLL;
+        private bool _detalleReservaVisible;
+        private const int DesplazamientoDetalleReserva = 92;
 
         public frmAuditarEventos()
         {
@@ -76,6 +78,8 @@ namespace UI
             label7.Text = t.Traducir("frmAuditarEventos.LblEvento");
             label8.Text = t.Traducir("frmAuditarEventos.LblNombre");
             label9.Text = t.Traducir("frmAuditarEventos.LblApellido");
+            gbDetalleReserva.Text = t.Traducir("frmAuditarEventos.GbDetalleReserva");
+            lblDescripcionReserva.Text = t.Traducir("frmAuditarEventos.LblDescripcionCompleta");
 
             btnBuscar.Text = t.Traducir("frmAuditarEventos.BtnBuscar");
             btnLimpiar.Text = t.Traducir("frmAuditarEventos.BtnLimpiar");
@@ -145,9 +149,13 @@ namespace UI
 
             txtNombre.Clear();
             txtApellido.Clear();
+            txtDescripcionReserva.Clear();
 
             txtNombre.ReadOnly = true;
             txtApellido.ReadOnly = true;
+            txtDescripcionReserva.ReadOnly = true;
+
+            AjustarDetalleReserva(false);
 
             lblMensaje.Text = string.Empty;
 
@@ -241,6 +249,8 @@ namespace UI
                 {
                     txtNombre.Clear();
                     txtApellido.Clear();
+                    txtDescripcionReserva.Clear();
+                    AjustarDetalleReserva(false);
                 }
 
                 lblMensaje.Text = eventos.Count == 0 ? t.Traducir("frmAuditarEventos.MsgSinEventos"): t.Traducir("frmAuditarEventos.MsgEventosEncontrados") + " " + eventos.Count;
@@ -255,15 +265,65 @@ namespace UI
         {
             txtNombre.Clear();
             txtApellido.Clear();
+            txtDescripcionReserva.Clear();
 
-            if (dgvEventos.CurrentRow == null) return;
+            if (dgvEventos.CurrentRow == null)
+            {
+                AjustarDetalleReserva(false);
+                return;
+            }
 
-            BitacoraEvento evento = dgvEventos.CurrentRow.DataBoundItem as BitacoraEvento;
+            BitacoraEvento evento =
+                dgvEventos.CurrentRow.DataBoundItem as BitacoraEvento;
 
-            if (evento == null) return;
+            if (evento == null)
+            {
+                AjustarDetalleReserva(false);
+                return;
+            }
 
             txtNombre.Text = evento.Nombre;
             txtApellido.Text = evento.Apellido;
+
+            bool esReserva =
+                evento.Modulo.Equals(
+                    "Reserva",
+                    StringComparison.OrdinalIgnoreCase);
+
+            AjustarDetalleReserva(esReserva);
+
+            if (esReserva)
+            {
+                txtDescripcionReserva.Text = evento.Descripcion;
+            }
+        }
+
+        private void AjustarDetalleReserva(bool mostrar)
+        {
+            if (_detalleReservaVisible == mostrar)
+            {
+                gbDetalleReserva.Visible = mostrar;
+                return;
+            }
+
+            int desplazamiento =
+                mostrar
+                    ? DesplazamientoDetalleReserva
+                    : -DesplazamientoDetalleReserva;
+
+            gbDetalleReserva.Visible = mostrar;
+
+            gbFiltros.Top += desplazamiento;
+            btnBuscar.Top += desplazamiento;
+            btnLimpiar.Top += desplazamiento;
+            btnImprimir.Top += desplazamiento;
+            btnVolver.Top += desplazamiento;
+
+            ClientSize = new Size(
+                ClientSize.Width,
+                ClientSize.Height + desplazamiento);
+
+            _detalleReservaVisible = mostrar;
         }
 
         private void ConfigurarColumnasGrilla()

@@ -414,5 +414,7 @@
   "frmCobrarReserva.RespuestaRechazada": "Rechazado",
   "Errores.Cobro.RespuestaBancoObligatoria": "Debe seleccionar la respuesta simulada del Banco.",
   "Errores.Equipamiento.StockInsuficienteRegistro": "No hay suficiente disponibilidad de {0} para ese turno. La reserva no fue registrada.",
-  "Errores.Reserva.PagoInvalido": "El pago aprobado no es válido o no coincide con el importe de la factura."
+  "Errores.Reserva.PagoInvalido": "El pago aprobado no es válido o no coincide con el importe de la factura.",
+  "frmAuditarEventos.GbDetalleReserva": "Detalle de la reserva",
+  "frmAuditarEventos.LblDescripcionCompleta": "Descripción completa:"
 }

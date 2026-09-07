@@ -55,7 +55,11 @@ namespace UI
             txtApellido = new TextBox();
             label8 = new Label();
             label9 = new Label();
+            gbDetalleReserva = new GroupBox();
+            lblDescripcionReserva = new Label();
+            txtDescripcionReserva = new TextBox();
             gbFiltros.SuspendLayout();
+            gbDetalleReserva.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvEventos).BeginInit();
             SuspendLayout();
             // 
@@ -332,12 +336,45 @@ namespace UI
             label9.TabIndex = 19;
             label9.Text = "Apellido";
             // 
+            // gbDetalleReserva
+            // 
+            gbDetalleReserva.BackColor = Color.LightSkyBlue;
+            gbDetalleReserva.Controls.Add(txtDescripcionReserva);
+            gbDetalleReserva.Controls.Add(lblDescripcionReserva);
+            gbDetalleReserva.Location = new Point(12, 278);
+            gbDetalleReserva.Name = "gbDetalleReserva";
+            gbDetalleReserva.Size = new Size(794, 85);
+            gbDetalleReserva.TabIndex = 20;
+            gbDetalleReserva.TabStop = false;
+            gbDetalleReserva.Text = "Detalle de la reserva";
+            gbDetalleReserva.Visible = false;
+            // 
+            // lblDescripcionReserva
+            // 
+            lblDescripcionReserva.AutoSize = true;
+            lblDescripcionReserva.Location = new Point(14, 24);
+            lblDescripcionReserva.Name = "lblDescripcionReserva";
+            lblDescripcionReserva.Size = new Size(123, 15);
+            lblDescripcionReserva.TabIndex = 0;
+            lblDescripcionReserva.Text = "Descripción completa:";
+            // 
+            // txtDescripcionReserva
+            // 
+            txtDescripcionReserva.Location = new Point(145, 20);
+            txtDescripcionReserva.Multiline = true;
+            txtDescripcionReserva.Name = "txtDescripcionReserva";
+            txtDescripcionReserva.ReadOnly = true;
+            txtDescripcionReserva.ScrollBars = ScrollBars.Vertical;
+            txtDescripcionReserva.Size = new Size(628, 52);
+            txtDescripcionReserva.TabIndex = 1;
+            // 
             // frmAuditarEventos
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.PowderBlue;
             ClientSize = new Size(1064, 507);
+            Controls.Add(gbDetalleReserva);
             Controls.Add(label9);
             Controls.Add(label8);
             Controls.Add(txtApellido);
@@ -358,6 +395,8 @@ namespace UI
             Load += frmAuditarEventos_Load;
             gbFiltros.ResumeLayout(false);
             gbFiltros.PerformLayout();
+            gbDetalleReserva.ResumeLayout(false);
+            gbDetalleReserva.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvEventos).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -391,5 +430,8 @@ namespace UI
         private TextBox txtApellido;
         private Label label8;
         private Label label9;
+        private GroupBox gbDetalleReserva;
+        private Label lblDescripcionReserva;
+        private TextBox txtDescripcionReserva;
     }
 }

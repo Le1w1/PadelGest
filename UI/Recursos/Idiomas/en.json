@@ -416,5 +416,7 @@
   "frmCobrarReserva.RespuestaRechazada": "Rejected",
   "Errores.Cobro.RespuestaBancoObligatoria": "You must select the simulated Bank response.",
   "Errores.Equipamiento.StockInsuficienteRegistro": "There is not enough {0} availability for that time slot. The reservation was not saved.",
-  "Errores.Reserva.PagoInvalido": "The approved payment is invalid or does not match the invoice amount."
+  "Errores.Reserva.PagoInvalido": "The approved payment is invalid or does not match the invoice amount.",
+  "frmAuditarEventos.GbDetalleReserva": "Reservation details",
+  "frmAuditarEventos.LblDescripcionCompleta": "Full description:"
 }
