@@ -59,30 +59,24 @@ namespace UI
             // 
             // menuPrincipal
             // 
-            menuPrincipal.BackColor = Color.FromArgb(24, 70, 138);
+            menuPrincipal.BackColor = Color.FromArgb(214, 246, 36);
             menuPrincipal.ForeColor = Color.White;
             menuPrincipal.ImageScalingSize = new Size(20, 20);
             menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, RecepcionistaToolStripMenuItem, vendedorBuffetToolStripMenuItem, encargadoDeCanchasToolStripMenuItem, dueñoToolStripMenuItem, mnuAdministrador });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
-            // AirPadel style preview BEGIN
-            menuPrincipal.BackColor = Color.FromArgb(24, 70, 138);
-            menuPrincipal.ForeColor = Color.White;
-            // AirPadel style preview END
             menuPrincipal.Size = new Size(800, 24);
             menuPrincipal.TabIndex = 0;
             menuPrincipal.Text = "menuStrip1";
             // 
             // mnuSesion
             // 
+            mnuSesion.BackColor = Color.FromArgb(214, 246, 36);
             mnuSesion.DropDownItems.AddRange(new ToolStripItem[] { reLoginToolStripMenuItem, cambiarClaveToolStripMenuItem, cambiarIdiomaToolStripMenuItem, cerrarSesionToolStripMenuItem });
+            mnuSesion.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            mnuSesion.ForeColor = Color.Black;
             mnuSesion.Name = "mnuSesion";
-            // AirPadel style preview BEGIN
-            mnuSesion.BackColor = Color.FromArgb(24, 70, 138);
-            mnuSesion.DropDownItems.AddRange(new ToolStripItem[] { reLoginToolStripMenuItem, cambiarClaveToolStripMenuItem, cambiarIdiomaToolStripMenuItem, cerrarSesionToolStripMenuItem });
-            mnuSesion.ForeColor = Color.White;
-            mnuSesion.Name = "mnuSesion";
-            mnuSesion.Size = new Size(59, 20);
+            mnuSesion.Size = new Size(61, 20);
             mnuSesion.Text = "Usuario";
             // 
             // reLoginToolStripMenuItem
@@ -90,16 +84,16 @@ namespace UI
             reLoginToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             reLoginToolStripMenuItem.ForeColor = Color.White;
             reLoginToolStripMenuItem.Name = "reLoginToolStripMenuItem";
-            reLoginToolStripMenuItem.Size = new Size(159, 22);
+            reLoginToolStripMenuItem.Size = new Size(180, 22);
             reLoginToolStripMenuItem.Text = "Re-Login";
             reLoginToolStripMenuItem.Click += reLoginToolStripMenuItem_Click;
             // 
             // cambiarClaveToolStripMenuItem
             // 
-            cambiarClaveToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            cambiarClaveToolStripMenuItem.ForeColor = Color.White;
+            cambiarClaveToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            cambiarClaveToolStripMenuItem.ForeColor = Color.Black;
             cambiarClaveToolStripMenuItem.Name = "cambiarClaveToolStripMenuItem";
-            cambiarClaveToolStripMenuItem.Size = new Size(159, 22);
+            cambiarClaveToolStripMenuItem.Size = new Size(180, 22);
             cambiarClaveToolStripMenuItem.Text = "Cambiar Clave";
             cambiarClaveToolStripMenuItem.Click += cambiarClaveToolStripMenuItem_Click;
             // 
@@ -108,29 +102,27 @@ namespace UI
             cambiarIdiomaToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             cambiarIdiomaToolStripMenuItem.ForeColor = Color.White;
             cambiarIdiomaToolStripMenuItem.Name = "cambiarIdiomaToolStripMenuItem";
-            cambiarIdiomaToolStripMenuItem.Size = new Size(159, 22);
+            cambiarIdiomaToolStripMenuItem.Size = new Size(180, 22);
             cambiarIdiomaToolStripMenuItem.Text = "Cambiar Idioma";
             cambiarIdiomaToolStripMenuItem.Click += cambiarIdiomaToolStripMenuItem_Click;
             // 
             // cerrarSesionToolStripMenuItem
             // 
-            cerrarSesionToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            cerrarSesionToolStripMenuItem.ForeColor = Color.White;
+            cerrarSesionToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            cerrarSesionToolStripMenuItem.ForeColor = Color.Black;
             cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
-            cerrarSesionToolStripMenuItem.Size = new Size(159, 22);
+            cerrarSesionToolStripMenuItem.Size = new Size(180, 22);
             cerrarSesionToolStripMenuItem.Text = "Cerrar Sesion";
             cerrarSesionToolStripMenuItem.Click += cerrarSesionToolStripMenuItem_Click;
             // 
             // RecepcionistaToolStripMenuItem
             // 
+            RecepcionistaToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
             RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { seleccionarTurnoToolStripMenuItem });
+            RecepcionistaToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            RecepcionistaToolStripMenuItem.ForeColor = Color.Black;
             RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
-            // AirPadel style preview BEGIN
-            RecepcionistaToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { seleccionarTurnoToolStripMenuItem });
-            RecepcionistaToolStripMenuItem.ForeColor = Color.White;
-            RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
-            RecepcionistaToolStripMenuItem.Size = new Size(92, 20);
+            RecepcionistaToolStripMenuItem.Size = new Size(96, 20);
             RecepcionistaToolStripMenuItem.Text = "Recepcionista";
             // 
             // seleccionarTurnoToolStripMenuItem
@@ -144,43 +136,39 @@ namespace UI
             // 
             // vendedorBuffetToolStripMenuItem
             // 
+            vendedorBuffetToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            vendedorBuffetToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            vendedorBuffetToolStripMenuItem.ForeColor = Color.Black;
             vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
-            // AirPadel style preview BEGIN
-            vendedorBuffetToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            vendedorBuffetToolStripMenuItem.ForeColor = Color.White;
-            vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
-            vendedorBuffetToolStripMenuItem.Size = new Size(104, 20);
+            vendedorBuffetToolStripMenuItem.Size = new Size(113, 20);
             vendedorBuffetToolStripMenuItem.Text = "Vendedor Buffet";
             // 
             // encargadoDeCanchasToolStripMenuItem
             // 
+            encargadoDeCanchasToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            encargadoDeCanchasToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            encargadoDeCanchasToolStripMenuItem.ForeColor = Color.Black;
             encargadoDeCanchasToolStripMenuItem.Name = "encargadoDeCanchasToolStripMenuItem";
-            // AirPadel style preview BEGIN
-            encargadoDeCanchasToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            encargadoDeCanchasToolStripMenuItem.ForeColor = Color.White;
-            encargadoDeCanchasToolStripMenuItem.Name = "encargadoDeCanchasToolStripMenuItem";
-            encargadoDeCanchasToolStripMenuItem.Size = new Size(139, 20);
+            encargadoDeCanchasToolStripMenuItem.Size = new Size(140, 20);
             encargadoDeCanchasToolStripMenuItem.Text = "Encargado de Canchas";
             // 
             // dueñoToolStripMenuItem
             // 
-            dueñoToolStripMenuItem.Name = "dueñoToolStripMenuItem";
+            dueñoToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
             dueñoToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dueñoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            dueñoToolStripMenuItem.ForeColor = Color.White;
-            dueñoToolStripMenuItem.Size = new Size(54, 20);
+            dueñoToolStripMenuItem.ForeColor = Color.Black;
+            dueñoToolStripMenuItem.Name = "dueñoToolStripMenuItem";
+            dueñoToolStripMenuItem.Size = new Size(56, 20);
             dueñoToolStripMenuItem.Text = "Dueño";
             // 
             // mnuAdministrador
             // 
+            mnuAdministrador.BackColor = Color.FromArgb(214, 246, 36);
             mnuAdministrador.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, bitacoraEventosToolStripMenuItem, gestionarPerfilToolStripMenuItem, gestionDeRespaldoToolStripMenuItem });
+            mnuAdministrador.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            mnuAdministrador.ForeColor = Color.Black;
             mnuAdministrador.Name = "mnuAdministrador";
-            // AirPadel style preview BEGIN
-            mnuAdministrador.BackColor = Color.FromArgb(24, 70, 138);
-            mnuAdministrador.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, bitacoraEventosToolStripMenuItem, gestionarPerfilToolStripMenuItem, gestionDeRespaldoToolStripMenuItem });
-            mnuAdministrador.ForeColor = Color.White;
-            mnuAdministrador.Name = "mnuAdministrador";
-            mnuAdministrador.Size = new Size(95, 20);
+            mnuAdministrador.Size = new Size(98, 20);
             mnuAdministrador.Text = "Administrador";
             // 
             // usuariosToolStripMenuItem
@@ -188,16 +176,16 @@ namespace UI
             usuariosToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             usuariosToolStripMenuItem.ForeColor = Color.White;
             usuariosToolStripMenuItem.Name = "usuariosToolStripMenuItem";
-            usuariosToolStripMenuItem.Size = new Size(219, 22);
+            usuariosToolStripMenuItem.Size = new Size(228, 22);
             usuariosToolStripMenuItem.Text = "Gestionar Usuarios";
             usuariosToolStripMenuItem.Click += usuariosToolStripMenuItem_Click;
             // 
             // bitacoraEventosToolStripMenuItem
             // 
-            bitacoraEventosToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            bitacoraEventosToolStripMenuItem.ForeColor = Color.White;
+            bitacoraEventosToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            bitacoraEventosToolStripMenuItem.ForeColor = Color.Black;
             bitacoraEventosToolStripMenuItem.Name = "bitacoraEventosToolStripMenuItem";
-            bitacoraEventosToolStripMenuItem.Size = new Size(219, 22);
+            bitacoraEventosToolStripMenuItem.Size = new Size(228, 22);
             bitacoraEventosToolStripMenuItem.Text = "Auditar Bitacora de Eventos";
             bitacoraEventosToolStripMenuItem.Click += bitacoraEventosToolStripMenuItem_Click;
             // 
@@ -206,16 +194,16 @@ namespace UI
             gestionarPerfilToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             gestionarPerfilToolStripMenuItem.ForeColor = Color.White;
             gestionarPerfilToolStripMenuItem.Name = "gestionarPerfilToolStripMenuItem";
-            gestionarPerfilToolStripMenuItem.Size = new Size(219, 22);
+            gestionarPerfilToolStripMenuItem.Size = new Size(228, 22);
             gestionarPerfilToolStripMenuItem.Text = "Gestion de Roles y Familias";
             gestionarPerfilToolStripMenuItem.Click += gestionarPerfilToolStripMenuItem_Click;
             // 
             // gestionDeRespaldoToolStripMenuItem
             // 
-            gestionDeRespaldoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            gestionDeRespaldoToolStripMenuItem.ForeColor = Color.White;
+            gestionDeRespaldoToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            gestionDeRespaldoToolStripMenuItem.ForeColor = Color.Black;
             gestionDeRespaldoToolStripMenuItem.Name = "gestionDeRespaldoToolStripMenuItem";
-            gestionDeRespaldoToolStripMenuItem.Size = new Size(219, 22);
+            gestionDeRespaldoToolStripMenuItem.Size = new Size(228, 22);
             gestionDeRespaldoToolStripMenuItem.Text = "Gestion de Respaldo";
             gestionDeRespaldoToolStripMenuItem.Click += gestionDeRespaldoToolStripMenuItem_Click;
             // 
@@ -234,17 +222,21 @@ namespace UI
             // 
             // lblUsuarioSesion
             // 
-            lblUsuarioSesion.ForeColor = Color.White;
+            lblUsuarioSesion.BackColor = Color.FromArgb(214, 246, 36);
+            lblUsuarioSesion.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUsuarioSesion.ForeColor = Color.Black;
             lblUsuarioSesion.Name = "lblUsuarioSesion";
-            lblUsuarioSesion.Size = new Size(50, 17);
+            lblUsuarioSesion.Size = new Size(52, 17);
             lblUsuarioSesion.Text = "Usuario:";
             lblUsuarioSesion.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblEstadoSesion
             // 
+            lblEstadoSesion.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblEstadoSesion.ForeColor = Color.White;
+            lblEstadoSesion.LinkColor = Color.FromArgb(0, 0, 255);
             lblEstadoSesion.Name = "lblEstadoSesion";
-            lblEstadoSesion.Size = new Size(735, 17);
+            lblEstadoSesion.Size = new Size(700, 17);
             lblEstadoSesion.Spring = true;
             lblEstadoSesion.Text = "Sesión activa";
             lblEstadoSesion.TextAlign = ContentAlignment.MiddleRight;
@@ -281,8 +273,8 @@ namespace UI
             // lblDescripcionInicio
             // 
             lblDescripcionInicio.Dock = DockStyle.Fill;
-            lblDescripcionInicio.Font = new Font("Segoe UI", 11F);
-            lblDescripcionInicio.ForeColor = Color.White;
+            lblDescripcionInicio.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblDescripcionInicio.ForeColor = Color.FromArgb(214, 246, 36);
             lblDescripcionInicio.Location = new Point(3, 181);
             lblDescripcionInicio.Name = "lblDescripcionInicio";
             lblDescripcionInicio.Size = new Size(794, 32);
@@ -293,8 +285,8 @@ namespace UI
             // lblTituloInicio
             // 
             lblTituloInicio.Dock = DockStyle.Fill;
-            lblTituloInicio.Font = new Font("Segoe UI", 22F);
-            lblTituloInicio.ForeColor = Color.White;
+            lblTituloInicio.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTituloInicio.ForeColor = Color.FromArgb(214, 246, 36);
             lblTituloInicio.Location = new Point(3, 121);
             lblTituloInicio.Name = "lblTituloInicio";
             lblTituloInicio.Size = new Size(794, 60);

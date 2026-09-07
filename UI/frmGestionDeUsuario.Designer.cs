@@ -317,7 +317,7 @@ namespace UI
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9.5F);
-            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.ForeColor = Color.Black;
             dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(211, 230, 248);
             dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(18, 18, 18);
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
@@ -339,11 +339,11 @@ namespace UI
             // 
             // btnCrearUsuario
             // 
-            btnCrearUsuario.BackColor = Color.FromArgb(24, 70, 138);
+            btnCrearUsuario.BackColor = Color.FromArgb(214, 246, 36);
             btnCrearUsuario.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
             btnCrearUsuario.FlatStyle = FlatStyle.Flat;
             btnCrearUsuario.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnCrearUsuario.ForeColor = Color.White;
+            btnCrearUsuario.ForeColor = Color.Black;
             btnCrearUsuario.Location = new Point(747, 152);
             btnCrearUsuario.Name = "btnCrearUsuario";
             btnCrearUsuario.Size = new Size(162, 38);
@@ -354,11 +354,11 @@ namespace UI
             // 
             // btnModificarUsuario
             // 
-            btnModificarUsuario.BackColor = Color.FromArgb(24, 70, 138);
+            btnModificarUsuario.BackColor = Color.FromArgb(214, 246, 36);
             btnModificarUsuario.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
             btnModificarUsuario.FlatStyle = FlatStyle.Flat;
             btnModificarUsuario.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnModificarUsuario.ForeColor = Color.White;
+            btnModificarUsuario.ForeColor = Color.Black;
             btnModificarUsuario.Location = new Point(748, 196);
             btnModificarUsuario.Name = "btnModificarUsuario";
             btnModificarUsuario.Size = new Size(162, 38);
@@ -369,11 +369,11 @@ namespace UI
             // 
             // btnDesbloquearUsuario
             // 
-            btnDesbloquearUsuario.BackColor = Color.FromArgb(24, 70, 138);
+            btnDesbloquearUsuario.BackColor = Color.FromArgb(214, 246, 36);
             btnDesbloquearUsuario.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
             btnDesbloquearUsuario.FlatStyle = FlatStyle.Flat;
             btnDesbloquearUsuario.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnDesbloquearUsuario.ForeColor = Color.White;
+            btnDesbloquearUsuario.ForeColor = Color.Black;
             btnDesbloquearUsuario.Location = new Point(747, 241);
             btnDesbloquearUsuario.Name = "btnDesbloquearUsuario";
             btnDesbloquearUsuario.Size = new Size(162, 38);
@@ -384,11 +384,11 @@ namespace UI
             // 
             // btnActivarDesactivarUsuario
             // 
-            btnActivarDesactivarUsuario.BackColor = Color.FromArgb(24, 70, 138);
+            btnActivarDesactivarUsuario.BackColor = Color.FromArgb(214, 246, 36);
             btnActivarDesactivarUsuario.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
             btnActivarDesactivarUsuario.FlatStyle = FlatStyle.Flat;
             btnActivarDesactivarUsuario.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnActivarDesactivarUsuario.ForeColor = Color.White;
+            btnActivarDesactivarUsuario.ForeColor = Color.Black;
             btnActivarDesactivarUsuario.Location = new Point(747, 285);
             btnActivarDesactivarUsuario.Name = "btnActivarDesactivarUsuario";
             btnActivarDesactivarUsuario.Size = new Size(162, 38);
@@ -455,7 +455,7 @@ namespace UI
             Controls.Add(lblTitulo);
             Controls.Add(dgvUsuarios);
             Font = new Font("Segoe UI", 9.5F);
-            ForeColor = Color.White;
+            ForeColor = Color.Black;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;

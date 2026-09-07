@@ -39,19 +39,21 @@ namespace UI
             btnVolver = new Button();
             gbDatos.SuspendLayout();
             SuspendLayout();
+            // 
             // lblTitulo
-            lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            // 
+            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
             lblTitulo.Location = new Point(20, 18);
             lblTitulo.Name = "lblTitulo";
-            // AirPadel style preview BEGIN
-            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
-            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            // AirPadel style preview END
             lblTitulo.Size = new Size(700, 45);
+            lblTitulo.TabIndex = 4;
             lblTitulo.Text = "Registrar Reserva";
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // gbDatos
-            gbDatos.BackColor = Color.LightSkyBlue;
+            // 
+            gbDatos.BackColor = Color.FromArgb(24, 70, 138);
             gbDatos.Controls.Add(lblImporteValor);
             gbDatos.Controls.Add(lblImporteTitulo);
             gbDatos.Controls.Add(lblEquipamientoValor);
@@ -66,133 +68,193 @@ namespace UI
             gbDatos.Controls.Add(lblFechaTitulo);
             gbDatos.Controls.Add(lblClienteValor);
             gbDatos.Controls.Add(lblClienteTitulo);
+            gbDatos.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            gbDatos.ForeColor = Color.White;
             gbDatos.Location = new Point(20, 80);
             gbDatos.Name = "gbDatos";
-            // AirPadel style preview BEGIN
-            gbDatos.BackColor = Color.FromArgb(24, 70, 138);
-            gbDatos.ForeColor = Color.White;
-            gbDatos.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            // AirPadel style preview END
             gbDatos.Size = new Size(700, 275);
+            gbDatos.TabIndex = 3;
             gbDatos.TabStop = false;
             gbDatos.Text = "Datos de la Reserva";
-            // Cliente
-            lblClienteTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblClienteTitulo.Location = new Point(30, 35);
-            lblClienteTitulo.Size = new Size(100, 23);
-            lblClienteTitulo.Text = "Cliente:";
-            lblClienteValor.Location = new Point(140, 35);
-            lblClienteValor.Size = new Size(520, 23);
-            lblClienteValor.Text = "-";
-            // Fecha
-            lblFechaTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblFechaTitulo.Location = new Point(30, 75);
-            lblFechaTitulo.Size = new Size(100, 23);
-            lblFechaTitulo.Text = "Fecha:";
-            lblFechaValor.Location = new Point(140, 75);
-            lblFechaValor.Size = new Size(180, 23);
-            lblFechaValor.Text = "-";
-            // Horario
-            lblHorarioTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblHorarioTitulo.Location = new Point(360, 75);
-            lblHorarioTitulo.Size = new Size(90, 23);
-            lblHorarioTitulo.Text = "Horario:";
-            lblHorarioValor.Location = new Point(460, 75);
-            lblHorarioValor.Size = new Size(200, 23);
-            lblHorarioValor.Text = "-";
-            // Cancha
-            lblCanchaTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblCanchaTitulo.Location = new Point(30, 115);
-            lblCanchaTitulo.Size = new Size(100, 23);
-            lblCanchaTitulo.Text = "Cancha:";
-            lblCanchaValor.Location = new Point(140, 115);
-            lblCanchaValor.Size = new Size(180, 23);
-            lblCanchaValor.Text = "-";
-            // Tarifa
-            lblTarifaTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblTarifaTitulo.Location = new Point(360, 115);
-            lblTarifaTitulo.Size = new Size(90, 23);
-            lblTarifaTitulo.Text = "Tarifa:";
-            lblTarifaValor.Location = new Point(460, 115);
-            lblTarifaValor.Size = new Size(200, 23);
-            lblTarifaValor.Text = "-";
-            // Equipamiento
-            lblEquipamientoTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblEquipamientoTitulo.Location = new Point(30, 155);
-            lblEquipamientoTitulo.Size = new Size(105, 23);
-            lblEquipamientoTitulo.Text = "Equipamiento:";
-            lblEquipamientoValor.Location = new Point(140, 155);
-            lblEquipamientoValor.Size = new Size(520, 23);
-            lblEquipamientoValor.Text = "-";
-            // Importe
-            lblImporteTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblImporteTitulo.Location = new Point(420, 210);
-            lblImporteTitulo.Size = new Size(110, 28);
-            lblImporteTitulo.Text = "Abonado:";
+            // 
+            // lblImporteValor
+            // 
             lblImporteValor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblImporteValor.Location = new Point(535, 210);
+            lblImporteValor.Name = "lblImporteValor";
             lblImporteValor.Size = new Size(125, 28);
+            lblImporteValor.TabIndex = 0;
             lblImporteValor.Text = "-";
             lblImporteValor.TextAlign = ContentAlignment.MiddleRight;
-            // Mensaje
-            lblMensaje.ForeColor = Color.DarkRed;
+            // 
+            // lblImporteTitulo
+            // 
+            lblImporteTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblImporteTitulo.Location = new Point(420, 210);
+            lblImporteTitulo.Name = "lblImporteTitulo";
+            lblImporteTitulo.Size = new Size(110, 28);
+            lblImporteTitulo.TabIndex = 1;
+            lblImporteTitulo.Text = "Abonado:";
+            // 
+            // lblEquipamientoValor
+            // 
+            lblEquipamientoValor.Location = new Point(140, 155);
+            lblEquipamientoValor.Name = "lblEquipamientoValor";
+            lblEquipamientoValor.Size = new Size(520, 23);
+            lblEquipamientoValor.TabIndex = 2;
+            lblEquipamientoValor.Text = "-";
+            // 
+            // lblEquipamientoTitulo
+            // 
+            lblEquipamientoTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEquipamientoTitulo.Location = new Point(30, 155);
+            lblEquipamientoTitulo.Name = "lblEquipamientoTitulo";
+            lblEquipamientoTitulo.Size = new Size(105, 23);
+            lblEquipamientoTitulo.TabIndex = 3;
+            lblEquipamientoTitulo.Text = "Equipamiento:";
+            // 
+            // lblTarifaValor
+            // 
+            lblTarifaValor.Location = new Point(460, 115);
+            lblTarifaValor.Name = "lblTarifaValor";
+            lblTarifaValor.Size = new Size(200, 23);
+            lblTarifaValor.TabIndex = 4;
+            lblTarifaValor.Text = "-";
+            // 
+            // lblTarifaTitulo
+            // 
+            lblTarifaTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblTarifaTitulo.Location = new Point(360, 115);
+            lblTarifaTitulo.Name = "lblTarifaTitulo";
+            lblTarifaTitulo.Size = new Size(90, 23);
+            lblTarifaTitulo.TabIndex = 5;
+            lblTarifaTitulo.Text = "Tarifa:";
+            // 
+            // lblCanchaValor
+            // 
+            lblCanchaValor.Location = new Point(140, 115);
+            lblCanchaValor.Name = "lblCanchaValor";
+            lblCanchaValor.Size = new Size(180, 23);
+            lblCanchaValor.TabIndex = 6;
+            lblCanchaValor.Text = "-";
+            // 
+            // lblCanchaTitulo
+            // 
+            lblCanchaTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblCanchaTitulo.Location = new Point(30, 115);
+            lblCanchaTitulo.Name = "lblCanchaTitulo";
+            lblCanchaTitulo.Size = new Size(100, 23);
+            lblCanchaTitulo.TabIndex = 7;
+            lblCanchaTitulo.Text = "Cancha:";
+            // 
+            // lblHorarioValor
+            // 
+            lblHorarioValor.Location = new Point(460, 75);
+            lblHorarioValor.Name = "lblHorarioValor";
+            lblHorarioValor.Size = new Size(200, 23);
+            lblHorarioValor.TabIndex = 8;
+            lblHorarioValor.Text = "-";
+            // 
+            // lblHorarioTitulo
+            // 
+            lblHorarioTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblHorarioTitulo.Location = new Point(360, 75);
+            lblHorarioTitulo.Name = "lblHorarioTitulo";
+            lblHorarioTitulo.Size = new Size(90, 23);
+            lblHorarioTitulo.TabIndex = 9;
+            lblHorarioTitulo.Text = "Horario:";
+            // 
+            // lblFechaValor
+            // 
+            lblFechaValor.Location = new Point(140, 75);
+            lblFechaValor.Name = "lblFechaValor";
+            lblFechaValor.Size = new Size(180, 23);
+            lblFechaValor.TabIndex = 10;
+            lblFechaValor.Text = "-";
+            // 
+            // lblFechaTitulo
+            // 
+            lblFechaTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblFechaTitulo.Location = new Point(30, 75);
+            lblFechaTitulo.Name = "lblFechaTitulo";
+            lblFechaTitulo.Size = new Size(100, 23);
+            lblFechaTitulo.TabIndex = 11;
+            lblFechaTitulo.Text = "Fecha:";
+            // 
+            // lblClienteValor
+            // 
+            lblClienteValor.Location = new Point(140, 35);
+            lblClienteValor.Name = "lblClienteValor";
+            lblClienteValor.Size = new Size(520, 23);
+            lblClienteValor.TabIndex = 12;
+            lblClienteValor.Text = "-";
+            // 
+            // lblClienteTitulo
+            // 
+            lblClienteTitulo.BackColor = Color.FromArgb(24, 70, 138);
+            lblClienteTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblClienteTitulo.Location = new Point(30, 35);
+            lblClienteTitulo.Name = "lblClienteTitulo";
+            lblClienteTitulo.Size = new Size(100, 23);
+            lblClienteTitulo.TabIndex = 13;
+            lblClienteTitulo.Text = "Cliente:";
+            // 
+            // lblMensaje
+            // 
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
             lblMensaje.Location = new Point(20, 370);
             lblMensaje.Name = "lblMensaje";
-            // AirPadel style preview BEGIN
-            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
-            // AirPadel style preview END
             lblMensaje.Size = new Size(700, 45);
+            lblMensaje.TabIndex = 2;
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
-            // Registrar
+            // 
+            // btnRegistrar
+            // 
+            btnRegistrar.BackColor = Color.FromArgb(214, 246, 36);
+            btnRegistrar.FlatAppearance.BorderSize = 0;
+            btnRegistrar.FlatStyle = FlatStyle.Flat;
+            btnRegistrar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnRegistrar.ForeColor = Color.FromArgb(18, 18, 18);
             btnRegistrar.Location = new Point(560, 430);
             btnRegistrar.Name = "btnRegistrar";
-            // AirPadel style preview BEGIN
-            btnRegistrar.FlatStyle = FlatStyle.Flat;
-            btnRegistrar.FlatAppearance.BorderSize = 0;
-            btnRegistrar.BackColor = Color.FromArgb(214, 246, 36);
-            btnRegistrar.ForeColor = Color.FromArgb(18, 18, 18);
-            btnRegistrar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnRegistrar.UseVisualStyleBackColor = false;
-            // AirPadel style preview END
             btnRegistrar.Size = new Size(160, 34);
+            btnRegistrar.TabIndex = 1;
             btnRegistrar.Text = "Registrar Reserva";
             btnRegistrar.UseVisualStyleBackColor = false;
             btnRegistrar.Click += btnRegistrar_Click;
-            // Volver
+            // 
+            // btnVolver
+            // 
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
+            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnVolver.ForeColor = Color.White;
             btnVolver.Location = new Point(440, 430);
             btnVolver.Name = "btnVolver";
-            // AirPadel style preview BEGIN
-            btnVolver.FlatStyle = FlatStyle.Flat;
-            btnVolver.FlatAppearance.BorderSize = 1;
-            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
-            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
-            btnVolver.ForeColor = Color.White;
-            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnVolver.UseVisualStyleBackColor = false;
-            // AirPadel style preview END
             btnVolver.Size = new Size(100, 34);
+            btnVolver.TabIndex = 0;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = false;
             btnVolver.Click += btnVolver_Click;
-            // Form
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            // 
+            // frmRegistrarReserva
+            // 
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.WhiteSmoke;
+            BackColor = Color.FromArgb(14, 43, 92);
             ClientSize = new Size(740, 485);
             Controls.Add(btnVolver);
             Controls.Add(btnRegistrar);
             Controls.Add(lblMensaje);
             Controls.Add(gbDatos);
             Controls.Add(lblTitulo);
+            Font = new Font("Segoe UI", 9.5F);
+            ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmRegistrarReserva";
-            // AirPadel style preview BEGIN
-            BackColor = Color.FromArgb(14, 43, 92);
-            ForeColor = Color.White;
-            Font = new Font("Segoe UI", 9.5F);
-            // AirPadel style preview END
             StartPosition = FormStartPosition.CenterParent;
             Text = "PadelGest - Registrar Reserva";
             FormClosed += frmRegistrarReserva_FormClosed;
