@@ -109,7 +109,7 @@ namespace BLL
             ValidarCodigoSeguridad(codigoSeguridad);
 
             // La factura se materializa en BD al primer intento de cobro.
-            // Si el Banco rechaza la operación, permanece en estado Pendiente.
+            // Si el Banco rechaza la operación, la factura queda Cancelada.
             if (factura.IdFactura == 0)
             {
                 factura.FechaHoraEmision = DateTime.Now;
@@ -126,6 +126,10 @@ namespace BLL
 
             if (!autorizacion.Aprobado)
             {
+                _cobroDAL.CancelarFactura(factura.IdFactura);
+                factura.Estado = "Cancelada";
+                _digitoVerificadorBLL.RecalcularDV("Factura");
+
                 return new ResultadoCobroBE
                 {
                     Aprobado = false,

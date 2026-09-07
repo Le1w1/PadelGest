@@ -86,6 +86,31 @@ namespace DAL
             }
         }
 
+        public void CancelarFactura(int idFactura)
+        {
+            using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
+            {
+                const string query = @"
+                    UPDATE Factura
+                    SET Estado = N'Cancelada'
+                    WHERE IdFactura = @IdFactura
+                      AND Estado = N'Pendiente'";
+
+                using (SqlCommand comando = new SqlCommand(query, conexion))
+                {
+                    comando.Parameters.Add("@IdFactura", SqlDbType.Int).Value = idFactura;
+
+                    conexion.Open();
+
+                    if (comando.ExecuteNonQuery() != 1)
+                    {
+                        throw new Exception(
+                            "No se pudo cancelar la factura pendiente.");
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Registra el pago aprobado y marca la factura como Pagada dentro de
         /// una misma transacción local.

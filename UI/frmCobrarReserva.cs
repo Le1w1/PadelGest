@@ -219,6 +219,8 @@ namespace UI
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
 
+                    DialogResult = DialogResult.Cancel;
+                    Close();
                     return;
                 }
 

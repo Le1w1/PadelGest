@@ -387,7 +387,7 @@
   "frmCobrarReserva.BtnCobrar": "Charge Reservation",
   "frmCobrarReserva.BtnVolver": "Back",
   "frmCobrarReserva.MsgAprobado": "The payment was approved successfully.",
-  "frmCobrarReserva.MsgRechazado": "The Bank rejected the transaction. The invoice remains unpaid.",
+  "frmCobrarReserva.MsgRechazado": "The Bank rejected the transaction. The invoice was cancelled and the reservation was not registered.",
   "frmSeleccionarTurno.BtnRegistrarReserva": "Register Reservation",
   "frmSeleccionarTurno.MsgFaltanDatosRegistro": "A time slot, Client and Paid invoice are required to register the reservation.",
   "frmSeleccionarTurno.MsgReservaRegistrada": "Reservation registered successfully. Code: {0}.",

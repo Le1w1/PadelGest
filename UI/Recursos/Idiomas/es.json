@@ -385,7 +385,7 @@
   "frmCobrarReserva.BtnCobrar": "Cobrar Reserva",
   "frmCobrarReserva.BtnVolver": "Volver",
   "frmCobrarReserva.MsgAprobado": "El cobro fue aprobado correctamente.",
-  "frmCobrarReserva.MsgRechazado": "El Banco rechazó la operación. La factura permanece sin pagar.",
+  "frmCobrarReserva.MsgRechazado": "El Banco rechazó la operación. La factura fue cancelada y la reserva no se registró.",
   "frmSeleccionarTurno.BtnRegistrarReserva": "Registrar Reserva",
   "frmSeleccionarTurno.MsgFaltanDatosRegistro": "Debe existir un turno, un Cliente y una factura Pagada para registrar la reserva.",
   "frmSeleccionarTurno.MsgReservaRegistrada": "Reserva registrada correctamente. Código: {0}.",
