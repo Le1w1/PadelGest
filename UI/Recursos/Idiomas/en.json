@@ -22,14 +22,12 @@
   "frmMenuPrincipal.SinSesion": "No active session",
   "frmMenuPrincipal.ConfirmarCerrarSesion": "Do you want to log out?",
   "frmMenuPrincipal.CerrarSesionTitulo": "Logout",
-
   "frmCambiarIdioma.Title": "Change Language",
   "frmCambiarIdioma.LblIdioma": "Language:",
   "frmCambiarIdioma.BtnGuardar": "Save",
   "frmCambiarIdioma.BtnVolver": "Back",
   "frmCambiarIdioma.MsgCambioExitoso": "Language changed successfully.",
   "frmCambiarIdioma.MsgSeleccioneIdioma": "You must select a language.",
-
   "frmLogin.Title": "PadelGest - Login",
   "frmLogin.LblTitulo": "PadelGest",
   "frmLogin.LblSubtitulo": "Login",
@@ -47,7 +45,6 @@
   "frmLogin.TitleCambioClave": "Password change recommended",
   "frmLogin.MsgCambioClaveRecomendado": "You are using an initial password. It is recommended to change it for security.\n\nDo you want to change it now?",
   "frmLogin.MsgIntegridadSinPermiso": "The system is currently experiencing some issues. Please contact an administrator to have them fixed if they haven't already been addressed.",
-
   "frmSesion.Title": "PadelGest - Session",
   "frmSesion.LblTitulo": "Session",
   "frmSesion.LblOpciones": "Current session options",
@@ -60,7 +57,6 @@
   "frmSesion.ConfirmarCerrarSesion": "Do you want to log out?",
   "frmSesion.CerrarSesionTitulo": "Logout",
   "frmSesion.MsgReLoginExitoso": "Re-Login completed successfully.",
-
   "frmCambiarClave.Title": "PadelGest - Change Password",
   "frmCambiarClave.LblTitulo": "Change Password",
   "frmCambiarClave.LblClaveActual": "Current Password:",
@@ -76,7 +72,6 @@
   "frmCambiarClave.MsgFaltaConfirmar": "You must confirm the new password.",
   "frmCambiarClave.MsgNoCoinciden": "The new password and confirmation do not match.",
   "frmCambiarClave.MsgRevise": "Please check the entered data.",
-
   "frmAdministrador.Title": "PadelGest - User Management",
   "frmAdministrador.LblTitulo": "USER MANAGEMENT",
   "frmAdministrador.GbFiltros": "User Filters",
@@ -122,7 +117,6 @@
   "frmAdministrador.ConfirmarDesbloquear": "Do you want to unlock the selected user?",
   "frmAdministrador.ConfirmarActivar": "Do you want to activate the selected user?",
   "frmAdministrador.ConfirmarDesactivar": "Do you want to deactivate the selected user?",
-
   "frmAuditarEventos.Title": "Event Audit",
   "frmAuditarEventos.GbFiltros": "Search Filters",
   "frmAuditarEventos.LblFechaDesde": "Date From:",
@@ -154,7 +148,6 @@
   "frmAuditarEventos.MsgPdfOK": "PDF exported successfully.",
   "frmAuditarEventos.MsgAbrirPdf": "PDF exported successfully.\nDo you want to open the file?",
   "frmAuditarEventos.MsgPdfError": "Could not export the PDF.",
-
   "frmGestionarRespaldo.Title": "Backup Management",
   "frmGestionarRespaldo.LblTitulo": "Backup Management",
   "frmGestionarRespaldo.GbBackup": "Backup",
@@ -174,7 +167,6 @@
   "frmGestionarRespaldo.ConfirmarRestore": "You are about to restore the database. This operation cannot be undone and will restart the application. Do you want to continue?",
   "frmGestionarRespaldo.BackupExitoso": "Backup successfully created at: {0}",
   "frmGestionarRespaldo.RestoreExitoso": "Restore completed successfully. The application will restart.",
-
   "frmRepararIntegridad.Title": "Integrity Repair",
   "frmRepararIntegridad.LblTitulo": "Integrity Repair",
   "frmRepararIntegridad.LblExplicacion": "The system detected the following inconsistencies in the database. You must repair the system before continuing operations.",
@@ -191,7 +183,6 @@
   "frmRepararIntegridad.RegistroDVV": "(table set)",
   "frmRepararIntegridad.ConfirmarRecalcular": "You are about to RECALCULATE the verifier digits. If any data was modified outside the system, that modification will be permanently legitimized. This operation cannot be undone.\n\nDo you want to continue?",
   "frmRepararIntegridad.RecalcularExitoso": "The verifier digits were recalculated successfully. The application will restart.",
-
   "Errores.DebeIngresarEmail": "You must enter the Email.",
   "Errores.PermisoDenegado": "You do not have permission to perform this operation.",
   "Errores.DebeIngresarContrasenia": "You must enter the Password.",
@@ -204,12 +195,10 @@
   "Errores.NoHaySesionParaCerrar": "There is no active session to close.",
   "Errores.NoHaySesionActiva": "There is no active session.",
   "Errores.IntegridadComprometida": "A data integrity violation was detected. The system requires repair by an administrator.",
-
   "Errores.UsuarioSeleccionadoNoEncontrado": "Selected user was not found.",
   "Errores.DebeSeleccionarUsuarioDesbloquear": "You must select a user to unlock.",
   "Errores.UsuarioNoBloqueado": "The selected user is not locked.",
   "Errores.DebeSeleccionarUsuarioModificar": "You must select a user to edit.",
-
   "Errores.DebeIngresarClaveActual": "You must enter the current password.",
   "Errores.DebeIngresarNuevaClave": "You must enter the new password.",
   "Errores.DebeConfirmarNuevaClave": "You must confirm the new password.",
@@ -217,7 +206,6 @@
   "Errores.ClaveInsegura": "The new password must have at least 8 characters, one uppercase letter and one number.",
   "Errores.ClaveActualIncorrecta": "The current password is incorrect.",
   "Errores.ClaveIgualAnterior": "The new password cannot be the same as the current one.",
-
   "Errores.CamposObligatorios": "You must fill in all required fields.",
   "Errores.NombreInvalido": "The first name can only contain letters and must be between 2 and 50 characters.",
   "Errores.ApellidoInvalido": "The last name can only contain letters and must be between 2 and 50 characters.",
@@ -231,10 +219,8 @@
   "Errores.DniYaRegistradoOtroUsuario": "The ID number is already registered by another user.",
   "Errores.NombreUsuarioYaRegistradoOtroUsuario": "The username is already registered by another user.",
   "Errores.IdiomaPorDefectoNoEncontrado": "Default language (ES) was not found in the database.",
-
   "Errores.DebeSeleccionarIdioma": "You must select a language.",
   "Errores.IdiomaIgualActual": "The selected language is already the current language.",
-
   "Errores.RBAC.NombreObligatorio": "You must enter a name.",
   "Errores.RBAC.NombreFamiliaYaExiste": "A Family with that name already exists.",
   "Errores.RBAC.NombreRolYaExiste": "A Role with that name already exists.",
@@ -247,7 +233,6 @@
   "Errores.RBAC.PermisoDuplicado": "Permission '{0}' is already included through {1}; it cannot also be added through {2}.",
   "Errores.RBAC.FamiliaEnUso": "The Family cannot be deleted because it is being used by one or more Roles or other Families. Remove those references first.",
   "Errores.RBAC.RolEnUso": "The Role cannot be deleted because it is assigned to one or more Users. Change the Role of those users first.",
-
   "frmGestionarRolesYFamilias.Title": "PadelGest - Manage Roles and Families",
   "frmGestionarRolesYFamilias.LblTitulo": "Manage Roles and Families",
   "frmGestionarRolesYFamilias.LblRolFamilia": "Role - Family:",
@@ -270,7 +255,6 @@
   "frmGestionarRolesYFamilias.ConfirmarDescartarBorrador": "The item you are creating has not been saved yet. If you change selection, it will be discarded.\n\nDo you want to discard it and continue?",
   "frmGestionarRolesYFamilias.ConfirmarEliminarPorVacio": "The composition has become empty. Do you want to delete this item? It will be permanently removed from the database. Only allowed if it is NOT being used by other Families or Roles.\n\nIf you choose No, the in-memory changes are kept and you can cancel to revert.",
   "frmGestionarRolesYFamilias.MsgNoEliminado": "Not deleted. Use 'Cancel' to discard changes, or add at least one item to the composition and save.",
-
   "Errores.SinPermisoRespaldo": "You do not have permission to manage backups.",
   "Errores.DebeSeleccionarCarpeta": "You must select a destination folder.",
   "Errores.CarpetaNoExiste": "The selected folder does not exist: {0}",
@@ -287,5 +271,9 @@
   "Respaldo.DescBackupExitoso": "A database backup was created at: {0}",
   "Respaldo.DescBackupFallido": "Backup failed at: {0}. Detail: {1}",
   "Respaldo.DescRestoreIniciado": "Starting database restore from: {0}",
-  "Respaldo.DescRestoreFallido": "Restore failed from: {0}. Detail: {1}"
+  "Respaldo.DescRestoreFallido": "Restore failed from: {0}. Detail: {1}",
+  "Errores.Reserva.FechaPasada": "A date earlier than today cannot be selected.",
+  "Errores.Reserva.FechaFueraAnticipacion": "Reservations can only be made up to 7 days in advance.",
+  "Errores.Reserva.TurnoIniciado": "A time slot that has already started cannot be selected.",
+  "Errores.Reserva.HorarioInvalido": "The selected time does not match a valid 90-minute time slot."
 }
