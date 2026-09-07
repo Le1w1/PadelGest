@@ -34,8 +34,7 @@ namespace UI
             _soloRestore = soloRestore;
 
             InitializeComponent();
-            EstiloVisual.Aplicar(this);
-            _respaldoBLL = new RespaldoBLL();
+_respaldoBLL = new RespaldoBLL();
 
             AplicarPermisos();
             ActualizarIdioma();
