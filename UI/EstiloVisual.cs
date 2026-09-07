@@ -4,37 +4,49 @@ namespace UI
 {
     public static class EstiloVisual
     {
+        // Paleta inspirada en la identidad visual enviada:
+        // azul profundo + azul medio + lima neón + blanco.
         private static readonly Color Fondo =
-            Color.FromArgb(245, 247, 250);
+            Color.FromArgb(14, 43, 92);
 
         private static readonly Color Superficie =
-            Color.White;
+            Color.FromArgb(24, 70, 138);
+
+        private static readonly Color SuperficieHover =
+            Color.FromArgb(31, 83, 156);
 
         private static readonly Color Primario =
-            Color.FromArgb(37, 99, 165);
+            Color.FromArgb(214, 246, 36);
 
         private static readonly Color PrimarioHover =
-            Color.FromArgb(31, 83, 139);
+            Color.FromArgb(192, 224, 29);
 
-        private static readonly Color Secundario =
-            Color.FromArgb(232, 236, 241);
+        private static readonly Color TextoClaro =
+            Color.White;
 
-        private static readonly Color Texto =
-            Color.FromArgb(35, 42, 52);
+        private static readonly Color TextoOscuro =
+            Color.FromArgb(18, 18, 18);
 
         private static readonly Color Borde =
-            Color.FromArgb(215, 220, 226);
+            Color.FromArgb(64, 103, 166);
+
+        private static readonly Color CajaTexto =
+            Color.White;
+
+        private static readonly Color CajaSoloLectura =
+            Color.FromArgb(236, 241, 248);
 
         private static readonly Color FilaAlterna =
-            Color.FromArgb(248, 249, 251);
+            Color.FromArgb(244, 247, 251);
 
         private static readonly Color Seleccion =
-            Color.FromArgb(214, 228, 244);
+            Color.FromArgb(211, 230, 248);
 
         public static void Aplicar(Form form)
         {
             form.Font = new Font("Segoe UI", 9.5F);
             form.BackColor = Fondo;
+            form.ForeColor = TextoClaro;
 
             AplicarControles(form.Controls);
         }
@@ -63,13 +75,15 @@ namespace UI
                         break;
 
                     case ComboBox combo:
-                        combo.FlatStyle = FlatStyle.Flat;
-                        combo.BackColor = Superficie;
-                        combo.ForeColor = Texto;
+                        EstilizarCombo(combo);
                         break;
 
                     case Label etiqueta:
                         EstilizarEtiqueta(etiqueta);
+                        break;
+
+                    case DateTimePicker fecha:
+                        EstilizarFecha(fecha);
                         break;
                 }
 
@@ -83,7 +97,7 @@ namespace UI
         private static void EstilizarGrupo(GroupBox grupo)
         {
             grupo.BackColor = Superficie;
-            grupo.ForeColor = Texto;
+            grupo.ForeColor = TextoClaro;
             grupo.Font = new Font(
                 "Segoe UI",
                 9.5F,
@@ -92,7 +106,7 @@ namespace UI
 
         private static void EstilizarEtiqueta(Label etiqueta)
         {
-            etiqueta.ForeColor = Texto;
+            etiqueta.ForeColor = TextoClaro;
 
             if (etiqueta.Name.Equals(
                 "lblTitulo",
@@ -102,6 +116,15 @@ namespace UI
                     "Segoe UI",
                     18F,
                     FontStyle.Bold);
+
+                etiqueta.ForeColor = Primario;
+            }
+
+            if (etiqueta.Name.Equals(
+                "lblMensaje",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                etiqueta.ForeColor = Primario;
             }
         }
 
@@ -110,10 +133,27 @@ namespace UI
             caja.BorderStyle = BorderStyle.FixedSingle;
             caja.BackColor =
                 caja.ReadOnly
-                    ? Color.FromArgb(247, 248, 250)
-                    : Superficie;
+                    ? CajaSoloLectura
+                    : CajaTexto;
 
-            caja.ForeColor = Texto;
+            caja.ForeColor = TextoOscuro;
+        }
+
+        private static void EstilizarCombo(ComboBox combo)
+        {
+            combo.FlatStyle = FlatStyle.Flat;
+            combo.BackColor = CajaTexto;
+            combo.ForeColor = TextoOscuro;
+        }
+
+        private static void EstilizarFecha(DateTimePicker fecha)
+        {
+            fecha.CalendarForeColor = TextoOscuro;
+            fecha.CalendarMonthBackground = CajaTexto;
+            fecha.CalendarTitleBackColor = Superficie;
+            fecha.CalendarTitleForeColor = TextoClaro;
+            fecha.CalendarTrailingForeColor =
+                Color.FromArgb(110, 120, 135);
         }
 
         private static void EstilizarBoton(Button boton)
@@ -124,12 +164,12 @@ namespace UI
             boton.Font = new Font(
                 "Segoe UI",
                 9.5F,
-                FontStyle.Regular);
+                FontStyle.Bold);
 
             if (EsBotonPrincipal(boton.Name))
             {
                 boton.BackColor = Primario;
-                boton.ForeColor = Color.White;
+                boton.ForeColor = TextoOscuro;
                 boton.FlatAppearance.MouseOverBackColor =
                     PrimarioHover;
                 boton.FlatAppearance.MouseDownBackColor =
@@ -137,12 +177,14 @@ namespace UI
             }
             else
             {
-                boton.BackColor = Secundario;
-                boton.ForeColor = Texto;
+                boton.BackColor = Superficie;
+                boton.ForeColor = TextoClaro;
+                boton.FlatAppearance.BorderSize = 1;
+                boton.FlatAppearance.BorderColor = Borde;
                 boton.FlatAppearance.MouseOverBackColor =
-                    Color.FromArgb(220, 225, 231);
+                    SuperficieHover;
                 boton.FlatAppearance.MouseDownBackColor =
-                    Color.FromArgb(210, 216, 223);
+                    SuperficieHover;
             }
         }
 
@@ -160,7 +202,7 @@ namespace UI
         private static void EstilizarGrilla(DataGridView grilla)
         {
             grilla.BorderStyle = BorderStyle.None;
-            grilla.BackgroundColor = Superficie;
+            grilla.BackgroundColor = CajaTexto;
             grilla.GridColor = Borde;
             grilla.EnableHeadersVisualStyles = false;
             grilla.RowHeadersVisible = false;
@@ -174,7 +216,7 @@ namespace UI
             grilla.ColumnHeadersDefaultCellStyle.BackColor =
                 Primario;
             grilla.ColumnHeadersDefaultCellStyle.ForeColor =
-                Color.White;
+                TextoOscuro;
             grilla.ColumnHeadersDefaultCellStyle.Font =
                 new Font(
                     "Segoe UI",
@@ -183,14 +225,14 @@ namespace UI
             grilla.ColumnHeadersDefaultCellStyle.SelectionBackColor =
                 Primario;
             grilla.ColumnHeadersDefaultCellStyle.SelectionForeColor =
-                Color.White;
+                TextoOscuro;
 
-            grilla.DefaultCellStyle.BackColor = Superficie;
-            grilla.DefaultCellStyle.ForeColor = Texto;
+            grilla.DefaultCellStyle.BackColor = CajaTexto;
+            grilla.DefaultCellStyle.ForeColor = TextoOscuro;
             grilla.DefaultCellStyle.SelectionBackColor =
                 Seleccion;
             grilla.DefaultCellStyle.SelectionForeColor =
-                Texto;
+                TextoOscuro;
             grilla.DefaultCellStyle.Padding =
                 new Padding(4, 2, 4, 2);
 
