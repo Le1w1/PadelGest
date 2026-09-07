@@ -1,11 +1,10 @@
-﻿using BLL.Servicios;
-using DAL;
+﻿using DAL.Servicios;
 using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BLL
+namespace BLL.Servicios
 {
     public class FamiliaBLL
     {
