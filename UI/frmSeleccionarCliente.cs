@@ -47,6 +47,7 @@ namespace UI
             lblCorreoTitulo.Text = t.Traducir("frmSeleccionarCliente.LblCorreo");
 
             btnConfirmar.Text = t.Traducir("frmSeleccionarCliente.BtnConfirmar");
+            btnRegistrarCliente.Text = t.Traducir("frmSeleccionarCliente.BtnRegistrar");
             btnVolver.Text = t.Traducir("frmSeleccionarCliente.BtnVolver");
         }
 
@@ -92,6 +93,10 @@ namespace UI
                 {
                     lblMensaje.Text =
                         Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgNoRegistrado");
+
+                    btnRegistrarCliente.Visible = true;
+                    btnRegistrarCliente.Enabled =
+                        SM.Instancia.TienePermiso("CLI_REGISTRAR");
                     return;
                 }
 
@@ -127,6 +132,29 @@ namespace UI
             lblCorreoValor.Text = "-";
 
             btnConfirmar.Enabled = false;
+            btnRegistrarCliente.Visible = false;
+            btnRegistrarCliente.Enabled = false;
+        }
+
+        private void btnRegistrarCliente_Click(object sender, EventArgs e)
+        {
+            string dni = txtDNI.Text.Trim();
+
+            using frmRegistrarCliente formRegistrar = new frmRegistrarCliente(dni);
+
+            if (formRegistrar.ShowDialog(this) == DialogResult.OK &&
+                formRegistrar.ClienteRegistrado != null)
+            {
+                _clienteEncontrado = formRegistrar.ClienteRegistrado;
+
+                MostrarCliente(_clienteEncontrado);
+                btnRegistrarCliente.Visible = false;
+                btnRegistrarCliente.Enabled = false;
+                btnConfirmar.Enabled = true;
+
+                lblMensaje.Text =
+                    Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgRegistradoIdentificado");
+            }
         }
 
         private void btnConfirmar_Click(object sender, EventArgs e)

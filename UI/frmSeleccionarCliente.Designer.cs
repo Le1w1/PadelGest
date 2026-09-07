@@ -37,6 +37,7 @@ namespace UI
             lblDNIValorTitulo = new Label();
             lblMensaje = new Label();
             btnConfirmar = new Button();
+            btnRegistrarCliente = new Button();
             btnVolver = new Button();
             errorProvider = new ErrorProvider(components);
             gbBusqueda.SuspendLayout();
@@ -179,6 +180,16 @@ namespace UI
             btnConfirmar.Text = "Confirmar Cliente";
             btnConfirmar.UseVisualStyleBackColor = true;
             btnConfirmar.Click += btnConfirmar_Click;
+            // btnRegistrarCliente
+            btnRegistrarCliente.Enabled = false;
+            btnRegistrarCliente.Location = new Point(215, 445);
+            btnRegistrarCliente.Name = "btnRegistrarCliente";
+            btnRegistrarCliente.Size = new Size(165, 34);
+            btnRegistrarCliente.TabIndex = 5;
+            btnRegistrarCliente.Text = "Registrar Cliente";
+            btnRegistrarCliente.UseVisualStyleBackColor = true;
+            btnRegistrarCliente.Visible = false;
+            btnRegistrarCliente.Click += btnRegistrarCliente_Click;
             // btnVolver
             btnVolver.Location = new Point(400, 445);
             btnVolver.Name = "btnVolver";
@@ -195,6 +206,7 @@ namespace UI
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(700, 500);
             Controls.Add(btnVolver);
+            Controls.Add(btnRegistrarCliente);
             Controls.Add(btnConfirmar);
             Controls.Add(lblMensaje);
             Controls.Add(gbDatosCliente);
@@ -235,6 +247,7 @@ namespace UI
         private Label lblCorreoValor;
         private Label lblMensaje;
         private Button btnConfirmar;
+        private Button btnRegistrarCliente;
         private Button btnVolver;
         private ErrorProvider errorProvider;
     }

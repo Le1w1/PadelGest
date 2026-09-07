@@ -30,6 +30,61 @@ namespace DAL
             };
         }
 
+        public bool ExistePorDNI(string dni)
+        {
+            using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
+            {
+                const string query = "SELECT COUNT(1) FROM Cliente WHERE DNI = @DNI";
+
+                using (SqlCommand comando = new SqlCommand(query, conexion))
+                {
+                    comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = dni;
+                    conexion.Open();
+
+                    return Convert.ToInt32(comando.ExecuteScalar()) > 0;
+                }
+            }
+        }
+
+        public ClienteBE Insertar(ClienteBE cliente)
+        {
+            using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
+            {
+                const string query = @"
+                    INSERT INTO Cliente
+                    (
+                        DNI,
+                        Nombre,
+                        Apellido,
+                        Telefono,
+                        CorreoElectronico
+                    )
+                    OUTPUT INSERTED.IdCliente
+                    VALUES
+                    (
+                        @DNI,
+                        @Nombre,
+                        @Apellido,
+                        @Telefono,
+                        @CorreoElectronico
+                    )";
+
+                using (SqlCommand comando = new SqlCommand(query, conexion))
+                {
+                    comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = cliente.DNI;
+                    comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50).Value = cliente.Nombre;
+                    comando.Parameters.Add("@Apellido", SqlDbType.NVarChar, 50).Value = cliente.Apellido;
+                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 30).Value = cliente.Telefono;
+                    comando.Parameters.Add("@CorreoElectronico", SqlDbType.NVarChar, 150).Value = cliente.CorreoElectronico;
+
+                    conexion.Open();
+
+                    cliente.IdCliente = Convert.ToInt32(comando.ExecuteScalar());
+                    return cliente;
+                }
+            }
+        }
+
         /// Busca un Cliente por DNI. Devuelve null si no existe.
         public ClienteBE? BuscarPorDNI(string dni)
         {
