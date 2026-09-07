@@ -96,7 +96,8 @@ namespace UI
                 $"{_cliente.DNI} - {_cliente.Nombre} {_cliente.Apellido}";
 
             lblTurnoValor.Text =
-                $"{_factura.FechaReserva:d} {_factura.Horario:hh\:mm}";
+                _factura.FechaReserva.ToString("d") + " " +
+                _factura.Horario.ToString(@"hh\:mm");
 
             lblCanchaValor.Text = _cancha.Nombre;
             lblTarifaValor.Text =
