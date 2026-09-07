@@ -134,8 +134,7 @@ namespace DAL.Servicios
                 comando.Parameters.AddWithValue("@RutaArchivo", rutaArchivo);
                 comando.Parameters.AddWithValue("@NombreArchivo", nombreArchivo);
                 comando.Parameters.AddWithValue("@Resultado", resultado);
-                comando.Parameters.AddWithValue("@Descripcion",
-                    (object)descripcion ?? DBNull.Value);
+                comando.Parameters.AddWithValue("@Descripcion",(object)descripcion ?? DBNull.Value);
                 comando.Parameters.AddWithValue("@IdUsuario", idUsuario);
 
                 conexion.Open();
