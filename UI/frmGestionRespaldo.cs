@@ -1,4 +1,4 @@
-﻿using BLL.Servicios;
+using BLL.Servicios;
 using Servicios;
 using System;
 using System.Collections.Generic;
@@ -34,6 +34,7 @@ namespace UI
             _soloRestore = soloRestore;
 
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
             _respaldoBLL = new RespaldoBLL();
 
             AplicarPermisos();

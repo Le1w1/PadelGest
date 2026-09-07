@@ -1,4 +1,4 @@
-﻿using BLL.Servicios;
+using BLL.Servicios;
 using Servicios;
 using System;
 using System.Collections.Generic;
@@ -36,6 +36,7 @@ namespace UI
         public frmGestionarRolesYFamilias()
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
             _familiaBLL = new FamiliaBLL();
             _rolBLL = new RolBLL();
             _permisoSimpleBLL = new PermisoSimpleBLL();

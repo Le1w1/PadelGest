@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class frmGestionarRespaldo
     {
@@ -108,7 +108,7 @@
             this.btnExaminarCarpeta.Size = new System.Drawing.Size(100, 25);
             this.btnExaminarCarpeta.TabIndex = 2;
             this.btnExaminarCarpeta.Text = "Examinar...";
-            this.btnExaminarCarpeta.UseVisualStyleBackColor = true;
+            this.btnExaminarCarpeta.UseVisualStyleBackColor = false;
             this.btnExaminarCarpeta.Click += new System.EventHandler(this.btnExaminarCarpeta_Click);
 
             // 
@@ -141,7 +141,7 @@
             this.btnRealizarBackup.Size = new System.Drawing.Size(160, 35);
             this.btnRealizarBackup.TabIndex = 5;
             this.btnRealizarBackup.Text = "Realizar Backup";
-            this.btnRealizarBackup.UseVisualStyleBackColor = true;
+            this.btnRealizarBackup.UseVisualStyleBackColor = false;
             this.btnRealizarBackup.Click += new System.EventHandler(this.btnRealizarBackup_Click);
 
             // ==================== GRUPO RESTORE ====================
@@ -194,7 +194,7 @@
             this.btnExaminarArchivo.Size = new System.Drawing.Size(100, 25);
             this.btnExaminarArchivo.TabIndex = 2;
             this.btnExaminarArchivo.Text = "Examinar...";
-            this.btnExaminarArchivo.UseVisualStyleBackColor = true;
+            this.btnExaminarArchivo.UseVisualStyleBackColor = false;
             this.btnExaminarArchivo.Click += new System.EventHandler(this.btnExaminarArchivo_Click);
 
             // 
@@ -239,7 +239,7 @@
             this.btnRestaurar.Size = new System.Drawing.Size(200, 35);
             this.btnRestaurar.TabIndex = 6;
             this.btnRestaurar.Text = "Restaurar Base de Datos";
-            this.btnRestaurar.UseVisualStyleBackColor = true;
+            this.btnRestaurar.UseVisualStyleBackColor = false;
             this.btnRestaurar.Click += new System.EventHandler(this.btnRestaurar_Click);
 
             // 

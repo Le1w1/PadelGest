@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class frmCambiarIdioma
     {
@@ -41,6 +41,9 @@
             lblIdioma.Font = new Font("Segoe UI", 10F);
             lblIdioma.Location = new Point(30, 35);
             lblIdioma.Name = "lblIdioma";
+            // AirPadel style preview BEGIN
+            lblIdioma.ForeColor = Color.White;
+            // AirPadel style preview END
             lblIdioma.Size = new Size(54, 19);
             lblIdioma.TabIndex = 0;
             lblIdioma.Text = "Idioma:";
@@ -52,6 +55,11 @@
             cboIdiomas.FormattingEnabled = true;
             cboIdiomas.Location = new Point(110, 32);
             cboIdiomas.Name = "cboIdiomas";
+            // AirPadel style preview BEGIN
+            cboIdiomas.BackColor = Color.White;
+            cboIdiomas.ForeColor = Color.FromArgb(18, 18, 18);
+            cboIdiomas.FlatStyle = FlatStyle.Flat;
+            // AirPadel style preview END
             cboIdiomas.Size = new Size(240, 25);
             cboIdiomas.TabIndex = 1;
             // 
@@ -61,6 +69,14 @@
             btnGuardar.Font = new Font("Segoe UI", 10F);
             btnGuardar.Location = new Point(110, 110);
             btnGuardar.Name = "btnGuardar";
+            // AirPadel style preview BEGIN
+            btnGuardar.FlatStyle = FlatStyle.Flat;
+            btnGuardar.FlatAppearance.BorderSize = 0;
+            btnGuardar.BackColor = Color.FromArgb(214, 246, 36);
+            btnGuardar.ForeColor = Color.FromArgb(18, 18, 18);
+            btnGuardar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnGuardar.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnGuardar.Size = new Size(110, 35);
             btnGuardar.TabIndex = 2;
             btnGuardar.Text = "Guardar";
@@ -72,10 +88,19 @@
             btnVolver.Font = new Font("Segoe UI", 10F);
             btnVolver.Location = new Point(240, 110);
             btnVolver.Name = "btnVolver";
+            // AirPadel style preview BEGIN
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.FlatAppearance.BorderSize = 1;
+            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
+            btnVolver.ForeColor = Color.White;
+            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnVolver.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnVolver.Size = new Size(110, 35);
             btnVolver.TabIndex = 3;
             btnVolver.Text = "Volver";
-            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.UseVisualStyleBackColor = false;
             btnVolver.Click += btnVolver_Click;
             // 
             // lblMensaje
@@ -85,6 +110,9 @@
             lblMensaje.ForeColor = Color.DarkRed;
             lblMensaje.Location = new Point(30, 75);
             lblMensaje.Name = "lblMensaje";
+            // AirPadel style preview BEGIN
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
+            // AirPadel style preview END
             lblMensaje.Size = new Size(0, 15);
             lblMensaje.TabIndex = 4;
             // 
@@ -104,6 +132,11 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmCambiarIdioma";
+            // AirPadel style preview BEGIN
+            BackColor = Color.FromArgb(14, 43, 92);
+            ForeColor = Color.White;
+            Font = new Font("Segoe UI", 9.5F);
+            // AirPadel style preview END
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Cambiar Idioma";
             FormClosed += frmCambiarIdioma_FormClosed;
