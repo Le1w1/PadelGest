@@ -34,6 +34,8 @@ namespace UI
             lblClienteValor = new Label();
             lblClienteTitulo = new Label();
             gbTarjeta = new GroupBox();
+            cboRespuestaBanco = new ComboBox();
+            lblRespuestaBanco = new Label();
             txtCodigoSeguridad = new TextBox();
             lblCodigoSeguridad = new Label();
             dtpVencimiento = new DateTimePicker();
@@ -142,6 +144,8 @@ namespace UI
             lblTotalValor.TextAlign = ContentAlignment.MiddleRight;
             // gbTarjeta
             gbTarjeta.BackColor = Color.LightSkyBlue;
+            gbTarjeta.Controls.Add(cboRespuestaBanco);
+            gbTarjeta.Controls.Add(lblRespuestaBanco);
             gbTarjeta.Controls.Add(txtCodigoSeguridad);
             gbTarjeta.Controls.Add(lblCodigoSeguridad);
             gbTarjeta.Controls.Add(dtpVencimiento);
@@ -152,7 +156,7 @@ namespace UI
             gbTarjeta.Controls.Add(lblBanco);
             gbTarjeta.Location = new Point(20, 315);
             gbTarjeta.Name = "gbTarjeta";
-            gbTarjeta.Size = new Size(720, 170);
+            gbTarjeta.Size = new Size(720, 210);
             gbTarjeta.TabIndex = 2;
             gbTarjeta.TabStop = false;
             gbTarjeta.Text = "Datos de la tarjeta";
@@ -197,21 +201,32 @@ namespace UI
             txtCodigoSeguridad.Size = new Size(100, 23);
             txtCodigoSeguridad.TextChanged += Campo_TextChanged;
             txtCodigoSeguridad.KeyPress += SoloNumeros_KeyPress;
+            // Respuesta Banco
+            lblRespuestaBanco.AutoSize = true;
+            lblRespuestaBanco.Location = new Point(310, 118);
+            lblRespuestaBanco.Name = "lblRespuestaBanco";
+            lblRespuestaBanco.Text = "Respuesta del Banco:";
+            cboRespuestaBanco.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboRespuestaBanco.FormattingEnabled = true;
+            cboRespuestaBanco.Location = new Point(455, 115);
+            cboRespuestaBanco.Name = "cboRespuestaBanco";
+            cboRespuestaBanco.Size = new Size(215, 23);
+            cboRespuestaBanco.TabIndex = 8;
             // lblMensaje
             lblMensaje.ForeColor = Color.DarkRed;
-            lblMensaje.Location = new Point(20, 500);
+            lblMensaje.Location = new Point(20, 540);
             lblMensaje.Name = "lblMensaje";
             lblMensaje.Size = new Size(720, 40);
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
             // btnCobrar
-            btnCobrar.Location = new Point(580, 555);
+            btnCobrar.Location = new Point(580, 595);
             btnCobrar.Name = "btnCobrar";
             btnCobrar.Size = new Size(160, 34);
             btnCobrar.Text = "Cobrar Reserva";
             btnCobrar.UseVisualStyleBackColor = true;
             btnCobrar.Click += btnCobrar_Click;
             // btnVolver
-            btnVolver.Location = new Point(460, 555);
+            btnVolver.Location = new Point(460, 595);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(100, 34);
             btnVolver.Text = "Volver";
@@ -223,7 +238,7 @@ namespace UI
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(760, 610);
+            ClientSize = new Size(760, 650);
             Controls.Add(btnVolver);
             Controls.Add(btnCobrar);
             Controls.Add(lblMensaje);
@@ -262,6 +277,8 @@ namespace UI
         private Label lblTotalTitulo;
         private Label lblTotalValor;
         private GroupBox gbTarjeta;
+        private Label lblRespuestaBanco;
+        private ComboBox cboRespuestaBanco;
         private Label lblBanco;
         private TextBox txtBanco;
         private Label lblNumeroTarjeta;

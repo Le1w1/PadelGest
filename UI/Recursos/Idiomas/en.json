@@ -410,5 +410,9 @@
   "frmRegistrarReserva.LblImporte": "Paid:",
   "frmRegistrarReserva.BtnRegistrar": "Register Reservation",
   "frmRegistrarReserva.BtnVolver": "Back",
-  "frmRegistrarReserva.MsgRegistrada": "The reservation was registered successfully. Code: {0}."
+  "frmRegistrarReserva.MsgRegistrada": "The reservation was registered successfully. Code: {0}.",
+  "frmCobrarReserva.LblRespuestaBanco": "Bank response (simulation):",
+  "frmCobrarReserva.RespuestaAprobada": "Approved",
+  "frmCobrarReserva.RespuestaRechazada": "Rejected",
+  "Errores.Cobro.RespuestaBancoObligatoria": "You must select the simulated Bank response."
 }
