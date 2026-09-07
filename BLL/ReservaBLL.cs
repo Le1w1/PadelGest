@@ -67,6 +67,20 @@ namespace BLL
                 throw new Exception(T("Errores.Reserva.EquipamientoInvalido"));
             }
 
+            if (cantidadPaletas > EquipamientoBLL.MaximoPaletasPorReserva)
+            {
+                throw new Exception(string.Format(
+                    T("Errores.Equipamiento.MaximoPaletas"),
+                    EquipamientoBLL.MaximoPaletasPorReserva));
+            }
+
+            if (cantidadPelotas > EquipamientoBLL.MaximoPelotasPorReserva)
+            {
+                throw new Exception(string.Format(
+                    T("Errores.Equipamiento.MaximoPelotas"),
+                    EquipamientoBLL.MaximoPelotasPorReserva));
+            }
+
             ReservaBE reserva = new ReservaBE
             {
                 Codigo = GenerarCodigoReserva(fecha),
@@ -84,13 +98,34 @@ namespace BLL
             try
             {
                 ReservaBE registrada = _reservaDAL.RegistrarReserva(reserva);
+
                 _digitoVerificadorBLL.RecalcularDV("Reserva");
+
+                if (cantidadPaletas > 0 || cantidadPelotas > 0)
+                {
+                    _digitoVerificadorBLL.RecalcularDV("Equipamiento");
+                }
+
                 return registrada;
             }
             catch (InvalidOperationException ex)
                 when (ex.Message == "TURNO_NO_DISPONIBLE")
             {
                 throw new Exception(T("Errores.Reserva.TurnoYaNoDisponible"));
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "STOCK_PALETAS_INSUFICIENTE")
+            {
+                throw new Exception(string.Format(
+                    T("Errores.Equipamiento.StockInsuficienteRegistro"),
+                    T("Equipamiento.Paleta")));
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "STOCK_PELOTAS_INSUFICIENTE")
+            {
+                throw new Exception(string.Format(
+                    T("Errores.Equipamiento.StockInsuficienteRegistro"),
+                    T("Equipamiento.Pelota")));
             }
         }
 

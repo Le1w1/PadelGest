@@ -412,5 +412,6 @@
   "frmCobrarReserva.LblRespuestaBanco": "Respuesta del Banco (simulación):",
   "frmCobrarReserva.RespuestaAprobada": "Aprobado",
   "frmCobrarReserva.RespuestaRechazada": "Rechazado",
-  "Errores.Cobro.RespuestaBancoObligatoria": "Debe seleccionar la respuesta simulada del Banco."
+  "Errores.Cobro.RespuestaBancoObligatoria": "Debe seleccionar la respuesta simulada del Banco.",
+  "Errores.Equipamiento.StockInsuficienteRegistro": "El stock disponible de {0} no es suficiente para completar la reserva. La reserva no fue registrada."
 }

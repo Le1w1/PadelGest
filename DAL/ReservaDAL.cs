@@ -111,6 +111,24 @@ namespace DAL
                                 Convert.ToInt32(comandoInsert.ExecuteScalar());
                         }
 
+                        // CUN07 - Actualización automática de stock.
+                        // Se ejecuta después del INSERT de la Reserva, pero antes
+                        // del COMMIT para que Reserva + stock sean una sola unidad
+                        // atómica: si falla el stock, también se revierte la Reserva.
+                        DescontarStockEquipamiento(
+                            conexion,
+                            transaccion,
+                            "Paleta",
+                            reserva.CantidadPaletas,
+                            "STOCK_PALETAS_INSUFICIENTE");
+
+                        DescontarStockEquipamiento(
+                            conexion,
+                            transaccion,
+                            "Pelota",
+                            reserva.CantidadPelotas,
+                            "STOCK_PELOTAS_INSUFICIENTE");
+
                         transaccion.Commit();
                         reserva.Estado = "Reservada";
                         return reserva;
@@ -120,6 +138,40 @@ namespace DAL
                         transaccion.Rollback();
                         throw;
                     }
+                }
+            }
+        }
+
+        private void DescontarStockEquipamiento(
+            SqlConnection conexion,
+            SqlTransaction transaccion,
+            string tipo,
+            int cantidad,
+            string codigoError)
+        {
+            if (cantidad <= 0)
+            {
+                return;
+            }
+
+            const string query = @"
+                UPDATE Equipamiento
+                SET StockDisponible = StockDisponible - @Cantidad
+                WHERE Tipo = @Tipo
+                  AND Activo = 1
+                  AND StockDisponible >= @Cantidad";
+
+            using (SqlCommand comando =
+                new SqlCommand(query, conexion, transaccion))
+            {
+                comando.Parameters.Add("@Tipo", SqlDbType.NVarChar, 30).Value = tipo;
+                comando.Parameters.Add("@Cantidad", SqlDbType.Int).Value = cantidad;
+
+                int filasAfectadas = comando.ExecuteNonQuery();
+
+                if (filasAfectadas != 1)
+                {
+                    throw new InvalidOperationException(codigoError);
                 }
             }
         }
