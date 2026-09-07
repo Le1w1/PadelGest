@@ -299,6 +299,22 @@ namespace UI
             dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(18, 18, 18);
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvEventos.DefaultCellStyle = dataGridViewCellStyle2;
+
+            // Estilo explícito de filas.
+            // El formulario usa ForeColor blanco, por eso la grilla debe
+            // definir su propio color para evitar que las filas hereden blanco.
+            dgvEventos.ForeColor = Color.FromArgb(18, 18, 18);
+
+            dgvEventos.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvEventos.RowsDefaultCellStyle.ForeColor = Color.FromArgb(18, 18, 18);
+            dgvEventos.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(211, 230, 248);
+            dgvEventos.RowsDefaultCellStyle.SelectionForeColor = Color.FromArgb(18, 18, 18);
+
+            dgvEventos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(244, 247, 251);
+            dgvEventos.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(18, 18, 18);
+            dgvEventos.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(211, 230, 248);
+            dgvEventos.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.FromArgb(18, 18, 18);
+
             dgvEventos.EnableHeadersVisualStyles = false;
             dgvEventos.GridColor = Color.FromArgb(64, 103, 166);
             dgvEventos.Location = new Point(12, 11);
