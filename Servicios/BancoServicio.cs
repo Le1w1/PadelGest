@@ -4,20 +4,18 @@ namespace Servicios
     /// Adaptador de desarrollo para representar la comunicación con el Banco.
     /// El proyecto no dispone actualmente de un endpoint bancario real.
     ///
-    /// Tarjetas de prueba:
-    /// - 4111111111111111: aprobada.
-    /// - 4000000000000002: rechazada.
+    /// Durante la demostración, la respuesta se selecciona manualmente para
+    /// simular lo que en un entorno real respondería el sistema del Banco.
     /// </summary>
     public class BancoServicio
     {
-        public const string TarjetaRechazadaPrueba = "4000000000000002";
-
         public ResultadoAutorizacionBanco AutorizarPago(
             string dniCliente,
             string numeroTarjeta,
-            decimal importe)
+            decimal importe,
+            bool respuestaSimuladaAprobada)
         {
-            if (numeroTarjeta == TarjetaRechazadaPrueba)
+            if (!respuestaSimuladaAprobada)
             {
                 return new ResultadoAutorizacionBanco
                 {

@@ -408,5 +408,9 @@
   "frmRegistrarReserva.LblImporte": "Abonado:",
   "frmRegistrarReserva.BtnRegistrar": "Registrar Reserva",
   "frmRegistrarReserva.BtnVolver": "Volver",
-  "frmRegistrarReserva.MsgRegistrada": "La reserva fue registrada correctamente. Código: {0}."
+  "frmRegistrarReserva.MsgRegistrada": "La reserva fue registrada correctamente. Código: {0}.",
+  "frmCobrarReserva.LblRespuestaBanco": "Respuesta del Banco (simulación):",
+  "frmCobrarReserva.RespuestaAprobada": "Aprobado",
+  "frmCobrarReserva.RespuestaRechazada": "Rechazado",
+  "Errores.Cobro.RespuestaBancoObligatoria": "Debe seleccionar la respuesta simulada del Banco."
 }

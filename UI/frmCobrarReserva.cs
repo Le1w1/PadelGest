@@ -85,9 +85,25 @@ namespace UI
             lblNumeroTarjeta.Text = t.Traducir("frmCobrarReserva.LblNumeroTarjeta");
             lblVencimiento.Text = t.Traducir("frmCobrarReserva.LblVencimiento");
             lblCodigoSeguridad.Text = t.Traducir("frmCobrarReserva.LblCodigoSeguridad");
+            lblRespuestaBanco.Text = t.Traducir("frmCobrarReserva.LblRespuestaBanco");
+            CargarRespuestasBanco();
 
             btnCobrar.Text = t.Traducir("frmCobrarReserva.BtnCobrar");
             btnVolver.Text = t.Traducir("frmCobrarReserva.BtnVolver");
+        }
+
+        private void CargarRespuestasBanco()
+        {
+            int seleccionAnterior = cboRespuestaBanco.SelectedIndex;
+
+            cboRespuestaBanco.Items.Clear();
+            cboRespuestaBanco.Items.Add(
+                Traductor.Instancia.Traducir("frmCobrarReserva.RespuestaAprobada"));
+            cboRespuestaBanco.Items.Add(
+                Traductor.Instancia.Traducir("frmCobrarReserva.RespuestaRechazada"));
+
+            cboRespuestaBanco.SelectedIndex =
+                seleccionAnterior >= 0 ? seleccionAnterior : -1;
         }
 
         private void MostrarFactura()
@@ -155,6 +171,14 @@ namespace UI
                 return false;
             }
 
+            if (cboRespuestaBanco.SelectedIndex < 0)
+            {
+                MostrarError(
+                    cboRespuestaBanco,
+                    "Errores.Cobro.RespuestaBancoObligatoria");
+                return false;
+            }
+
             return true;
         }
 
@@ -181,7 +205,8 @@ namespace UI
                     txtBanco.Text,
                     txtNumeroTarjeta.Text,
                     dtpVencimiento.Value,
-                    txtCodigoSeguridad.Text);
+                    txtCodigoSeguridad.Text,
+                    cboRespuestaBanco.SelectedIndex == 0);
 
                 if (!resultado.Aprobado)
                 {

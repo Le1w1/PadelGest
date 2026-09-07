@@ -86,7 +86,8 @@ namespace BLL
             string banco,
             string numeroTarjeta,
             DateTime fechaVencimiento,
-            string codigoSeguridad)
+            string codigoSeguridad,
+            bool respuestaBancoAprobada)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
@@ -120,7 +121,8 @@ namespace BLL
                 _bancoServicio.AutorizarPago(
                     cliente.DNI,
                     numeroTarjeta,
-                    factura.ImporteTotal);
+                    factura.ImporteTotal,
+                    respuestaBancoAprobada);
 
             if (!autorizacion.Aprobado)
             {
