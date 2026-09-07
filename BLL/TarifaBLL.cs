@@ -1,0 +1,34 @@
+using BE;
+using DAL;
+using Servicios;
+
+namespace BLL
+{
+    public class TarifaBLL
+    {
+        private readonly TarifaDAL _tarifaDAL;
+
+        public TarifaBLL()
+        {
+            _tarifaDAL = new TarifaDAL();
+        }
+
+        /// <summary>
+        /// Obtiene la tarifa activa correspondiente al horario seleccionado
+        /// durante el proceso de reserva.
+        /// </summary>
+        public TarifaBE ObtenerTarifa(TimeSpan horario)
+        {
+            SM.Instancia.RequierePermiso("RES_CREAR");
+
+            TarifaBE? tarifa = _tarifaDAL.ObtenerTarifa(horario);
+
+            if (tarifa == null)
+            {
+                throw new Exception("No existe una tarifa activa para el horario seleccionado.");
+            }
+
+            return tarifa;
+        }
+    }
+}
