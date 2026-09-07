@@ -3,6 +3,7 @@ using iTextSharp.text.pdf;
 using Servicios;
 using System.Data;
 using System.Diagnostics;
+using UI.Recursos;
 using ITextBaseColor = iTextSharp.text.BaseColor;
 using ITextDocument = iTextSharp.text.Document;
 using ITextElement = iTextSharp.text.Element;

@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace UI
+namespace UI.Recursos
 {
     public static class EstiloVisual
     {
