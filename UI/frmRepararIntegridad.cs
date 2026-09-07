@@ -1,4 +1,4 @@
-﻿using BLL.Servicios;
+using BLL.Servicios;
 using Servicios;
 using Servicios.DigitoVerificador;
 using System;
@@ -37,6 +37,7 @@ namespace UI
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
 
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
 
             ActualizarIdioma();
             CargarInconsistenciasEnGrilla();

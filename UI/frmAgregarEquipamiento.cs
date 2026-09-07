@@ -22,6 +22,7 @@ namespace UI
         public frmAgregarEquipamiento(DateTime fecha,TimeSpan horario,int cantidadPaletasInicial = 0,int cantidadPelotasInicial = 0)
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
 
             _equipamientoBLL = new EquipamientoBLL();
             _fecha = fecha.Date;

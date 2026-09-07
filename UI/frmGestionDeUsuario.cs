@@ -1,4 +1,4 @@
-﻿using BLL.Servicios;
+using BLL.Servicios;
 using Servicios;
 using System;
 using System.Collections.Generic;
@@ -21,6 +21,7 @@ namespace UI
         public frmGestionDeUsuario()
         {
             InitializeComponent();
+            EstiloVisual.Aplicar(this);
             dgvUsuarios.ClearSelection();
             txtNombre.Focus();
             _usuarioBLL = new UsuarioBLL();

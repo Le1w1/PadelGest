@@ -50,6 +50,10 @@ namespace UI
             lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitulo.Location = new Point(20, 18);
             lblTitulo.Name = "lblTitulo";
+            // AirPadel style preview BEGIN
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
+            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            // AirPadel style preview END
             lblTitulo.Size = new Size(620, 45);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Agregar Equipamiento";
@@ -74,6 +78,11 @@ namespace UI
             gbEquipamiento.Controls.Add(lblPaletas);
             gbEquipamiento.Location = new Point(20, 80);
             gbEquipamiento.Name = "gbEquipamiento";
+            // AirPadel style preview BEGIN
+            gbEquipamiento.BackColor = Color.FromArgb(24, 70, 138);
+            gbEquipamiento.ForeColor = Color.White;
+            gbEquipamiento.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            // AirPadel style preview END
             gbEquipamiento.Size = new Size(620, 250);
             gbEquipamiento.TabIndex = 1;
             gbEquipamiento.TabStop = false;
@@ -82,6 +91,9 @@ namespace UI
             lblTotalValor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblTotalValor.Location = new Point(420, 205);
             lblTotalValor.Name = "lblTotalValor";
+            // AirPadel style preview BEGIN
+            lblTotalValor.ForeColor = Color.White;
+            // AirPadel style preview END
             lblTotalValor.Size = new Size(165, 28);
             lblTotalValor.TabIndex = 15;
             lblTotalValor.Text = "$0,00";
@@ -91,6 +103,9 @@ namespace UI
             lblTotalTitulo.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             lblTotalTitulo.Location = new Point(325, 209);
             lblTotalTitulo.Name = "lblTotalTitulo";
+            // AirPadel style preview BEGIN
+            lblTotalTitulo.ForeColor = Color.White;
+            // AirPadel style preview END
             lblTotalTitulo.Size = new Size(48, 20);
             lblTotalTitulo.TabIndex = 14;
             lblTotalTitulo.Text = "Total:";
@@ -98,39 +113,61 @@ namespace UI
             lblPelotas.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblPelotas.Location = new Point(25, 120);
             lblPelotas.Name = "lblPelotas";
+            // AirPadel style preview BEGIN
+            lblPelotas.ForeColor = Color.White;
+            // AirPadel style preview END
             lblPelotas.Size = new Size(110, 25);
             lblPelotas.TabIndex = 8;
             lblPelotas.Text = "Pelotas";
             nudPelotas.Location = new Point(190, 122);
             nudPelotas.Name = "nudPelotas";
+            // AirPadel style preview BEGIN
+            nudPelotas.BackColor = Color.White;
+            nudPelotas.ForeColor = Color.FromArgb(18, 18, 18);
+            // AirPadel style preview END
             nudPelotas.Size = new Size(75, 23);
             nudPelotas.TabIndex = 9;
             nudPelotas.ValueChanged += nudCantidad_ValueChanged;
             lblCantidadPelotas.AutoSize = true;
             lblCantidadPelotas.Location = new Point(140, 125);
             lblCantidadPelotas.Name = "lblCantidadPelotas";
+            // AirPadel style preview BEGIN
+            lblCantidadPelotas.ForeColor = Color.White;
+            // AirPadel style preview END
             lblCantidadPelotas.Size = new Size(39, 15);
             lblCantidadPelotas.TabIndex = 10;
             lblCantidadPelotas.Text = "Cant.:";
             lblStockPelotasTitulo.AutoSize = true;
             lblStockPelotasTitulo.Location = new Point(300, 125);
             lblStockPelotasTitulo.Name = "lblStockPelotasTitulo";
+            // AirPadel style preview BEGIN
+            lblStockPelotasTitulo.ForeColor = Color.White;
+            // AirPadel style preview END
             lblStockPelotasTitulo.Size = new Size(39, 15);
             lblStockPelotasTitulo.TabIndex = 11;
             lblStockPelotasTitulo.Text = "Stock:";
             lblStockPelotasValor.Location = new Point(350, 122);
             lblStockPelotasValor.Name = "lblStockPelotasValor";
+            // AirPadel style preview BEGIN
+            lblStockPelotasValor.ForeColor = Color.White;
+            // AirPadel style preview END
             lblStockPelotasValor.Size = new Size(50, 23);
             lblStockPelotasValor.TabIndex = 12;
             lblStockPelotasValor.Text = "0";
             lblImportePelotasTitulo.AutoSize = true;
             lblImportePelotasTitulo.Location = new Point(420, 125);
             lblImportePelotasTitulo.Name = "lblImportePelotasTitulo";
+            // AirPadel style preview BEGIN
+            lblImportePelotasTitulo.ForeColor = Color.White;
+            // AirPadel style preview END
             lblImportePelotasTitulo.Size = new Size(75, 15);
             lblImportePelotasTitulo.TabIndex = 13;
             lblImportePelotasTitulo.Text = "Importe unit.:";
             lblImportePelotasValor.Location = new Point(505, 122);
             lblImportePelotasValor.Name = "lblImportePelotasValor";
+            // AirPadel style preview BEGIN
+            lblImportePelotasValor.ForeColor = Color.White;
+            // AirPadel style preview END
             lblImportePelotasValor.Size = new Size(80, 23);
             lblImportePelotasValor.TabIndex = 14;
             lblImportePelotasValor.Text = "-";
@@ -138,39 +175,61 @@ namespace UI
             lblPaletas.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblPaletas.Location = new Point(25, 55);
             lblPaletas.Name = "lblPaletas";
+            // AirPadel style preview BEGIN
+            lblPaletas.ForeColor = Color.White;
+            // AirPadel style preview END
             lblPaletas.Size = new Size(110, 25);
             lblPaletas.TabIndex = 0;
             lblPaletas.Text = "Paletas";
             nudPaletas.Location = new Point(190, 57);
             nudPaletas.Name = "nudPaletas";
+            // AirPadel style preview BEGIN
+            nudPaletas.BackColor = Color.White;
+            nudPaletas.ForeColor = Color.FromArgb(18, 18, 18);
+            // AirPadel style preview END
             nudPaletas.Size = new Size(75, 23);
             nudPaletas.TabIndex = 1;
             nudPaletas.ValueChanged += nudCantidad_ValueChanged;
             lblCantidadPaletas.AutoSize = true;
             lblCantidadPaletas.Location = new Point(140, 60);
             lblCantidadPaletas.Name = "lblCantidadPaletas";
+            // AirPadel style preview BEGIN
+            lblCantidadPaletas.ForeColor = Color.White;
+            // AirPadel style preview END
             lblCantidadPaletas.Size = new Size(39, 15);
             lblCantidadPaletas.TabIndex = 2;
             lblCantidadPaletas.Text = "Cant.:";
             lblStockPaletasTitulo.AutoSize = true;
             lblStockPaletasTitulo.Location = new Point(300, 60);
             lblStockPaletasTitulo.Name = "lblStockPaletasTitulo";
+            // AirPadel style preview BEGIN
+            lblStockPaletasTitulo.ForeColor = Color.White;
+            // AirPadel style preview END
             lblStockPaletasTitulo.Size = new Size(39, 15);
             lblStockPaletasTitulo.TabIndex = 3;
             lblStockPaletasTitulo.Text = "Stock:";
             lblStockPaletasValor.Location = new Point(350, 57);
             lblStockPaletasValor.Name = "lblStockPaletasValor";
+            // AirPadel style preview BEGIN
+            lblStockPaletasValor.ForeColor = Color.White;
+            // AirPadel style preview END
             lblStockPaletasValor.Size = new Size(50, 23);
             lblStockPaletasValor.TabIndex = 4;
             lblStockPaletasValor.Text = "0";
             lblImportePaletasTitulo.AutoSize = true;
             lblImportePaletasTitulo.Location = new Point(420, 60);
             lblImportePaletasTitulo.Name = "lblImportePaletasTitulo";
+            // AirPadel style preview BEGIN
+            lblImportePaletasTitulo.ForeColor = Color.White;
+            // AirPadel style preview END
             lblImportePaletasTitulo.Size = new Size(75, 15);
             lblImportePaletasTitulo.TabIndex = 5;
             lblImportePaletasTitulo.Text = "Importe unit.:";
             lblImportePaletasValor.Location = new Point(505, 57);
             lblImportePaletasValor.Name = "lblImportePaletasValor";
+            // AirPadel style preview BEGIN
+            lblImportePaletasValor.ForeColor = Color.White;
+            // AirPadel style preview END
             lblImportePaletasValor.Size = new Size(80, 23);
             lblImportePaletasValor.TabIndex = 6;
             lblImportePaletasValor.Text = "-";
@@ -178,24 +237,44 @@ namespace UI
             lblMensaje.ForeColor = Color.DarkRed;
             lblMensaje.Location = new Point(20, 345);
             lblMensaje.Name = "lblMensaje";
+            // AirPadel style preview BEGIN
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
+            // AirPadel style preview END
             lblMensaje.Size = new Size(620, 40);
             lblMensaje.TabIndex = 2;
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
             // btnConfirmar
             btnConfirmar.Location = new Point(480, 400);
             btnConfirmar.Name = "btnConfirmar";
+            // AirPadel style preview BEGIN
+            btnConfirmar.FlatStyle = FlatStyle.Flat;
+            btnConfirmar.FlatAppearance.BorderSize = 0;
+            btnConfirmar.BackColor = Color.FromArgb(214, 246, 36);
+            btnConfirmar.ForeColor = Color.FromArgb(18, 18, 18);
+            btnConfirmar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnConfirmar.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnConfirmar.Size = new Size(160, 34);
             btnConfirmar.TabIndex = 3;
             btnConfirmar.Text = "Confirmar";
-            btnConfirmar.UseVisualStyleBackColor = true;
+            btnConfirmar.UseVisualStyleBackColor = false;
             btnConfirmar.Click += btnConfirmar_Click;
             // btnVolver
             btnVolver.Location = new Point(360, 400);
             btnVolver.Name = "btnVolver";
+            // AirPadel style preview BEGIN
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.FlatAppearance.BorderSize = 1;
+            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
+            btnVolver.ForeColor = Color.White;
+            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnVolver.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnVolver.Size = new Size(100, 34);
             btnVolver.TabIndex = 4;
             btnVolver.Text = "Volver";
-            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.UseVisualStyleBackColor = false;
             btnVolver.Click += btnVolver_Click;
             // errorProvider
             errorProvider.ContainerControl = this;
@@ -213,6 +292,11 @@ namespace UI
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmAgregarEquipamiento";
+            // AirPadel style preview BEGIN
+            BackColor = Color.FromArgb(14, 43, 92);
+            ForeColor = Color.White;
+            Font = new Font("Segoe UI", 9.5F);
+            // AirPadel style preview END
             StartPosition = FormStartPosition.CenterParent;
             Text = "PadelGest - Agregar Equipamiento";
             FormClosed += frmAgregarEquipamiento_FormClosed;

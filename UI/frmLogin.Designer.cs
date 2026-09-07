@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class frmLogin
     {
@@ -51,6 +51,10 @@
             lblTitulo.Font = new Font("Segoe UI", 20F);
             lblTitulo.Location = new Point(134, 9);
             lblTitulo.Name = "lblTitulo";
+            // AirPadel style preview BEGIN
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
+            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            // AirPadel style preview END
             lblTitulo.Size = new Size(136, 37);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "PadelGest";
@@ -60,6 +64,9 @@
             lblSubtitulo.Font = new Font("Segoe UI", 13F);
             lblSubtitulo.Location = new Point(124, 46);
             lblSubtitulo.Name = "lblSubtitulo";
+            // AirPadel style preview BEGIN
+            lblSubtitulo.ForeColor = Color.White;
+            // AirPadel style preview END
             lblSubtitulo.Size = new Size(146, 34);
             lblSubtitulo.TabIndex = 1;
             lblSubtitulo.Text = "Inicio de Sesión";
@@ -70,6 +77,9 @@
             lblEmail.AutoSize = true;
             lblEmail.Location = new Point(68, 116);
             lblEmail.Name = "lblEmail";
+            // AirPadel style preview BEGIN
+            lblEmail.ForeColor = Color.White;
+            // AirPadel style preview END
             lblEmail.Size = new Size(41, 19);
             lblEmail.TabIndex = 2;
             lblEmail.Text = "Email";
@@ -79,6 +89,11 @@
             txtEmail.Location = new Point(69, 138);
             txtEmail.MaxLength = 100;
             txtEmail.Name = "txtEmail";
+            // AirPadel style preview BEGIN
+            txtEmail.BackColor = Color.White;
+            txtEmail.ForeColor = Color.FromArgb(18, 18, 18);
+            txtEmail.BorderStyle = BorderStyle.FixedSingle;
+            // AirPadel style preview END
             txtEmail.Size = new Size(242, 25);
             txtEmail.TabIndex = 0;
             // 
@@ -87,6 +102,9 @@
             lblContrasenia.AutoSize = true;
             lblContrasenia.Location = new Point(69, 184);
             lblContrasenia.Name = "lblContrasenia";
+            // AirPadel style preview BEGIN
+            lblContrasenia.ForeColor = Color.White;
+            // AirPadel style preview END
             lblContrasenia.Size = new Size(79, 19);
             lblContrasenia.TabIndex = 4;
             lblContrasenia.Text = "Contraseña";
@@ -96,6 +114,11 @@
             txtContrasenia.Location = new Point(69, 206);
             txtContrasenia.MaxLength = 50;
             txtContrasenia.Name = "txtContrasenia";
+            // AirPadel style preview BEGIN
+            txtContrasenia.BackColor = Color.White;
+            txtContrasenia.ForeColor = Color.FromArgb(18, 18, 18);
+            txtContrasenia.BorderStyle = BorderStyle.FixedSingle;
+            // AirPadel style preview END
             txtContrasenia.Size = new Size(242, 25);
             txtContrasenia.TabIndex = 1;
             txtContrasenia.UseSystemPasswordChar = true;
@@ -105,6 +128,9 @@
             chkMostrarContrasenia.AutoSize = true;
             chkMostrarContrasenia.Location = new Point(71, 237);
             chkMostrarContrasenia.Name = "chkMostrarContrasenia";
+            // AirPadel style preview BEGIN
+            chkMostrarContrasenia.ForeColor = Color.White;
+            // AirPadel style preview END
             chkMostrarContrasenia.Size = new Size(77, 23);
             chkMostrarContrasenia.TabIndex = 2;
             chkMostrarContrasenia.Text = "Mostrar";
@@ -115,30 +141,56 @@
             // 
             btnIngresar.Location = new Point(68, 295);
             btnIngresar.Name = "btnIngresar";
+            // AirPadel style preview BEGIN
+            btnIngresar.FlatStyle = FlatStyle.Flat;
+            btnIngresar.FlatAppearance.BorderSize = 0;
+            btnIngresar.BackColor = Color.FromArgb(214, 246, 36);
+            btnIngresar.ForeColor = Color.FromArgb(18, 18, 18);
+            btnIngresar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnIngresar.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnIngresar.Size = new Size(243, 37);
             btnIngresar.TabIndex = 3;
             btnIngresar.Text = "Ingresar";
-            btnIngresar.UseVisualStyleBackColor = true;
+            btnIngresar.UseVisualStyleBackColor = false;
             btnIngresar.Click += btnIngresar_Click;
             // 
             // btnSalir
             // 
             btnSalir.Location = new Point(68, 358);
             btnSalir.Name = "btnSalir";
+            // AirPadel style preview BEGIN
+            btnSalir.FlatStyle = FlatStyle.Flat;
+            btnSalir.FlatAppearance.BorderSize = 1;
+            btnSalir.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnSalir.BackColor = Color.FromArgb(24, 70, 138);
+            btnSalir.ForeColor = Color.White;
+            btnSalir.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnSalir.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnSalir.Size = new Size(243, 36);
             btnSalir.TabIndex = 4;
             btnSalir.Text = "Salir";
-            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.UseVisualStyleBackColor = false;
             btnSalir.Click += btnSalir_Click;
             // 
             // btnVolver
             // 
             btnVolver.Location = new Point(68, 358);
             btnVolver.Name = "btnVolver";
+            // AirPadel style preview BEGIN
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.FlatAppearance.BorderSize = 1;
+            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
+            btnVolver.ForeColor = Color.White;
+            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnVolver.UseVisualStyleBackColor = false;
+            // AirPadel style preview END
             btnVolver.Size = new Size(243, 36);
             btnVolver.TabIndex = 5;
             btnVolver.Text = "Volver al Menú Principal";
-            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.UseVisualStyleBackColor = false;
             btnVolver.Visible = false;
             btnVolver.Click += btnVolver_Click;
             // 
@@ -149,6 +201,11 @@
             cboIdioma.FormattingEnabled = true;
             cboIdioma.Location = new Point(294, 12);
             cboIdioma.Name = "cboIdioma";
+            // AirPadel style preview BEGIN
+            cboIdioma.BackColor = Color.White;
+            cboIdioma.ForeColor = Color.FromArgb(18, 18, 18);
+            cboIdioma.FlatStyle = FlatStyle.Flat;
+            // AirPadel style preview END
             cboIdioma.Size = new Size(98, 23);
             cboIdioma.TabIndex = 10;
             cboIdioma.SelectedIndexChanged += cboIdioma_SelectedIndexChanged;
@@ -158,6 +215,9 @@
             lblMensaje.ForeColor = Color.Red;
             lblMensaje.Location = new Point(68, 419);
             lblMensaje.Name = "lblMensaje";
+            // AirPadel style preview BEGIN
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
+            // AirPadel style preview END
             lblMensaje.Size = new Size(243, 53);
             lblMensaje.TabIndex = 9;
             lblMensaje.TextAlign = ContentAlignment.MiddleCenter;
@@ -190,6 +250,11 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "frmLogin";
+            // AirPadel style preview BEGIN
+            BackColor = Color.FromArgb(14, 43, 92);
+            ForeColor = Color.White;
+            Font = new Font("Segoe UI", 9.5F);
+            // AirPadel style preview END
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PadelGest - Incio de Sesion";
             ((System.ComponentModel.ISupportInitialize)errorProviderLogin).EndInit();
