@@ -19,7 +19,7 @@ namespace DAL.Servicios
         }
 
         // Registrar un evento en la bitácora.
-        public void Registrar(BitacoraEvento evento)
+        public void Registrar(global::Servicios.BitacoraEvento evento)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
@@ -31,7 +31,7 @@ namespace DAL.Servicios
         // Variante transaccional: permite que la bitácora forme parte de la
         // misma unidad atómica que la operación de negocio.
         public void Registrar(
-            BitacoraEvento evento,
+            global::Servicios.BitacoraEvento evento,
             SqlConnection conexion,
             SqlTransaction? transaccion)
         {
@@ -113,9 +113,9 @@ namespace DAL.Servicios
 
 
         // Obtener eventos de la bitácora según los filtros proporcionados
-        public List<BitacoraEvento> ObtenerEventos(DateTime fechaDesde,DateTime fechaHasta,string usuario,string modulo,string accion,string criticidad,string resultado,string descripcion)
+        public List<global::Servicios.BitacoraEvento> ObtenerEventos(DateTime fechaDesde,DateTime fechaHasta,string usuario,string modulo,string accion,string criticidad,string resultado,string descripcion)
         {
-            List<BitacoraEvento> eventos = new List<BitacoraEvento>();
+            List<global::Servicios.BitacoraEvento> eventos = new List<global::Servicios.BitacoraEvento>();
 
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
@@ -191,7 +191,7 @@ namespace DAL.Servicios
                     {
                         while (reader.Read())
                         {
-                            eventos.Add(new BitacoraEvento
+                            eventos.Add(new global::Servicios.BitacoraEvento
                             {
                                 IdEvento = Convert.ToInt32(reader["IdEvento"]),
                                 IdUsuario = reader["IdUsuario"] == DBNull.Value ? 0 : Convert.ToInt32(reader["IdUsuario"]),
