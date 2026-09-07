@@ -8,7 +8,7 @@ namespace DAL
         private readonly string _cadenaConexion;
 
         // La eleccion se hace en tiempo de instalacion via variable de entorno
-        // PADELGEST_ENTORNO ("UAI" "SEBA" o "LEO").
+        // PADELGEST_ENTORNO ("UAI" o "LEO").
         private const string CADENA_LEO =
          @"Data Source=localhost\SQLEXPRESS;Initial Catalog=PadelGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
