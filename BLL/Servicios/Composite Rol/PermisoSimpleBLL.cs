@@ -1,9 +1,9 @@
-﻿using DAL;
+﻿using DAL.Servicios;
 using Servicios;
 using System;
 using System.Collections.Generic;
 
-namespace BLL
+namespace BLL.Servicios
 {
     public class PermisoSimpleBLL
     {
