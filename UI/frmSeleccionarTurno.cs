@@ -225,7 +225,11 @@ namespace UI
             }
 
             using frmAgregarEquipamiento formEquipamiento =
-                new frmAgregarEquipamiento(CantidadPaletas, CantidadPelotas);
+                new frmAgregarEquipamiento(
+                    FechaSeleccionada,
+                    HorarioSeleccionado,
+                    CantidadPaletas,
+                    CantidadPelotas);
 
             if (formEquipamiento.ShowDialog(this) == DialogResult.OK)
             {
@@ -320,7 +324,8 @@ namespace UI
             if (ClienteSeleccionado == null ||
                 CanchaSeleccionada == null ||
                 TarifaSeleccionada == null ||
-                FacturaPagada == null)
+                FacturaPagada == null ||
+                PagoAprobado == null)
             {
                 lblMensaje.Text =
                     Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosRegistro");
@@ -332,6 +337,7 @@ namespace UI
                 CanchaSeleccionada,
                 TarifaSeleccionada,
                 FacturaPagada,
+                PagoAprobado,
                 FechaSeleccionada,
                 HorarioSeleccionado,
                 CantidadPaletas,

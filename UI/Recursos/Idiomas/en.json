@@ -359,7 +359,7 @@
   "frmSeleccionarCliente.MsgRegistradoIdentificado": "The Client was registered and identified to continue with the reservation.",
   "frmSeleccionarTurno.BtnCobrarReserva": "Charge Reservation",
   "frmSeleccionarTurno.MsgFaltanDatosCobro": "You must select the time slot and Client before charging.",
-  "frmSeleccionarTurno.MsgPagoAprobado": "Payment approved. The invoice is Paid and the reservation can now be registered.",
+  "frmSeleccionarTurno.MsgPagoAprobado": "Charge approved. The invoice and payment are ready to be saved together with the reservation.",
   "Errores.Cobro.ClienteInvalido": "The selected Client is invalid.",
   "Errores.Cobro.CanchaInvalida": "The selected Court is invalid.",
   "Errores.Cobro.TarifaInvalida": "The selected Rate is invalid.",
@@ -386,8 +386,8 @@
   "frmCobrarReserva.LblCodigoSeguridad": "Security code:",
   "frmCobrarReserva.BtnCobrar": "Charge Reservation",
   "frmCobrarReserva.BtnVolver": "Back",
-  "frmCobrarReserva.MsgAprobado": "The payment was approved successfully.",
-  "frmCobrarReserva.MsgRechazado": "The Bank rejected the transaction. The invoice was cancelled and the reservation was not registered.",
+  "frmCobrarReserva.MsgAprobado": "The Bank approved the charge. The invoice and payment will be saved when the reservation is confirmed.",
+  "frmCobrarReserva.MsgRechazado": "The Bank rejected the transaction. No invoice, payment or reservation was saved.",
   "frmSeleccionarTurno.BtnRegistrarReserva": "Register Reservation",
   "frmSeleccionarTurno.MsgFaltanDatosRegistro": "A time slot, Client and Paid invoice are required to register the reservation.",
   "frmSeleccionarTurno.MsgReservaRegistrada": "Reservation registered successfully. Code: {0}.",
@@ -415,5 +415,6 @@
   "frmCobrarReserva.RespuestaAprobada": "Approved",
   "frmCobrarReserva.RespuestaRechazada": "Rejected",
   "Errores.Cobro.RespuestaBancoObligatoria": "You must select the simulated Bank response.",
-  "Errores.Equipamiento.StockInsuficienteRegistro": "The available stock of {0} is not sufficient to complete the reservation. The reservation was not registered."
+  "Errores.Equipamiento.StockInsuficienteRegistro": "There is not enough {0} availability for that time slot. The reservation was not saved.",
+  "Errores.Reserva.PagoInvalido": "The approved payment is invalid or does not match the invoice amount."
 }

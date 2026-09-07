@@ -14,12 +14,10 @@ namespace DAL
             _conexionDAL = new DAO_AccesoDatos();
         }
 
-        /// <summary>
-        /// Valida nuevamente la disponibilidad y registra la Reserva de forma
-        /// atómica. SERIALIZABLE + UPDLOCK/HOLDLOCK impiden que dos procesos
-        /// registren simultáneamente la misma cancha, fecha y horario.
-        /// </summary>
-        public ReservaBE RegistrarReserva(ReservaBE reserva)
+        public ReservaBE RegistrarReserva(
+            ReservaBE reserva,
+            FacturaBE factura,
+            PagoBE pago)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
@@ -30,107 +28,52 @@ namespace DAL
                 {
                     try
                     {
-                        const string queryDisponibilidad = @"
-                            SELECT TOP 1 IdReserva
-                            FROM Reserva WITH (UPDLOCK, HOLDLOCK)
-                            WHERE IdCancha = @IdCancha
-                              AND Fecha = @Fecha
-                              AND Horario = @Horario
-                              AND Estado <> N'Cancelada'";
-
-                        using (SqlCommand comandoDisponibilidad =
-                            new SqlCommand(queryDisponibilidad, conexion, transaccion))
-                        {
-                            comandoDisponibilidad.Parameters.Add("@IdCancha", SqlDbType.Int).Value =
-                                reserva.IdCancha;
-                            comandoDisponibilidad.Parameters.Add("@Fecha", SqlDbType.Date).Value =
-                                reserva.Fecha.Date;
-                            comandoDisponibilidad.Parameters.Add("@Horario", SqlDbType.Time).Value =
-                                reserva.Horario;
-
-                            object? existente = comandoDisponibilidad.ExecuteScalar();
-
-                            if (existente != null && existente != DBNull.Value)
-                            {
-                                throw new InvalidOperationException("TURNO_NO_DISPONIBLE");
-                            }
-                        }
-
-                        const string queryInsert = @"
-                            INSERT INTO Reserva
-                            (
-                                Codigo,
-                                IdCliente,
-                                IdCancha,
-                                IdTarifa,
-                                IdFactura,
-                                Fecha,
-                                Horario,
-                                CantidadPaletas,
-                                CantidadPelotas,
-                                Estado
-                            )
-                            OUTPUT INSERTED.IdReserva
-                            VALUES
-                            (
-                                @Codigo,
-                                @IdCliente,
-                                @IdCancha,
-                                @IdTarifa,
-                                @IdFactura,
-                                @Fecha,
-                                @Horario,
-                                @CantidadPaletas,
-                                @CantidadPelotas,
-                                N'Reservada'
-                            )";
-
-                        using (SqlCommand comandoInsert =
-                            new SqlCommand(queryInsert, conexion, transaccion))
-                        {
-                            comandoInsert.Parameters.Add("@Codigo", SqlDbType.NVarChar, 30).Value =
-                                reserva.Codigo;
-                            comandoInsert.Parameters.Add("@IdCliente", SqlDbType.Int).Value =
-                                reserva.IdCliente;
-                            comandoInsert.Parameters.Add("@IdCancha", SqlDbType.Int).Value =
-                                reserva.IdCancha;
-                            comandoInsert.Parameters.Add("@IdTarifa", SqlDbType.Int).Value =
-                                reserva.IdTarifa;
-                            comandoInsert.Parameters.Add("@IdFactura", SqlDbType.Int).Value =
-                                reserva.IdFactura;
-                            comandoInsert.Parameters.Add("@Fecha", SqlDbType.Date).Value =
-                                reserva.Fecha.Date;
-                            comandoInsert.Parameters.Add("@Horario", SqlDbType.Time).Value =
-                                reserva.Horario;
-                            comandoInsert.Parameters.Add("@CantidadPaletas", SqlDbType.Int).Value =
-                                reserva.CantidadPaletas;
-                            comandoInsert.Parameters.Add("@CantidadPelotas", SqlDbType.Int).Value =
-                                reserva.CantidadPelotas;
-
-                            reserva.IdReserva =
-                                Convert.ToInt32(comandoInsert.ExecuteScalar());
-                        }
-
-                        // CUN07 - Actualización automática de stock.
-                        // Se ejecuta después del INSERT de la Reserva, pero antes
-                        // del COMMIT para que Reserva + stock sean una sola unidad
-                        // atómica: si falla el stock, también se revierte la Reserva.
-                        DescontarStockEquipamiento(
+                        ValidarTurnoDisponible(conexion, transaccion, reserva);
+                        ValidarDisponibilidadEquipamiento(
                             conexion,
                             transaccion,
+                            reserva.Fecha,
+                            reserva.Horario,
                             "Paleta",
                             reserva.CantidadPaletas,
                             "STOCK_PALETAS_INSUFICIENTE");
 
-                        DescontarStockEquipamiento(
+                        ValidarDisponibilidadEquipamiento(
                             conexion,
                             transaccion,
+                            reserva.Fecha,
+                            reserva.Horario,
                             "Pelota",
                             reserva.CantidadPelotas,
                             "STOCK_PELOTAS_INSUFICIENTE");
 
+                        int idFactura =
+                            InsertarFacturaPagada(conexion, transaccion, factura);
+
+                        int idPago =
+                            InsertarPagoAprobado(
+                                conexion,
+                                transaccion,
+                                pago,
+                                idFactura);
+
+                        reserva.IdFactura = idFactura;
+
+                        int idReserva =
+                            InsertarReserva(conexion, transaccion, reserva);
+
                         transaccion.Commit();
+
+                        factura.IdFactura = idFactura;
+                        factura.Estado = "Pagada";
+
+                        pago.IdPago = idPago;
+                        pago.IdFactura = idFactura;
+                        pago.Estado = "Aprobado";
+
+                        reserva.IdReserva = idReserva;
                         reserva.Estado = "Reservada";
+
                         return reserva;
                     }
                     catch
@@ -142,37 +85,259 @@ namespace DAL
             }
         }
 
-        private void DescontarStockEquipamiento(
+        private void ValidarTurnoDisponible(
             SqlConnection conexion,
             SqlTransaction transaccion,
+            ReservaBE reserva)
+        {
+            const string query = @"
+                SELECT TOP 1 IdReserva
+                FROM Reserva WITH (UPDLOCK, HOLDLOCK)
+                WHERE IdCancha = @IdCancha
+                  AND Fecha = @Fecha
+                  AND Horario = @Horario
+                  AND Estado <> N'Cancelada'";
+
+            using (SqlCommand comando = new SqlCommand(query, conexion, transaccion))
+            {
+                comando.Parameters.Add("@IdCancha", SqlDbType.Int).Value = reserva.IdCancha;
+                comando.Parameters.Add("@Fecha", SqlDbType.Date).Value = reserva.Fecha.Date;
+                comando.Parameters.Add("@Horario", SqlDbType.Time).Value = reserva.Horario;
+
+                object? existente = comando.ExecuteScalar();
+
+                if (existente != null && existente != DBNull.Value)
+                    throw new InvalidOperationException("TURNO_NO_DISPONIBLE");
+            }
+        }
+
+        private void ValidarDisponibilidadEquipamiento(
+            SqlConnection conexion,
+            SqlTransaction transaccion,
+            DateTime fecha,
+            TimeSpan horario,
             string tipo,
-            int cantidad,
+            int cantidadSolicitada,
             string codigoError)
         {
-            if (cantidad <= 0)
-            {
+            if (cantidadSolicitada <= 0)
                 return;
+
+            const string queryStock = @"
+                SELECT StockDisponible
+                FROM Equipamiento WITH (UPDLOCK, HOLDLOCK)
+                WHERE Tipo = @Tipo
+                  AND Activo = 1";
+
+            int stockMaximo;
+
+            using (SqlCommand comandoStock =
+                new SqlCommand(queryStock, conexion, transaccion))
+            {
+                comandoStock.Parameters.Add("@Tipo", SqlDbType.NVarChar, 30).Value = tipo;
+
+                object? resultado = comandoStock.ExecuteScalar();
+
+                if (resultado == null || resultado == DBNull.Value)
+                    throw new InvalidOperationException(codigoError);
+
+                stockMaximo = Convert.ToInt32(resultado);
             }
 
+            string columna =
+                tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)
+                    ? "CantidadPaletas"
+                    : "CantidadPelotas";
+
+            string queryReservado = $@"
+                SELECT ISNULL(SUM({columna}), 0)
+                FROM Reserva WITH (UPDLOCK, HOLDLOCK)
+                WHERE Fecha = @Fecha
+                  AND Horario = @Horario
+                  AND Estado <> N'Cancelada'";
+
+            int cantidadReservada;
+
+            using (SqlCommand comandoReservado =
+                new SqlCommand(queryReservado, conexion, transaccion))
+            {
+                comandoReservado.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha.Date;
+                comandoReservado.Parameters.Add("@Horario", SqlDbType.Time).Value = horario;
+
+                cantidadReservada =
+                    Convert.ToInt32(comandoReservado.ExecuteScalar());
+            }
+
+            if (cantidadReservada + cantidadSolicitada > stockMaximo)
+                throw new InvalidOperationException(codigoError);
+        }
+
+        private int InsertarFacturaPagada(
+            SqlConnection conexion,
+            SqlTransaction transaccion,
+            FacturaBE factura)
+        {
             const string query = @"
-                UPDATE Equipamiento
-                SET StockDisponible = StockDisponible - @Cantidad
-                WHERE Tipo = @Tipo
-                  AND Activo = 1
-                  AND StockDisponible >= @Cantidad";
+                INSERT INTO Factura
+                (
+                    IdCliente,
+                    IdCancha,
+                    IdTarifa,
+                    FechaHoraEmision,
+                    FechaReserva,
+                    Horario,
+                    CantidadPaletas,
+                    CantidadPelotas,
+                    ImporteTarifa,
+                    ImporteEquipamiento,
+                    ImporteTotal,
+                    Estado
+                )
+                OUTPUT INSERTED.IdFactura
+                VALUES
+                (
+                    @IdCliente,
+                    @IdCancha,
+                    @IdTarifa,
+                    @FechaHoraEmision,
+                    @FechaReserva,
+                    @Horario,
+                    @CantidadPaletas,
+                    @CantidadPelotas,
+                    @ImporteTarifa,
+                    @ImporteEquipamiento,
+                    @ImporteTotal,
+                    N'Pagada'
+                )";
 
             using (SqlCommand comando =
                 new SqlCommand(query, conexion, transaccion))
             {
-                comando.Parameters.Add("@Tipo", SqlDbType.NVarChar, 30).Value = tipo;
-                comando.Parameters.Add("@Cantidad", SqlDbType.Int).Value = cantidad;
+                comando.Parameters.Add("@IdCliente", SqlDbType.Int).Value = factura.IdCliente;
+                comando.Parameters.Add("@IdCancha", SqlDbType.Int).Value = factura.IdCancha;
+                comando.Parameters.Add("@IdTarifa", SqlDbType.Int).Value = factura.IdTarifa;
+                comando.Parameters.Add("@FechaHoraEmision", SqlDbType.DateTime2).Value = factura.FechaHoraEmision;
+                comando.Parameters.Add("@FechaReserva", SqlDbType.Date).Value = factura.FechaReserva.Date;
+                comando.Parameters.Add("@Horario", SqlDbType.Time).Value = factura.Horario;
+                comando.Parameters.Add("@CantidadPaletas", SqlDbType.Int).Value = factura.CantidadPaletas;
+                comando.Parameters.Add("@CantidadPelotas", SqlDbType.Int).Value = factura.CantidadPelotas;
 
-                int filasAfectadas = comando.ExecuteNonQuery();
+                var pTarifa = comando.Parameters.Add("@ImporteTarifa", SqlDbType.Decimal);
+                pTarifa.Precision = 12;
+                pTarifa.Scale = 2;
+                pTarifa.Value = factura.ImporteTarifa;
 
-                if (filasAfectadas != 1)
-                {
-                    throw new InvalidOperationException(codigoError);
-                }
+                var pEquipamiento = comando.Parameters.Add("@ImporteEquipamiento", SqlDbType.Decimal);
+                pEquipamiento.Precision = 12;
+                pEquipamiento.Scale = 2;
+                pEquipamiento.Value = factura.ImporteEquipamiento;
+
+                var pTotal = comando.Parameters.Add("@ImporteTotal", SqlDbType.Decimal);
+                pTotal.Precision = 12;
+                pTotal.Scale = 2;
+                pTotal.Value = factura.ImporteTotal;
+
+                return Convert.ToInt32(comando.ExecuteScalar());
+            }
+        }
+
+        private int InsertarPagoAprobado(
+            SqlConnection conexion,
+            SqlTransaction transaccion,
+            PagoBE pago,
+            int idFactura)
+        {
+            const string query = @"
+                INSERT INTO Pago
+                (
+                    IdFactura,
+                    Banco,
+                    Ultimos4Tarjeta,
+                    Importe,
+                    FechaHora,
+                    Estado,
+                    CodigoAutorizacion
+                )
+                OUTPUT INSERTED.IdPago
+                VALUES
+                (
+                    @IdFactura,
+                    @Banco,
+                    @Ultimos4Tarjeta,
+                    @Importe,
+                    @FechaHora,
+                    N'Aprobado',
+                    @CodigoAutorizacion
+                )";
+
+            using (SqlCommand comando =
+                new SqlCommand(query, conexion, transaccion))
+            {
+                comando.Parameters.Add("@IdFactura", SqlDbType.Int).Value = idFactura;
+                comando.Parameters.Add("@Banco", SqlDbType.NVarChar, 80).Value = pago.Banco;
+                comando.Parameters.Add("@Ultimos4Tarjeta", SqlDbType.Char, 4).Value = pago.Ultimos4Tarjeta;
+
+                var pImporte = comando.Parameters.Add("@Importe", SqlDbType.Decimal);
+                pImporte.Precision = 12;
+                pImporte.Scale = 2;
+                pImporte.Value = pago.Importe;
+
+                comando.Parameters.Add("@FechaHora", SqlDbType.DateTime2).Value = pago.FechaHora;
+                comando.Parameters.Add("@CodigoAutorizacion", SqlDbType.NVarChar, 50).Value =
+                    pago.CodigoAutorizacion;
+
+                return Convert.ToInt32(comando.ExecuteScalar());
+            }
+        }
+
+        private int InsertarReserva(
+            SqlConnection conexion,
+            SqlTransaction transaccion,
+            ReservaBE reserva)
+        {
+            const string query = @"
+                INSERT INTO Reserva
+                (
+                    Codigo,
+                    IdCliente,
+                    IdCancha,
+                    IdTarifa,
+                    IdFactura,
+                    Fecha,
+                    Horario,
+                    CantidadPaletas,
+                    CantidadPelotas,
+                    Estado
+                )
+                OUTPUT INSERTED.IdReserva
+                VALUES
+                (
+                    @Codigo,
+                    @IdCliente,
+                    @IdCancha,
+                    @IdTarifa,
+                    @IdFactura,
+                    @Fecha,
+                    @Horario,
+                    @CantidadPaletas,
+                    @CantidadPelotas,
+                    N'Reservada'
+                )";
+
+            using (SqlCommand comando =
+                new SqlCommand(query, conexion, transaccion))
+            {
+                comando.Parameters.Add("@Codigo", SqlDbType.NVarChar, 30).Value = reserva.Codigo;
+                comando.Parameters.Add("@IdCliente", SqlDbType.Int).Value = reserva.IdCliente;
+                comando.Parameters.Add("@IdCancha", SqlDbType.Int).Value = reserva.IdCancha;
+                comando.Parameters.Add("@IdTarifa", SqlDbType.Int).Value = reserva.IdTarifa;
+                comando.Parameters.Add("@IdFactura", SqlDbType.Int).Value = reserva.IdFactura;
+                comando.Parameters.Add("@Fecha", SqlDbType.Date).Value = reserva.Fecha.Date;
+                comando.Parameters.Add("@Horario", SqlDbType.Time).Value = reserva.Horario;
+                comando.Parameters.Add("@CantidadPaletas", SqlDbType.Int).Value = reserva.CantidadPaletas;
+                comando.Parameters.Add("@CantidadPelotas", SqlDbType.Int).Value = reserva.CantidadPelotas;
+
+                return Convert.ToInt32(comando.ExecuteScalar());
             }
         }
     }

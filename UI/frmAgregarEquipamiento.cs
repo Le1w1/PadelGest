@@ -7,6 +7,8 @@ namespace UI
     public partial class frmAgregarEquipamiento : Form, IObservadorIdioma
     {
         private readonly EquipamientoBLL _equipamientoBLL;
+        private readonly DateTime _fecha;
+        private readonly TimeSpan _horario;
         private readonly int _cantidadPaletasInicial;
         private readonly int _cantidadPelotasInicial;
 
@@ -17,11 +19,17 @@ namespace UI
         public int CantidadPelotas { get; private set; }
         public decimal ImporteEquipamiento { get; private set; }
 
-        public frmAgregarEquipamiento(int cantidadPaletasInicial = 0, int cantidadPelotasInicial = 0)
+        public frmAgregarEquipamiento(
+            DateTime fecha,
+            TimeSpan horario,
+            int cantidadPaletasInicial = 0,
+            int cantidadPelotasInicial = 0)
         {
             InitializeComponent();
 
             _equipamientoBLL = new EquipamientoBLL();
+            _fecha = fecha.Date;
+            _horario = horario;
             _cantidadPaletasInicial = cantidadPaletasInicial;
             _cantidadPelotasInicial = cantidadPelotasInicial;
 
@@ -68,7 +76,10 @@ namespace UI
                 errorProvider.Clear();
                 lblMensaje.Text = string.Empty;
 
-                List<EquipamientoBE> equipamientos = _equipamientoBLL.ObtenerEquipamientosActivos();
+                List<EquipamientoBE> equipamientos =
+                    _equipamientoBLL.ObtenerEquipamientosActivos(
+                        _fecha,
+                        _horario);
 
                 _paleta = equipamientos.FirstOrDefault(
                     e => e.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase));
@@ -159,6 +170,8 @@ namespace UI
                 }
 
                 decimal importe = _equipamientoBLL.ValidarYCalcularImporte(
+                    _fecha,
+                    _horario,
                     cantidadPaletas,
                     cantidadPelotas);
 

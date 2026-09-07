@@ -11,6 +11,7 @@ namespace UI
         private readonly CanchaBE _cancha;
         private readonly TarifaBE _tarifa;
         private readonly FacturaBE _facturaPagada;
+        private readonly PagoBE _pagoAprobado;
         private readonly DateTime _fecha;
         private readonly TimeSpan _horario;
         private readonly int _cantidadPaletas;
@@ -23,6 +24,7 @@ namespace UI
             CanchaBE cancha,
             TarifaBE tarifa,
             FacturaBE facturaPagada,
+            PagoBE pagoAprobado,
             DateTime fecha,
             TimeSpan horario,
             int cantidadPaletas,
@@ -35,6 +37,7 @@ namespace UI
             _cancha = cancha;
             _tarifa = tarifa;
             _facturaPagada = facturaPagada;
+            _pagoAprobado = pagoAprobado;
             _fecha = fecha;
             _horario = horario;
             _cantidadPaletas = cantidadPaletas;
@@ -100,6 +103,7 @@ namespace UI
                     _cancha,
                     _tarifa,
                     _facturaPagada,
+                    _pagoAprobado,
                     _fecha,
                     _horario,
                     _cantidadPaletas,

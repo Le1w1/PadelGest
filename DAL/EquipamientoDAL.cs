@@ -25,28 +25,65 @@ namespace DAL
             };
         }
 
-        /// Obtiene el equipamiento activo disponible para alquiler.
-        public List<EquipamientoBE> ObtenerEquipamientosActivos()
+        /// Obtiene el equipamiento disponible para una fecha y horario.
+        /// StockDisponible en Equipamiento representa la capacidad máxima física.
+        /// Para cada turno se descuenta solamente lo ya reservado en ese mismo
+        /// turno; las reservas de otros horarios no afectan la disponibilidad.
+        public List<EquipamientoBE> ObtenerEquipamientosDisponiblesPorTurno(
+            DateTime fecha,
+            TimeSpan horario)
         {
             List<EquipamientoBE> equipamientos = new List<EquipamientoBE>();
 
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
                 const string query = @"
-                    SELECT IdEquipamiento, Tipo, Importe, StockDisponible, Activo
-                    FROM Equipamiento
-                    WHERE Activo = 1
-                    ORDER BY Tipo";
+                    SELECT
+                        e.IdEquipamiento,
+                        e.Tipo,
+                        e.Importe,
+                        e.StockDisponible,
+                        e.Activo,
+                        ISNULL((
+                            SELECT SUM(r.CantidadPaletas)
+                            FROM Reserva r
+                            WHERE r.Fecha = @Fecha
+                              AND r.Horario = @Horario
+                              AND r.Estado <> N'Cancelada'
+                        ), 0) AS PaletasReservadas,
+                        ISNULL((
+                            SELECT SUM(r.CantidadPelotas)
+                            FROM Reserva r
+                            WHERE r.Fecha = @Fecha
+                              AND r.Horario = @Horario
+                              AND r.Estado <> N'Cancelada'
+                        ), 0) AS PelotasReservadas
+                    FROM Equipamiento e
+                    WHERE e.Activo = 1
+                    ORDER BY e.Tipo";
 
                 using (SqlCommand comando = new SqlCommand(query, conexion))
                 {
+                    comando.Parameters.Add("@Fecha", System.Data.SqlDbType.Date).Value = fecha.Date;
+                    comando.Parameters.Add("@Horario", System.Data.SqlDbType.Time).Value = horario;
+
                     conexion.Open();
 
                     using (SqlDataReader reader = comando.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            equipamientos.Add(MapearEquipamiento(reader));
+                            EquipamientoBE equipamiento = MapearEquipamiento(reader);
+
+                            int reservado =
+                                equipamiento.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)
+                                    ? Convert.ToInt32(reader["PaletasReservadas"])
+                                    : Convert.ToInt32(reader["PelotasReservadas"]);
+
+                            equipamiento.StockDisponible =
+                                Math.Max(0, equipamiento.StockDisponible - reservado);
+
+                            equipamientos.Add(equipamiento);
                         }
                     }
                 }

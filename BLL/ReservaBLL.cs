@@ -24,6 +24,7 @@ namespace BLL
             CanchaBE cancha,
             TarifaBE tarifa,
             FacturaBE facturaPagada,
+            PagoBE pagoAprobado,
             DateTime fecha,
             TimeSpan horario,
             int cantidadPaletas,
@@ -32,25 +33,25 @@ namespace BLL
             SM.Instancia.RequierePermiso("RES_CREAR");
 
             if (cliente == null || cliente.IdCliente <= 0)
-            {
                 throw new Exception(T("Errores.Reserva.ClienteInvalido"));
-            }
 
             if (cancha == null || cancha.IdCancha <= 0)
-            {
                 throw new Exception(T("Errores.Reserva.CanchaInvalida"));
-            }
 
             if (tarifa == null || tarifa.IdTarifa <= 0)
-            {
                 throw new Exception(T("Errores.Reserva.TarifaInvalida"));
-            }
 
             if (facturaPagada == null ||
-                facturaPagada.IdFactura <= 0 ||
                 !facturaPagada.Estado.Equals("Pagada", StringComparison.OrdinalIgnoreCase))
             {
                 throw new Exception(T("Errores.Reserva.FacturaNoPagada"));
+            }
+
+            if (pagoAprobado == null ||
+                !pagoAprobado.Estado.Equals("Aprobado", StringComparison.OrdinalIgnoreCase) ||
+                pagoAprobado.Importe != facturaPagada.ImporteTotal)
+            {
+                throw new Exception(T("Errores.Reserva.PagoInvalido"));
             }
 
             if (facturaPagada.IdCliente != cliente.IdCliente ||
@@ -63,9 +64,7 @@ namespace BLL
             ReglasReserva.ValidarFechaYHorario(fecha, horario);
 
             if (cantidadPaletas < 0 || cantidadPelotas < 0)
-            {
                 throw new Exception(T("Errores.Reserva.EquipamientoInvalido"));
-            }
 
             if (cantidadPaletas > EquipamientoBLL.MaximoPaletasPorReserva)
             {
@@ -81,13 +80,14 @@ namespace BLL
                     EquipamientoBLL.MaximoPelotasPorReserva));
             }
 
+            facturaPagada.FechaHoraEmision = DateTime.Now;
+
             ReservaBE reserva = new ReservaBE
             {
                 Codigo = GenerarCodigoReserva(fecha),
                 IdCliente = cliente.IdCliente,
                 IdCancha = cancha.IdCancha,
                 IdTarifa = tarifa.IdTarifa,
-                IdFactura = facturaPagada.IdFactura,
                 Fecha = fecha.Date,
                 Horario = horario,
                 CantidadPaletas = cantidadPaletas,
@@ -97,14 +97,15 @@ namespace BLL
 
             try
             {
-                ReservaBE registrada = _reservaDAL.RegistrarReserva(reserva);
+                ReservaBE registrada =
+                    _reservaDAL.RegistrarReserva(
+                        reserva,
+                        facturaPagada,
+                        pagoAprobado);
 
+                _digitoVerificadorBLL.RecalcularDV("Factura");
+                _digitoVerificadorBLL.RecalcularDV("Pago");
                 _digitoVerificadorBLL.RecalcularDV("Reserva");
-
-                if (cantidadPaletas > 0 || cantidadPelotas > 0)
-                {
-                    _digitoVerificadorBLL.RecalcularDV("Equipamiento");
-                }
 
                 return registrada;
             }

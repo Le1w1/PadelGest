@@ -20,16 +20,25 @@ namespace BLL
             Traductor.Instancia.Traducir(clave);
 
         /// Obtiene el equipamiento activo para mostrar stock e importe.
-        public List<EquipamientoBE> ObtenerEquipamientosActivos()
+        public List<EquipamientoBE> ObtenerEquipamientosActivos(
+            DateTime fecha,
+            TimeSpan horario)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
+            ReglasReserva.ValidarFechaYHorario(fecha, horario);
 
-            return _equipamientoDAL.ObtenerEquipamientosActivos();
+            return _equipamientoDAL.ObtenerEquipamientosDisponiblesPorTurno(
+                fecha,
+                horario);
         }
 
         /// Valida cantidades, limites y stock actual. Si todo es valido,
         /// devuelve el importe total del equipamiento solicitado.
-        public decimal ValidarYCalcularImporte(int cantidadPaletas, int cantidadPelotas)
+        public decimal ValidarYCalcularImporte(
+            DateTime fecha,
+            TimeSpan horario,
+            int cantidadPaletas,
+            int cantidadPelotas)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
@@ -57,7 +66,12 @@ namespace BLL
                     MaximoPelotasPorReserva));
             }
 
-            List<EquipamientoBE> equipamientos = _equipamientoDAL.ObtenerEquipamientosActivos();
+            ReglasReserva.ValidarFechaYHorario(fecha, horario);
+
+            List<EquipamientoBE> equipamientos =
+                _equipamientoDAL.ObtenerEquipamientosDisponiblesPorTurno(
+                    fecha,
+                    horario);
 
             EquipamientoBE? paleta = equipamientos.FirstOrDefault(
                 e => e.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase));

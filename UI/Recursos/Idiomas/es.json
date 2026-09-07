@@ -357,7 +357,7 @@
   "frmSeleccionarCliente.MsgRegistradoIdentificado": "El Cliente fue registrado y quedó identificado para continuar con la reserva.",
   "frmSeleccionarTurno.BtnCobrarReserva": "Cobrar Reserva",
   "frmSeleccionarTurno.MsgFaltanDatosCobro": "Debe seleccionar el turno y el Cliente antes de realizar el cobro.",
-  "frmSeleccionarTurno.MsgPagoAprobado": "Pago aprobado. La factura quedó Pagada y puede continuarse con el registro de la reserva.",
+  "frmSeleccionarTurno.MsgPagoAprobado": "Cobro aprobado. La factura y el pago están listos para registrarse junto con la reserva.",
   "Errores.Cobro.ClienteInvalido": "El Cliente seleccionado no es válido.",
   "Errores.Cobro.CanchaInvalida": "La Cancha seleccionada no es válida.",
   "Errores.Cobro.TarifaInvalida": "La Tarifa seleccionada no es válida.",
@@ -384,8 +384,8 @@
   "frmCobrarReserva.LblCodigoSeguridad": "Código de seguridad:",
   "frmCobrarReserva.BtnCobrar": "Cobrar Reserva",
   "frmCobrarReserva.BtnVolver": "Volver",
-  "frmCobrarReserva.MsgAprobado": "El cobro fue aprobado correctamente.",
-  "frmCobrarReserva.MsgRechazado": "El Banco rechazó la operación. La factura fue cancelada y la reserva no se registró.",
+  "frmCobrarReserva.MsgAprobado": "El Banco aprobó el cobro. La factura y el pago se registrarán al confirmar la reserva.",
+  "frmCobrarReserva.MsgRechazado": "El Banco rechazó la operación. No se registró la factura, el pago ni la reserva.",
   "frmSeleccionarTurno.BtnRegistrarReserva": "Registrar Reserva",
   "frmSeleccionarTurno.MsgFaltanDatosRegistro": "Debe existir un turno, un Cliente y una factura Pagada para registrar la reserva.",
   "frmSeleccionarTurno.MsgReservaRegistrada": "Reserva registrada correctamente. Código: {0}.",
@@ -413,5 +413,6 @@
   "frmCobrarReserva.RespuestaAprobada": "Aprobado",
   "frmCobrarReserva.RespuestaRechazada": "Rechazado",
   "Errores.Cobro.RespuestaBancoObligatoria": "Debe seleccionar la respuesta simulada del Banco.",
-  "Errores.Equipamiento.StockInsuficienteRegistro": "El stock disponible de {0} no es suficiente para completar la reserva. La reserva no fue registrada."
+  "Errores.Equipamiento.StockInsuficienteRegistro": "No hay suficiente disponibilidad de {0} para ese turno. La reserva no fue registrada.",
+  "Errores.Reserva.PagoInvalido": "El pago aprobado no es válido o no coincide con el importe de la factura."
 }
