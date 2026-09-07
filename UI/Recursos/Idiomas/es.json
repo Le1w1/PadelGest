@@ -22,14 +22,12 @@
   "frmMenuPrincipal.SinSesion": "Sin sesión activa",
   "frmMenuPrincipal.ConfirmarCerrarSesion": "¿Desea cerrar la sesión actual?",
   "frmMenuPrincipal.CerrarSesionTitulo": "Cerrar sesión",
-
   "frmCambiarIdioma.Title": "Cambiar Idioma",
   "frmCambiarIdioma.LblIdioma": "Idioma:",
   "frmCambiarIdioma.BtnGuardar": "Guardar",
   "frmCambiarIdioma.BtnVolver": "Volver",
   "frmCambiarIdioma.MsgCambioExitoso": "Idioma cambiado correctamente.",
   "frmCambiarIdioma.MsgSeleccioneIdioma": "Debe seleccionar un idioma.",
-
   "frmLogin.Title": "PadelGest - Inicio de Sesión",
   "frmLogin.LblTitulo": "PadelGest",
   "frmLogin.LblSubtitulo": "Inicio de Sesión",
@@ -47,7 +45,6 @@
   "frmLogin.TitleCambioClave": "Cambio de contraseña recomendado",
   "frmLogin.MsgCambioClaveRecomendado": "Está utilizando una contraseña inicial. Se recomienda cambiarla por seguridad.\n\n¿Desea cambiarla ahora?",
   "frmLogin.MsgIntegridadSinPermiso": "El sistema tiene algunas fallas por el momento. Contacte a un administrador para poder repararlas si aun no se ha hecho.",
-
   "frmSesion.Title": "PadelGest - Sesión",
   "frmSesion.LblTitulo": "Sesión",
   "frmSesion.LblOpciones": "Opciones de la sesión Actual",
@@ -60,7 +57,6 @@
   "frmSesion.ConfirmarCerrarSesion": "¿Desea cerrar la sesión actual?",
   "frmSesion.CerrarSesionTitulo": "Cerrar sesión",
   "frmSesion.MsgReLoginExitoso": "Re-Login realizado correctamente.",
-
   "frmCambiarClave.Title": "PadelGest - Cambiar Clave",
   "frmCambiarClave.LblTitulo": "Cambiar Clave",
   "frmCambiarClave.LblClaveActual": "Clave Actual:",
@@ -76,7 +72,6 @@
   "frmCambiarClave.MsgFaltaConfirmar": "Debe confirmar la nueva clave.",
   "frmCambiarClave.MsgNoCoinciden": "La nueva clave y la confirmación no coinciden.",
   "frmCambiarClave.MsgRevise": "Revise los datos ingresados.",
-
   "frmAdministrador.Title": "PadelGest - Gestión de Usuarios",
   "frmAdministrador.LblTitulo": "GESTIÓN DE USUARIOS",
   "frmAdministrador.GbFiltros": "Filtros de Usuarios",
@@ -122,7 +117,6 @@
   "frmAdministrador.ConfirmarDesbloquear": "¿Desea desbloquear el usuario seleccionado?",
   "frmAdministrador.ConfirmarActivar": "¿Desea activar el usuario seleccionado?",
   "frmAdministrador.ConfirmarDesactivar": "¿Desea desactivar el usuario seleccionado?",
-
   "frmAuditarEventos.Title": "Auditoría de Eventos",
   "frmAuditarEventos.GbFiltros": "Filtros de búsqueda",
   "frmAuditarEventos.LblFechaDesde": "Fecha Desde:",
@@ -154,7 +148,6 @@
   "frmAuditarEventos.MsgPdfOK": "PDF exportado correctamente.",
   "frmAuditarEventos.MsgAbrirPdf": "PDF exportado correctamente.\n¿Desea abrir el archivo?",
   "frmAuditarEventos.MsgPdfError": "No se pudo exportar el PDF.",
-
   "frmGestionarRespaldo.Title": "Gestión de Respaldo",
   "frmGestionarRespaldo.LblTitulo": "Gestión de Respaldo",
   "frmGestionarRespaldo.GbBackup": "Backup",
@@ -174,7 +167,6 @@
   "frmGestionarRespaldo.ConfirmarRestore": "Está a punto de restaurar la base de datos. Esta operación no se puede deshacer y reiniciará la aplicación. ¿Desea continuar?",
   "frmGestionarRespaldo.BackupExitoso": "Backup realizado correctamente en: {0}",
   "frmGestionarRespaldo.RestoreExitoso": "Restore completado correctamente. La aplicación se reiniciará.",
-
   "frmRepararIntegridad.Title": "Reparación de Integridad",
   "frmRepararIntegridad.LblTitulo": "Reparación de Integridad",
   "frmRepararIntegridad.LblExplicacion": "El sistema detectó las siguientes inconsistencias en la base de datos. Debe reparar el sistema antes de continuar operando.",
@@ -191,7 +183,6 @@
   "frmRepararIntegridad.RegistroDVV": "(conjunto de la tabla)",
   "frmRepararIntegridad.ConfirmarRecalcular": "Está a punto de RECALCULAR los dígitos verificadores. Si algún dato fue modificado por fuera del sistema, esa modificación quedará legitimada permanentemente. Esta operación no se puede deshacer.\n\n¿Desea continuar?",
   "frmRepararIntegridad.RecalcularExitoso": "Los dígitos verificadores se recalcularon correctamente. La aplicación se reiniciará.",
-
   "Errores.DebeIngresarEmail": "Debe ingresar Email.",
   "Errores.PermisoDenegado": "No tiene permiso para realizar esta operación.",
   "Errores.DebeIngresarContrasenia": "Debe ingresar Contraseña.",
@@ -204,12 +195,10 @@
   "Errores.NoHaySesionParaCerrar": "No hay una sesión activa para cerrar.",
   "Errores.NoHaySesionActiva": "No hay una sesión activa.",
   "Errores.IntegridadComprometida": "Se detectó una alteración en la integridad de los datos. El sistema requiere reparación por parte de un administrador.",
-
   "Errores.UsuarioSeleccionadoNoEncontrado": "No se encontró el usuario seleccionado.",
   "Errores.DebeSeleccionarUsuarioDesbloquear": "Debe seleccionar un usuario para desbloquear.",
   "Errores.UsuarioNoBloqueado": "El usuario seleccionado no se encuentra bloqueado.",
   "Errores.DebeSeleccionarUsuarioModificar": "Debe seleccionar un usuario para modificar.",
-
   "Errores.DebeIngresarClaveActual": "Debe ingresar la clave actual.",
   "Errores.DebeIngresarNuevaClave": "Debe ingresar la nueva clave.",
   "Errores.DebeConfirmarNuevaClave": "Debe confirmar la nueva clave.",
@@ -217,7 +206,6 @@
   "Errores.ClaveInsegura": "La nueva clave debe tener al menos 8 caracteres, una letra mayúscula y un número.",
   "Errores.ClaveActualIncorrecta": "La clave actual ingresada es incorrecta.",
   "Errores.ClaveIgualAnterior": "La nueva clave no puede ser igual a la clave actual.",
-
   "Errores.CamposObligatorios": "Debe completar todos los campos obligatorios.",
   "Errores.NombreInvalido": "El nombre solo puede contener letras y debe tener entre 2 y 50 caracteres.",
   "Errores.ApellidoInvalido": "El apellido solo puede contener letras y debe tener entre 2 y 50 caracteres.",
@@ -231,10 +219,8 @@
   "Errores.DniYaRegistradoOtroUsuario": "El DNI ya se encuentra registrado por otro usuario.",
   "Errores.NombreUsuarioYaRegistradoOtroUsuario": "El nombre de usuario ya se encuentra registrado por otro usuario.",
   "Errores.IdiomaPorDefectoNoEncontrado": "No se encontró el idioma por defecto (ES) en la base de datos.",
-
   "Errores.DebeSeleccionarIdioma": "Debe seleccionar un idioma.",
   "Errores.IdiomaIgualActual": "El idioma seleccionado ya es el idioma actual.",
-
   "Errores.RBAC.NombreObligatorio": "Debe ingresar un nombre.",
   "Errores.RBAC.NombreFamiliaYaExiste": "Ya existe una Familia registrada con ese nombre.",
   "Errores.RBAC.NombreRolYaExiste": "Ya existe un Rol registrado con ese nombre.",
@@ -247,7 +233,6 @@
   "Errores.RBAC.PermisoDuplicado": "El permiso '{0}' ya está incluido vía {1}, no puede agregarse también vía {2}.",
   "Errores.RBAC.FamiliaEnUso": "La Familia no se puede eliminar porque está siendo usada por uno o más Roles u otras Familias. Quitala de ellos primero.",
   "Errores.RBAC.RolEnUso": "El Rol no se puede eliminar porque está asignado a uno o más Usuarios. Cambiá el Rol de esos usuarios primero.",
-
   "frmGestionarRolesYFamilias.Title": "PadelGest - Gestión de Roles y Familias",
   "frmGestionarRolesYFamilias.LblTitulo": "Gestión de Roles y Familias",
   "frmGestionarRolesYFamilias.LblRolFamilia": "Rol - Familia:",
@@ -270,7 +255,6 @@
   "frmGestionarRolesYFamilias.ConfirmarDescartarBorrador": "El elemento que estás creando aún no fue guardado. Si cambias de selección, se va a descartar.\n\n¿Querés descartarlo y continuar?",
   "frmGestionarRolesYFamilias.ConfirmarEliminarPorVacio": "La composición quedó vacía. ¿Querés eliminar este elemento? Se borra definitivamente de la base de datos. Solo se permite si NO está siendo usado por otras Familias o Roles.\n\nSi elegís No, los cambios en memoria se mantienen y podés cancelar para volver al estado anterior.",
   "frmGestionarRolesYFamilias.MsgNoEliminado": "No se eliminó. Usá 'Cancelar' para descartar los cambios o agregá al menos un elemento a la composición y guardá.",
-
   "Errores.SinPermisoRespaldo": "No tiene permisos para gestionar respaldos.",
   "Errores.DebeSeleccionarCarpeta": "Debe seleccionar una carpeta de destino.",
   "Errores.CarpetaNoExiste": "La carpeta seleccionada no existe: {0}",
@@ -285,6 +269,9 @@
   "Respaldo.DescBackupExitoso": "Se realizó un backup de la base en: {0}",
   "Respaldo.DescBackupFallido": "Falló el backup en: {0}. Detalle: {1}",
   "Respaldo.DescRestoreIniciado": "Se inicia restore de la base desde: {0}",
-  "Respaldo.DescRestoreFallido": "Falló el restore desde: {0}. Detalle: {1}"
-
+  "Respaldo.DescRestoreFallido": "Falló el restore desde: {0}. Detalle: {1}",
+  "Errores.Reserva.FechaPasada": "No se puede seleccionar una fecha anterior a la actual.",
+  "Errores.Reserva.FechaFueraAnticipacion": "Las reservas solo pueden realizarse con hasta 7 días de anticipación.",
+  "Errores.Reserva.TurnoIniciado": "No se puede seleccionar un turno que ya haya comenzado.",
+  "Errores.Reserva.HorarioInvalido": "El horario seleccionado no corresponde a una franja válida de 90 minutos."
 }
