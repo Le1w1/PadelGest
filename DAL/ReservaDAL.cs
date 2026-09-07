@@ -18,11 +18,7 @@ namespace DAL
             _bitacoraEventoDAL = new BitacoraEventoDAL();
         }
 
-        public ReservaBE RegistrarReserva(
-            ReservaBE reserva,
-            FacturaBE factura,
-            PagoBE pago,
-            global::Servicios.BitacoraEvento evento)
+        public ReservaBE RegistrarReserva(ReservaBE reserva,FacturaBE factura,PagoBE pago,global::Servicios.BitacoraEvento evento)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
@@ -34,33 +30,13 @@ namespace DAL
                     try
                     {
                         ValidarTurnoDisponible(conexion, transaccion, reserva);
-                        ValidarDisponibilidadEquipamiento(
-                            conexion,
-                            transaccion,
-                            reserva.Fecha,
-                            reserva.Horario,
-                            "Paleta",
-                            reserva.CantidadPaletas,
-                            "STOCK_PALETAS_INSUFICIENTE");
+                        ValidarDisponibilidadEquipamiento(conexion,transaccion,reserva.Fecha,reserva.Horario,"Paleta",reserva.CantidadPaletas,"STOCK_PALETAS_INSUFICIENTE");
 
-                        ValidarDisponibilidadEquipamiento(
-                            conexion,
-                            transaccion,
-                            reserva.Fecha,
-                            reserva.Horario,
-                            "Pelota",
-                            reserva.CantidadPelotas,
-                            "STOCK_PELOTAS_INSUFICIENTE");
+                        ValidarDisponibilidadEquipamiento(conexion,transaccion,reserva.Fecha,reserva.Horario,"Pelota",reserva.CantidadPelotas,"STOCK_PELOTAS_INSUFICIENTE");
 
-                        int idFactura =
-                            InsertarFacturaPagada(conexion, transaccion, factura);
+                        int idFactura = InsertarFacturaPagada(conexion, transaccion, factura);
 
-                        int idPago =
-                            InsertarPagoAprobado(
-                                conexion,
-                                transaccion,
-                                pago,
-                                idFactura);
+                        int idPago = InsertarPagoAprobado(conexion,transaccion,pago,idFactura);
 
                         reserva.IdFactura = idFactura;
 
@@ -70,28 +46,16 @@ namespace DAL
                         // Los DV de las tablas modificadas se generan dentro
                         // de la misma transacción. Si cualquiera falla, no se
                         // confirma Factura, Pago ni Reserva.
-                        _digitoVerificadorDAL.RecalcularDVEnTransaccion(
-                            "Factura",
-                            conexion,
-                            transaccion);
+                        _digitoVerificadorDAL.RecalcularDVEnTransaccion("Factura",conexion,transaccion);
 
-                        _digitoVerificadorDAL.RecalcularDVEnTransaccion(
-                            "Pago",
-                            conexion,
-                            transaccion);
+                        _digitoVerificadorDAL.RecalcularDVEnTransaccion("Pago",conexion,transaccion);
 
-                        _digitoVerificadorDAL.RecalcularDVEnTransaccion(
-                            "Reserva",
-                            conexion,
-                            transaccion);
+                        _digitoVerificadorDAL.RecalcularDVEnTransaccion("Reserva",conexion,transaccion);
 
                         // El evento de auditoría también forma parte del mismo
                         // COMMIT para que nunca exista una Reserva exitosa sin
                         // su correspondiente registro en BitacoraEvento.
-                        _bitacoraEventoDAL.Registrar(
-                            evento,
-                            conexion,
-                            transaccion);
+                        _bitacoraEventoDAL.Registrar(evento,conexion,transaccion);
 
                         transaccion.Commit();
 
@@ -142,14 +106,7 @@ namespace DAL
             }
         }
 
-        private void ValidarDisponibilidadEquipamiento(
-            SqlConnection conexion,
-            SqlTransaction transaccion,
-            DateTime fecha,
-            TimeSpan horario,
-            string tipo,
-            int cantidadSolicitada,
-            string codigoError)
+        private void ValidarDisponibilidadEquipamiento(SqlConnection conexion,SqlTransaction transaccion,DateTime fecha,TimeSpan horario,string tipo,int cantidadSolicitada,string codigoError)
         {
             if (cantidadSolicitada <= 0)
                 return;
@@ -162,8 +119,7 @@ namespace DAL
 
             int stockMaximo;
 
-            using (SqlCommand comandoStock =
-                new SqlCommand(queryStock, conexion, transaccion))
+            using (SqlCommand comandoStock =new SqlCommand(queryStock, conexion, transaccion))
             {
                 comandoStock.Parameters.Add("@Tipo", SqlDbType.NVarChar, 30).Value = tipo;
 
@@ -175,10 +131,7 @@ namespace DAL
                 stockMaximo = Convert.ToInt32(resultado);
             }
 
-            string columna =
-                tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)
-                    ? "CantidadPaletas"
-                    : "CantidadPelotas";
+            string columna =tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)? "CantidadPaletas": "CantidadPelotas";
 
             string queryReservado = $@"
                 SELECT ISNULL(SUM({columna}), 0)
@@ -189,24 +142,19 @@ namespace DAL
 
             int cantidadReservada;
 
-            using (SqlCommand comandoReservado =
-                new SqlCommand(queryReservado, conexion, transaccion))
+            using (SqlCommand comandoReservado =new SqlCommand(queryReservado, conexion, transaccion))
             {
                 comandoReservado.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha.Date;
                 comandoReservado.Parameters.Add("@Horario", SqlDbType.Time).Value = horario;
 
-                cantidadReservada =
-                    Convert.ToInt32(comandoReservado.ExecuteScalar());
+                cantidadReservada =Convert.ToInt32(comandoReservado.ExecuteScalar());
             }
 
             if (cantidadReservada + cantidadSolicitada > stockMaximo)
                 throw new InvalidOperationException(codigoError);
         }
 
-        private int InsertarFacturaPagada(
-            SqlConnection conexion,
-            SqlTransaction transaccion,
-            FacturaBE factura)
+        private int InsertarFacturaPagada(SqlConnection conexion,SqlTransaction transaccion,FacturaBE factura)
         {
             const string query = @"
                 INSERT INTO Factura
@@ -241,8 +189,7 @@ namespace DAL
                     N'Pagada'
                 )";
 
-            using (SqlCommand comando =
-                new SqlCommand(query, conexion, transaccion))
+            using (SqlCommand comando =new SqlCommand(query, conexion, transaccion))
             {
                 comando.Parameters.Add("@IdCliente", SqlDbType.Int).Value = factura.IdCliente;
                 comando.Parameters.Add("@IdCancha", SqlDbType.Int).Value = factura.IdCancha;
@@ -272,11 +219,7 @@ namespace DAL
             }
         }
 
-        private int InsertarPagoAprobado(
-            SqlConnection conexion,
-            SqlTransaction transaccion,
-            PagoBE pago,
-            int idFactura)
+        private int InsertarPagoAprobado(SqlConnection conexion,SqlTransaction transaccion,PagoBE pago,int idFactura)
         {
             const string query = @"
                 INSERT INTO Pago
@@ -314,17 +257,13 @@ namespace DAL
                 pImporte.Value = pago.Importe;
 
                 comando.Parameters.Add("@FechaHora", SqlDbType.DateTime2).Value = pago.FechaHora;
-                comando.Parameters.Add("@CodigoAutorizacion", SqlDbType.NVarChar, 50).Value =
-                    pago.CodigoAutorizacion;
+                comando.Parameters.Add("@CodigoAutorizacion", SqlDbType.NVarChar, 50).Value = pago.CodigoAutorizacion;
 
                 return Convert.ToInt32(comando.ExecuteScalar());
             }
         }
 
-        private int InsertarReserva(
-            SqlConnection conexion,
-            SqlTransaction transaccion,
-            ReservaBE reserva)
+        private int InsertarReserva(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva)
         {
             const string query = @"
                 INSERT INTO Reserva
@@ -355,8 +294,7 @@ namespace DAL
                     N'Reservada'
                 )";
 
-            using (SqlCommand comando =
-                new SqlCommand(query, conexion, transaccion))
+            using (SqlCommand comando =new SqlCommand(query, conexion, transaccion))
             {
                 comando.Parameters.Add("@Codigo", SqlDbType.NVarChar, 30).Value = reserva.Codigo;
                 comando.Parameters.Add("@IdCliente", SqlDbType.Int).Value = reserva.IdCliente;

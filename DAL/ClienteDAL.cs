@@ -9,8 +9,7 @@ namespace DAL
     {
         private readonly DAO_AccesoDatos _conexionDAL;
 
-        private const string COLUMNAS_CLIENTE =
-            "IdCliente, DNI, Nombre, Apellido, Telefono, CorreoElectronico";
+        private const string COLUMNAS_CLIENTE ="IdCliente, DNI, Nombre, Apellido, Telefono, CorreoElectronico";
 
         public ClienteDAL()
         {
@@ -90,8 +89,7 @@ namespace DAL
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
-                string query =
-                    "SELECT " + COLUMNAS_CLIENTE + " FROM Cliente WHERE DNI = @DNI";
+                string query ="SELECT " + COLUMNAS_CLIENTE + " FROM Cliente WHERE DNI = @DNI";
 
                 using (SqlCommand comando = new SqlCommand(query, conexion))
                 {
@@ -108,7 +106,6 @@ namespace DAL
                     }
                 }
             }
-
             return null;
         }
     }

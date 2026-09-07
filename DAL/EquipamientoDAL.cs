@@ -29,9 +29,7 @@ namespace DAL
         /// StockDisponible en Equipamiento representa la capacidad máxima física.
         /// Para cada turno se descuenta solamente lo ya reservado en ese mismo
         /// turno; las reservas de otros horarios no afectan la disponibilidad.
-        public List<EquipamientoBE> ObtenerEquipamientosDisponiblesPorTurno(
-            DateTime fecha,
-            TimeSpan horario)
+        public List<EquipamientoBE> ObtenerEquipamientosDisponiblesPorTurno(DateTime fecha,TimeSpan horario)
         {
             List<EquipamientoBE> equipamientos = new List<EquipamientoBE>();
 
@@ -75,20 +73,15 @@ namespace DAL
                         {
                             EquipamientoBE equipamiento = MapearEquipamiento(reader);
 
-                            int reservado =
-                                equipamiento.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)
-                                    ? Convert.ToInt32(reader["PaletasReservadas"])
-                                    : Convert.ToInt32(reader["PelotasReservadas"]);
+                            int reservado =equipamiento.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)? Convert.ToInt32(reader["PaletasReservadas"]): Convert.ToInt32(reader["PelotasReservadas"]);
 
-                            equipamiento.StockDisponible =
-                                Math.Max(0, equipamiento.StockDisponible - reservado);
+                            equipamiento.StockDisponible =Math.Max(0, equipamiento.StockDisponible - reservado);
 
                             equipamientos.Add(equipamiento);
                         }
                     }
                 }
             }
-
             return equipamientos;
         }
     }

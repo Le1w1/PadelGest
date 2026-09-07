@@ -78,8 +78,7 @@ namespace UI
 
                 if (string.IsNullOrWhiteSpace(dni))
                 {
-                    string mensaje =
-                        Traductor.Instancia.Traducir("Errores.Cliente.DNIObligatorio");
+                    string mensaje =Traductor.Instancia.Traducir("Errores.Cliente.DNIObligatorio");
 
                     errorProvider.SetError(txtDNI, mensaje);
                     lblMensaje.Text = mensaje;
@@ -91,12 +90,10 @@ namespace UI
 
                 if (_clienteEncontrado == null)
                 {
-                    lblMensaje.Text =
-                        Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgNoRegistrado");
+                    lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgNoRegistrado");
 
                     btnRegistrarCliente.Visible = true;
-                    btnRegistrarCliente.Enabled =
-                        SM.Instancia.TienePermiso("CLI_REGISTRAR");
+                    btnRegistrarCliente.Enabled =SM.Instancia.TienePermiso("CLI_REGISTRAR");
                     return;
                 }
 
@@ -152,8 +149,7 @@ namespace UI
                 btnRegistrarCliente.Enabled = false;
                 btnConfirmar.Enabled = true;
 
-                lblMensaje.Text =
-                    Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgRegistradoIdentificado");
+                lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgRegistradoIdentificado");
             }
         }
 
@@ -161,8 +157,7 @@ namespace UI
         {
             if (_clienteEncontrado == null)
             {
-                lblMensaje.Text =
-                    Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgDebeBuscar");
+                lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgDebeBuscar");
                 return;
             }
 

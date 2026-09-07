@@ -19,11 +19,7 @@ namespace UI
         public int CantidadPelotas { get; private set; }
         public decimal ImporteEquipamiento { get; private set; }
 
-        public frmAgregarEquipamiento(
-            DateTime fecha,
-            TimeSpan horario,
-            int cantidadPaletasInicial = 0,
-            int cantidadPelotasInicial = 0)
+        public frmAgregarEquipamiento(DateTime fecha,TimeSpan horario,int cantidadPaletasInicial = 0,int cantidadPelotasInicial = 0)
         {
             InitializeComponent();
 
@@ -76,16 +72,11 @@ namespace UI
                 errorProvider.Clear();
                 lblMensaje.Text = string.Empty;
 
-                List<EquipamientoBE> equipamientos =
-                    _equipamientoBLL.ObtenerEquipamientosActivos(
-                        _fecha,
-                        _horario);
+                List<EquipamientoBE> equipamientos = _equipamientoBLL.ObtenerEquipamientosActivos(_fecha,_horario);
 
-                _paleta = equipamientos.FirstOrDefault(
-                    e => e.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase));
+                _paleta = equipamientos.FirstOrDefault(e => e.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase));
 
-                _pelota = equipamientos.FirstOrDefault(
-                    e => e.Tipo.Equals("Pelota", StringComparison.OrdinalIgnoreCase));
+                _pelota = equipamientos.FirstOrDefault(e => e.Tipo.Equals("Pelota", StringComparison.OrdinalIgnoreCase));
 
                 ConfigurarPaletas();
                 ConfigurarPelotas();
@@ -169,11 +160,7 @@ namespace UI
                     return;
                 }
 
-                decimal importe = _equipamientoBLL.ValidarYCalcularImporte(
-                    _fecha,
-                    _horario,
-                    cantidadPaletas,
-                    cantidadPelotas);
+                decimal importe = _equipamientoBLL.ValidarYCalcularImporte(_fecha,_horario,cantidadPaletas,cantidadPelotas);
 
                 CantidadPaletas = cantidadPaletas;
                 CantidadPelotas = cantidadPelotas;

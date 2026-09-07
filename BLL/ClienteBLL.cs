@@ -17,8 +17,7 @@ namespace BLL
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
         }
 
-        private static string T(string clave) =>
-            Traductor.Instancia.Traducir(clave);
+        private static string T(string clave) => Traductor.Instancia.Traducir(clave);
 
         /// Busca un Cliente por DNI luego de validar el dato ingresado.
         public ClienteBE? BuscarPorDNI(string dni)
@@ -40,12 +39,7 @@ namespace BLL
             return _clienteDAL.BuscarPorDNI(dni);
         }
 
-        public ClienteBE RegistrarCliente(
-            string dni,
-            string nombre,
-            string apellido,
-            string telefono,
-            string correoElectronico)
+        public ClienteBE RegistrarCliente(string dni,string nombre,string apellido,string telefono,string correoElectronico)
         {
             SM.Instancia.RequierePermiso("CLI_REGISTRAR");
 
@@ -55,11 +49,8 @@ namespace BLL
             telefono = (telefono ?? string.Empty).Trim();
             correoElectronico = (correoElectronico ?? string.Empty).Trim();
 
-            if (string.IsNullOrWhiteSpace(dni) ||
-                string.IsNullOrWhiteSpace(nombre) ||
-                string.IsNullOrWhiteSpace(apellido) ||
-                string.IsNullOrWhiteSpace(telefono) ||
-                string.IsNullOrWhiteSpace(correoElectronico))
+            if (string.IsNullOrWhiteSpace(dni) ||string.IsNullOrWhiteSpace(nombre) ||string.IsNullOrWhiteSpace(apellido) ||
+                string.IsNullOrWhiteSpace(telefono) ||string.IsNullOrWhiteSpace(correoElectronico))
             {
                 throw new Exception(T("Errores.Cliente.CamposObligatorios"));
             }
@@ -128,9 +119,7 @@ namespace BLL
 
         private bool EsCorreoValido(string correoElectronico)
         {
-            return Regex.IsMatch(
-                correoElectronico,
-                @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            return Regex.IsMatch(correoElectronico,@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
     }
 }

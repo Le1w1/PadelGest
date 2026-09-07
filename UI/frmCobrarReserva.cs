@@ -16,15 +16,7 @@ namespace UI
         public FacturaBE? FacturaPagada { get; private set; }
         public PagoBE? PagoAprobado { get; private set; }
 
-        public frmCobrarReserva(
-            ClienteBE cliente,
-            CanchaBE cancha,
-            TarifaBE tarifa,
-            DateTime fechaReserva,
-            TimeSpan horario,
-            int cantidadPaletas,
-            int cantidadPelotas,
-            decimal importeEquipamiento)
+        public frmCobrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fechaReserva,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,decimal importeEquipamiento)
         {
             InitializeComponent();
 
@@ -33,15 +25,7 @@ namespace UI
             _cancha = cancha;
             _tarifa = tarifa;
 
-            _factura = _cobroBLL.GenerarFactura(
-                cliente,
-                cancha,
-                tarifa,
-                fechaReserva,
-                horario,
-                cantidadPaletas,
-                cantidadPelotas,
-                importeEquipamiento);
+            _factura = _cobroBLL.GenerarFactura(cliente,cancha,tarifa,fechaReserva,horario,cantidadPaletas,cantidadPelotas,importeEquipamiento);
 
             ActualizarIdioma();
             MostrarFactura();
@@ -97,41 +81,29 @@ namespace UI
             int seleccionAnterior = cboRespuestaBanco.SelectedIndex;
 
             cboRespuestaBanco.Items.Clear();
-            cboRespuestaBanco.Items.Add(
-                Traductor.Instancia.Traducir("frmCobrarReserva.RespuestaAprobada"));
-            cboRespuestaBanco.Items.Add(
-                Traductor.Instancia.Traducir("frmCobrarReserva.RespuestaRechazada"));
+            cboRespuestaBanco.Items.Add(Traductor.Instancia.Traducir("frmCobrarReserva.RespuestaAprobada"));
+            cboRespuestaBanco.Items.Add(Traductor.Instancia.Traducir("frmCobrarReserva.RespuestaRechazada"));
 
-            cboRespuestaBanco.SelectedIndex =
-                seleccionAnterior >= 0 ? seleccionAnterior : -1;
+            cboRespuestaBanco.SelectedIndex = seleccionAnterior >= 0 ? seleccionAnterior : -1;
         }
 
         private void MostrarFactura()
         {
-            lblClienteValor.Text =
-                $"{_cliente.DNI} - {_cliente.Nombre} {_cliente.Apellido}";
+            lblClienteValor.Text =$"{_cliente.DNI} - {_cliente.Nombre} {_cliente.Apellido}";
 
-            lblTurnoValor.Text =
-                _factura.FechaReserva.ToString("d") + " " +
-                _factura.Horario.ToString(@"hh\:mm");
+            lblTurnoValor.Text =_factura.FechaReserva.ToString("d") + " " + _factura.Horario.ToString(@"hh\:mm");
 
             lblCanchaValor.Text = _cancha.Nombre;
-            lblTarifaValor.Text =
-                $"{_tarifa.TipoTarifa} - {_factura.ImporteTarifa:C}";
+            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_factura.ImporteTarifa:C}";
 
-            lblEquipamientoValor.Text =
-                $"Paletas: {_factura.CantidadPaletas} | " +
-                $"Pelotas: {_factura.CantidadPelotas} | " +
-                $"{_factura.ImporteEquipamiento:C}";
+            lblEquipamientoValor.Text = $"Paletas: {_factura.CantidadPaletas} | " + $"Pelotas: {_factura.CantidadPelotas} | " + $"{_factura.ImporteEquipamiento:C}";
 
             lblTotalValor.Text = _factura.ImporteTotal.ToString("C");
         }
 
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) &&
-                !char.IsDigit(e.KeyChar) &&
-                e.KeyChar != ' ')
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ' ')
             {
                 e.Handled = true;
             }
@@ -154,8 +126,7 @@ namespace UI
                 return false;
             }
 
-            string tarjeta =
-                Regex.Replace(txtNumeroTarjeta.Text ?? string.Empty, @"[\s-]", "");
+            string tarjeta = Regex.Replace(txtNumeroTarjeta.Text ?? string.Empty, @"[\s-]", "");
 
             if (!Regex.IsMatch(tarjeta, @"^\d{13,19}$"))
             {
@@ -165,17 +136,13 @@ namespace UI
 
             if (!Regex.IsMatch(txtCodigoSeguridad.Text.Trim(), @"^\d{3,4}$"))
             {
-                MostrarError(
-                    txtCodigoSeguridad,
-                    "Errores.Cobro.CodigoSeguridadInvalido");
+                MostrarError(txtCodigoSeguridad,"Errores.Cobro.CodigoSeguridadInvalido");
                 return false;
             }
 
             if (cboRespuestaBanco.SelectedIndex < 0)
             {
-                MostrarError(
-                    cboRespuestaBanco,
-                    "Errores.Cobro.RespuestaBancoObligatoria");
+                MostrarError(cboRespuestaBanco,"Errores.Cobro.RespuestaBancoObligatoria");
                 return false;
             }
 
@@ -210,14 +177,9 @@ namespace UI
 
                 if (!resultado.Aprobado)
                 {
-                    lblMensaje.Text =
-                        Traductor.Instancia.Traducir("frmCobrarReserva.MsgRechazado");
+                    lblMensaje.Text = Traductor.Instancia.Traducir("frmCobrarReserva.MsgRechazado");
 
-                    MessageBox.Show(
-                        lblMensaje.Text,
-                        Text,
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show(lblMensaje.Text,Text,MessageBoxButtons.OK,MessageBoxIcon.Warning);
 
                     DialogResult = DialogResult.Cancel;
                     Close();
@@ -227,11 +189,7 @@ namespace UI
                 FacturaPagada = resultado.Factura;
                 PagoAprobado = resultado.Pago;
 
-                MessageBox.Show(
-                    Traductor.Instancia.Traducir("frmCobrarReserva.MsgAprobado"),
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                MessageBox.Show(Traductor.Instancia.Traducir("frmCobrarReserva.MsgAprobado"),Text,MessageBoxButtons.OK,MessageBoxIcon.Information);
 
                 DialogResult = DialogResult.OK;
                 Close();
@@ -240,11 +198,7 @@ namespace UI
             {
                 lblMensaje.Text = ex.Message;
 
-                MessageBox.Show(
-                    ex.Message,
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message,Text,MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
         }
 

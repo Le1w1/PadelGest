@@ -84,21 +84,15 @@ namespace UI
             string telefono = txtTelefono.Text.Trim();
             string correo = txtCorreo.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(dni) ||
-                string.IsNullOrWhiteSpace(nombre) ||
-                string.IsNullOrWhiteSpace(apellido) ||
-                string.IsNullOrWhiteSpace(telefono) ||
-                string.IsNullOrWhiteSpace(correo))
+            if (string.IsNullOrWhiteSpace(dni) || string.IsNullOrWhiteSpace(nombre) ||string.IsNullOrWhiteSpace(apellido) || string.IsNullOrWhiteSpace(telefono) || string.IsNullOrWhiteSpace(correo))
             {
-                lblMensaje.Text =
-                    Traductor.Instancia.Traducir("Errores.Cliente.CamposObligatorios");
+                lblMensaje.Text = Traductor.Instancia.Traducir("Errores.Cliente.CamposObligatorios");
                 return false;
             }
 
             if (!Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
-                string mensaje =
-                    Traductor.Instancia.Traducir("Errores.Cliente.DNIInvalido");
+                string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.DNIInvalido");
 
                 errorProvider.SetError(txtDNI, mensaje);
                 lblMensaje.Text = mensaje;
@@ -108,8 +102,7 @@ namespace UI
 
             if (!Regex.IsMatch(nombre, @"^[\p{L}\s'-]{2,50}$"))
             {
-                string mensaje =
-                    Traductor.Instancia.Traducir("Errores.Cliente.NombreInvalido");
+                string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.NombreInvalido");
 
                 errorProvider.SetError(txtNombre, mensaje);
                 lblMensaje.Text = mensaje;
@@ -119,8 +112,7 @@ namespace UI
 
             if (!Regex.IsMatch(apellido, @"^[\p{L}\s'-]{2,50}$"))
             {
-                string mensaje =
-                    Traductor.Instancia.Traducir("Errores.Cliente.ApellidoInvalido");
+                string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.ApellidoInvalido");
 
                 errorProvider.SetError(txtApellido, mensaje);
                 lblMensaje.Text = mensaje;
@@ -130,8 +122,7 @@ namespace UI
 
             if (!Regex.IsMatch(telefono, @"^\d{8,15}$"))
             {
-                string mensaje =
-                    Traductor.Instancia.Traducir("Errores.Cliente.TelefonoInvalido");
+                string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.TelefonoInvalido");
 
                 errorProvider.SetError(txtTelefono, mensaje);
                 lblMensaje.Text = mensaje;
@@ -141,8 +132,7 @@ namespace UI
 
             if (!Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                string mensaje =
-                    Traductor.Instancia.Traducir("Errores.Cliente.CorreoInvalido");
+                string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.CorreoInvalido");
 
                 errorProvider.SetError(txtCorreo, mensaje);
                 lblMensaje.Text = mensaje;
@@ -162,18 +152,9 @@ namespace UI
 
             try
             {
-                ClienteRegistrado = _clienteBLL.RegistrarCliente(
-                    txtDNI.Text,
-                    txtNombre.Text,
-                    txtApellido.Text,
-                    txtTelefono.Text,
-                    txtCorreo.Text);
+                ClienteRegistrado = _clienteBLL.RegistrarCliente(txtDNI.Text,txtNombre.Text,txtApellido.Text,txtTelefono.Text,txtCorreo.Text);
 
-                MessageBox.Show(
-                    Traductor.Instancia.Traducir("frmRegistrarCliente.MsgRegistrado"),
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                MessageBox.Show(Traductor.Instancia.Traducir("frmRegistrarCliente.MsgRegistrado"),Text,MessageBoxButtons.OK,MessageBoxIcon.Information);
 
                 DialogResult = DialogResult.OK;
                 Close();
@@ -181,11 +162,7 @@ namespace UI
             catch (Exception ex)
             {
                 lblMensaje.Text = ex.Message;
-                MessageBox.Show(
-                    ex.Message,
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message,Text,MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
         }
 

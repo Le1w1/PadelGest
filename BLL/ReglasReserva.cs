@@ -65,9 +65,7 @@ namespace BLL
 
             DateTime fechaSeleccionada = fecha.Date;
 
-            return HorariosValidos
-                .Where(horario => fechaSeleccionada.Add(horario) > DateTime.Now)
-                .ToList();
+            return HorariosValidos.Where(horario => fechaSeleccionada.Add(horario) > DateTime.Now).ToList();
         }
     }
 }

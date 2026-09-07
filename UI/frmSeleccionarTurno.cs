@@ -178,18 +178,14 @@ namespace UI
 
         private void dgvCanchas_SelectionChanged(object sender, EventArgs e)
         {
-            btnSeleccionar.Enabled =
-                dgvCanchas.SelectedRows.Count == 1 &&
-                dgvCanchas.SelectedRows[0].DataBoundItem is CanchaBE &&
-                _tarifaActual != null;
+            btnSeleccionar.Enabled = dgvCanchas.SelectedRows.Count == 1 && dgvCanchas.SelectedRows[0].DataBoundItem is CanchaBE && _tarifaActual != null;
         }
 
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             errorProvider.Clear();
 
-            if (dgvCanchas.SelectedRows.Count != 1 ||
-                dgvCanchas.SelectedRows[0].DataBoundItem is not CanchaBE cancha)
+            if (dgvCanchas.SelectedRows.Count != 1 ||dgvCanchas.SelectedRows[0].DataBoundItem is not CanchaBE cancha)
             {
                 lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha");
                 return;
@@ -224,12 +220,7 @@ namespace UI
                 return;
             }
 
-            using frmAgregarEquipamiento formEquipamiento =
-                new frmAgregarEquipamiento(
-                    FechaSeleccionada,
-                    HorarioSeleccionado,
-                    CantidadPaletas,
-                    CantidadPelotas);
+            using frmAgregarEquipamiento formEquipamiento = new frmAgregarEquipamiento(FechaSeleccionada,HorarioSeleccionado,CantidadPaletas,CantidadPelotas);
 
             if (formEquipamiento.ShowDialog(this) == DialogResult.OK)
             {
@@ -246,16 +237,11 @@ namespace UI
         {
             if (CantidadPaletas == 0 && CantidadPelotas == 0)
             {
-                lblEquipamientoSelValor.Text =
-                    Traductor.Instancia.Traducir("frmSeleccionarTurno.SinEquipamiento");
+                lblEquipamientoSelValor.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.SinEquipamiento");
                 return;
             }
 
-            lblEquipamientoSelValor.Text = string.Format(
-                Traductor.Instancia.Traducir("frmSeleccionarTurno.ResumenEquipamiento"),
-                CantidadPaletas,
-                CantidadPelotas,
-                ImporteEquipamiento);
+            lblEquipamientoSelValor.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.ResumenEquipamiento"),CantidadPaletas,CantidadPelotas,ImporteEquipamiento);
         }
 
         private void btnContinuar_Click(object sender, EventArgs e)
@@ -273,11 +259,7 @@ namespace UI
             {
                 ClienteSeleccionado = formCliente.ClienteSeleccionado;
 
-                lblMensaje.Text = string.Format(
-                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgClienteSeleccionado"),
-                    ClienteSeleccionado.DNI,
-                    ClienteSeleccionado.Nombre,
-                    ClienteSeleccionado.Apellido);
+                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgClienteSeleccionado"),ClienteSeleccionado.DNI,ClienteSeleccionado.Nombre,ClienteSeleccionado.Apellido);
 
                 btnCobrarReserva.Enabled = true;
             }
@@ -285,12 +267,9 @@ namespace UI
 
         private void btnCobrarReserva_Click(object sender, EventArgs e)
         {
-            if (ClienteSeleccionado == null ||
-                CanchaSeleccionada == null ||
-                TarifaSeleccionada == null)
+            if (ClienteSeleccionado == null ||CanchaSeleccionada == null ||TarifaSeleccionada == null)
             {
-                lblMensaje.Text =
-                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosCobro");
+                lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosCobro");
                 return;
             }
 
@@ -304,15 +283,12 @@ namespace UI
                 CantidadPelotas,
                 ImporteEquipamiento);
 
-            if (formCobro.ShowDialog(this) == DialogResult.OK &&
-                formCobro.FacturaPagada != null &&
-                formCobro.PagoAprobado != null)
+            if (formCobro.ShowDialog(this) == DialogResult.OK && formCobro.FacturaPagada != null && formCobro.PagoAprobado != null)
             {
                 FacturaPagada = formCobro.FacturaPagada;
                 PagoAprobado = formCobro.PagoAprobado;
 
-                lblMensaje.Text =
-                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgPagoAprobado");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgPagoAprobado");
 
                 BloquearDatosLuegoDelPago();
                 btnRegistrarReserva.Enabled = true;
@@ -321,14 +297,9 @@ namespace UI
 
         private void btnRegistrarReserva_Click(object sender, EventArgs e)
         {
-            if (ClienteSeleccionado == null ||
-                CanchaSeleccionada == null ||
-                TarifaSeleccionada == null ||
-                FacturaPagada == null ||
-                PagoAprobado == null)
+            if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null || FacturaPagada == null || PagoAprobado == null)
             {
-                lblMensaje.Text =
-                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosRegistro");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosRegistro");
                 return;
             }
 
@@ -343,14 +314,11 @@ namespace UI
                 CantidadPaletas,
                 CantidadPelotas);
 
-            if (formReserva.ShowDialog(this) == DialogResult.OK &&
-                formReserva.ReservaRegistrada != null)
+            if (formReserva.ShowDialog(this) == DialogResult.OK && formReserva.ReservaRegistrada != null)
             {
                 ReservaRegistrada = formReserva.ReservaRegistrada;
 
-                lblMensaje.Text = string.Format(
-                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgReservaRegistrada"),
-                    ReservaRegistrada.Codigo);
+                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgReservaRegistrada"),ReservaRegistrada.Codigo);
 
                 btnRegistrarReserva.Enabled = false;
             }

@@ -19,16 +19,7 @@ namespace UI
 
         public ReservaBE? ReservaRegistrada { get; private set; }
 
-        public frmRegistrarReserva(
-            ClienteBE cliente,
-            CanchaBE cancha,
-            TarifaBE tarifa,
-            FacturaBE facturaPagada,
-            PagoBE pagoAprobado,
-            DateTime fecha,
-            TimeSpan horario,
-            int cantidadPaletas,
-            int cantidadPelotas)
+        public frmRegistrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
         {
             InitializeComponent();
 
@@ -79,15 +70,12 @@ namespace UI
 
         private void MostrarDatos()
         {
-            lblClienteValor.Text =
-                $"{_cliente.DNI} - {_cliente.Nombre} {_cliente.Apellido}";
+            lblClienteValor.Text =$"{_cliente.DNI} - {_cliente.Nombre} {_cliente.Apellido}";
             lblFechaValor.Text = _fecha.ToString("d");
             lblHorarioValor.Text = _horario.ToString(@"hh\:mm");
             lblCanchaValor.Text = _cancha.Nombre;
-            lblTarifaValor.Text =
-                $"{_tarifa.TipoTarifa} - {_tarifa.Importe:C}";
-            lblEquipamientoValor.Text =
-                $"Paletas: {_cantidadPaletas} | Pelotas: {_cantidadPelotas}";
+            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_tarifa.Importe:C}";
+            lblEquipamientoValor.Text = $"Paletas: {_cantidadPaletas} | Pelotas: {_cantidadPelotas}";
             lblImporteValor.Text = _facturaPagada.ImporteTotal.ToString("C");
         }
 
@@ -98,26 +86,11 @@ namespace UI
                 btnRegistrar.Enabled = false;
                 lblMensaje.Text = string.Empty;
 
-                ReservaRegistrada = _reservaBLL.RegistrarReserva(
-                    _cliente,
-                    _cancha,
-                    _tarifa,
-                    _facturaPagada,
-                    _pagoAprobado,
-                    _fecha,
-                    _horario,
-                    _cantidadPaletas,
-                    _cantidadPelotas);
+                ReservaRegistrada = _reservaBLL.RegistrarReserva(_cliente,_cancha,_tarifa,_facturaPagada,_pagoAprobado,_fecha,_horario,_cantidadPaletas,_cantidadPelotas);
 
-                string mensaje = string.Format(
-                    Traductor.Instancia.Traducir("frmRegistrarReserva.MsgRegistrada"),
-                    ReservaRegistrada.Codigo);
+                string mensaje = string.Format(Traductor.Instancia.Traducir("frmRegistrarReserva.MsgRegistrada"),ReservaRegistrada.Codigo);
 
-                MessageBox.Show(
-                    mensaje,
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                MessageBox.Show(mensaje,Text,MessageBoxButtons.OK,MessageBoxIcon.Information);
 
                 DialogResult = DialogResult.OK;
                 Close();
@@ -127,11 +100,7 @@ namespace UI
                 btnRegistrar.Enabled = true;
                 lblMensaje.Text = ex.Message;
 
-                MessageBox.Show(
-                    ex.Message,
-                    Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message,Text,MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
         }
 

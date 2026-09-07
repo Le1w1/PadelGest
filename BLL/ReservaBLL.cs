@@ -14,19 +14,9 @@ namespace BLL
             _reservaDAL = new ReservaDAL();
         }
 
-        private static string T(string clave) =>
-            Traductor.Instancia.Traducir(clave);
+        private static string T(string clave) =>Traductor.Instancia.Traducir(clave);
 
-        public ReservaBE RegistrarReserva(
-            ClienteBE cliente,
-            CanchaBE cancha,
-            TarifaBE tarifa,
-            FacturaBE facturaPagada,
-            PagoBE pagoAprobado,
-            DateTime fecha,
-            TimeSpan horario,
-            int cantidadPaletas,
-            int cantidadPelotas)
+        public ReservaBE RegistrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
@@ -39,22 +29,17 @@ namespace BLL
             if (tarifa == null || tarifa.IdTarifa <= 0)
                 throw new Exception(T("Errores.Reserva.TarifaInvalida"));
 
-            if (facturaPagada == null ||
-                !facturaPagada.Estado.Equals("Pagada", StringComparison.OrdinalIgnoreCase))
+            if (facturaPagada == null ||!facturaPagada.Estado.Equals("Pagada", StringComparison.OrdinalIgnoreCase))
             {
                 throw new Exception(T("Errores.Reserva.FacturaNoPagada"));
             }
 
-            if (pagoAprobado == null ||
-                !pagoAprobado.Estado.Equals("Aprobado", StringComparison.OrdinalIgnoreCase) ||
-                pagoAprobado.Importe != facturaPagada.ImporteTotal)
+            if (pagoAprobado == null || !pagoAprobado.Estado.Equals("Aprobado", StringComparison.OrdinalIgnoreCase) || pagoAprobado.Importe != facturaPagada.ImporteTotal)
             {
                 throw new Exception(T("Errores.Reserva.PagoInvalido"));
             }
 
-            if (facturaPagada.IdCliente != cliente.IdCliente ||
-                facturaPagada.IdCancha != cancha.IdCancha ||
-                facturaPagada.IdTarifa != tarifa.IdTarifa)
+            if (facturaPagada.IdCliente != cliente.IdCliente || facturaPagada.IdCancha != cancha.IdCancha || facturaPagada.IdTarifa != tarifa.IdTarifa)
             {
                 throw new Exception(T("Errores.Reserva.DatosInconsistentes"));
             }
@@ -66,16 +51,12 @@ namespace BLL
 
             if (cantidadPaletas > EquipamientoBLL.MaximoPaletasPorReserva)
             {
-                throw new Exception(string.Format(
-                    T("Errores.Equipamiento.MaximoPaletas"),
-                    EquipamientoBLL.MaximoPaletasPorReserva));
+                throw new Exception(string.Format(T("Errores.Equipamiento.MaximoPaletas"),EquipamientoBLL.MaximoPaletasPorReserva));
             }
 
             if (cantidadPelotas > EquipamientoBLL.MaximoPelotasPorReserva)
             {
-                throw new Exception(string.Format(
-                    T("Errores.Equipamiento.MaximoPelotas"),
-                    EquipamientoBLL.MaximoPelotasPorReserva));
+                throw new Exception(string.Format(T("Errores.Equipamiento.MaximoPelotas"),EquipamientoBLL.MaximoPelotasPorReserva));
             }
 
             facturaPagada.FechaHoraEmision = DateTime.Now;
@@ -94,21 +75,11 @@ namespace BLL
             };
 
             BitacoraEvento evento =
-                CrearEventoBitacora(
-                    reserva,
-                    cliente,
-                    cancha,
-                    facturaPagada,
-                    cantidadPaletas,
-                    cantidadPelotas);
+                CrearEventoBitacora(reserva,cliente,cancha,facturaPagada,cantidadPaletas,cantidadPelotas);
 
             try
             {
-                return _reservaDAL.RegistrarReserva(
-                    reserva,
-                    facturaPagada,
-                    pagoAprobado,
-                    evento);
+                return _reservaDAL.RegistrarReserva(reserva,facturaPagada,pagoAprobado,evento);
             }
             catch (InvalidOperationException ex)
                 when (ex.Message == "TURNO_NO_DISPONIBLE")
@@ -118,26 +89,16 @@ namespace BLL
             catch (InvalidOperationException ex)
                 when (ex.Message == "STOCK_PALETAS_INSUFICIENTE")
             {
-                throw new Exception(string.Format(
-                    T("Errores.Equipamiento.StockInsuficienteRegistro"),
-                    T("Equipamiento.Paleta")));
+                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Paleta")));
             }
             catch (InvalidOperationException ex)
                 when (ex.Message == "STOCK_PELOTAS_INSUFICIENTE")
             {
-                throw new Exception(string.Format(
-                    T("Errores.Equipamiento.StockInsuficienteRegistro"),
-                    T("Equipamiento.Pelota")));
+                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Pelota")));
             }
         }
 
-        private BitacoraEvento CrearEventoBitacora(
-            ReservaBE reserva,
-            ClienteBE cliente,
-            CanchaBE cancha,
-            FacturaBE factura,
-            int cantidadPaletas,
-            int cantidadPelotas)
+        private BitacoraEvento CrearEventoBitacora(ReservaBE reserva,ClienteBE cliente,CanchaBE cancha,FacturaBE factura,int cantidadPaletas,int cantidadPelotas)
         {
             Usuario usuario = SM.Instancia.UsuarioActual;
 
@@ -171,8 +132,7 @@ namespace BLL
 
         private string GenerarCodigoReserva(DateTime fecha)
         {
-            string aleatorio =
-                Guid.NewGuid().ToString("N")[..6].ToUpperInvariant();
+            string aleatorio = Guid.NewGuid().ToString("N")[..6].ToUpperInvariant();
 
             return $"RES-{fecha:yyyyMMdd}-{aleatorio}";
         }

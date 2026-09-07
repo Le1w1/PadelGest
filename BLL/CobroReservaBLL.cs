@@ -16,15 +16,7 @@ namespace BLL
         private static string T(string clave) =>
             Traductor.Instancia.Traducir(clave);
 
-        public FacturaBE GenerarFactura(
-            ClienteBE cliente,
-            CanchaBE cancha,
-            TarifaBE tarifa,
-            DateTime fechaReserva,
-            TimeSpan horario,
-            int cantidadPaletas,
-            int cantidadPelotas,
-            decimal importeEquipamiento)
+        public FacturaBE GenerarFactura(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fechaReserva,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,decimal importeEquipamiento)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
@@ -64,21 +56,11 @@ namespace BLL
             };
         }
 
-        public ResultadoCobroBE CobrarReserva(
-            FacturaBE factura,
-            ClienteBE cliente,
-            string banco,
-            string numeroTarjeta,
-            DateTime fechaVencimiento,
-            string codigoSeguridad,
-            bool respuestaBancoAprobada)
+        public ResultadoCobroBE CobrarReserva(FacturaBE factura,ClienteBE cliente,string banco,string numeroTarjeta,DateTime fechaVencimiento,string codigoSeguridad,bool respuestaBancoAprobada)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
-            if (factura == null || cliente == null ||
-                factura.IdCliente <= 0 ||
-                factura.IdCliente != cliente.IdCliente ||
-                factura.ImporteTotal <= 0)
+            if (factura == null || cliente == null ||factura.IdCliente <= 0 ||factura.IdCliente != cliente.IdCliente ||factura.ImporteTotal <= 0)
             {
                 throw new Exception(T("Errores.Cobro.FacturaInvalida"));
             }
@@ -92,12 +74,7 @@ namespace BLL
             ValidarVencimiento(fechaVencimiento);
             ValidarCodigoSeguridad(codigoSeguridad);
 
-            ResultadoAutorizacionBanco autorizacion =
-                _bancoServicio.AutorizarPago(
-                    cliente.DNI,
-                    numeroTarjeta,
-                    factura.ImporteTotal,
-                    respuestaBancoAprobada);
+            ResultadoAutorizacionBanco autorizacion =_bancoServicio.AutorizarPago(cliente.DNI,numeroTarjeta,factura.ImporteTotal,respuestaBancoAprobada);
 
             if (!autorizacion.Aprobado)
             {
@@ -148,10 +125,7 @@ namespace BLL
 
         private void ValidarVencimiento(DateTime fechaVencimiento)
         {
-            DateTime finMes = new DateTime(
-                fechaVencimiento.Year,
-                fechaVencimiento.Month,
-                DateTime.DaysInMonth(fechaVencimiento.Year, fechaVencimiento.Month));
+            DateTime finMes = new DateTime(fechaVencimiento.Year,fechaVencimiento.Month,DateTime.DaysInMonth(fechaVencimiento.Year, fechaVencimiento.Month));
 
             if (finMes < DateTime.Today)
                 throw new Exception(T("Errores.Cobro.VencimientoInvalido"));
