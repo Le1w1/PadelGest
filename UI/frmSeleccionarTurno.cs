@@ -20,6 +20,7 @@ namespace UI
         public ClienteBE? ClienteSeleccionado { get; private set; }
         public FacturaBE? FacturaPagada { get; private set; }
         public PagoBE? PagoAprobado { get; private set; }
+        public ReservaBE? ReservaRegistrada { get; private set; }
 
         public frmSeleccionarTurno()
         {
@@ -75,6 +76,7 @@ namespace UI
             lblEquipamientoSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblEquipamiento");
             btnAgregarEquipamiento.Text = t.Traducir("frmSeleccionarTurno.BtnAgregarEquipamiento");
             btnCobrarReserva.Text = t.Traducir("frmSeleccionarTurno.BtnCobrarReserva");
+            btnRegistrarReserva.Text = t.Traducir("frmSeleccionarTurno.BtnRegistrarReserva");
             ActualizarResumenEquipamiento();
 
             btnContinuar.Text = t.Traducir("frmSeleccionarTurno.BtnContinuar");
@@ -309,6 +311,42 @@ namespace UI
                     Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgPagoAprobado");
 
                 BloquearDatosLuegoDelPago();
+                btnRegistrarReserva.Enabled = true;
+            }
+        }
+
+        private void btnRegistrarReserva_Click(object sender, EventArgs e)
+        {
+            if (ClienteSeleccionado == null ||
+                CanchaSeleccionada == null ||
+                TarifaSeleccionada == null ||
+                FacturaPagada == null)
+            {
+                lblMensaje.Text =
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosRegistro");
+                return;
+            }
+
+            using frmRegistrarReserva formReserva = new frmRegistrarReserva(
+                ClienteSeleccionado,
+                CanchaSeleccionada,
+                TarifaSeleccionada,
+                FacturaPagada,
+                FechaSeleccionada,
+                HorarioSeleccionado,
+                CantidadPaletas,
+                CantidadPelotas);
+
+            if (formReserva.ShowDialog(this) == DialogResult.OK &&
+                formReserva.ReservaRegistrada != null)
+            {
+                ReservaRegistrada = formReserva.ReservaRegistrada;
+
+                lblMensaje.Text = string.Format(
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgReservaRegistrada"),
+                    ReservaRegistrada.Codigo);
+
+                btnRegistrarReserva.Enabled = false;
             }
         }
 
@@ -321,6 +359,7 @@ namespace UI
             btnSeleccionar.Enabled = false;
             btnAgregarEquipamiento.Enabled = false;
             btnCobrarReserva.Enabled = false;
+            btnRegistrarReserva.Enabled = false;
             btnContinuar.Enabled = false;
             btnCobrarReserva.Enabled = false;
         }
@@ -352,6 +391,7 @@ namespace UI
             ClienteSeleccionado = null;
             FacturaPagada = null;
             PagoAprobado = null;
+            ReservaRegistrada = null;
 
             lblFechaSelValor.Text = "-";
             lblHorarioSelValor.Text = "-";

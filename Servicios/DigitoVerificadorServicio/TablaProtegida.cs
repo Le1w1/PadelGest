@@ -87,7 +87,8 @@ namespace Servicios.DigitoVerificador
                 new[] { "IdTarifa" }),
 
             new TablaProtegida("Reserva",
-                new[] { "IdReserva", "IdCancha", "IdTarifa", "Fecha", "Horario", "Estado" },
+                new[] { "IdReserva", "Codigo", "IdCliente", "IdCancha", "IdTarifa", "IdFactura",
+                        "Fecha", "Horario", "CantidadPaletas", "CantidadPelotas", "Estado" },
                 new[] { "IdReserva" }),
 
             new TablaProtegida("Equipamiento",
