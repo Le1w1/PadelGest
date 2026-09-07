@@ -34,6 +34,9 @@ namespace UI
             colCancha = new DataGridViewTextBoxColumn();
             colEstado = new DataGridViewTextBoxColumn();
             gbSeleccionado = new GroupBox();
+            btnAgregarEquipamiento = new Button();
+            lblEquipamientoSelValor = new Label();
+            lblEquipamientoSelTitulo = new Label();
             lblTarifaSelValor = new Label();
             lblTarifaSelTitulo = new Label();
             lblCanchaSelValor = new Label();
@@ -181,6 +184,9 @@ namespace UI
             colEstado.ReadOnly = true;
             // gbSeleccionado
             gbSeleccionado.BackColor = Color.LightSkyBlue;
+            gbSeleccionado.Controls.Add(btnAgregarEquipamiento);
+            gbSeleccionado.Controls.Add(lblEquipamientoSelValor);
+            gbSeleccionado.Controls.Add(lblEquipamientoSelTitulo);
             gbSeleccionado.Controls.Add(lblTarifaSelValor);
             gbSeleccionado.Controls.Add(lblTarifaSelTitulo);
             gbSeleccionado.Controls.Add(lblCanchaSelValor);
@@ -191,10 +197,33 @@ namespace UI
             gbSeleccionado.Controls.Add(lblFechaSelTitulo);
             gbSeleccionado.Location = new Point(20, 445);
             gbSeleccionado.Name = "gbSeleccionado";
-            gbSeleccionado.Size = new Size(840, 105);
+            gbSeleccionado.Size = new Size(840, 145);
             gbSeleccionado.TabIndex = 3;
             gbSeleccionado.TabStop = false;
             gbSeleccionado.Text = "Turno seleccionado";
+            // btnAgregarEquipamiento
+            btnAgregarEquipamiento.Enabled = false;
+            btnAgregarEquipamiento.Location = new Point(650, 102);
+            btnAgregarEquipamiento.Name = "btnAgregarEquipamiento";
+            btnAgregarEquipamiento.Size = new Size(160, 30);
+            btnAgregarEquipamiento.TabIndex = 10;
+            btnAgregarEquipamiento.Text = "Agregar Equipamiento";
+            btnAgregarEquipamiento.UseVisualStyleBackColor = true;
+            btnAgregarEquipamiento.Click += btnAgregarEquipamiento_Click;
+            // lblEquipamientoSelValor
+            lblEquipamientoSelValor.Location = new Point(140, 105);
+            lblEquipamientoSelValor.Name = "lblEquipamientoSelValor";
+            lblEquipamientoSelValor.Size = new Size(480, 23);
+            lblEquipamientoSelValor.TabIndex = 9;
+            lblEquipamientoSelValor.Text = "Sin equipamiento adicional";
+            // lblEquipamientoSelTitulo
+            lblEquipamientoSelTitulo.AutoSize = true;
+            lblEquipamientoSelTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEquipamientoSelTitulo.Location = new Point(35, 108);
+            lblEquipamientoSelTitulo.Name = "lblEquipamientoSelTitulo";
+            lblEquipamientoSelTitulo.Size = new Size(87, 15);
+            lblEquipamientoSelTitulo.TabIndex = 8;
+            lblEquipamientoSelTitulo.Text = "Equipamiento:";
             // lblTarifaSelValor
             lblTarifaSelValor.Location = new Point(510, 65);
             lblTarifaSelValor.Name = "lblTarifaSelValor";
@@ -253,14 +282,14 @@ namespace UI
             lblFechaSelTitulo.Text = "Fecha:";
             // lblMensaje
             lblMensaje.ForeColor = Color.DarkRed;
-            lblMensaje.Location = new Point(20, 563);
+            lblMensaje.Location = new Point(20, 603);
             lblMensaje.Name = "lblMensaje";
             lblMensaje.Size = new Size(540, 40);
             lblMensaje.TabIndex = 4;
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
             // btnContinuar
             btnContinuar.Enabled = false;
-            btnContinuar.Location = new Point(700, 565);
+            btnContinuar.Location = new Point(700, 605);
             btnContinuar.Name = "btnContinuar";
             btnContinuar.Size = new Size(160, 34);
             btnContinuar.TabIndex = 5;
@@ -268,7 +297,7 @@ namespace UI
             btnContinuar.UseVisualStyleBackColor = true;
             btnContinuar.Click += btnContinuar_Click;
             // btnVolver
-            btnVolver.Location = new Point(580, 565);
+            btnVolver.Location = new Point(580, 605);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(100, 34);
             btnVolver.TabIndex = 6;
@@ -281,7 +310,7 @@ namespace UI
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(880, 620);
+            ClientSize = new Size(880, 660);
             Controls.Add(btnVolver);
             Controls.Add(btnContinuar);
             Controls.Add(lblMensaje);
@@ -334,6 +363,9 @@ namespace UI
         private Label lblCanchaSelValor;
         private Label lblTarifaSelTitulo;
         private Label lblTarifaSelValor;
+        private Label lblEquipamientoSelTitulo;
+        private Label lblEquipamientoSelValor;
+        private Button btnAgregarEquipamiento;
         private Label lblMensaje;
         private Button btnContinuar;
         private Button btnVolver;

@@ -14,6 +14,9 @@ namespace UI
         public TimeSpan HorarioSeleccionado { get; private set; }
         public CanchaBE? CanchaSeleccionada { get; private set; }
         public TarifaBE? TarifaSeleccionada { get; private set; }
+        public int CantidadPaletas { get; private set; }
+        public int CantidadPelotas { get; private set; }
+        public decimal ImporteEquipamiento { get; private set; }
 
         public frmSeleccionarTurno()
         {
@@ -66,6 +69,9 @@ namespace UI
             lblHorarioSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblHorario");
             lblCanchaSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblCancha");
             lblTarifaSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblTarifa");
+            lblEquipamientoSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblEquipamiento");
+            btnAgregarEquipamiento.Text = t.Traducir("frmSeleccionarTurno.BtnAgregarEquipamiento");
+            ActualizarResumenEquipamiento();
 
             btnContinuar.Text = t.Traducir("frmSeleccionarTurno.BtnContinuar");
             btnVolver.Text = t.Traducir("frmSeleccionarTurno.BtnVolver");
@@ -199,8 +205,47 @@ namespace UI
             lblCanchaSelValor.Text = cancha.Nombre;
             lblTarifaSelValor.Text = $"{_tarifaActual.TipoTarifa} - {_tarifaActual.Importe:C}";
 
+            btnAgregarEquipamiento.Enabled = true;
             btnContinuar.Enabled = true;
             lblMensaje.Text = string.Empty;
+        }
+
+        private void btnAgregarEquipamiento_Click(object sender, EventArgs e)
+        {
+            if (CanchaSeleccionada == null || TarifaSeleccionada == null)
+            {
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha");
+                return;
+            }
+
+            using frmAgregarEquipamiento formEquipamiento =
+                new frmAgregarEquipamiento(CantidadPaletas, CantidadPelotas);
+
+            if (formEquipamiento.ShowDialog(this) == DialogResult.OK)
+            {
+                CantidadPaletas = formEquipamiento.CantidadPaletas;
+                CantidadPelotas = formEquipamiento.CantidadPelotas;
+                ImporteEquipamiento = formEquipamiento.ImporteEquipamiento;
+
+                ActualizarResumenEquipamiento();
+                lblMensaje.Text = string.Empty;
+            }
+        }
+
+        private void ActualizarResumenEquipamiento()
+        {
+            if (CantidadPaletas == 0 && CantidadPelotas == 0)
+            {
+                lblEquipamientoSelValor.Text =
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.SinEquipamiento");
+                return;
+            }
+
+            lblEquipamientoSelValor.Text = string.Format(
+                Traductor.Instancia.Traducir("frmSeleccionarTurno.ResumenEquipamiento"),
+                CantidadPaletas,
+                CantidadPelotas,
+                ImporteEquipamiento);
         }
 
         private void btnContinuar_Click(object sender, EventArgs e)
@@ -236,11 +281,16 @@ namespace UI
             HorarioSeleccionado = default;
             CanchaSeleccionada = null;
             TarifaSeleccionada = null;
+            CantidadPaletas = 0;
+            CantidadPelotas = 0;
+            ImporteEquipamiento = 0;
 
             lblFechaSelValor.Text = "-";
             lblHorarioSelValor.Text = "-";
             lblCanchaSelValor.Text = "-";
             lblTarifaSelValor.Text = "-";
+            lblEquipamientoSelValor.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.SinEquipamiento");
+            btnAgregarEquipamiento.Enabled = false;
             btnContinuar.Enabled = false;
         }
     }
