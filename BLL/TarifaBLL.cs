@@ -18,6 +18,7 @@ namespace BLL
         public TarifaBE ObtenerTarifa(TimeSpan horario)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
+            ReglasReserva.ValidarHorario(horario);
 
             TarifaBE? tarifa = _tarifaDAL.ObtenerTarifa(horario);
 
