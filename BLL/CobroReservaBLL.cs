@@ -173,8 +173,7 @@ namespace BLL
 
         private void ValidarNumeroTarjeta(string numeroTarjeta)
         {
-            if (!Regex.IsMatch(numeroTarjeta, @"^\d{13,19}$") ||
-                !CumpleLuhn(numeroTarjeta))
+            if (!Regex.IsMatch(numeroTarjeta, @"^\d{13,19}$"))
             {
                 throw new Exception(T("Errores.Cobro.TarjetaInvalida"));
             }
@@ -212,29 +211,5 @@ namespace BLL
                 string.Empty);
         }
 
-        private bool CumpleLuhn(string numeroTarjeta)
-        {
-            int suma = 0;
-            bool duplicar = false;
-
-            for (int i = numeroTarjeta.Length - 1; i >= 0; i--)
-            {
-                int digito = numeroTarjeta[i] - '0';
-
-                if (duplicar)
-                {
-                    digito *= 2;
-                    if (digito > 9)
-                    {
-                        digito -= 9;
-                    }
-                }
-
-                suma += digito;
-                duplicar = !duplicar;
-            }
-
-            return suma % 10 == 0;
-        }
     }
 }
