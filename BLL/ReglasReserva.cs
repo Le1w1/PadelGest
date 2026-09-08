@@ -19,9 +19,10 @@ namespace BLL
             new TimeSpan(20, 30, 0)
         };
 
-        private static string T(string clave) =>
-            Traductor.Instancia.Traducir(clave);
+        // Método privado para traducir claves de error
+        private static string T(string clave) => Traductor.Instancia.Traducir(clave);
 
+        // Validar que la fecha y el horario de la reserva sean válidos
         public static void ValidarFechaYHorario(DateTime fecha, TimeSpan horario)
         {
             ValidarFecha(fecha);
@@ -35,6 +36,7 @@ namespace BLL
             }
         }
 
+        // Validar que la fecha de la reserva esté dentro del rango permitido
         public static void ValidarFecha(DateTime fecha)
         {
             DateTime fechaSeleccionada = fecha.Date;
@@ -51,6 +53,7 @@ namespace BLL
             }
         }
 
+        // Validar que el horario de la reserva sea uno de los horarios válidos
         public static void ValidarHorario(TimeSpan horario)
         {
             if (!HorariosValidos.Contains(horario))
@@ -59,6 +62,7 @@ namespace BLL
             }
         }
 
+        // Obtener los horarios disponibles para una fecha específica
         public static List<TimeSpan> ObtenerHorariosDisponibles(DateTime fecha)
         {
             ValidarFecha(fecha);

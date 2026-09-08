@@ -19,7 +19,7 @@ namespace UI
         public frmCambiarClave()
         {
             InitializeComponent();
-_usuarioBLL = new UsuarioBLL();
+            _usuarioBLL = new UsuarioBLL();
 
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
@@ -28,16 +28,19 @@ _usuarioBLL = new UsuarioBLL();
             this.FormClosed += frmCambiarClave_FormClosed;
         }
 
+        // Suscribirse al evento Load del formulario para suscribirse al servicio de idioma
         private void frmCambiarClave_Load(object sender, EventArgs e)
         {
             SM.Instancia.Suscribir(this);
         }
-
+        // Suscribirse al evento FormClosed del formulario para desuscribirse del servicio de idioma
         private void frmCambiarClave_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
+
+        // Implementación de la interfaz IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -53,6 +56,8 @@ _usuarioBLL = new UsuarioBLL();
             btnVolver.Text = t.Traducir("frmCambiarClave.BtnVolver");
         }
 
+
+        //guardar cambios de clave
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             if (!ValidarCampos()) return;
@@ -75,16 +80,20 @@ _usuarioBLL = new UsuarioBLL();
             }
         }
 
+        // Limpiar campos del formulario
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
         }
 
+        // Cerrar el formulario
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+
+        // Mostrar u ocultar las claves según el estado del checkbox
         private void chkMostrarClaves_CheckedChanged(object sender, EventArgs e)
         {
             bool ocultar = !chkMostrarClaves.Checked;
@@ -94,6 +103,8 @@ _usuarioBLL = new UsuarioBLL();
             txtConfirmarClave.UseSystemPasswordChar = ocultar;
         }
 
+
+        // Validar los campos del formulario antes de guardar los cambios
         private bool ValidarCampos()
         {
             errorProviderCambiarClave.Clear();
@@ -133,10 +144,11 @@ _usuarioBLL = new UsuarioBLL();
             {
                 lblMensaje.Text = t.Traducir("frmCambiarClave.MsgRevise");
             }
-
             return esValido;
         }
 
+
+        // Limpiar los campos del formulario y restablecer el estado inicial
         private void LimpiarCampos()
         {
             txtClaveActual.Clear();

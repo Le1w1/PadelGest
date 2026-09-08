@@ -22,7 +22,7 @@ namespace UI
         public frmAuditarEventos()
         {
             InitializeComponent();
-_bitacoraEventoBLL = new BitacoraEventoBLL();
+            _bitacoraEventoBLL = new BitacoraEventoBLL();
 
             // Traducir  los labels/botones, antes de que el form se cargue.
             // Las cabeceras de la grilla se traducen mas abajo, despues del BuscarEventos.
@@ -30,6 +30,8 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             this.FormClosed += frmAuditarEventos_FormClosed;
         }
 
+
+        // Este método maneja el evento de carga del formulario, configurando los combos, el estado inicial y buscando eventos.
         private void frmAuditarEventos_Load(object sender, EventArgs e)
         {
             ConfigurarCombos();
@@ -44,6 +46,7 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             ActualizarCabecerasGrilla();
         }
 
+      
         /// Habilita/deshabilita cada boton del form segun los permisos del Rol logueado.
         /// El menu padre filtra la entrada con BIT_AUDITAR, pero btnImprimir requiere BIT_IMPRIMIR_PDF,
         /// que es un permiso simple distinto. btnVolver SIEMPRE habilitado.
@@ -56,17 +59,20 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             btnImprimir.Enabled = sm.TienePermiso("BIT_IMPRIMIR_PDF");
         }
 
+
+        // Este método maneja el evento de cierre del formulario, desuscribiéndose del observador de idioma.
         private void frmAuditarEventos_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
+
+        // Este método actualiza el idioma de los elementos del formulario utilizando el traductor.
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
 
             this.Text = t.Traducir("frmAuditarEventos.Title");
-
             gbFiltros.Text = t.Traducir("frmAuditarEventos.GbFiltros");
             lblFechaDesde.Text = t.Traducir("frmAuditarEventos.LblFechaDesde");
             lblFechaHasta.Text = t.Traducir("frmAuditarEventos.LblFechaHasta");
@@ -80,7 +86,6 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             label9.Text = t.Traducir("frmAuditarEventos.LblApellido");
             gbDetalleReserva.Text = t.Traducir("frmAuditarEventos.GbDetalleReserva");
             lblDescripcionReserva.Text = t.Traducir("frmAuditarEventos.LblDescripcionCompleta");
-
             btnBuscar.Text = t.Traducir("frmAuditarEventos.BtnBuscar");
             btnLimpiar.Text = t.Traducir("frmAuditarEventos.BtnLimpiar");
             btnImprimir.Text = t.Traducir("frmAuditarEventos.BtnImprimir");
@@ -90,6 +95,8 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             ActualizarCabecerasGrilla();
         }
 
+
+        // Este método actualiza los encabezados de las columnas del DataGridView utilizando el traductor.
         private void ActualizarCabecerasGrilla()
         {
             if (dgvEventos.Columns.Count == 0) return;
@@ -106,16 +113,22 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             if (dgvEventos.Columns.Contains("Descripcion")) dgvEventos.Columns["Descripcion"].HeaderText = t.Traducir("frmAuditarEventos.ColDescripcion");
         }
 
+
+        // Este método maneja el evento de cambio de selección en el DataGridView, cargando el nombre y apellido del evento seleccionado.
         private void dgvEventos_SelectionChanged(object sender, EventArgs e)
         {
             CargarNombreApellidoDesdeEventoSeleccionado();
         }
 
+
+        // Este método maneja el evento de clic del botón "Buscar", llamando al método BuscarEventos.
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             BuscarEventos();
         }
 
+
+        // Este método maneja el evento de clic del botón "Limpiar", restableciendo los filtros y buscando eventos nuevamente.
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtUsuario.Clear();
@@ -136,6 +149,8 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             BuscarEventos();
         }
 
+        
+        // Este método maneja el evento de clic del botón "Volver", cerrando el formulario actual.
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -211,6 +226,8 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
         }
         #endregion
 
+
+        // Este método realiza la búsqueda de eventos en la bitácora según los filtros especificados y actualiza el DataGridView con los resultados.
         private void BuscarEventos()
         {
             var t = Traductor.Instancia;
@@ -218,10 +235,8 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             try
             {
                 lblMensaje.Text = string.Empty;
-
                 DateTime fechaDesde = DtpFechaDesde.Value.Date;
                 DateTime fechaHasta = dtpFechaHasta.Value.Date;
-
                 string usuario = txtUsuario.Text.Trim();
                 string modulo = cmbModulo.SelectedItem.ToString();
                 string accion = cmbAccion.SelectedItem.ToString();
@@ -261,6 +276,8 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             }
         }
 
+
+        // Este método carga el nombre y apellido del evento seleccionado en el DataGridView y ajusta la visibilidad del detalle de reserva según corresponda.
         private void CargarNombreApellidoDesdeEventoSeleccionado()
         {
             txtNombre.Clear();
@@ -273,8 +290,7 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
                 return;
             }
 
-            BitacoraEvento evento =
-                dgvEventos.CurrentRow.DataBoundItem as BitacoraEvento;
+            BitacoraEvento evento = dgvEventos.CurrentRow.DataBoundItem as BitacoraEvento;
 
             if (evento == null)
             {
@@ -285,10 +301,7 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             txtNombre.Text = evento.Nombre;
             txtApellido.Text = evento.Apellido;
 
-            bool esReserva =
-                evento.Modulo.Equals(
-                    "Reserva",
-                    StringComparison.OrdinalIgnoreCase);
+            bool esReserva = evento.Modulo.Equals("Reserva",StringComparison.OrdinalIgnoreCase);
 
             AjustarDetalleReserva(esReserva);
 
@@ -298,6 +311,8 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             }
         }
 
+
+        // Este método ajusta la visibilidad del grupo de detalle de reserva y desplaza los controles del formulario según corresponda.
         private void AjustarDetalleReserva(bool mostrar)
         {
             if (_detalleReservaVisible == mostrar)
@@ -306,10 +321,7 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
                 return;
             }
 
-            int desplazamiento =
-                mostrar
-                    ? DesplazamientoDetalleReserva
-                    : -DesplazamientoDetalleReserva;
+            int desplazamiento =mostrar ? DesplazamientoDetalleReserva : -DesplazamientoDetalleReserva;
 
             gbDetalleReserva.Visible = mostrar;
 
@@ -319,13 +331,12 @@ _bitacoraEventoBLL = new BitacoraEventoBLL();
             btnImprimir.Top += desplazamiento;
             btnVolver.Top += desplazamiento;
 
-            ClientSize = new Size(
-                ClientSize.Width,
-                ClientSize.Height + desplazamiento);
-
+            ClientSize = new Size(ClientSize.Width,ClientSize.Height + desplazamiento);
             _detalleReservaVisible = mostrar;
         }
 
+
+        // Este método configura las columnas de la grilla de eventos.
         private void ConfigurarColumnasGrilla()
         {
             dgvEventos.ReadOnly = true;

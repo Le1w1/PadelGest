@@ -16,6 +16,7 @@ namespace BLL
 
         private static string T(string clave) =>Traductor.Instancia.Traducir(clave);
 
+        // Registrar una nueva reserva con validaciones y creación de evento en la bitácora
         public ReservaBE RegistrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
@@ -74,8 +75,7 @@ namespace BLL
                 Estado = "Reservada"
             };
 
-            BitacoraEvento evento =
-                CrearEventoBitacora(reserva,cliente,cancha,facturaPagada,cantidadPaletas,cantidadPelotas);
+            BitacoraEvento evento = CrearEventoBitacora(reserva,cliente,cancha,facturaPagada,cantidadPaletas,cantidadPelotas);
 
             try
             {
@@ -104,32 +104,24 @@ namespace BLL
 
             if (usuario == null)
             {
-                throw new Exception(
-                    "No hay un usuario activo para registrar la reserva.");
+                throw new Exception("No hay un usuario activo para registrar la reserva.");
             }
 
             string descripcion =
                 $"Reserva {reserva.Codigo} registrada para el Cliente DNI {cliente.DNI}. " +
-                $"Cancha: {cancha.Nombre}. " +
-                $"Fecha: {reserva.Fecha:dd/MM/yyyy}. " +
+                $"Cancha: {cancha.Nombre}. " + $"Fecha: {reserva.Fecha:dd/MM/yyyy}. " +
                 $"Horario: {reserva.Horario:hh\\:mm}. " +
-                $"Paletas: {cantidadPaletas}. " +
-                $"Pelotas: {cantidadPelotas}. " +
-                $"Importe abonado: {factura.ImporteTotal:C}.";
+                $"Paletas: {cantidadPaletas}. " + $"Pelotas: {cantidadPelotas}. " + $"Importe abonado: {factura.ImporteTotal:C}.";
 
             return new BitacoraEvento
             {
-                IdUsuario = usuario.IdUsuario,
-                Usuario = usuario.NombreUsuario,
-                FechaHora = DateTime.Now,
-                Modulo = "Reserva",
-                Accion = "Registrar reserva",
-                Criticidad = "Alta",
-                Resultado = "Exitoso",
-                Descripcion = descripcion
+                IdUsuario = usuario.IdUsuario,Usuario = usuario.NombreUsuario,
+                FechaHora = DateTime.Now, Modulo = "Reserva", Accion = "Registrar reserva",
+                Criticidad = "Alta", Resultado = "Exitoso", Descripcion = descripcion
             };
         }
 
+        // Generar un código único para la reserva basado en la fecha y un identificador aleatorio
         private string GenerarCodigoReserva(DateTime fecha)
         {
             string aleatorio = Guid.NewGuid().ToString("N")[..6].ToUpperInvariant();

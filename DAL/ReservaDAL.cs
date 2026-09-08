@@ -18,6 +18,7 @@ namespace DAL
             _bitacoraEventoDAL = new BitacoraEventoDAL();
         }
 
+        //registra una reserva, su factura y su pago en una transacción atómica
         public ReservaBE RegistrarReserva(ReservaBE reserva,FacturaBE factura,PagoBE pago,global::Servicios.BitacoraEvento evento)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
@@ -80,10 +81,8 @@ namespace DAL
             }
         }
 
-        private void ValidarTurnoDisponible(
-            SqlConnection conexion,
-            SqlTransaction transaccion,
-            ReservaBE reserva)
+        // Valida que no exista otra reserva para la misma cancha, fecha y horario
+        private void ValidarTurnoDisponible(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva)
         {
             const string query = @"
                 SELECT TOP 1 IdReserva
@@ -106,6 +105,8 @@ namespace DAL
             }
         }
 
+
+        /// Valida que la cantidad solicitada de equipamiento no supere el stock disponible
         private void ValidarDisponibilidadEquipamiento(SqlConnection conexion,SqlTransaction transaccion,DateTime fecha,TimeSpan horario,string tipo,int cantidadSolicitada,string codigoError)
         {
             if (cantidadSolicitada <= 0)
@@ -154,39 +155,21 @@ namespace DAL
                 throw new InvalidOperationException(codigoError);
         }
 
+
+        // Inserta la factura con estado "Pagada" y devuelve el IdFactura generado
         private int InsertarFacturaPagada(SqlConnection conexion,SqlTransaction transaccion,FacturaBE factura)
         {
             const string query = @"
                 INSERT INTO Factura
                 (
-                    IdCliente,
-                    IdCancha,
-                    IdTarifa,
-                    FechaHoraEmision,
-                    FechaReserva,
-                    Horario,
-                    CantidadPaletas,
-                    CantidadPelotas,
-                    ImporteTarifa,
-                    ImporteEquipamiento,
-                    ImporteTotal,
-                    Estado
+                    IdCliente, IdCancha, IdTarifa, FechaHoraEmision, FechaReserva, Horario,
+                    CantidadPaletas, CantidadPelotas, ImporteTarifa, ImporteEquipamiento, ImporteTotal, Estado
                 )
                 OUTPUT INSERTED.IdFactura
                 VALUES
                 (
-                    @IdCliente,
-                    @IdCancha,
-                    @IdTarifa,
-                    @FechaHoraEmision,
-                    @FechaReserva,
-                    @Horario,
-                    @CantidadPaletas,
-                    @CantidadPelotas,
-                    @ImporteTarifa,
-                    @ImporteEquipamiento,
-                    @ImporteTotal,
-                    N'Pagada'
+                    @IdCliente, @IdCancha, @IdTarifa, @FechaHoraEmision, @FechaReserva, @Horario,
+                    @CantidadPaletas, @CantidadPelotas, @ImporteTarifa,@ImporteEquipamiento, @ImporteTotal, N'Pagada'
                 )";
 
             using (SqlCommand comando =new SqlCommand(query, conexion, transaccion))
@@ -219,29 +202,18 @@ namespace DAL
             }
         }
 
+        // Inserta el pago con estado "Aprobado" y devuelve el IdPago generado
         private int InsertarPagoAprobado(SqlConnection conexion,SqlTransaction transaccion,PagoBE pago,int idFactura)
         {
             const string query = @"
                 INSERT INTO Pago
                 (
-                    IdFactura,
-                    Banco,
-                    Ultimos4Tarjeta,
-                    Importe,
-                    FechaHora,
-                    Estado,
-                    CodigoAutorizacion
+                    IdFactura, Banco, Ultimos4Tarjeta, Importe, FechaHora, Estado, CodigoAutorizacion
                 )
                 OUTPUT INSERTED.IdPago
                 VALUES
                 (
-                    @IdFactura,
-                    @Banco,
-                    @Ultimos4Tarjeta,
-                    @Importe,
-                    @FechaHora,
-                    N'Aprobado',
-                    @CodigoAutorizacion
+                    @IdFactura, @Banco, @Ultimos4Tarjeta, @Importe, @FechaHora, N'Aprobado', @CodigoAutorizacion
                 )";
 
             using (SqlCommand comando =
@@ -263,35 +235,20 @@ namespace DAL
             }
         }
 
+        // Inserta la reserva con estado "Reservada" y devuelve el IdReserva generado
         private int InsertarReserva(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva)
         {
             const string query = @"
                 INSERT INTO Reserva
                 (
-                    Codigo,
-                    IdCliente,
-                    IdCancha,
-                    IdTarifa,
-                    IdFactura,
-                    Fecha,
-                    Horario,
-                    CantidadPaletas,
-                    CantidadPelotas,
-                    Estado
+                    Codigo, IdCliente, IdCancha, IdTarifa, IdFactura, Fecha,
+                    Horario, CantidadPaletas, CantidadPelotas, Estado
                 )
                 OUTPUT INSERTED.IdReserva
                 VALUES
                 (
-                    @Codigo,
-                    @IdCliente,
-                    @IdCancha,
-                    @IdTarifa,
-                    @IdFactura,
-                    @Fecha,
-                    @Horario,
-                    @CantidadPaletas,
-                    @CantidadPelotas,
-                    N'Reservada'
+                    @Codigo, @IdCliente, @IdCancha, @IdTarifa, @IdFactura, @Fecha,
+                    @Horario, @CantidadPaletas, @CantidadPelotas, N'Reservada'
                 )";
 
             using (SqlCommand comando =new SqlCommand(query, conexion, transaccion))

@@ -6,6 +6,7 @@ namespace UI
 {
     public partial class frmRegistrarReserva : Form, IObservadorIdioma
     {
+        #region "Campos"
         private readonly ReservaBLL _reservaBLL;
         private readonly ClienteBE _cliente;
         private readonly CanchaBE _cancha;
@@ -16,13 +17,16 @@ namespace UI
         private readonly TimeSpan _horario;
         private readonly int _cantidadPaletas;
         private readonly int _cantidadPelotas;
-
+       
+        #endregion
         public ReservaBE? ReservaRegistrada { get; private set; }
 
+        //constructor de la clase frmRegistrarReserva que recibe varios parámetros relacionados con la reserva, como cliente, cancha, tarifa, factura pagada, pago aprobado, fecha, horario y cantidades de paletas y pelotas.
+        //Inicializa los campos privados de la clase con los valores proporcionados y llama a los métodos para actualizar el idioma y mostrar los datos en el formulario.
         public frmRegistrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
         {
             InitializeComponent();
-_reservaBLL = new ReservaBLL();
+            _reservaBLL = new ReservaBLL();
             _cliente = cliente;
             _cancha = cancha;
             _tarifa = tarifa;
@@ -47,6 +51,8 @@ _reservaBLL = new ReservaBLL();
             SM.Instancia.Desuscribir(this);
         }
 
+
+        // Implementación del método ActualizarIdioma de la interfaz IObservadorIdioma para actualizar los textos de los controles del formulario según el idioma seleccionado.
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -54,7 +60,6 @@ _reservaBLL = new ReservaBLL();
             Text = t.Traducir("frmRegistrarReserva.Title");
             lblTitulo.Text = t.Traducir("frmRegistrarReserva.LblTitulo");
             gbDatos.Text = t.Traducir("frmRegistrarReserva.GbDatos");
-
             lblClienteTitulo.Text = t.Traducir("frmRegistrarReserva.LblCliente");
             lblFechaTitulo.Text = t.Traducir("frmRegistrarReserva.LblFecha");
             lblHorarioTitulo.Text = t.Traducir("frmRegistrarReserva.LblHorario");
@@ -67,6 +72,8 @@ _reservaBLL = new ReservaBLL();
             btnVolver.Text = t.Traducir("frmRegistrarReserva.BtnVolver");
         }
 
+
+        // Método privado MostrarDatos que se encarga de mostrar los datos de la reserva en los controles del formulario.
         private void MostrarDatos()
         {
             lblClienteValor.Text =$"{_cliente.DNI} - {_cliente.Nombre} {_cliente.Apellido}";
@@ -78,6 +85,9 @@ _reservaBLL = new ReservaBLL();
             lblImporteValor.Text = _facturaPagada.ImporteTotal.ToString("C");
         }
 
+
+        // Evento btnRegistrar_Click que se ejecuta cuando se hace clic en el botón de registrar reserva.
+        // Intenta registrar la reserva utilizando la lógica de negocio y muestra un mensaje de éxito o error según corresponda.
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
             try

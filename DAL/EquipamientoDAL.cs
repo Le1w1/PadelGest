@@ -13,6 +13,7 @@ namespace DAL
             _conexionDAL = new DAO_AccesoDatos();
         }
 
+        /// Mapea un registro de BD a un objeto EquipamientoBE
         private EquipamientoBE MapearEquipamiento(SqlDataReader reader)
         {
             return new EquipamientoBE
@@ -25,10 +26,10 @@ namespace DAL
             };
         }
 
+
         /// Obtiene el equipamiento disponible para una fecha y horario.
-        /// StockDisponible en Equipamiento representa la capacidad máxima física.
-        /// Para cada turno se descuenta solamente lo ya reservado en ese mismo
-        /// turno; las reservas de otros horarios no afectan la disponibilidad.
+        /// Para cada turno se descuenta solamente lo ya reservado en ese mismoturno.
+        /// las reservas de otros horarios no afectan la disponibilidad.
         public List<EquipamientoBE> ObtenerEquipamientosDisponiblesPorTurno(DateTime fecha,TimeSpan horario)
         {
             List<EquipamientoBE> equipamientos = new List<EquipamientoBE>();
@@ -37,11 +38,7 @@ namespace DAL
             {
                 const string query = @"
                     SELECT
-                        e.IdEquipamiento,
-                        e.Tipo,
-                        e.Importe,
-                        e.StockDisponible,
-                        e.Activo,
+                        e.IdEquipamiento, e.Tipo, e.Importe, e.StockDisponible, e.Activo,
                         ISNULL((
                             SELECT SUM(r.CantidadPaletas)
                             FROM Reserva r
@@ -73,7 +70,7 @@ namespace DAL
                         {
                             EquipamientoBE equipamiento = MapearEquipamiento(reader);
 
-                            int reservado =equipamiento.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)? Convert.ToInt32(reader["PaletasReservadas"]): Convert.ToInt32(reader["PelotasReservadas"]);
+                            int reservado = equipamiento.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)? Convert.ToInt32(reader["PaletasReservadas"]): Convert.ToInt32(reader["PelotasReservadas"]);
 
                             equipamiento.StockDisponible =Math.Max(0, equipamiento.StockDisponible - reservado);
 

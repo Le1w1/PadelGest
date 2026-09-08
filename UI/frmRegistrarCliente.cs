@@ -15,12 +15,14 @@ namespace UI
         public frmRegistrarCliente(string dniInicial = "")
         {
             InitializeComponent();
-_clienteBLL = new ClienteBLL();
+            _clienteBLL = new ClienteBLL();
             _dniInicial = (dniInicial ?? string.Empty).Trim();
 
             ActualizarIdioma();
         }
 
+
+        // carga el formulario y suscribe al observador de idioma
         private void frmRegistrarCliente_Load(object sender, EventArgs e)
         {
             SM.Instancia.Suscribir(this);
@@ -37,11 +39,15 @@ _clienteBLL = new ClienteBLL();
             }
         }
 
+
+
         private void frmRegistrarCliente_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
+
+        // Implementación de la interfaz IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -58,6 +64,8 @@ _clienteBLL = new ClienteBLL();
             btnVolver.Text = t.Traducir("frmRegistrarCliente.BtnVolver");
         }
 
+
+        // Validación de campos y eventos de UI
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -66,12 +74,16 @@ _clienteBLL = new ClienteBLL();
             }
         }
 
+
+        // Validación de campos y eventos de UI
         private void Campo_TextChanged(object sender, EventArgs e)
         {
             errorProvider.Clear();
             lblMensaje.Text = string.Empty;
         }
 
+
+        // Validación de campos y eventos de UI
         private bool ValidarCamposUI()
         {
             errorProvider.Clear();
@@ -92,7 +104,6 @@ _clienteBLL = new ClienteBLL();
             if (!Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
                 string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.DNIInvalido");
-
                 errorProvider.SetError(txtDNI, mensaje);
                 lblMensaje.Text = mensaje;
                 txtDNI.Focus();
@@ -102,7 +113,6 @@ _clienteBLL = new ClienteBLL();
             if (!Regex.IsMatch(nombre, @"^[\p{L}\s'-]{2,50}$"))
             {
                 string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.NombreInvalido");
-
                 errorProvider.SetError(txtNombre, mensaje);
                 lblMensaje.Text = mensaje;
                 txtNombre.Focus();
@@ -112,7 +122,6 @@ _clienteBLL = new ClienteBLL();
             if (!Regex.IsMatch(apellido, @"^[\p{L}\s'-]{2,50}$"))
             {
                 string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.ApellidoInvalido");
-
                 errorProvider.SetError(txtApellido, mensaje);
                 lblMensaje.Text = mensaje;
                 txtApellido.Focus();
@@ -122,7 +131,6 @@ _clienteBLL = new ClienteBLL();
             if (!Regex.IsMatch(telefono, @"^\d{8,15}$"))
             {
                 string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.TelefonoInvalido");
-
                 errorProvider.SetError(txtTelefono, mensaje);
                 lblMensaje.Text = mensaje;
                 txtTelefono.Focus();
@@ -132,16 +140,16 @@ _clienteBLL = new ClienteBLL();
             if (!Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 string mensaje = Traductor.Instancia.Traducir("Errores.Cliente.CorreoInvalido");
-
                 errorProvider.SetError(txtCorreo, mensaje);
                 lblMensaje.Text = mensaje;
                 txtCorreo.Focus();
                 return false;
             }
-
             return true;
         }
 
+
+        // Eventos de botones
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
             if (!ValidarCamposUI())
@@ -152,9 +160,7 @@ _clienteBLL = new ClienteBLL();
             try
             {
                 ClienteRegistrado = _clienteBLL.RegistrarCliente(txtDNI.Text,txtNombre.Text,txtApellido.Text,txtTelefono.Text,txtCorreo.Text);
-
                 MessageBox.Show(Traductor.Instancia.Traducir("frmRegistrarCliente.MsgRegistrado"),Text,MessageBoxButtons.OK,MessageBoxIcon.Information);
-
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -165,6 +171,8 @@ _clienteBLL = new ClienteBLL();
             }
         }
 
+
+        // Eventos de botones
         private void btnVolver_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;

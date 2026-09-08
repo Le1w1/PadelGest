@@ -16,6 +16,7 @@ namespace DAL
             _conexionDAL = new DAO_AccesoDatos();
         }
 
+        /// Mapea un registro de la base de datos a un objeto CanchaBE.
         private CanchaBE MapearCancha(SqlDataReader reader)
         {
             return new CanchaBE

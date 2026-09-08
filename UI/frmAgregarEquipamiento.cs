@@ -6,6 +6,7 @@ namespace UI
 {
     public partial class frmAgregarEquipamiento : Form, IObservadorIdioma
     {
+        #region "campos utilizados"
         private readonly EquipamientoBLL _equipamientoBLL;
         private readonly DateTime _fecha;
         private readonly TimeSpan _horario;
@@ -19,29 +20,36 @@ namespace UI
         public int CantidadPelotas { get; private set; }
         public decimal ImporteEquipamiento { get; private set; }
 
+        #endregion
+
+        // formulario para agregar equipamiento a una reserva, recibe la fecha y horario de la reserva, y opcionalmente la cantidad inicial de paletas y pelotas
         public frmAgregarEquipamiento(DateTime fecha,TimeSpan horario,int cantidadPaletasInicial = 0,int cantidadPelotasInicial = 0)
         {
             InitializeComponent();
-_equipamientoBLL = new EquipamientoBLL();
+            _equipamientoBLL = new EquipamientoBLL();
             _fecha = fecha.Date;
             _horario = horario;
             _cantidadPaletasInicial = cantidadPaletasInicial;
             _cantidadPelotasInicial = cantidadPelotasInicial;
-
             ActualizarIdioma();
         }
 
+
+        // Carga inicial del formulario, suscribe al observador de idioma y carga el equipamiento disponible
         private void frmAgregarEquipamiento_Load(object sender, EventArgs e)
         {
-            SM.Instancia.Suscribir(this);
+            SM.Instancia.Suscribir(this); 
             CargarEquipamiento();
         }
 
+
+        // Desuscribe del observador de idioma al cerrar el formulario
         private void frmAgregarEquipamiento_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
+        // Implementación de la interfaz IObservadorIdioma para actualizar el idioma de los controles del formulario
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -49,7 +57,6 @@ _equipamientoBLL = new EquipamientoBLL();
             Text = t.Traducir("frmAgregarEquipamiento.Title");
             lblTitulo.Text = t.Traducir("frmAgregarEquipamiento.LblTitulo");
             gbEquipamiento.Text = t.Traducir("frmAgregarEquipamiento.GbEquipamiento");
-
             lblPaletas.Text = t.Traducir("frmAgregarEquipamiento.LblPaletas");
             lblPelotas.Text = t.Traducir("frmAgregarEquipamiento.LblPelotas");
             lblCantidadPaletas.Text = t.Traducir("frmAgregarEquipamiento.LblCantidad");
@@ -59,11 +66,11 @@ _equipamientoBLL = new EquipamientoBLL();
             lblImportePaletasTitulo.Text = t.Traducir("frmAgregarEquipamiento.LblImporteUnitario");
             lblImportePelotasTitulo.Text = t.Traducir("frmAgregarEquipamiento.LblImporteUnitario");
             lblTotalTitulo.Text = t.Traducir("frmAgregarEquipamiento.LblTotal");
-
             btnConfirmar.Text = t.Traducir("frmAgregarEquipamiento.BtnConfirmar");
             btnVolver.Text = t.Traducir("frmAgregarEquipamiento.BtnVolver");
         }
 
+        // Carga el equipamiento disponible para la fecha y horario de la reserva, y configura los controles del formulario según el stock disponible
         private void CargarEquipamiento()
         {
             try
@@ -74,7 +81,6 @@ _equipamientoBLL = new EquipamientoBLL();
                 List<EquipamientoBE> equipamientos = _equipamientoBLL.ObtenerEquipamientosActivos(_fecha,_horario);
 
                 _paleta = equipamientos.FirstOrDefault(e => e.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase));
-
                 _pelota = equipamientos.FirstOrDefault(e => e.Tipo.Equals("Pelota", StringComparison.OrdinalIgnoreCase));
 
                 ConfigurarPaletas();
@@ -89,6 +95,7 @@ _equipamientoBLL = new EquipamientoBLL();
             }
         }
 
+        // Configura los controles del formulario para la selección de paletas según el stock disponible y la cantidad inicial
         private void ConfigurarPaletas()
         {
             int stock = _paleta?.StockDisponible ?? 0;
@@ -103,6 +110,8 @@ _equipamientoBLL = new EquipamientoBLL();
             nudPaletas.Enabled = _paleta != null && stock > 0;
         }
 
+
+        // Configura los controles del formulario para la selección de pelotas según el stock disponible y la cantidad inicial
         private void ConfigurarPelotas()
         {
             int stock = _pelota?.StockDisponible ?? 0;
@@ -117,6 +126,8 @@ _equipamientoBLL = new EquipamientoBLL();
             nudPelotas.Enabled = _pelota != null && stock > 0;
         }
 
+
+        // Actualiza el total del importe del equipamiento seleccionado cuando cambia la cantidad de paletas o pelotas
         private void nudCantidad_ValueChanged(object sender, EventArgs e)
         {
             errorProvider.Clear();
@@ -124,6 +135,8 @@ _equipamientoBLL = new EquipamientoBLL();
             ActualizarTotalVista();
         }
 
+
+        // Calcula y actualiza el total del importe del equipamiento seleccionado en la vista
         private void ActualizarTotalVista()
         {
             decimal total = 0;
@@ -141,6 +154,8 @@ _equipamientoBLL = new EquipamientoBLL();
             lblTotalValor.Text = total.ToString("C");
         }
 
+
+        // Valida la selección de equipamiento y calcula el importe total, cerrando el formulario con DialogResult.OK si todo es correcto
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             try
@@ -178,6 +193,8 @@ _equipamientoBLL = new EquipamientoBLL();
             }
         }
 
+
+        // Cierra el formulario sin guardar cambios al hacer clic en el botón "Volver"
         private void btnVolver_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;

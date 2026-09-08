@@ -22,12 +22,15 @@
   "frmMenuPrincipal.SinSesion": "No active session",
   "frmMenuPrincipal.ConfirmarCerrarSesion": "Do you want to log out?",
   "frmMenuPrincipal.CerrarSesionTitulo": "Logout",
+  "frmMenuPrincipal.MenuSeleccionarTurno": "Select Time Slot",
+
   "frmCambiarIdioma.Title": "Change Language",
   "frmCambiarIdioma.LblIdioma": "Language:",
   "frmCambiarIdioma.BtnGuardar": "Save",
   "frmCambiarIdioma.BtnVolver": "Back",
   "frmCambiarIdioma.MsgCambioExitoso": "Language changed successfully.",
   "frmCambiarIdioma.MsgSeleccioneIdioma": "You must select a language.",
+
   "frmLogin.Title": "PadelGest - Login",
   "frmLogin.LblTitulo": "PadelGest",
   "frmLogin.LblSubtitulo": "Login",
@@ -45,6 +48,7 @@
   "frmLogin.TitleCambioClave": "Password change recommended",
   "frmLogin.MsgCambioClaveRecomendado": "You are using an initial password. It is recommended to change it for security.\n\nDo you want to change it now?",
   "frmLogin.MsgIntegridadSinPermiso": "The system is currently experiencing some issues. Please contact an administrator to have them fixed if they haven't already been addressed.",
+
   "frmSesion.Title": "PadelGest - Session",
   "frmSesion.LblTitulo": "Session",
   "frmSesion.LblOpciones": "Current session options",
@@ -57,6 +61,7 @@
   "frmSesion.ConfirmarCerrarSesion": "Do you want to log out?",
   "frmSesion.CerrarSesionTitulo": "Logout",
   "frmSesion.MsgReLoginExitoso": "Re-Login completed successfully.",
+
   "frmCambiarClave.Title": "PadelGest - Change Password",
   "frmCambiarClave.LblTitulo": "Change Password",
   "frmCambiarClave.LblClaveActual": "Current Password:",
@@ -72,6 +77,7 @@
   "frmCambiarClave.MsgFaltaConfirmar": "You must confirm the new password.",
   "frmCambiarClave.MsgNoCoinciden": "The new password and confirmation do not match.",
   "frmCambiarClave.MsgRevise": "Please check the entered data.",
+
   "frmAdministrador.Title": "PadelGest - User Management",
   "frmAdministrador.LblTitulo": "USER MANAGEMENT",
   "frmAdministrador.GbFiltros": "User Filters",
@@ -117,6 +123,7 @@
   "frmAdministrador.ConfirmarDesbloquear": "Do you want to unlock the selected user?",
   "frmAdministrador.ConfirmarActivar": "Do you want to activate the selected user?",
   "frmAdministrador.ConfirmarDesactivar": "Do you want to deactivate the selected user?",
+
   "frmAuditarEventos.Title": "Event Audit",
   "frmAuditarEventos.GbFiltros": "Search Filters",
   "frmAuditarEventos.LblFechaDesde": "Date From:",
@@ -148,6 +155,9 @@
   "frmAuditarEventos.MsgPdfOK": "PDF exported successfully.",
   "frmAuditarEventos.MsgAbrirPdf": "PDF exported successfully.\nDo you want to open the file?",
   "frmAuditarEventos.MsgPdfError": "Could not export the PDF.",
+  "frmAuditarEventos.GbDetalleReserva": "Reservation details",
+  "frmAuditarEventos.LblDescripcionCompleta": "Full description:",
+
   "frmGestionarRespaldo.Title": "Backup Management",
   "frmGestionarRespaldo.LblTitulo": "Backup Management",
   "frmGestionarRespaldo.GbBackup": "Backup",
@@ -167,6 +177,7 @@
   "frmGestionarRespaldo.ConfirmarRestore": "You are about to restore the database. This operation cannot be undone and will restart the application. Do you want to continue?",
   "frmGestionarRespaldo.BackupExitoso": "Backup successfully created at: {0}",
   "frmGestionarRespaldo.RestoreExitoso": "Restore completed successfully. The application will restart.",
+
   "frmRepararIntegridad.Title": "Integrity Repair",
   "frmRepararIntegridad.LblTitulo": "Integrity Repair",
   "frmRepararIntegridad.LblExplicacion": "The system detected the following inconsistencies in the database. You must repair the system before continuing operations.",
@@ -183,6 +194,7 @@
   "frmRepararIntegridad.RegistroDVV": "(table set)",
   "frmRepararIntegridad.ConfirmarRecalcular": "You are about to RECALCULATE the verifier digits. If any data was modified outside the system, that modification will be permanently legitimized. This operation cannot be undone.\n\nDo you want to continue?",
   "frmRepararIntegridad.RecalcularExitoso": "The verifier digits were recalculated successfully. The application will restart.",
+
   "Errores.DebeIngresarEmail": "You must enter the Email.",
   "Errores.PermisoDenegado": "You do not have permission to perform this operation.",
   "Errores.DebeIngresarContrasenia": "You must enter the Password.",
@@ -221,6 +233,7 @@
   "Errores.IdiomaPorDefectoNoEncontrado": "Default language (ES) was not found in the database.",
   "Errores.DebeSeleccionarIdioma": "You must select a language.",
   "Errores.IdiomaIgualActual": "The selected language is already the current language.",
+
   "Errores.RBAC.NombreObligatorio": "You must enter a name.",
   "Errores.RBAC.NombreFamiliaYaExiste": "A Family with that name already exists.",
   "Errores.RBAC.NombreRolYaExiste": "A Role with that name already exists.",
@@ -233,6 +246,7 @@
   "Errores.RBAC.PermisoDuplicado": "Permission '{0}' is already included through {1}; it cannot also be added through {2}.",
   "Errores.RBAC.FamiliaEnUso": "The Family cannot be deleted because it is being used by one or more Roles or other Families. Remove those references first.",
   "Errores.RBAC.RolEnUso": "The Role cannot be deleted because it is assigned to one or more Users. Change the Role of those users first.",
+
   "frmGestionarRolesYFamilias.Title": "PadelGest - Manage Roles and Families",
   "frmGestionarRolesYFamilias.LblTitulo": "Manage Roles and Families",
   "frmGestionarRolesYFamilias.LblRolFamilia": "Role - Family:",
@@ -255,6 +269,7 @@
   "frmGestionarRolesYFamilias.ConfirmarDescartarBorrador": "The item you are creating has not been saved yet. If you change selection, it will be discarded.\n\nDo you want to discard it and continue?",
   "frmGestionarRolesYFamilias.ConfirmarEliminarPorVacio": "The composition has become empty. Do you want to delete this item? It will be permanently removed from the database. Only allowed if it is NOT being used by other Families or Roles.\n\nIf you choose No, the in-memory changes are kept and you can cancel to revert.",
   "frmGestionarRolesYFamilias.MsgNoEliminado": "Not deleted. Use 'Cancel' to discard changes, or add at least one item to the composition and save.",
+
   "Errores.SinPermisoRespaldo": "You do not have permission to manage backups.",
   "Errores.DebeSeleccionarCarpeta": "You must select a destination folder.",
   "Errores.CarpetaNoExiste": "The selected folder does not exist: {0}",
@@ -263,6 +278,7 @@
   "Errores.ArchivoNoBak": "The selected file does not have a .bak extension",
   "Errores.BackupFallido": "Could not complete the backup: {0}",
   "Errores.RestoreFallido": "Could not complete the restore: {0}",
+
   "Respaldo.AccionCrearBackup": "Create Backup",
   "Respaldo.AccionRestaurarBackup": "Restore Backup",
   "Respaldo.ResultadoIniciado": "Started",
@@ -272,11 +288,13 @@
   "Respaldo.DescBackupFallido": "Backup failed at: {0}. Detail: {1}",
   "Respaldo.DescRestoreIniciado": "Starting database restore from: {0}",
   "Respaldo.DescRestoreFallido": "Restore failed from: {0}. Detail: {1}",
+
   "Errores.Reserva.FechaPasada": "A date earlier than today cannot be selected.",
   "Errores.Reserva.FechaFueraAnticipacion": "Reservations can only be made up to 7 days in advance.",
   "Errores.Reserva.TurnoIniciado": "A time slot that has already started cannot be selected.",
   "Errores.Reserva.HorarioInvalido": "The selected time does not match a valid 90-minute time slot.",
-  "frmMenuPrincipal.MenuSeleccionarTurno": "Select Time Slot",
+
+
   "frmSeleccionarTurno.Title": "PadelGest - Select Time Slot",
   "frmSeleccionarTurno.LblTitulo": "SELECT TIME SLOT",
   "frmSeleccionarTurno.GbBusqueda": "Time slot search",
@@ -297,6 +315,7 @@
   "frmSeleccionarTurno.MsgSinCanchas": "There are no available courts for the selected date and time.",
   "frmSeleccionarTurno.MsgSinHorarios": "There are no remaining time slots for the selected date.",
   "frmSeleccionarTurno.MsgBuscarNuevamente": "The search criteria changed. Check availability again before selecting the time slot.",
+
   "Errores.Reserva.TarifaNoDisponible": "There is no active rate for the selected time.",
   "Equipamiento.Paleta": "paddles",
   "Equipamiento.Pelota": "balls",
@@ -306,6 +325,7 @@
   "Errores.Equipamiento.MaximoPelotas": "A maximum of {0} balls can be added per reservation.",
   "Errores.Equipamiento.NoDisponible": "Equipment of type {0} is not available.",
   "Errores.Equipamiento.StockInsuficiente": "There is not enough stock of {0}. Available stock: {1}.",
+
   "frmAgregarEquipamiento.Title": "PadelGest - Add Equipment",
   "frmAgregarEquipamiento.LblTitulo": "ADD EQUIPMENT",
   "frmAgregarEquipamiento.GbEquipamiento": "Available equipment",
@@ -317,12 +337,16 @@
   "frmAgregarEquipamiento.LblTotal": "Total:",
   "frmAgregarEquipamiento.BtnConfirmar": "Confirm",
   "frmAgregarEquipamiento.BtnVolver": "Back",
+
   "frmSeleccionarTurno.LblEquipamiento": "Equipment:",
   "frmSeleccionarTurno.BtnAgregarEquipamiento": "Add Equipment",
   "frmSeleccionarTurno.SinEquipamiento": "No additional equipment",
   "frmSeleccionarTurno.ResumenEquipamiento": "Paddles: {0} | Balls: {1} | Amount: {2:C}",
+  "frmSeleccionarTurno.MsgClienteSeleccionado": "Selected Client: ID {0} - {1} {2}.",
+
   "Errores.Cliente.DNIObligatorio": "You must enter the Client's ID number.",
   "Errores.Cliente.DNIInvalido": "The ID number must contain only digits and be between 7 and 8 digits long.",
+
   "frmSeleccionarCliente.Title": "PadelGest - Select Client",
   "frmSeleccionarCliente.LblTitulo": "SELECT CLIENT",
   "frmSeleccionarCliente.GbBusqueda": "Search by ID number",
@@ -337,13 +361,14 @@
   "frmSeleccionarCliente.BtnVolver": "Back",
   "frmSeleccionarCliente.MsgNoRegistrado": "The Client is not registered. The Client must be registered to continue.",
   "frmSeleccionarCliente.MsgDebeBuscar": "You must search for and select a registered Client.",
-  "frmSeleccionarTurno.MsgClienteSeleccionado": "Selected Client: ID {0} - {1} {2}.",
+
   "Errores.Cliente.CamposObligatorios": "You must complete ID Number, First Name, Last Name, Phone and Email.",
   "Errores.Cliente.NombreInvalido": "The First Name must contain only letters and be between 2 and 50 characters.",
   "Errores.Cliente.ApellidoInvalido": "The Last Name must contain only letters and be between 2 and 50 characters.",
   "Errores.Cliente.TelefonoInvalido": "The Phone must contain only digits and be between 8 and 15 digits long.",
   "Errores.Cliente.CorreoInvalido": "The Email format is not valid.",
   "Errores.Cliente.DNIYaRegistrado": "The entered ID Number already belongs to a registered Client.",
+
   "frmRegistrarCliente.Title": "PadelGest - Register Client",
   "frmRegistrarCliente.LblTitulo": "REGISTER CLIENT",
   "frmRegistrarCliente.GbDatos": "Client Data",
@@ -355,11 +380,13 @@
   "frmRegistrarCliente.BtnRegistrar": "Register",
   "frmRegistrarCliente.BtnVolver": "Back",
   "frmRegistrarCliente.MsgRegistrado": "Client registered successfully.",
+
   "frmSeleccionarCliente.BtnRegistrar": "Register Client",
   "frmSeleccionarCliente.MsgRegistradoIdentificado": "The Client was registered and identified to continue with the reservation.",
   "frmSeleccionarTurno.BtnCobrarReserva": "Charge Reservation",
   "frmSeleccionarTurno.MsgFaltanDatosCobro": "You must select the time slot and Client before charging.",
   "frmSeleccionarTurno.MsgPagoAprobado": "Charge approved. The invoice and payment are ready to be saved together with the reservation.",
+
   "Errores.Cobro.ClienteInvalido": "The selected Client is invalid.",
   "Errores.Cobro.CanchaInvalida": "The selected Court is invalid.",
   "Errores.Cobro.TarifaInvalida": "The selected Rate is invalid.",
@@ -370,6 +397,7 @@
   "Errores.Cobro.TarjetaInvalida": "The card number is invalid.",
   "Errores.Cobro.VencimientoInvalido": "The card is expired.",
   "Errores.Cobro.CodigoSeguridadInvalido": "The security code must contain 3 or 4 digits.",
+
   "frmCobrarReserva.Title": "PadelGest - Charge Reservation",
   "frmCobrarReserva.LblTitulo": "CHARGE RESERVATION",
   "frmCobrarReserva.GbFactura": "Reservation Invoice",
@@ -388,9 +416,14 @@
   "frmCobrarReserva.BtnVolver": "Back",
   "frmCobrarReserva.MsgAprobado": "The Bank approved the charge. The invoice and payment will be saved when the reservation is confirmed.",
   "frmCobrarReserva.MsgRechazado": "The Bank rejected the transaction. No invoice, payment or reservation was saved.",
+  "frmCobrarReserva.LblRespuestaBanco": "Bank response:",
+  "frmCobrarReserva.RespuestaAprobada": "Approved",
+  "frmCobrarReserva.RespuestaRechazada": "Rejected",
+
   "frmSeleccionarTurno.BtnRegistrarReserva": "Register Reservation",
   "frmSeleccionarTurno.MsgFaltanDatosRegistro": "A time slot, Client and Paid invoice are required to register the reservation.",
   "frmSeleccionarTurno.MsgReservaRegistrada": "Reservation registered successfully. Code: {0}.",
+
   "Errores.Reserva.ClienteInvalido": "The selected Client is invalid.",
   "Errores.Reserva.CanchaInvalida": "The selected Court is invalid.",
   "Errores.Reserva.TarifaInvalida": "The selected Rate is invalid.",
@@ -398,6 +431,7 @@
   "Errores.Reserva.DatosInconsistentes": "The Client, Court or Rate data do not match the paid invoice.",
   "Errores.Reserva.EquipamientoInvalido": "The equipment quantities are invalid.",
   "Errores.Reserva.TurnoYaNoDisponible": "The selected time slot is no longer available and the reservation cannot be registered.",
+
   "frmRegistrarReserva.Title": "PadelGest - Register Reservation",
   "frmRegistrarReserva.LblTitulo": "REGISTER RESERVATION",
   "frmRegistrarReserva.GbDatos": "Reservation Data",
@@ -411,12 +445,9 @@
   "frmRegistrarReserva.BtnRegistrar": "Register Reservation",
   "frmRegistrarReserva.BtnVolver": "Back",
   "frmRegistrarReserva.MsgRegistrada": "The reservation was registered successfully. Code: {0}.",
-  "frmCobrarReserva.LblRespuestaBanco": "Bank response (simulation):",
-  "frmCobrarReserva.RespuestaAprobada": "Approved",
-  "frmCobrarReserva.RespuestaRechazada": "Rejected",
+
   "Errores.Cobro.RespuestaBancoObligatoria": "You must select the simulated Bank response.",
   "Errores.Equipamiento.StockInsuficienteRegistro": "There is not enough {0} availability for that time slot. The reservation was not saved.",
-  "Errores.Reserva.PagoInvalido": "The approved payment is invalid or does not match the invoice amount.",
-  "frmAuditarEventos.GbDetalleReserva": "Reservation details",
-  "frmAuditarEventos.LblDescripcionCompleta": "Full description:"
+  "Errores.Reserva.PagoInvalido": "The approved payment is invalid or does not match the invoice amount."
+
 }

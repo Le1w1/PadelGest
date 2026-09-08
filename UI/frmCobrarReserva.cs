@@ -7,6 +7,7 @@ namespace UI
 {
     public partial class frmCobrarReserva : Form, IObservadorIdioma
     {
+        #region "campos"
         private readonly CobroReservaBLL _cobroBLL;
         private readonly ClienteBE _cliente;
         private readonly CanchaBE _cancha;
@@ -16,10 +17,14 @@ namespace UI
         public FacturaBE? FacturaPagada { get; private set; }
         public PagoBE? PagoAprobado { get; private set; }
 
+        #endregion
+
+
+        // formulario para cobrar una reserva, recibe los datos del cliente, cancha, tarifa, fecha y horario de la reserva, cantidad de paletas y pelotas, y el importe del equipamiento
         public frmCobrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fechaReserva,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,decimal importeEquipamiento)
         {
             InitializeComponent();
-_cobroBLL = new CobroReservaBLL();
+            _cobroBLL = new CobroReservaBLL();
             _cliente = cliente;
             _cancha = cancha;
             _tarifa = tarifa;
@@ -30,6 +35,7 @@ _cobroBLL = new CobroReservaBLL();
             MostrarFactura();
         }
 
+        // Suscribirse al evento de cambio de idioma y configurar el DateTimePicker para la fecha de vencimiento de la tarjeta
         private void frmCobrarReserva_Load(object sender, EventArgs e)
         {
             SM.Instancia.Suscribir(this);
@@ -48,6 +54,7 @@ _cobroBLL = new CobroReservaBLL();
             SM.Instancia.Desuscribir(this);
         }
 
+        // Implementación de la interfaz IObservadorIdioma para actualizar los textos del formulario cuando se cambia el idioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -56,19 +63,18 @@ _cobroBLL = new CobroReservaBLL();
             lblTitulo.Text = t.Traducir("frmCobrarReserva.LblTitulo");
             gbFactura.Text = t.Traducir("frmCobrarReserva.GbFactura");
             gbTarjeta.Text = t.Traducir("frmCobrarReserva.GbTarjeta");
-
             lblClienteTitulo.Text = t.Traducir("frmCobrarReserva.LblCliente");
             lblTurnoTitulo.Text = t.Traducir("frmCobrarReserva.LblTurno");
             lblCanchaTitulo.Text = t.Traducir("frmCobrarReserva.LblCancha");
             lblTarifaTitulo.Text = t.Traducir("frmCobrarReserva.LblTarifa");
             lblEquipamientoTitulo.Text = t.Traducir("frmCobrarReserva.LblEquipamiento");
             lblTotalTitulo.Text = t.Traducir("frmCobrarReserva.LblTotal");
-
             lblBanco.Text = t.Traducir("frmCobrarReserva.LblBanco");
             lblNumeroTarjeta.Text = t.Traducir("frmCobrarReserva.LblNumeroTarjeta");
             lblVencimiento.Text = t.Traducir("frmCobrarReserva.LblVencimiento");
             lblCodigoSeguridad.Text = t.Traducir("frmCobrarReserva.LblCodigoSeguridad");
             lblRespuestaBanco.Text = t.Traducir("frmCobrarReserva.LblRespuestaBanco");
+           
             CargarRespuestasBanco();
 
             btnCobrar.Text = t.Traducir("frmCobrarReserva.BtnCobrar");
@@ -86,6 +92,7 @@ _cobroBLL = new CobroReservaBLL();
             cboRespuestaBanco.SelectedIndex = seleccionAnterior >= 0 ? seleccionAnterior : -1;
         }
 
+        // Muestra los datos de la factura en los controles del formulario
         private void MostrarFactura()
         {
             lblClienteValor.Text =$"{_cliente.DNI} - {_cliente.Nombre} {_cliente.Apellido}";
@@ -100,6 +107,8 @@ _cobroBLL = new CobroReservaBLL();
             lblTotalValor.Text = _factura.ImporteTotal.ToString("C");
         }
 
+
+        // Valida que solo se puedan ingresar números y espacios en los campos de texto correspondientes
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ' ')
@@ -114,6 +123,7 @@ _cobroBLL = new CobroReservaBLL();
             lblMensaje.Text = string.Empty;
         }
 
+        // Valida los campos de la interfaz de usuario y muestra mensajes de error si es necesario
         private bool ValidarUI()
         {
             errorProvider.Clear();
@@ -148,6 +158,8 @@ _cobroBLL = new CobroReservaBLL();
             return true;
         }
 
+
+        // Muestra un mensaje de error en el control especificado y establece el foco en él
         private void MostrarError(Control control, string clave)
         {
             string mensaje = Traductor.Instancia.Traducir(clave);
@@ -156,35 +168,23 @@ _cobroBLL = new CobroReservaBLL();
             control.Focus();
         }
 
+
+        // Maneja el evento de clic del botón "Cobrar", valida la interfaz de usuario y realiza el cobro de la reserva
         private void btnCobrar_Click(object sender, EventArgs e)
         {
-            if (!ValidarUI())
-            {
-                return;
-            }
-
+            if (!ValidarUI()) { return; }
             try
             {
-                ResultadoCobroBE resultado = _cobroBLL.CobrarReserva(
-                    _factura,
-                    _cliente,
-                    txtBanco.Text,
-                    txtNumeroTarjeta.Text,
-                    dtpVencimiento.Value,
-                    txtCodigoSeguridad.Text,
-                    cboRespuestaBanco.SelectedIndex == 0);
+                ResultadoCobroBE resultado = _cobroBLL.CobrarReserva(_factura,_cliente,txtBanco.Text,txtNumeroTarjeta.Text,dtpVencimiento.Value,txtCodigoSeguridad.Text,cboRespuestaBanco.SelectedIndex == 0);
 
                 if (!resultado.Aprobado)
                 {
-                    lblMensaje.Text = Traductor.Instancia.Traducir("frmCobrarReserva.MsgRechazado");
-
-                    MessageBox.Show(lblMensaje.Text,Text,MessageBoxButtons.OK,MessageBoxIcon.Warning);
-
+                    lblMensaje.Text = Traductor.Instancia.Traducir("frmCobrarReserva.MsgRechazado")
+                    MessageBox.Show(lblMensaje.Text, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     DialogResult = DialogResult.Cancel;
                     Close();
                     return;
                 }
-
                 FacturaPagada = resultado.Factura;
                 PagoAprobado = resultado.Pago;
 
@@ -201,6 +201,8 @@ _cobroBLL = new CobroReservaBLL();
             }
         }
 
+
+        // Maneja el evento de clic del botón "Volver", cierra el formulario y establece el resultado del diálogo como Cancel
         private void btnVolver_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;

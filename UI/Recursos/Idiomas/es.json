@@ -22,12 +22,14 @@
   "frmMenuPrincipal.SinSesion": "Sin sesión activa",
   "frmMenuPrincipal.ConfirmarCerrarSesion": "¿Desea cerrar la sesión actual?",
   "frmMenuPrincipal.CerrarSesionTitulo": "Cerrar sesión",
+
   "frmCambiarIdioma.Title": "Cambiar Idioma",
   "frmCambiarIdioma.LblIdioma": "Idioma:",
   "frmCambiarIdioma.BtnGuardar": "Guardar",
   "frmCambiarIdioma.BtnVolver": "Volver",
   "frmCambiarIdioma.MsgCambioExitoso": "Idioma cambiado correctamente.",
   "frmCambiarIdioma.MsgSeleccioneIdioma": "Debe seleccionar un idioma.",
+
   "frmLogin.Title": "PadelGest - Inicio de Sesión",
   "frmLogin.LblTitulo": "PadelGest",
   "frmLogin.LblSubtitulo": "Inicio de Sesión",
@@ -45,6 +47,7 @@
   "frmLogin.TitleCambioClave": "Cambio de contraseña recomendado",
   "frmLogin.MsgCambioClaveRecomendado": "Está utilizando una contraseña inicial. Se recomienda cambiarla por seguridad.\n\n¿Desea cambiarla ahora?",
   "frmLogin.MsgIntegridadSinPermiso": "El sistema tiene algunas fallas por el momento. Contacte a un administrador para poder repararlas si aun no se ha hecho.",
+
   "frmSesion.Title": "PadelGest - Sesión",
   "frmSesion.LblTitulo": "Sesión",
   "frmSesion.LblOpciones": "Opciones de la sesión Actual",
@@ -57,6 +60,7 @@
   "frmSesion.ConfirmarCerrarSesion": "¿Desea cerrar la sesión actual?",
   "frmSesion.CerrarSesionTitulo": "Cerrar sesión",
   "frmSesion.MsgReLoginExitoso": "Re-Login realizado correctamente.",
+
   "frmCambiarClave.Title": "PadelGest - Cambiar Clave",
   "frmCambiarClave.LblTitulo": "Cambiar Clave",
   "frmCambiarClave.LblClaveActual": "Clave Actual:",
@@ -72,6 +76,7 @@
   "frmCambiarClave.MsgFaltaConfirmar": "Debe confirmar la nueva clave.",
   "frmCambiarClave.MsgNoCoinciden": "La nueva clave y la confirmación no coinciden.",
   "frmCambiarClave.MsgRevise": "Revise los datos ingresados.",
+
   "frmAdministrador.Title": "PadelGest - Gestión de Usuarios",
   "frmAdministrador.LblTitulo": "GESTIÓN DE USUARIOS",
   "frmAdministrador.GbFiltros": "Filtros de Usuarios",
@@ -117,6 +122,7 @@
   "frmAdministrador.ConfirmarDesbloquear": "¿Desea desbloquear el usuario seleccionado?",
   "frmAdministrador.ConfirmarActivar": "¿Desea activar el usuario seleccionado?",
   "frmAdministrador.ConfirmarDesactivar": "¿Desea desactivar el usuario seleccionado?",
+
   "frmAuditarEventos.Title": "Auditoría de Eventos",
   "frmAuditarEventos.GbFiltros": "Filtros de búsqueda",
   "frmAuditarEventos.LblFechaDesde": "Fecha Desde:",
@@ -148,6 +154,9 @@
   "frmAuditarEventos.MsgPdfOK": "PDF exportado correctamente.",
   "frmAuditarEventos.MsgAbrirPdf": "PDF exportado correctamente.\n¿Desea abrir el archivo?",
   "frmAuditarEventos.MsgPdfError": "No se pudo exportar el PDF.",
+  "frmAuditarEventos.GbDetalleReserva": "Detalle de la reserva",
+  "frmAuditarEventos.LblDescripcionCompleta": "Descripción completa:",
+
   "frmGestionarRespaldo.Title": "Gestión de Respaldo",
   "frmGestionarRespaldo.LblTitulo": "Gestión de Respaldo",
   "frmGestionarRespaldo.GbBackup": "Backup",
@@ -167,6 +176,7 @@
   "frmGestionarRespaldo.ConfirmarRestore": "Está a punto de restaurar la base de datos. Esta operación no se puede deshacer y reiniciará la aplicación. ¿Desea continuar?",
   "frmGestionarRespaldo.BackupExitoso": "Backup realizado correctamente en: {0}",
   "frmGestionarRespaldo.RestoreExitoso": "Restore completado correctamente. La aplicación se reiniciará.",
+
   "frmRepararIntegridad.Title": "Reparación de Integridad",
   "frmRepararIntegridad.LblTitulo": "Reparación de Integridad",
   "frmRepararIntegridad.LblExplicacion": "El sistema detectó las siguientes inconsistencias en la base de datos. Debe reparar el sistema antes de continuar operando.",
@@ -183,6 +193,7 @@
   "frmRepararIntegridad.RegistroDVV": "(conjunto de la tabla)",
   "frmRepararIntegridad.ConfirmarRecalcular": "Está a punto de RECALCULAR los dígitos verificadores. Si algún dato fue modificado por fuera del sistema, esa modificación quedará legitimada permanentemente. Esta operación no se puede deshacer.\n\n¿Desea continuar?",
   "frmRepararIntegridad.RecalcularExitoso": "Los dígitos verificadores se recalcularon correctamente. La aplicación se reiniciará.",
+
   "Errores.DebeIngresarEmail": "Debe ingresar Email.",
   "Errores.PermisoDenegado": "No tiene permiso para realizar esta operación.",
   "Errores.DebeIngresarContrasenia": "Debe ingresar Contraseña.",
@@ -221,6 +232,7 @@
   "Errores.IdiomaPorDefectoNoEncontrado": "No se encontró el idioma por defecto (ES) en la base de datos.",
   "Errores.DebeSeleccionarIdioma": "Debe seleccionar un idioma.",
   "Errores.IdiomaIgualActual": "El idioma seleccionado ya es el idioma actual.",
+
   "Errores.RBAC.NombreObligatorio": "Debe ingresar un nombre.",
   "Errores.RBAC.NombreFamiliaYaExiste": "Ya existe una Familia registrada con ese nombre.",
   "Errores.RBAC.NombreRolYaExiste": "Ya existe un Rol registrado con ese nombre.",
@@ -233,6 +245,7 @@
   "Errores.RBAC.PermisoDuplicado": "El permiso '{0}' ya está incluido vía {1}, no puede agregarse también vía {2}.",
   "Errores.RBAC.FamiliaEnUso": "La Familia no se puede eliminar porque está siendo usada por uno o más Roles u otras Familias. Quitala de ellos primero.",
   "Errores.RBAC.RolEnUso": "El Rol no se puede eliminar porque está asignado a uno o más Usuarios. Cambiá el Rol de esos usuarios primero.",
+
   "frmGestionarRolesYFamilias.Title": "PadelGest - Gestión de Roles y Familias",
   "frmGestionarRolesYFamilias.LblTitulo": "Gestión de Roles y Familias",
   "frmGestionarRolesYFamilias.LblRolFamilia": "Rol - Familia:",
@@ -255,6 +268,7 @@
   "frmGestionarRolesYFamilias.ConfirmarDescartarBorrador": "El elemento que estás creando aún no fue guardado. Si cambias de selección, se va a descartar.\n\n¿Querés descartarlo y continuar?",
   "frmGestionarRolesYFamilias.ConfirmarEliminarPorVacio": "La composición quedó vacía. ¿Querés eliminar este elemento? Se borra definitivamente de la base de datos. Solo se permite si NO está siendo usado por otras Familias o Roles.\n\nSi elegís No, los cambios en memoria se mantienen y podés cancelar para volver al estado anterior.",
   "frmGestionarRolesYFamilias.MsgNoEliminado": "No se eliminó. Usá 'Cancelar' para descartar los cambios o agregá al menos un elemento a la composición y guardá.",
+
   "Errores.SinPermisoRespaldo": "No tiene permisos para gestionar respaldos.",
   "Errores.DebeSeleccionarCarpeta": "Debe seleccionar una carpeta de destino.",
   "Errores.CarpetaNoExiste": "La carpeta seleccionada no existe: {0}",
@@ -263,6 +277,7 @@
   "Errores.ArchivoNoBak": "El archivo seleccionado no tiene extensión .bak",
   "Errores.BackupFallido": "No se pudo completar el backup: {0}",
   "Errores.RestoreFallido": "No se pudo completar el restore: {0}",
+
   "Respaldo.AccionCrearBackup": "Crear Backup",
   "Respaldo.AccionRestaurarBackup": "Restaurar Backup",
   "Respaldo.ResultadoIniciado": "Iniciado",
@@ -270,10 +285,12 @@
   "Respaldo.DescBackupFallido": "Falló el backup en: {0}. Detalle: {1}",
   "Respaldo.DescRestoreIniciado": "Se inicia restore de la base desde: {0}",
   "Respaldo.DescRestoreFallido": "Falló el restore desde: {0}. Detalle: {1}",
+
   "Errores.Reserva.FechaPasada": "No se puede seleccionar una fecha anterior a la actual.",
   "Errores.Reserva.FechaFueraAnticipacion": "Las reservas solo pueden realizarse con hasta 7 días de anticipación.",
   "Errores.Reserva.TurnoIniciado": "No se puede seleccionar un turno que ya haya comenzado.",
   "Errores.Reserva.HorarioInvalido": "El horario seleccionado no corresponde a una franja válida de 90 minutos.",
+
   "frmMenuPrincipal.MenuSeleccionarTurno": "Seleccionar Turno",
   "frmSeleccionarTurno.Title": "PadelGest - Seleccionar Turno",
   "frmSeleccionarTurno.LblTitulo": "SELECCIONAR TURNO",
@@ -295,6 +312,12 @@
   "frmSeleccionarTurno.MsgSinCanchas": "No existen canchas disponibles para la fecha y horario seleccionados.",
   "frmSeleccionarTurno.MsgSinHorarios": "No quedan turnos disponibles para la fecha seleccionada.",
   "frmSeleccionarTurno.MsgBuscarNuevamente": "La búsqueda cambió. Vuelva a consultar la disponibilidad antes de seleccionar el turno.",
+  "frmSeleccionarTurno.LblEquipamiento": "Equipamiento:",
+  "frmSeleccionarTurno.BtnAgregarEquipamiento": "Agregar Equipamiento",
+  "frmSeleccionarTurno.SinEquipamiento": "Sin equipamiento adicional",
+  "frmSeleccionarTurno.ResumenEquipamiento": "Paletas: {0} | Pelotas: {1} | Importe: {2:C}",
+  "frmSeleccionarTurno.MsgClienteSeleccionado": "Cliente seleccionado: DNI {0} - {1} {2}.",
+
   "Errores.Reserva.TarifaNoDisponible": "No existe una tarifa activa para el horario seleccionado.",
   "Equipamiento.Paleta": "paletas",
   "Equipamiento.Pelota": "pelotas",
@@ -304,6 +327,7 @@
   "Errores.Equipamiento.MaximoPelotas": "Se pueden agregar como máximo {0} pelotas por reserva.",
   "Errores.Equipamiento.NoDisponible": "El equipamiento de tipo {0} no se encuentra disponible.",
   "Errores.Equipamiento.StockInsuficiente": "No existe stock suficiente de {0}. Stock disponible: {1}.",
+
   "frmAgregarEquipamiento.Title": "PadelGest - Agregar Equipamiento",
   "frmAgregarEquipamiento.LblTitulo": "AGREGAR EQUIPAMIENTO",
   "frmAgregarEquipamiento.GbEquipamiento": "Equipamiento disponible",
@@ -315,12 +339,11 @@
   "frmAgregarEquipamiento.LblTotal": "Total:",
   "frmAgregarEquipamiento.BtnConfirmar": "Confirmar",
   "frmAgregarEquipamiento.BtnVolver": "Volver",
-  "frmSeleccionarTurno.LblEquipamiento": "Equipamiento:",
-  "frmSeleccionarTurno.BtnAgregarEquipamiento": "Agregar Equipamiento",
-  "frmSeleccionarTurno.SinEquipamiento": "Sin equipamiento adicional",
-  "frmSeleccionarTurno.ResumenEquipamiento": "Paletas: {0} | Pelotas: {1} | Importe: {2:C}",
+
+
   "Errores.Cliente.DNIObligatorio": "Debe ingresar el DNI del Cliente.",
   "Errores.Cliente.DNIInvalido": "El DNI debe contener únicamente números y tener entre 7 y 8 dígitos.",
+
   "frmSeleccionarCliente.Title": "PadelGest - Seleccionar Cliente",
   "frmSeleccionarCliente.LblTitulo": "SELECCIONAR CLIENTE",
   "frmSeleccionarCliente.GbBusqueda": "Búsqueda por DNI",
@@ -335,13 +358,15 @@
   "frmSeleccionarCliente.BtnVolver": "Volver",
   "frmSeleccionarCliente.MsgNoRegistrado": "El Cliente no se encuentra registrado. Debe registrarlo para continuar.",
   "frmSeleccionarCliente.MsgDebeBuscar": "Debe buscar y seleccionar un Cliente registrado.",
-  "frmSeleccionarTurno.MsgClienteSeleccionado": "Cliente seleccionado: DNI {0} - {1} {2}.",
+
+
   "Errores.Cliente.CamposObligatorios": "Debe completar DNI, Nombre, Apellido, Teléfono y Correo electrónico.",
   "Errores.Cliente.NombreInvalido": "El Nombre debe contener únicamente letras y tener entre 2 y 50 caracteres.",
   "Errores.Cliente.ApellidoInvalido": "El Apellido debe contener únicamente letras y tener entre 2 y 50 caracteres.",
   "Errores.Cliente.TelefonoInvalido": "El Teléfono debe contener únicamente números y tener entre 8 y 15 dígitos.",
   "Errores.Cliente.CorreoInvalido": "El formato del Correo electrónico no es válido.",
   "Errores.Cliente.DNIYaRegistrado": "El DNI ingresado ya pertenece a un Cliente registrado.",
+
   "frmRegistrarCliente.Title": "PadelGest - Registrar Cliente",
   "frmRegistrarCliente.LblTitulo": "REGISTRAR CLIENTE",
   "frmRegistrarCliente.GbDatos": "Datos del Cliente",
@@ -353,11 +378,16 @@
   "frmRegistrarCliente.BtnRegistrar": "Registrar",
   "frmRegistrarCliente.BtnVolver": "Volver",
   "frmRegistrarCliente.MsgRegistrado": "Cliente registrado correctamente.",
+
   "frmSeleccionarCliente.BtnRegistrar": "Registrar Cliente",
   "frmSeleccionarCliente.MsgRegistradoIdentificado": "El Cliente fue registrado y quedó identificado para continuar con la reserva.",
   "frmSeleccionarTurno.BtnCobrarReserva": "Cobrar Reserva",
   "frmSeleccionarTurno.MsgFaltanDatosCobro": "Debe seleccionar el turno y el Cliente antes de realizar el cobro.",
   "frmSeleccionarTurno.MsgPagoAprobado": "Cobro aprobado. La factura y el pago están listos para registrarse junto con la reserva.",
+  "frmSeleccionarTurno.BtnRegistrarReserva": "Registrar Reserva",
+  "frmSeleccionarTurno.MsgFaltanDatosRegistro": "Debe existir un turno, un Cliente y una factura Pagada para registrar la reserva.",
+  "frmSeleccionarTurno.MsgReservaRegistrada": "Reserva registrada correctamente. Código: {0}.",
+
   "Errores.Cobro.ClienteInvalido": "El Cliente seleccionado no es válido.",
   "Errores.Cobro.CanchaInvalida": "La Cancha seleccionada no es válida.",
   "Errores.Cobro.TarifaInvalida": "La Tarifa seleccionada no es válida.",
@@ -368,6 +398,7 @@
   "Errores.Cobro.TarjetaInvalida": "El número de tarjeta no es válido.",
   "Errores.Cobro.VencimientoInvalido": "La tarjeta se encuentra vencida.",
   "Errores.Cobro.CodigoSeguridadInvalido": "El código de seguridad debe contener 3 o 4 dígitos.",
+
   "frmCobrarReserva.Title": "PadelGest - Cobrar Reserva",
   "frmCobrarReserva.LblTitulo": "COBRAR RESERVA",
   "frmCobrarReserva.GbFactura": "Factura de Reserva",
@@ -386,9 +417,12 @@
   "frmCobrarReserva.BtnVolver": "Volver",
   "frmCobrarReserva.MsgAprobado": "El Banco aprobó el cobro. La factura y el pago se registrarán al confirmar la reserva.",
   "frmCobrarReserva.MsgRechazado": "El Banco rechazó la operación. No se registró la factura, el pago ni la reserva.",
-  "frmSeleccionarTurno.BtnRegistrarReserva": "Registrar Reserva",
-  "frmSeleccionarTurno.MsgFaltanDatosRegistro": "Debe existir un turno, un Cliente y una factura Pagada para registrar la reserva.",
-  "frmSeleccionarTurno.MsgReservaRegistrada": "Reserva registrada correctamente. Código: {0}.",
+  "frmCobrarReserva.LblRespuestaBanco": "Respuesta del Banco:",
+  "frmCobrarReserva.RespuestaAprobada": "Aprobado",
+  "frmCobrarReserva.RespuestaRechazada": "Rechazado",
+
+
+
   "Errores.Reserva.ClienteInvalido": "El Cliente seleccionado no es válido.",
   "Errores.Reserva.CanchaInvalida": "La Cancha seleccionada no es válida.",
   "Errores.Reserva.TarifaInvalida": "La Tarifa seleccionada no es válida.",
@@ -396,6 +430,7 @@
   "Errores.Reserva.DatosInconsistentes": "Los datos de Cliente, Cancha o Tarifa no coinciden con la factura pagada.",
   "Errores.Reserva.EquipamientoInvalido": "Las cantidades de equipamiento no son válidas.",
   "Errores.Reserva.TurnoYaNoDisponible": "El turno seleccionado ya no se encuentra disponible y la reserva no puede registrarse.",
+
   "frmRegistrarReserva.Title": "PadelGest - Registrar Reserva",
   "frmRegistrarReserva.LblTitulo": "REGISTRAR RESERVA",
   "frmRegistrarReserva.GbDatos": "Datos de la Reserva",
@@ -409,12 +444,9 @@
   "frmRegistrarReserva.BtnRegistrar": "Registrar Reserva",
   "frmRegistrarReserva.BtnVolver": "Volver",
   "frmRegistrarReserva.MsgRegistrada": "La reserva fue registrada correctamente. Código: {0}.",
-  "frmCobrarReserva.LblRespuestaBanco": "Respuesta del Banco (simulación):",
-  "frmCobrarReserva.RespuestaAprobada": "Aprobado",
-  "frmCobrarReserva.RespuestaRechazada": "Rechazado",
+
   "Errores.Cobro.RespuestaBancoObligatoria": "Debe seleccionar la respuesta simulada del Banco.",
   "Errores.Equipamiento.StockInsuficienteRegistro": "No hay suficiente disponibilidad de {0} para ese turno. La reserva no fue registrada.",
-  "Errores.Reserva.PagoInvalido": "El pago aprobado no es válido o no coincide con el importe de la factura.",
-  "frmAuditarEventos.GbDetalleReserva": "Detalle de la reserva",
-  "frmAuditarEventos.LblDescripcionCompleta": "Descripción completa:"
+  "Errores.Reserva.PagoInvalido": "El pago aprobado no es válido o no coincide con el importe de la factura."
+
 }

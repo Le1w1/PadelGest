@@ -14,6 +14,7 @@ namespace UI
 {
     public partial class frmGestionarRolesYFamilias : Form, IObservadorIdioma
     {
+        #region "Campos"
         private readonly FamiliaBLL _familiaBLL;
         private readonly RolBLL _rolBLL;
         private readonly PermisoSimpleBLL _permisoSimpleBLL;
@@ -32,11 +33,13 @@ namespace UI
         // Determinan si el usuario puede operar sobre Roles, sobre Familias o sobre ambos.
         private bool _puedeGestionarRol;
         private bool _puedeGestionarFamilia;
+        
+        #endregion
 
         public frmGestionarRolesYFamilias()
         {
             InitializeComponent();
-_familiaBLL = new FamiliaBLL();
+            _familiaBLL = new FamiliaBLL();
             _rolBLL = new RolBLL();
             _permisoSimpleBLL = new PermisoSimpleBLL();
 
@@ -50,8 +53,9 @@ _familiaBLL = new FamiliaBLL();
             this.FormClosed += frmGestionar_FormClosed;
         }
 
-        /// Cachea los permisos del Rol logueado y ajusta los radio buttons.
-        /// Caso edge: si no tiene ninguno de los dos, el form bloquea todo (defensa, no deberia haberse abierto).
+     
+        /// Revisa los permisos del Rol logueado y ajusta los radio buttons.
+        /// Caso: si no tiene ninguno de los dos, el form bloquea todo.
         private void AplicarPermisos()
         {
             var sm = SM.Instancia;
@@ -79,6 +83,7 @@ _familiaBLL = new FamiliaBLL();
             }
         }
 
+        // Suscripcion a eventos de idioma
         private void frmGestionar_Load(object sender, EventArgs e)
         {
             SM.Instancia.Suscribir(this);
@@ -90,6 +95,7 @@ _familiaBLL = new FamiliaBLL();
             SM.Instancia.Desuscribir(this);
         }
 
+        // Implementación de IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -110,8 +116,10 @@ _familiaBLL = new FamiliaBLL();
             btnEliminar.Text = t.Traducir("frmGestionarRolesYFamilias.BtnEliminar");
         }
 
+
         #region "Carga y refresco"
 
+        // Recarga todo el form: limpia controles, recarga combo y checklist, y deja el form en estado inicial.
         private void RecargarTodo()
         {
             _enEdicion = null;
@@ -128,6 +136,8 @@ _familiaBLL = new FamiliaBLL();
             ActivarEstadoInicial();
         }
 
+
+        // Carga el checklist de disponibles: todos los PermisoSimples y todas las Familias activas.
         private void CargarDisponibles()
         {
             _refrescandoCheckList = true;
@@ -145,6 +155,8 @@ _familiaBLL = new FamiliaBLL();
             _refrescandoCheckList = false;
         }
 
+
+        // Carga el combo de Roles y Familias: primero un item especial "(Nuevo)", luego todas las Familias y todos los Roles.
         private void CargarCombo()
         {
             _cargandoCombo = true;
@@ -164,6 +176,8 @@ _familiaBLL = new FamiliaBLL();
             _cargandoCombo = false;
         }
 
+
+        // Refresca el TreeView de composicion del componente en edicion, reconstruyendo todos los nodos desde cero.
         private void RefrescarTreeView()
         {
             tvComposicion.Nodes.Clear();
@@ -177,6 +191,8 @@ _familiaBLL = new FamiliaBLL();
             tvComposicion.ExpandAll();
         }
 
+
+        // Construye un TreeNode recursivamente a partir de un Componente (Familia o Rol).
         private TreeNode BuildNode(Componente c)
         {
             TreeNode node = new TreeNode(c.ToString());
@@ -195,6 +211,8 @@ _familiaBLL = new FamiliaBLL();
             return node;
         }
 
+
+        // Refresca el checklist de disponibles marcando los items que están actualmente en la composición del componente en edición.
         private void RefrescarCheckListSegunComponente()
         {
             // Marca los items del clbDisponibles que estan en la composicion del componente en edicion.
@@ -203,9 +221,7 @@ _familiaBLL = new FamiliaBLL();
 
             try
             {
-                List<Componente> hijosActuales = _enEdicion == null
-                    ? new List<Componente>()
-                    : ObtenerHijos(_enEdicion);
+                List<Componente> hijosActuales = _enEdicion == null ? new List<Componente>(): ObtenerHijos(_enEdicion);
 
                 for (int i = 0; i < clbDisponibles.Items.Count; i++)
                 {
@@ -224,6 +240,7 @@ _familiaBLL = new FamiliaBLL();
 
         #region "Estados del form (habilitacion de controles)"
 
+         // Estado inicial: no hay entidad en edicion, se puede crear una nueva, pero no editar nada.
         private void ActivarEstadoInicial()
         {
             // Sin entidad en edicion: se puede crear una nueva, pero no editar nada.
@@ -240,6 +257,7 @@ _familiaBLL = new FamiliaBLL();
             RefrescarCheckListSegunComponente(); // limpia checks
         }
 
+        // Estado de edicion: hay una entidad en edicion, se bloquean los controles de creacion y se habilitan los de edicion.
         private void ActivarEstadoEdicion()
         {
             // Hay una entidad en edicion: bloqueamos los controles de creacion y habilitamos los de edicion de composicion.
@@ -262,6 +280,8 @@ _familiaBLL = new FamiliaBLL();
 
         #region "Metodos privados para el Composite"
 
+
+        /// Obtiene la lista de hijos de un Componente (Familia o Rol). Si es un PermisoSimple, devuelve lista vacía.
         private List<Componente> ObtenerHijos(Componente c)
         {
             if (c is Familia f) return f.Hijos;
@@ -269,12 +289,16 @@ _familiaBLL = new FamiliaBLL();
             return new List<Componente>();
         }
 
+
+        /// Agrega un hijo a un Componente (Familia o Rol). Si es un PermisoSimple, no hace nada.
         private void AgregarHijo(Componente padre, Componente hijo)
         {
             if (padre is Familia f) f.Agregar(hijo);
             else if (padre is Rol r) r.Agregar(hijo);
         }
 
+
+        /// Quita un hijo de un Componente (Familia o Rol). Si es un PermisoSimple, no hace nada.
         private void QuitarHijo(Componente padre, Componente hijo)
         {
             if (padre is Familia f) f.Quitar(hijo);
@@ -285,6 +309,7 @@ _familiaBLL = new FamiliaBLL();
 
         #region "Eventos de controles"
 
+        // Evento disparado al cambiar la seleccion del combo de Roles y Familias.
         private void cboRolFamilia_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_cargandoCombo) return;
@@ -364,6 +389,8 @@ _familiaBLL = new FamiliaBLL();
             }
         }
 
+
+        // Evento disparado al hacer click en el boton "Crear" para crear un nuevo Rol o Familia.
         private void btnCrear_Click(object sender, EventArgs e)
         {
             string nombre = (txtNombre.Text ?? string.Empty).Trim();
@@ -372,16 +399,12 @@ _familiaBLL = new FamiliaBLL();
             // Validacion de permiso por tipo de entidad a crear.
             if (rbFamilia.Checked && !_puedeGestionarFamilia)
             {
-                MessageBox.Show(t.Traducir("Errores.PermisoDenegado"),
-                    t.Traducir("frmGestionarRolesYFamilias.Title"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(t.Traducir("Errores.PermisoDenegado"),t.Traducir("frmGestionarRolesYFamilias.Title"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (rbRol.Checked && !_puedeGestionarRol)
             {
-                MessageBox.Show(t.Traducir("Errores.PermisoDenegado"),
-                    t.Traducir("frmGestionarRolesYFamilias.Title"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(t.Traducir("Errores.PermisoDenegado"),t.Traducir("frmGestionarRolesYFamilias.Title"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -418,6 +441,7 @@ _familiaBLL = new FamiliaBLL();
             lblMensaje.Text = string.Empty;
         }
 
+        // Evento disparado al marcar o desmarcar un item en el checklist de disponibles.
         private void clbDisponibles_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (_refrescandoCheckList) return;
@@ -440,6 +464,8 @@ _familiaBLL = new FamiliaBLL();
             BeginInvoke(new Action(RefrescarTreeView));
         }
 
+
+        // Evento disparado al hacer click en el boton "Eliminar seleccionado" para quitar un item de la composicion del componente en edicion.
         private void btnEliminarSeleccionado_Click(object sender, EventArgs e)
         {
             if (_enEdicion == null || tvComposicion.SelectedNode == null) return;
@@ -474,6 +500,8 @@ _familiaBLL = new FamiliaBLL();
             RefrescarTreeView();
         }
 
+
+        // Evento disparado al hacer click en el boton "Guardar cambios" para persistir la composicion del componente en edicion.
         private void btnGuardarCambios_Click(object sender, EventArgs e)
         {
             if (_enEdicion == null) return;
@@ -518,6 +546,7 @@ _familiaBLL = new FamiliaBLL();
             }
         }
 
+      
         /// Pregunta al admin si quiere eliminar la entidad (Familia o Rol) porque su composición quedó vacía. 
         /// Si confirma, ejecuta el Eliminar del BLL correspondiente (que valida que no esté en uso). 
         /// Si no, la entidad queda como estaba en BD y se descarta el cambio en memoria.
@@ -556,6 +585,8 @@ _familiaBLL = new FamiliaBLL();
             RecargarTodo();
         }
 
+
+        // Evento disparado al hacer click en el boton "Eliminar" para desactivar la entidad (Familia o Rol) actualmente en edicion.
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (_enEdicion == null || _esNuevo) return;

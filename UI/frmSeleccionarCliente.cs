@@ -14,7 +14,7 @@ namespace UI
         public frmSeleccionarCliente()
         {
             InitializeComponent();
-_clienteBLL = new ClienteBLL();
+            _clienteBLL = new ClienteBLL();
             ActualizarIdioma();
         }
 
@@ -38,19 +38,18 @@ _clienteBLL = new ClienteBLL();
             gbBusqueda.Text = t.Traducir("frmSeleccionarCliente.GbBusqueda");
             lblDNI.Text = t.Traducir("frmSeleccionarCliente.LblDNI");
             btnBuscar.Text = t.Traducir("frmSeleccionarCliente.BtnBuscar");
-
             gbDatosCliente.Text = t.Traducir("frmSeleccionarCliente.GbDatos");
             lblDNIValorTitulo.Text = t.Traducir("frmSeleccionarCliente.LblDNI");
             lblNombreTitulo.Text = t.Traducir("frmSeleccionarCliente.LblNombre");
             lblApellidoTitulo.Text = t.Traducir("frmSeleccionarCliente.LblApellido");
             lblTelefonoTitulo.Text = t.Traducir("frmSeleccionarCliente.LblTelefono");
             lblCorreoTitulo.Text = t.Traducir("frmSeleccionarCliente.LblCorreo");
-
             btnConfirmar.Text = t.Traducir("frmSeleccionarCliente.BtnConfirmar");
             btnRegistrarCliente.Text = t.Traducir("frmSeleccionarCliente.BtnRegistrar");
             btnVolver.Text = t.Traducir("frmSeleccionarCliente.BtnVolver");
         }
 
+        // permite solo ingresar números en el campo de texto del DNI
         private void txtDNI_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -59,6 +58,8 @@ _clienteBLL = new ClienteBLL();
             }
         }
 
+        
+        // permite limpiar el error y el mensaje cuando se modifica el campo de texto del DNI
         private void txtDNI_TextChanged(object sender, EventArgs e)
         {
             errorProvider.SetError(txtDNI, string.Empty);
@@ -66,6 +67,8 @@ _clienteBLL = new ClienteBLL();
             LimpiarClienteEncontrado();
         }
 
+
+        // permite buscar un cliente por su DNI y mostrar sus datos en la interfaz
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -133,6 +136,8 @@ _clienteBLL = new ClienteBLL();
             btnRegistrarCliente.Enabled = false;
         }
 
+
+        // permite abrir el formulario de registro de cliente y registrar un nuevo cliente
         private void btnRegistrarCliente_Click(object sender, EventArgs e)
         {
             string dni = txtDNI.Text.Trim();
@@ -153,6 +158,8 @@ _clienteBLL = new ClienteBLL();
             }
         }
 
+
+        // permite confirmar la selección del cliente encontrado y cerrar el formulario
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             if (_clienteEncontrado == null)

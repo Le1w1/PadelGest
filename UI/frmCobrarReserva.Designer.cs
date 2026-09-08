@@ -233,16 +233,16 @@ namespace UI
             cboRespuestaBanco.FlatStyle = FlatStyle.Flat;
             cboRespuestaBanco.ForeColor = Color.FromArgb(18, 18, 18);
             cboRespuestaBanco.FormattingEnabled = true;
-            cboRespuestaBanco.Location = new Point(455, 115);
+            cboRespuestaBanco.Location = new Point(505, 115);
             cboRespuestaBanco.Name = "cboRespuestaBanco";
-            cboRespuestaBanco.Size = new Size(215, 25);
+            cboRespuestaBanco.Size = new Size(165, 25);
             cboRespuestaBanco.TabIndex = 8;
             // 
             // lblRespuestaBanco
             // 
             lblRespuestaBanco.AutoSize = true;
             lblRespuestaBanco.ForeColor = Color.White;
-            lblRespuestaBanco.Location = new Point(310, 118);
+            lblRespuestaBanco.Location = new Point(361, 118);
             lblRespuestaBanco.Name = "lblRespuestaBanco";
             lblRespuestaBanco.Size = new Size(138, 17);
             lblRespuestaBanco.TabIndex = 9;

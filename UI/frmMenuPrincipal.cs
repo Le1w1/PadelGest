@@ -19,10 +19,12 @@ namespace UI
         public frmMenuPrincipal()
         {
             InitializeComponent();
-// Traducir antes de que el form se cargue.
+            // Traducir antes de que el form se cargue.
             ActualizarIdioma();
         }
 
+
+        // Suscripcion al Observer de idioma y carga de datos de sesion al cargar el form.
         private void frmMenuPrincipal_Load(object sender, EventArgs e)
         {
             // Suscripcion al Observer de idioma.
@@ -31,9 +33,10 @@ namespace UI
             AplicarPermisos();
         }
 
+   
+        
         /// Recorre los items del menu y los habilita/deshabilita segun los permisos del usuario logueado. 
         /// Excepcion: "Cerrar Sesion" SIEMPRE habilitado por seguridad operativa, sin importar los permisos del rol.
-
         private void AplicarPermisos()
         {
             var sm = SM.Instancia;
@@ -75,11 +78,13 @@ namespace UI
 
         }
 
+     
         private void frmMenuPrincipal_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
+ 
         /// Implementacion del Observer: el SM nos llama cuando cambia el idioma. Recorre todos los textos del form y aplica las traducciones.
         public void ActualizarIdioma()
         {
@@ -115,6 +120,7 @@ namespace UI
             CargarDatosSesion();
         }
 
+        // Carga los datos de la sesion en la barra de estado. Si no hay sesion activa, muestra "Sin Sesion".
         private void CargarDatosSesion()
         {
             var t = Traductor.Instancia;
@@ -133,6 +139,8 @@ namespace UI
             }
         }
 
+
+        /// Evento del menu "Cerrar Sesion": pregunta al usuario si desea cerrar la sesion, y si confirma, llama al BLL para cerrar la sesion y cierra el form.
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -153,6 +161,8 @@ namespace UI
             }
         }
 
+
+        #region "MENUs"
         private void reLoginToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmLogin formSesion = new frmLogin(true);
@@ -200,7 +210,7 @@ namespace UI
             frmGestionarRespaldo formGestionarRespaldo = new frmGestionarRespaldo();
             formGestionarRespaldo.ShowDialog();
         }
+        #endregion
 
-       
     }
 }

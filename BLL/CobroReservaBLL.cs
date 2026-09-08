@@ -13,9 +13,9 @@ namespace BLL
             _bancoServicio = new BancoServicio();
         }
 
-        private static string T(string clave) =>
-            Traductor.Instancia.Traducir(clave);
+        private static string T(string clave) => Traductor.Instancia.Traducir(clave);
 
+        // Genera una factura para la reserva de una cancha, validando los datos de entrada y calcula el importe total.
         public FacturaBE GenerarFactura(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fechaReserva,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,decimal importeEquipamiento)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
@@ -56,6 +56,8 @@ namespace BLL
             };
         }
 
+
+        // Realiza el cobro de una reserva, validando los datos de entrada y autorizando el pago con el banco.
         public ResultadoCobroBE CobrarReserva(FacturaBE factura,ClienteBE cliente,string banco,string numeroTarjeta,DateTime fechaVencimiento,string codigoSeguridad,bool respuestaBancoAprobada)
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
@@ -108,6 +110,7 @@ namespace BLL
             };
         }
 
+        #region "Validaciones de datos de cobro"
         private void ValidarBanco(string banco)
         {
             if (string.IsNullOrWhiteSpace(banco))
@@ -141,5 +144,7 @@ namespace BLL
         {
             return Regex.Replace(numeroTarjeta ?? string.Empty, @"[\s-]", string.Empty);
         }
+        #endregion
+
     }
 }

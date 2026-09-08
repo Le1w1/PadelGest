@@ -17,7 +17,7 @@ namespace BLL
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
         }
 
-        private static string T(string clave) => Traductor.Instancia.Traducir(clave);
+        private static string T (string clave) => Traductor.Instancia.Traducir(clave);
 
         /// Busca un Cliente por DNI luego de validar el dato ingresado.
         public ClienteBE? BuscarPorDNI(string dni)
@@ -39,6 +39,8 @@ namespace BLL
             return _clienteDAL.BuscarPorDNI(dni);
         }
 
+
+        /// Registra un nuevo Cliente luego de validar todos los datos ingresados.
         public ClienteBE RegistrarCliente(string dni,string nombre,string apellido,string telefono,string correoElectronico)
         {
             SM.Instancia.RequierePermiso("CLI_REGISTRAR");
@@ -102,6 +104,7 @@ namespace BLL
             return clienteRegistrado;
         }
 
+        #region Validaciones
         private bool EsDNIValido(string dni)
         {
             return Regex.IsMatch(dni, @"^\d{7,8}$");
@@ -121,5 +124,7 @@ namespace BLL
         {
             return Regex.IsMatch(correoElectronico,@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
+
+        #endregion
     }
 }

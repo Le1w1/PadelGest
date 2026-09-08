@@ -1,19 +1,13 @@
 namespace Servicios
 {
-    /// <summary>
-    /// Adaptador de desarrollo para representar la comunicación con el Banco.
-    /// El proyecto no dispone actualmente de un endpoint bancario real.
-    ///
+    /// Entidad de desarrollo para representar la comunicación con el Banco.
+    /// ya que el proyecto no dispone actualmente de un endpoint bancario real.
+    
     /// Durante la demostración, la respuesta se selecciona manualmente para
     /// simular lo que en un entorno real respondería el sistema del Banco.
-    /// </summary>
     public class BancoServicio
     {
-        public ResultadoAutorizacionBanco AutorizarPago(
-            string dniCliente,
-            string numeroTarjeta,
-            decimal importe,
-            bool respuestaSimuladaAprobada)
+        public ResultadoAutorizacionBanco AutorizarPago(string dniCliente,string numeroTarjeta,decimal importe,bool respuestaSimuladaAprobada)
         {
             if (!respuestaSimuladaAprobada)
             {
@@ -27,12 +21,12 @@ namespace Servicios
             return new ResultadoAutorizacionBanco
             {
                 Aprobado = true,
-                CodigoAutorizacion =
-                    "SIM-" + Guid.NewGuid().ToString("N")[..12].ToUpperInvariant()
+                CodigoAutorizacion = "RES-" + Guid.NewGuid().ToString("N")[..12].ToUpperInvariant()
             };
         }
     }
 
+    /// Entidad de desarrollo para representar la respuesta del Banco.
     public class ResultadoAutorizacionBanco
     {
         public bool Aprobado { get; set; }

@@ -27,6 +27,7 @@ namespace BLL
             return _equipamientoDAL.ObtenerEquipamientosDisponiblesPorTurno(fecha,horario);
         }
 
+     
         /// Valida cantidades, limites y stock actual. Si todo es valido,
         /// devuelve el importe total del equipamiento solicitado.
         public decimal ValidarYCalcularImporte(DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
@@ -58,7 +59,6 @@ namespace BLL
             List<EquipamientoBE> equipamientos = _equipamientoDAL.ObtenerEquipamientosDisponiblesPorTurno(fecha,horario);
 
             EquipamientoBE? paleta = equipamientos.FirstOrDefault(e => e.Tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase));
-
             EquipamientoBE? pelota = equipamientos.FirstOrDefault(e => e.Tipo.Equals("Pelota", StringComparison.OrdinalIgnoreCase));
 
             decimal total = 0;

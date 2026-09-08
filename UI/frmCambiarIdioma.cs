@@ -19,7 +19,7 @@ namespace UI
         public frmCambiarIdioma()
         {
             InitializeComponent();
-_idiomaBLL = new IdiomaBLL();
+            _idiomaBLL = new IdiomaBLL();
 
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
@@ -33,12 +33,15 @@ _idiomaBLL = new IdiomaBLL();
             SM.Instancia.Suscribir(this);
         }
 
+       
         private void frmCambiarIdioma_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Desuscribirse para evitar notificaciones a un form cerrado.
             SM.Instancia.Desuscribir(this);
         }
 
+
+        // Carga los idiomas disponibles en el combo box y pre-selecciona el idioma actual de la sesion.
         private void CargarIdiomas()
         {
             try
@@ -69,6 +72,8 @@ _idiomaBLL = new IdiomaBLL();
             }
         }
 
+
+        // Guardar el idioma seleccionado y cerrar el form.
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             lblMensaje.Text = string.Empty;
@@ -96,11 +101,13 @@ _idiomaBLL = new IdiomaBLL();
             }
         }
 
+
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+  
         /// Implementacion de IObservadorIdioma.
         /// Aplica las traducciones a todos los controles del form.
         public void ActualizarIdioma()

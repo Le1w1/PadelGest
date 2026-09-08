@@ -21,7 +21,7 @@ namespace UI
         public frmGestionDeUsuario()
         {
             InitializeComponent();
-dgvUsuarios.ClearSelection();
+            dgvUsuarios.ClearSelection();
             txtNombre.Focus();
             _usuarioBLL = new UsuarioBLL();
             _rolBLL = new RolBLL();
@@ -51,6 +51,8 @@ dgvUsuarios.ClearSelection();
             SM.Instancia.Desuscribir(this);
         }
 
+
+        // Implementación de IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -108,6 +110,8 @@ dgvUsuarios.ClearSelection();
             ActualizarLblCantidad(dgvUsuarios.RowCount);
         }
 
+
+        /// Actualiza el label de cantidad de usuarios segun el numero pasado por parametro.
         private void ActualizarLblCantidad(int cantidad)
         {
             lblCantidadUsuarios.Text = Traductor.Instancia.Traducir("frmAdministrador.LblCantidadUsuarios") + " " + cantidad;
@@ -132,6 +136,8 @@ dgvUsuarios.ClearSelection();
         }
 
         #region "Configuracion del DataGridView"
+
+        /// Carga los usuarios en el DataGridView segun el filtro seleccionado (rbActivos, rbBloqueados, rbTodos).
         private void CargarUsuarios()
         {
             try
@@ -157,6 +163,8 @@ dgvUsuarios.ClearSelection();
             }
         }
 
+
+        /// Configura el form para que el admin pueda crear un nuevo usuario.
         private void ConfigurarModoCreacion()
         {
             _usuarioSeleccionado = null;
@@ -294,6 +302,8 @@ dgvUsuarios.ClearSelection();
         }
         #endregion
 
+
+        // Evento que se dispara cuando se selecciona un usuario en el DataGridView.
         private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvUsuarios.CurrentRow == null) return;
@@ -323,6 +333,8 @@ dgvUsuarios.ClearSelection();
             lblMensaje.Text = t.Traducir("frmAdministrador.MsgUsuarioSeleccionado") + " " + usuario.NombreUsuario;
         }
 
+
+        /// Limpia todos los campos del formulario y resetea el estado a modo creación.
         private void LimpiarCampos()
         {
             _usuarioSeleccionado = null;
@@ -359,6 +371,8 @@ dgvUsuarios.ClearSelection();
             MostrarMensaje(Traductor.Instancia.Traducir("frmAdministrador.MsgCamposLimpiados"));
         }
 
+
+        /// Botón Crear Usuario: valida los campos y llama a la capa BLL para crear un nuevo usuario.
         private void btnCrearUsuario_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -378,6 +392,8 @@ dgvUsuarios.ClearSelection();
             }
         }
 
+
+        /// Botón Modificar Usuario: valida los campos y llama a la capa BLL para modificar el usuario seleccionado.
         private void btnModificarUsuario_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -412,6 +428,8 @@ dgvUsuarios.ClearSelection();
             }
         }
 
+
+        /// Botón Desbloquear Usuario: valida que haya un usuario seleccionado y llama a la capa BLL para desbloquearlo.
         private void btnDesbloquearUsuario_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -444,6 +462,8 @@ dgvUsuarios.ClearSelection();
             }
         }
 
+
+        /// Botón Activar/Desactivar Usuario: valida que haya un usuario seleccionado y llama a la capa BLL para activarlo o desactivarlo.
         private void btnActivarDesactivarUsuario_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;

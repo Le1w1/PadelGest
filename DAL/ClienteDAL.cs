@@ -16,6 +16,7 @@ namespace DAL
             _conexionDAL = new DAO_AccesoDatos();
         }
 
+        /// Mapea un registro de BD a un objeto ClienteBE
         private ClienteBE MapearCliente(SqlDataReader reader)
         {
             return new ClienteBE
@@ -29,6 +30,8 @@ namespace DAL
             };
         }
 
+
+        /// Verifica si un Cliente existe por su DNI
         public bool ExistePorDNI(string dni)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
@@ -45,6 +48,8 @@ namespace DAL
             }
         }
 
+
+        /// Inserta un nuevo Cliente en la base de datos y devuelve el objeto con el IdCliente asignado
         public ClienteBE Insertar(ClienteBE cliente)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())

@@ -13,7 +13,7 @@ namespace UI
         public frmLogin(bool esReLogin = false)
         {
             InitializeComponent();
-_usuarioBLL = new UsuarioBLL();
+            _usuarioBLL = new UsuarioBLL();
             _esReLogin = esReLogin;
             _rolBLL = new RolBLL();
 
@@ -47,6 +47,8 @@ _usuarioBLL = new UsuarioBLL();
             SM.Instancia.Desuscribir(this);
         }
 
+
+        // Implementación de IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -66,6 +68,8 @@ _usuarioBLL = new UsuarioBLL();
 
         #region "Selector de idioma en el form de Login"
 
+
+        // Carga los items del combo de idiomas. No setea el SelectedIndex, eso se hace en SincronizarCboIdioma.
         private void CargarComboIdiomas()
         {
             // Solo carga los items. El SelectedIndex se setea en SincronizarCboIdioma (que es llamado por ActualizarIdioma).
@@ -78,6 +82,8 @@ _usuarioBLL = new UsuarioBLL();
             _cargandoCboIdioma = false;
         }
 
+
+        // Sincroniza el SelectedIndex del combo de idiomas con el idioma actual del Traductor.
         private void SincronizarCboIdioma()
         {
             // Solo tiene sentido si los items ya estan cargados.
@@ -97,6 +103,8 @@ _usuarioBLL = new UsuarioBLL();
             _cargandoCboIdioma = false;
         }
 
+
+        // Handler del evento SelectedIndexChanged del combo de idiomas. Cambia el idioma del Traductor y actualiza los textos del form.
         private void cboIdioma_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_cargandoCboIdioma) return;
@@ -117,6 +125,9 @@ _usuarioBLL = new UsuarioBLL();
 
         #endregion
 
+
+
+        //Evento Click del boton Ingresar. Valida campos, intenta login y maneja excepciones.
         private void btnIngresar_Click(object sender, EventArgs e)
         {
             if (!ValidarCamposVacios()) return;
@@ -232,8 +243,9 @@ _usuarioBLL = new UsuarioBLL();
                 txtEmail.Focus();
             }
         }
-        
-       
+
+
+        // Evento Click del boton Salir. Pregunta confirmacion y cierra la aplicacion si el usuario confirma.
         private void btnSalir_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -243,16 +255,22 @@ _usuarioBLL = new UsuarioBLL();
             if (respuesta == DialogResult.Yes) Application.Exit();
         }
 
+
+        // Evento Click del boton Volver. Cierra el form de login y vuelve al form anterior (solo en re-login).
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+
+        // Evento CheckedChanged del checkbox de mostrar contraseña. Cambia el modo de visualización del textbox de contraseña.
         private void chkMostrarContrasenia_CheckedChanged(object sender, EventArgs e)
         {
             txtContrasenia.UseSystemPasswordChar = !chkMostrarContrasenia.Checked;
         }
 
+
+        // Valida que los campos de email y contraseña no esten vacios. Si alguno esta vacio, muestra un error en el errorProvider y un mensaje en lblMensaje.
         private bool ValidarCamposVacios()
         {
             errorProviderLogin.Clear();

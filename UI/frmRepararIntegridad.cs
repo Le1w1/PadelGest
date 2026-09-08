@@ -1,25 +1,15 @@
 using BLL.Servicios;
 using Servicios;
 using Servicios.DigitoVerificador;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+            
 
 namespace UI
 {
 
     /// Modo degradado:
     ///   - No hay sesion iniciada en SM (los datos vienen de una base
-    ///     potencialmente comprometida, no se confia en ellos para gobernar
-    ///     una sesion completa).
-    ///   - Solo se habilita la accion de reparar: restore de backup, o
-    ///     recalculo de los DV.
+    ///     potencialmente comprometida, no se confia en ellos para gobernar una sesion completa).
+    ///   - Solo se habilita la accion de reparar: restore de backup, o recalculo de los DV.
     ///   - Cualquier reparacion exitosa reinicia la aplicacion.
     public partial class frmRepararIntegridad : Form, IObservadorIdioma
     {
@@ -28,7 +18,7 @@ namespace UI
         private readonly IReadOnlyList<Inconsistencia> _inconsistencias;
         private readonly DigitoVerificadorBLL _digitoVerificadorBLL;
 
-       
+        // Constructor que recibe el usuario admin reparador, sus roles y la lista de inconsistencias detectadas.
         public frmRepararIntegridad(Usuario adminReparador, List<Rol> rolesAdmin,IReadOnlyList<Inconsistencia> inconsistencias)
         {
             _adminReparador = adminReparador;
@@ -37,7 +27,7 @@ namespace UI
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
 
             InitializeComponent();
-ActualizarIdioma();
+            ActualizarIdioma();
             CargarInconsistenciasEnGrilla();
 
             this.Load += frmRepararIntegridad_Load;
@@ -55,7 +45,7 @@ ActualizarIdioma();
             SM.Instancia.Desuscribir(this);
         }
 
-
+        // Implementación de IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -77,7 +67,7 @@ ActualizarIdioma();
             }
         }
 
-        
+        // Carga las inconsistencias detectadas en la grilla de la interfaz.
         private void CargarInconsistenciasEnGrilla()
         {
             var t = Traductor.Instancia;
@@ -94,15 +84,13 @@ ActualizarIdioma();
             foreach (Inconsistencia inc in _inconsistencias)
             {
                 string tipoTexto = inc.Tipo == Inconsistencia.TipoInconsistencia.DVH? t.Traducir("frmRepararIntegridad.TipoDVH"): t.Traducir("frmRepararIntegridad.TipoDVV");
-
                 string registroTexto = inc.Tipo == Inconsistencia.TipoInconsistencia.DVV? t.Traducir("frmRepararIntegridad.RegistroDVV"): inc.IdentificadorPk;
-
                 dgvInconsistencias.Rows.Add(inc.Tabla, tipoTexto, registroTexto);
             }
         }
 
-       
 
+        // Boton de restaurar backup: abre el formulario de gestion de respaldos en modo restauracion.
         private void btnRestaurar_Click(object sender, EventArgs e)
         {
             // Se registra en SM temporalmente al admin para que frmGestionarRespaldo
@@ -123,7 +111,8 @@ ActualizarIdioma();
             SM.Instancia.CerrarSesion();
         }
 
-    
+
+        // Boton de recalcular DV: recalcula todos los digitos verificadores y reinicia la app si es exitoso.
         private void btnRecalcular_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -136,11 +125,8 @@ ActualizarIdioma();
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-
                 _digitoVerificadorBLL.RecalcularTodo();
-
                 Cursor.Current = Cursors.Default;
-
                 MessageBox.Show(t.Traducir("frmRepararIntegridad.RecalcularExitoso"),t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.OK,MessageBoxIcon.Information);
 
                 // Reparacion completa: reiniciar la app para estado limpio.
@@ -154,7 +140,6 @@ ActualizarIdioma();
             }
         }
 
-    
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {

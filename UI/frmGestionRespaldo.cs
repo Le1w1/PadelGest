@@ -34,7 +34,7 @@ namespace UI
             _soloRestore = soloRestore;
 
             InitializeComponent();
-_respaldoBLL = new RespaldoBLL();
+            _respaldoBLL = new RespaldoBLL();
 
             AplicarPermisos();
             ActualizarIdioma();
@@ -53,19 +53,18 @@ _respaldoBLL = new RespaldoBLL();
             SM.Instancia.Desuscribir(this);
         }
 
+        // Implementacion de IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
 
             this.Text = t.Traducir("frmGestionarRespaldo.Title");
             lblTitulo.Text = t.Traducir("frmGestionarRespaldo.LblTitulo");
-
             gbBackup.Text = t.Traducir("frmGestionarRespaldo.GbBackup");
             lblCarpetaDestino.Text = t.Traducir("frmGestionarRespaldo.LblCarpetaDestino");
             lblDescripcionBackup.Text = t.Traducir("frmGestionarRespaldo.LblDescripcionBackup");
             btnExaminarCarpeta.Text = t.Traducir("frmGestionarRespaldo.BtnExaminarCarpeta");
             btnRealizarBackup.Text = t.Traducir("frmGestionarRespaldo.BtnRealizarBackup");
-
             gbRestore.Text = t.Traducir("frmGestionarRespaldo.GbRestore");
             lblArchivoBak.Text = t.Traducir("frmGestionarRespaldo.LblArchivoBak");
             lblDescripcionRestore.Text = t.Traducir("frmGestionarRespaldo.LblDescripcionRestore");
@@ -78,7 +77,6 @@ _respaldoBLL = new RespaldoBLL();
         /// Ademas, si se abrio en MODO SOLO RESTORE,
         /// oculta completamente el grupo de Backup y reubica el grupo de
         /// Restore para que el form no quede con un espacio vacio arriba.
-
         private void AplicarPermisos()
         {
             bool puedeGestionar = SM.Instancia.TienePermiso(PERMISO);
@@ -102,7 +100,7 @@ _respaldoBLL = new RespaldoBLL();
         }
 
 
-        //  BACKUP
+        //Examinar carpeta de destino para backup
         private void btnExaminarCarpeta_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
@@ -115,6 +113,8 @@ _respaldoBLL = new RespaldoBLL();
             }
         }
 
+
+        // Realizar backup
         private void btnRealizarBackup_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -141,8 +141,8 @@ _respaldoBLL = new RespaldoBLL();
             }
         }
 
-        //  RESTORE
 
+        // Examinar archivo .bak para restore
         private void btnExaminarArchivo_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
@@ -156,6 +156,8 @@ _respaldoBLL = new RespaldoBLL();
             }
         }
 
+
+        // Restaurar backup
         private void btnRestaurar_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
