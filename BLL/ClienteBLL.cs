@@ -10,11 +10,13 @@ namespace BLL
     {
         private readonly ClienteDAL _clienteDAL;
         private readonly DigitoVerificadorBLL _digitoVerificadorBLL;
+        private readonly BitacoraEventoBLL _bitacoraEventoBLL;
 
         public ClienteBLL()
         {
             _clienteDAL = new ClienteDAL();
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
+            _bitacoraEventoBLL = new BitacoraEventoBLL();
         }
 
         private static string T (string clave) => Traductor.Instancia.Traducir(clave);
@@ -44,6 +46,12 @@ namespace BLL
         public ClienteBE RegistrarCliente(string dni,string nombre,string apellido,string telefono,string correoElectronico)
         {
             SM.Instancia.RequierePermiso("CLI_REGISTRAR");
+
+            Usuario usuarioActual = SM.Instancia.UsuarioActual;
+            if (usuarioActual == null)
+            {
+                throw new Exception("No hay un usuario activo para registrar el cliente.");
+            }
 
             dni = (dni ?? string.Empty).Trim();
             nombre = (nombre ?? string.Empty).Trim();
@@ -100,6 +108,15 @@ namespace BLL
 
             // Cliente es una tabla protegida: toda escritura debe regenerar DVH/DVV.
             _digitoVerificadorBLL.RecalcularDV("Cliente");
+
+            _bitacoraEventoBLL.Registrar(
+                usuarioActual.IdUsuario,
+                usuarioActual.NombreUsuario,
+                "Cliente",
+                "Registrar cliente",
+                "Media",
+                "Exitoso",
+                $"Se registró el cliente DNI {clienteRegistrado.DNI} con IdCliente {clienteRegistrado.IdCliente}.");
 
             return clienteRegistrado;
         }
