@@ -179,8 +179,8 @@ namespace UI
 
                 if (!resultado.Aprobado)
                 {
-                    lblMensaje.Text = Traductor.Instancia.Traducir("frmCobrarReserva.MsgRechazado")
-                    MessageBox.Show(lblMensaje.Text, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    lblMensaje.Text = Traductor.Instancia.Traducir("frmCobrarReserva.MsgRechazado");
+                    MessageBox.Show(lblMensaje.Text, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     DialogResult = DialogResult.Cancel;
                     Close();
                     return;
