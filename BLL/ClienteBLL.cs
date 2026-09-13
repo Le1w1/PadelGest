@@ -109,14 +109,7 @@ namespace BLL
             // Cliente es una tabla protegida: toda escritura debe regenerar DVH/DVV.
             _digitoVerificadorBLL.RecalcularDV("Cliente");
 
-            _bitacoraEventoBLL.Registrar(
-                usuarioActual.IdUsuario,
-                usuarioActual.NombreUsuario,
-                "Cliente",
-                "Registrar cliente",
-                "Media",
-                "Exitoso",
-                $"Se registró el cliente DNI {clienteRegistrado.DNI} con IdCliente {clienteRegistrado.IdCliente}.");
+            _bitacoraEventoBLL.Registrar(usuarioActual.IdUsuario,usuarioActual.NombreUsuario,"Cliente","Registrar cliente","Media","Exitoso",$"Se registró el cliente DNI {clienteRegistrado.DNI} con IdCliente {clienteRegistrado.IdCliente}.");
 
             return clienteRegistrado;
         }
