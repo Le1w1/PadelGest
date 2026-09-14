@@ -190,7 +190,7 @@
   "frmRepararIntegridad.ColRegistro": "Registro afectado",
   "frmRepararIntegridad.TipoDVH": "Registro modificado",
   "frmRepararIntegridad.TipoDVV": "Tabla alterada",
-  "frmRepararIntegridad.RegistroDVV": "(conjunto de la tabla)",
+  "frmRepararIntegridad.RegistroDVV": "(Registro de la tabla)",
   "frmRepararIntegridad.ConfirmarRecalcular": "Está a punto de RECALCULAR los dígitos verificadores. Si algún dato fue modificado por fuera del sistema, esa modificación quedará legitimada permanentemente. Esta operación no se puede deshacer.\n\n¿Desea continuar?",
   "frmRepararIntegridad.RecalcularExitoso": "Los dígitos verificadores se recalcularon correctamente. La aplicación se reiniciará.",
 

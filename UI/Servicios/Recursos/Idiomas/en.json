@@ -191,7 +191,7 @@
   "frmRepararIntegridad.ColRegistro": "Affected record",
   "frmRepararIntegridad.TipoDVH": "Modified record",
   "frmRepararIntegridad.TipoDVV": "Altered table",
-  "frmRepararIntegridad.RegistroDVV": "(table set)",
+  "frmRepararIntegridad.RegistroDVV": "(table record)",
   "frmRepararIntegridad.ConfirmarRecalcular": "You are about to RECALCULATE the verifier digits. If any data was modified outside the system, that modification will be permanently legitimized. This operation cannot be undone.\n\nDo you want to continue?",
   "frmRepararIntegridad.RecalcularExitoso": "The verifier digits were recalculated successfully. The application will restart.",
 
