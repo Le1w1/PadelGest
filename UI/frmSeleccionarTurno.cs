@@ -9,6 +9,7 @@ namespace UI
         #region "Campos"
         private readonly CanchaBLL _canchaBLL;
         private readonly TarifaBLL _tarifaBLL;
+        private readonly EquipamientoBLL _equipamientoBLL;
         private TarifaBE? _tarifaActual;
 
         public DateTime FechaSeleccionada { get; private set; }
@@ -22,7 +23,6 @@ namespace UI
         public FacturaBE? FacturaPagada { get; private set; }
         public PagoBE? PagoAprobado { get; private set; }
         public ReservaBE? ReservaRegistrada { get; private set; }
-      
         #endregion
 
         public frmSeleccionarTurno()
@@ -30,14 +30,14 @@ namespace UI
             InitializeComponent();
             _canchaBLL = new CanchaBLL();
             _tarifaBLL = new TarifaBLL();
+            _equipamientoBLL = new EquipamientoBLL();
 
             cboHorario.Format += cboHorario_Format;
+            FormClosing += frmSeleccionarTurno_FormClosing;
 
             ActualizarIdioma();
         }
 
-
-        // carga del formulario
         private void frmSeleccionarTurno_Load(object sender, EventArgs e)
         {
             SM.Instancia.Suscribir(this);
@@ -50,14 +50,20 @@ namespace UI
             CargarHorarios();
         }
 
-
         private void frmSeleccionarTurno_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
+        // Si el pago ya fue aprobado, el proceso no puede abandonarse hasta registrar la reserva.
+        private void frmSeleccionarTurno_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (PagoAprobado != null && ReservaRegistrada == null && e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+            }
+        }
 
-        // Implementación de IObservadorIdioma
         public void ActualizarIdioma()
         {
             var t = Traductor.Instancia;
@@ -82,11 +88,10 @@ namespace UI
             btnAgregarEquipamiento.Text = t.Traducir("frmSeleccionarTurno.BtnAgregarEquipamiento");
             btnCobrarReserva.Text = t.Traducir("frmSeleccionarTurno.BtnCobrarReserva");
             btnRegistrarReserva.Text = t.Traducir("frmSeleccionarTurno.BtnRegistrarReserva");
-
-            ActualizarResumenEquipamiento();
-
             btnContinuar.Text = t.Traducir("frmSeleccionarTurno.BtnContinuar");
             btnVolver.Text = t.Traducir("frmSeleccionarTurno.BtnVolver");
+
+            ActualizarResumenEquipamiento();
         }
 
         private void dtpFecha_ValueChanged(object sender, EventArgs e)
@@ -100,8 +105,6 @@ namespace UI
             LimpiarResultados();
         }
 
-
-        // permite formatear la visualización de los horarios en el ComboBox
         private void cboHorario_Format(object? sender, ListControlConvertEventArgs e)
         {
             if (e.ListItem is TimeSpan horario)
@@ -110,14 +113,11 @@ namespace UI
             }
         }
 
-
-        // Carga de horarios disponibles
         private void CargarHorarios()
         {
             try
             {
                 errorProvider.Clear();
-
                 List<TimeSpan> horarios = _canchaBLL.ObtenerHorariosDisponibles(dtpFecha.Value.Date);
 
                 cboHorario.DataSource = null;
@@ -140,8 +140,6 @@ namespace UI
             }
         }
 
-
-        // busca canchas disponibles para la fecha y horario seleccionados
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -160,16 +158,13 @@ namespace UI
                 }
 
                 DateTime fecha = dtpFecha.Value.Date;
-
                 _tarifaActual = _tarifaBLL.ObtenerTarifa(horario);
                 List<CanchaBE> canchas = _canchaBLL.ObtenerCanchasDisponibles(fecha, horario);
 
                 lblTarifaValor.Text = $"{_tarifaActual.TipoTarifa} - {_tarifaActual.Importe:C}";
-
                 dgvCanchas.DataSource = null;
                 dgvCanchas.DataSource = canchas;
                 dgvCanchas.ClearSelection();
-
                 btnSeleccionar.Enabled = false;
 
                 if (canchas.Count == 0)
@@ -190,16 +185,16 @@ namespace UI
 
         private void dgvCanchas_SelectionChanged(object sender, EventArgs e)
         {
-            btnSeleccionar.Enabled = dgvCanchas.SelectedRows.Count == 1 && dgvCanchas.SelectedRows[0].DataBoundItem is CanchaBE && _tarifaActual != null;
+            btnSeleccionar.Enabled = dgvCanchas.SelectedRows.Count == 1 &&
+                                     dgvCanchas.SelectedRows[0].DataBoundItem is CanchaBE &&
+                                     _tarifaActual != null;
         }
 
-
-        // selecciona la cancha y el horario para la reserva
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             errorProvider.Clear();
 
-            if (dgvCanchas.SelectedRows.Count != 1 ||dgvCanchas.SelectedRows[0].DataBoundItem is not CanchaBE cancha)
+            if (dgvCanchas.SelectedRows.Count != 1 || dgvCanchas.SelectedRows[0].DataBoundItem is not CanchaBE cancha)
             {
                 lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha");
                 return;
@@ -226,8 +221,6 @@ namespace UI
             lblMensaje.Text = string.Empty;
         }
 
-
-        // agrega equipamiento a la reserva
         private void btnAgregarEquipamiento_Click(object sender, EventArgs e)
         {
             if (CanchaSeleccionada == null || TarifaSeleccionada == null)
@@ -236,21 +229,19 @@ namespace UI
                 return;
             }
 
-            using frmAgregarEquipamiento formEquipamiento = new frmAgregarEquipamiento(FechaSeleccionada,HorarioSeleccionado,CantidadPaletas,CantidadPelotas);
+            using frmAgregarEquipamiento formEquipamiento = new frmAgregarEquipamiento(
+                FechaSeleccionada, HorarioSeleccionado, CantidadPaletas, CantidadPelotas);
 
             if (formEquipamiento.ShowDialog(this) == DialogResult.OK)
             {
                 CantidadPaletas = formEquipamiento.CantidadPaletas;
                 CantidadPelotas = formEquipamiento.CantidadPelotas;
                 ImporteEquipamiento = formEquipamiento.ImporteEquipamiento;
-
                 ActualizarResumenEquipamiento();
                 lblMensaje.Text = string.Empty;
             }
         }
 
-
-        // actualiza el resumen del equipamiento seleccionado
         private void ActualizarResumenEquipamiento()
         {
             if (CantidadPaletas == 0 && CantidadPelotas == 0)
@@ -259,11 +250,11 @@ namespace UI
                 return;
             }
 
-            lblEquipamientoSelValor.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.ResumenEquipamiento"),CantidadPaletas,CantidadPelotas,ImporteEquipamiento);
+            lblEquipamientoSelValor.Text = string.Format(
+                Traductor.Instancia.Traducir("frmSeleccionarTurno.ResumenEquipamiento"),
+                CantidadPaletas, CantidadPelotas, ImporteEquipamiento);
         }
 
-
-        // permite continuar con la selección del cliente para la reserva
         private void btnContinuar_Click(object sender, EventArgs e)
         {
             if (CanchaSeleccionada == null || TarifaSeleccionada == null)
@@ -274,69 +265,103 @@ namespace UI
 
             using frmSeleccionarCliente formCliente = new frmSeleccionarCliente();
 
-            if (formCliente.ShowDialog(this) == DialogResult.OK &&
-                formCliente.ClienteSeleccionado != null)
+            if (formCliente.ShowDialog(this) == DialogResult.OK && formCliente.ClienteSeleccionado != null)
             {
                 ClienteSeleccionado = formCliente.ClienteSeleccionado;
-
-                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgClienteSeleccionado"),ClienteSeleccionado.DNI,ClienteSeleccionado.Nombre,ClienteSeleccionado.Apellido);
-
+                lblMensaje.Text = string.Format(
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgClienteSeleccionado"),
+                    ClienteSeleccionado.DNI, ClienteSeleccionado.Nombre, ClienteSeleccionado.Apellido);
                 btnCobrarReserva.Enabled = true;
             }
         }
 
-
-        // permite cobrar la reserva y generar la factura
-        private void btnCobrarReserva_Click(object sender, EventArgs e)
+        // Revalida turno y equipamiento inmediatamente antes de autorizar el cobro.
+        private void ValidarDisponibilidadAntesDelCobro()
         {
-            if (ClienteSeleccionado == null ||CanchaSeleccionada == null ||TarifaSeleccionada == null)
+            if (CanchaSeleccionada == null)
+                throw new Exception(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha"));
+
+            List<CanchaBE> disponibles = _canchaBLL.ObtenerCanchasDisponibles(FechaSeleccionada, HorarioSeleccionado);
+            if (!disponibles.Any(c => c.IdCancha == CanchaSeleccionada.IdCancha))
+                throw new Exception(Traductor.Instancia.Traducir("Errores.Reserva.TurnoYaNoDisponible"));
+
+            if (CantidadPaletas > 0 || CantidadPelotas > 0)
             {
-                lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosCobro");
-                return;
-            }
-
-            using frmCobrarReserva formCobro = new frmCobrarReserva(
-                ClienteSeleccionado,CanchaSeleccionada,TarifaSeleccionada,FechaSeleccionada,
-                HorarioSeleccionado,CantidadPaletas,CantidadPelotas,ImporteEquipamiento);
-
-            if (formCobro.ShowDialog(this) == DialogResult.OK && formCobro.FacturaPagada != null && formCobro.PagoAprobado != null)
-            {
-                FacturaPagada = formCobro.FacturaPagada;
-                PagoAprobado = formCobro.PagoAprobado;
-
-                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgPagoAprobado");
-
-                BloquearDatosLuegoDelPago();
-                btnRegistrarReserva.Enabled = true;
+                ImporteEquipamiento = _equipamientoBLL.ValidarYCalcularImporte(
+                    FechaSeleccionada, HorarioSeleccionado, CantidadPaletas, CantidadPelotas);
+                ActualizarResumenEquipamiento();
             }
         }
 
+        private void btnCobrarReserva_Click(object sender, EventArgs e)
+        {
+            if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null)
+            {
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosCobro");
+                return;
+            }
 
-        // permite registrar la reserva en el sistema
+            try
+            {
+                ValidarDisponibilidadAntesDelCobro();
+
+                using frmCobrarReserva formCobro = new frmCobrarReserva(
+                    ClienteSeleccionado, CanchaSeleccionada, TarifaSeleccionada, FechaSeleccionada,
+                    HorarioSeleccionado, CantidadPaletas, CantidadPelotas, ImporteEquipamiento);
+
+                if (formCobro.ShowDialog(this) == DialogResult.OK &&
+                    formCobro.FacturaPagada != null && formCobro.PagoAprobado != null)
+                {
+                    FacturaPagada = formCobro.FacturaPagada;
+                    PagoAprobado = formCobro.PagoAprobado;
+
+                    lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgPagoAprobado");
+                    BloquearDatosLuegoDelPago();
+
+                    // Un pago aprobado obliga a continuar inmediatamente con el registro.
+                    RegistrarReservaObligatoria();
+                }
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = ex.Message;
+                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private void btnRegistrarReserva_Click(object sender, EventArgs e)
         {
-            if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null || FacturaPagada == null || PagoAprobado == null)
+            RegistrarReservaObligatoria();
+        }
+
+        private void RegistrarReservaObligatoria()
+        {
+            if (ReservaRegistrada != null)
+                return;
+
+            if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null ||
+                FacturaPagada == null || PagoAprobado == null)
             {
                 lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosRegistro");
                 return;
             }
 
             using frmRegistrarReserva formReserva = new frmRegistrarReserva(
-                ClienteSeleccionado,CanchaSeleccionada,TarifaSeleccionada,FacturaPagada,PagoAprobado,
-                FechaSeleccionada,HorarioSeleccionado,CantidadPaletas,CantidadPelotas);
+                ClienteSeleccionado, CanchaSeleccionada, TarifaSeleccionada, FacturaPagada, PagoAprobado,
+                FechaSeleccionada, HorarioSeleccionado, CantidadPaletas, CantidadPelotas);
 
             if (formReserva.ShowDialog(this) == DialogResult.OK && formReserva.ReservaRegistrada != null)
             {
                 ReservaRegistrada = formReserva.ReservaRegistrada;
-
-                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgReservaRegistrada"),ReservaRegistrada.Codigo);
+                lblMensaje.Text = string.Format(
+                    Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgReservaRegistrada"),
+                    ReservaRegistrada.Codigo);
 
                 btnRegistrarReserva.Enabled = false;
+                btnVolver.Enabled = true;
             }
         }
 
-    
-        // bloquea los controles de selección de datos luego de que se haya realizado el pago
         private void BloquearDatosLuegoDelPago()
         {
             dtpFecha.Enabled = false;
@@ -346,21 +371,20 @@ namespace UI
             btnSeleccionar.Enabled = false;
             btnAgregarEquipamiento.Enabled = false;
             btnCobrarReserva.Enabled = false;
-            btnRegistrarReserva.Enabled = false;
             btnContinuar.Enabled = false;
-            btnCobrarReserva.Enabled = false;
+            btnRegistrarReserva.Enabled = false;
+            btnVolver.Enabled = false;
         }
 
-
-        // permite volver al formulario anterior sin guardar cambios
         private void btnVolver_Click(object sender, EventArgs e)
         {
+            if (PagoAprobado != null && ReservaRegistrada == null)
+                return;
+
             DialogResult = DialogResult.Cancel;
             Close();
         }
 
-
-        // permite limpiar los resultados de la búsqueda y la selección de datos
         private void LimpiarResultados()
         {
             dgvCanchas.DataSource = null;
@@ -370,8 +394,6 @@ namespace UI
             LimpiarSeleccion();
         }
 
-
-        // permite limpiar la selección de datos realizada por el usuario
         private void LimpiarSeleccion()
         {
             FechaSeleccionada = default;

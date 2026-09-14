@@ -36,7 +36,6 @@ namespace UI
             lblClienteTitulo = new Label();
             lblMensaje = new Label();
             btnRegistrar = new Button();
-            btnVolver = new Button();
             gbDatos.SuspendLayout();
             SuspendLayout();
             // 
@@ -218,25 +217,10 @@ namespace UI
             btnRegistrar.Location = new Point(560, 430);
             btnRegistrar.Name = "btnRegistrar";
             btnRegistrar.Size = new Size(160, 34);
-            btnRegistrar.TabIndex = 1;
+            btnRegistrar.TabIndex = 0;
             btnRegistrar.Text = "Registrar Reserva";
             btnRegistrar.UseVisualStyleBackColor = false;
             btnRegistrar.Click += btnRegistrar_Click;
-            // 
-            // btnVolver
-            // 
-            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
-            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
-            btnVolver.FlatStyle = FlatStyle.Flat;
-            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnVolver.ForeColor = Color.White;
-            btnVolver.Location = new Point(440, 430);
-            btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(100, 34);
-            btnVolver.TabIndex = 0;
-            btnVolver.Text = "Volver";
-            btnVolver.UseVisualStyleBackColor = false;
-            btnVolver.Click += btnVolver_Click;
             // 
             // frmRegistrarReserva
             // 
@@ -244,7 +228,7 @@ namespace UI
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(14, 43, 92);
             ClientSize = new Size(740, 485);
-            Controls.Add(btnVolver);
+            ControlBox = false;
             Controls.Add(btnRegistrar);
             Controls.Add(lblMensaje);
             Controls.Add(gbDatos);
@@ -283,6 +267,5 @@ namespace UI
         private Label lblImporteValor;
         private Label lblMensaje;
         private Button btnRegistrar;
-        private Button btnVolver;
     }
 }
