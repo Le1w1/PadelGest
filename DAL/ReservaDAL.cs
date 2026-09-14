@@ -41,8 +41,7 @@ namespace DAL
 
                         reserva.IdFactura = idFactura;
 
-                        int idReserva =
-                            InsertarReserva(conexion, transaccion, reserva);
+                        int idReserva = InsertarReserva(conexion, transaccion, reserva);
 
                         // Los DV de las tablas modificadas se generan dentro
                         // de la misma transacción. Si cualquiera falla, no se
