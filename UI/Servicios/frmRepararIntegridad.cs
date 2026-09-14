@@ -1,11 +1,9 @@
 using BLL.Servicios;
 using Servicios;
 using Servicios.DigitoVerificador;
-            
 
 namespace UI
 {
-
     /// Modo degradado:
     ///   - No hay sesion iniciada en SM (los datos vienen de una base
     ///     potencialmente comprometida, no se confia en ellos para gobernar una sesion completa).
@@ -19,7 +17,7 @@ namespace UI
         private readonly DigitoVerificadorBLL _digitoVerificadorBLL;
 
         // Constructor que recibe el usuario admin reparador, sus roles y la lista de inconsistencias detectadas.
-        public frmRepararIntegridad(Usuario adminReparador, List<Rol> rolesAdmin,IReadOnlyList<Inconsistencia> inconsistencias)
+        public frmRepararIntegridad(Usuario adminReparador, List<Rol> rolesAdmin, IReadOnlyList<Inconsistencia> inconsistencias)
         {
             _adminReparador = adminReparador;
             _rolesAdminReparador = rolesAdmin;
@@ -33,7 +31,6 @@ namespace UI
             this.Load += frmRepararIntegridad_Load;
             this.FormClosed += frmRepararIntegridad_FormClosed;
         }
-
 
         private void frmRepararIntegridad_Load(object sender, EventArgs e)
         {
@@ -61,9 +58,9 @@ namespace UI
 
             if (dgvInconsistencias.Columns.Count > 0)
             {
-                dgvInconsistencias.Columns["Tabla"].HeaderText =t.Traducir("frmRepararIntegridad.ColTabla");
-                dgvInconsistencias.Columns["Tipo"].HeaderText =t.Traducir("frmRepararIntegridad.ColTipo");
-                dgvInconsistencias.Columns["Registro"].HeaderText =t.Traducir("frmRepararIntegridad.ColRegistro");
+                dgvInconsistencias.Columns["Tabla"].HeaderText = t.Traducir("frmRepararIntegridad.ColTabla");
+                dgvInconsistencias.Columns["Tipo"].HeaderText = t.Traducir("frmRepararIntegridad.ColTipo");
+                dgvInconsistencias.Columns["Registro"].HeaderText = t.Traducir("frmRepararIntegridad.ColRegistro");
             }
         }
 
@@ -77,18 +74,57 @@ namespace UI
             dgvInconsistencias.Columns.Add("Tipo", t.Traducir("frmRepararIntegridad.ColTipo"));
             dgvInconsistencias.Columns.Add("Registro", t.Traducir("frmRepararIntegridad.ColRegistro"));
 
-            dgvInconsistencias.Columns["Tabla"].FillWeight = 25;
-            dgvInconsistencias.Columns["Tipo"].FillWeight = 15;
-            dgvInconsistencias.Columns["Registro"].FillWeight = 60;
+            // Damos mas espacio a Tipo para que no se corte "Registro modificado/agregado/eliminado".
+            dgvInconsistencias.Columns["Tabla"].FillWeight = 20;
+            dgvInconsistencias.Columns["Tipo"].FillWeight = 30;
+            dgvInconsistencias.Columns["Registro"].FillWeight = 50;
 
             foreach (Inconsistencia inc in _inconsistencias)
             {
-                string tipoTexto = inc.Tipo == Inconsistencia.TipoInconsistencia.DVH? t.Traducir("frmRepararIntegridad.TipoDVH"): t.Traducir("frmRepararIntegridad.TipoDVV");
-                string registroTexto = inc.Tipo == Inconsistencia.TipoInconsistencia.DVV? t.Traducir("frmRepararIntegridad.RegistroDVV"): inc.IdentificadorPk;
+                string tipoTexto = ObtenerTextoTipo(inc.Tipo);
+                string registroTexto = ObtenerTextoRegistro(inc);
+
                 dgvInconsistencias.Rows.Add(inc.Tabla, tipoTexto, registroTexto);
             }
         }
 
+        // Los JSON actuales ya tienen el texto de "Registro modificado".
+        // Para los dos nuevos estados usamos el idioma actualmente cargado sin agregar
+        // dependencias nuevas al mecanismo de traduccion.
+        private string ObtenerTextoTipo(Inconsistencia.TipoInconsistencia tipo)
+        {
+            var t = Traductor.Instancia;
+            bool ingles = string.Equals(t.CodigoIdiomaActual, "EN", StringComparison.OrdinalIgnoreCase);
+
+            return tipo switch
+            {
+                Inconsistencia.TipoInconsistencia.RegistroModificado =>
+                    t.Traducir("frmRepararIntegridad.TipoDVH"),
+
+                Inconsistencia.TipoInconsistencia.RegistroAgregado =>
+                    ingles ? "Added record" : "Registro agregado",
+
+                Inconsistencia.TipoInconsistencia.RegistroEliminado =>
+                    ingles ? "Deleted record" : "Registro eliminado",
+
+                _ => ingles ? "Integrity inconsistency" : "Inconsistencia de integridad"
+            };
+        }
+
+        private string ObtenerTextoRegistro(Inconsistencia inconsistencia)
+        {
+            if (inconsistencia.Tipo != Inconsistencia.TipoInconsistencia.RegistroEliminado)
+                return inconsistencia.IdentificadorPk;
+
+            bool ingles = string.Equals(
+                Traductor.Instancia.CodigoIdiomaActual,
+                "EN",
+                StringComparison.OrdinalIgnoreCase);
+
+            // Sin guardar un snapshot historico no se puede recuperar la PK de una fila
+            // que ya fue eliminada. Se informa la baja sin inventar un identificador.
+            return ingles ? "(record not identifiable)" : "(registro no identificable)";
+        }
 
         // Boton de restaurar backup: abre el formulario de gestion de respaldos en modo restauracion.
         private void btnRestaurar_Click(object sender, EventArgs e)
@@ -96,7 +132,6 @@ namespace UI
             // Se registra en SM temporalmente al admin para que frmGestionarRespaldo
             // (que usa SM.UsuarioActual y SM.TienePermiso) pueda operar.
             // Al terminar el restore, la app se reinicia y esta sesion se descarta.
-
             SM.Instancia.IniciarSesion(_adminReparador);
             SM.Instancia.EstablecerRolesUsuario(_rolesAdminReparador);
 
@@ -111,13 +146,17 @@ namespace UI
             SM.Instancia.CerrarSesion();
         }
 
-
         // Boton de recalcular DV: recalcula todos los digitos verificadores y reinicia la app si es exitoso.
         private void btnRecalcular_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
 
-            DialogResult respuesta = MessageBox.Show(t.Traducir("frmRepararIntegridad.ConfirmarRecalcular"),t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2);
+            DialogResult respuesta = MessageBox.Show(
+                t.Traducir("frmRepararIntegridad.ConfirmarRecalcular"),
+                t.Traducir("frmRepararIntegridad.Title"),
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
 
             if (respuesta != DialogResult.Yes)
                 return;
@@ -127,7 +166,12 @@ namespace UI
                 Cursor.Current = Cursors.WaitCursor;
                 _digitoVerificadorBLL.RecalcularTodo();
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show(t.Traducir("frmRepararIntegridad.RecalcularExitoso"),t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.OK,MessageBoxIcon.Information);
+
+                MessageBox.Show(
+                    t.Traducir("frmRepararIntegridad.RecalcularExitoso"),
+                    t.Traducir("frmRepararIntegridad.Title"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 // Reparacion completa: reiniciar la app para estado limpio.
                 Application.Restart();
@@ -136,10 +180,13 @@ namespace UI
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show(ex.Message,t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(
+                    ex.Message,
+                    t.Traducir("frmRepararIntegridad.Title"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
-
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
