@@ -17,6 +17,7 @@ namespace UI
         private readonly TimeSpan _horario;
         private readonly int _cantidadPaletas;
         private readonly int _cantidadPelotas;
+        private bool _cierrePermitido;
        
         #endregion
         public ReservaBE? ReservaRegistrada { get; private set; }
@@ -37,6 +38,8 @@ namespace UI
             _cantidadPaletas = cantidadPaletas;
             _cantidadPelotas = cantidadPelotas;
 
+            FormClosing += frmRegistrarReserva_FormClosing;
+
             ActualizarIdioma();
             MostrarDatos();
         }
@@ -49,6 +52,16 @@ namespace UI
         private void frmRegistrarReserva_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
+        }
+
+        // Impide abandonar el registro una vez que el pago fue aprobado.
+        // El cierre solo se habilita después de registrar correctamente la reserva.
+        private void frmRegistrarReserva_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (!_cierrePermitido && e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+            }
         }
 
 
@@ -69,7 +82,6 @@ namespace UI
             lblImporteTitulo.Text = t.Traducir("frmRegistrarReserva.LblImporte");
 
             btnRegistrar.Text = t.Traducir("frmRegistrarReserva.BtnRegistrar");
-            btnVolver.Text = t.Traducir("frmRegistrarReserva.BtnVolver");
         }
 
 
@@ -101,6 +113,7 @@ namespace UI
 
                 MessageBox.Show(mensaje,Text,MessageBoxButtons.OK,MessageBoxIcon.Information);
 
+                _cierrePermitido = true;
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -111,12 +124,6 @@ namespace UI
 
                 MessageBox.Show(ex.Message,Text,MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
-        }
-
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
     }
 }
