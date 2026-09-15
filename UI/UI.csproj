@@ -21,11 +21,10 @@
   <ItemGroup>
     <None Update="Servicios\Recursos\Idiomas\en.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		<TargetPath>Recursos\Idiomas\en.json</TargetPath>
-	</None>
+    </None>
     <None Update="Servicios\Recursos\Idiomas\es.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		<TargetPath>Recursos\Idiomas\es.json</TargetPath>
+		
 	</None>
   </ItemGroup>
 

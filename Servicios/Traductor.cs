@@ -45,7 +45,7 @@ namespace Servicios
 
             // Construir la ruta completa del archivo JSON de idioma
             string rutaBase = AppDomain.CurrentDomain.BaseDirectory;
-            string rutaArchivo = Path.Combine(rutaBase, "Recursos", "Idiomas", codigoNormalizado.ToLower() + ".json");
+            string rutaArchivo = Path.Combine(rutaBase, "Servicios", "Recursos", "Idiomas", codigoNormalizado.ToLower() + ".json");
 
             if (!File.Exists(rutaArchivo))
                 throw new Exception("No se encontro el archivo de idioma: " + rutaArchivo);
