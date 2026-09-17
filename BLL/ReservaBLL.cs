@@ -21,6 +21,38 @@ namespace BLL
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
+            ValidarDatosReserva(cliente,cancha,tarifa,facturaPagada,pagoAprobado,fecha,horario,cantidadPaletas,cantidadPelotas);
+
+            facturaPagada.FechaHoraEmision = DateTime.Now;
+
+            ReservaBE reserva = CrearReserva(cliente,cancha,tarifa,fecha,horario,cantidadPaletas,cantidadPelotas);
+
+            BitacoraEvento evento = CrearEventoBitacora(reserva,cliente,cancha,facturaPagada,cantidadPaletas,cantidadPelotas);
+
+            try
+            {
+                return _reservaDAL.RegistrarReserva(reserva,facturaPagada,pagoAprobado,evento);
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "TURNO_NO_DISPONIBLE")
+            {
+                throw new Exception(T("Errores.Reserva.TurnoYaNoDisponible"));
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "STOCK_PALETAS_INSUFICIENTE")
+            {
+                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Paleta")));
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "STOCK_PELOTAS_INSUFICIENTE")
+            {
+                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Pelota")));
+            }
+        }
+
+        private void ValidarDatosReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
+        {
+
             if (cliente == null || cliente.IdCliente <= 0)
                 throw new Exception(T("Errores.Reserva.ClienteInvalido"));
 
@@ -59,10 +91,11 @@ namespace BLL
             {
                 throw new Exception(string.Format(T("Errores.Equipamiento.MaximoPelotas"),EquipamientoBLL.MaximoPelotasPorReserva));
             }
+        }
 
-            facturaPagada.FechaHoraEmision = DateTime.Now;
-
-            ReservaBE reserva = new ReservaBE
+        private ReservaBE CrearReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
+        {
+            return new ReservaBE
             {
                 Codigo = GenerarCodigoReserva(fecha),
                 IdCliente = cliente.IdCliente,
@@ -74,28 +107,6 @@ namespace BLL
                 CantidadPelotas = cantidadPelotas,
                 Estado = "Reservada"
             };
-
-            BitacoraEvento evento = CrearEventoBitacora(reserva,cliente,cancha,facturaPagada,cantidadPaletas,cantidadPelotas);
-
-            try
-            {
-                return _reservaDAL.RegistrarReserva(reserva,facturaPagada,pagoAprobado,evento);
-            }
-            catch (InvalidOperationException ex)
-                when (ex.Message == "TURNO_NO_DISPONIBLE")
-            {
-                throw new Exception(T("Errores.Reserva.TurnoYaNoDisponible"));
-            }
-            catch (InvalidOperationException ex)
-                when (ex.Message == "STOCK_PALETAS_INSUFICIENTE")
-            {
-                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Paleta")));
-            }
-            catch (InvalidOperationException ex)
-                when (ex.Message == "STOCK_PELOTAS_INSUFICIENTE")
-            {
-                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Pelota")));
-            }
         }
 
         private BitacoraEvento CrearEventoBitacora(ReservaBE reserva,ClienteBE cliente,CanchaBE cancha,FacturaBE factura,int cantidadPaletas,int cantidadPelotas)

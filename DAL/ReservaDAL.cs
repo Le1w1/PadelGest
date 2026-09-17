@@ -21,62 +21,76 @@ namespace DAL
         //registra una reserva, su factura y su pago en una transacción atómica
         public ReservaBE RegistrarReserva(ReservaBE reserva,FacturaBE factura,PagoBE pago,global::Servicios.BitacoraEvento evento)
         {
-            using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
+            using SqlConnection conexion = _conexionDAL.ObtenerConexion();
+
+            conexion.Open();
+
+            using SqlTransaction transaccion = conexion.BeginTransaction(IsolationLevel.Serializable);
+
+            try
             {
-                conexion.Open();
+                ValidarDisponibilidad(conexion,transaccion,reserva);
 
-                using (SqlTransaction transaccion = conexion.BeginTransaction(IsolationLevel.Serializable))
-                {
-                    try
-                    {
-                        ValidarTurnoDisponible(conexion, transaccion, reserva);
-                        ValidarDisponibilidadEquipamiento(conexion,transaccion,reserva.Fecha,reserva.Horario,"Paleta",reserva.CantidadPaletas,"STOCK_PALETAS_INSUFICIENTE");
+                (int idFactura,int idPago,int idReserva) = PersistirOperacion(conexion,transaccion,reserva,factura,pago);
 
-                        ValidarDisponibilidadEquipamiento(conexion,transaccion,reserva.Fecha,reserva.Horario,"Pelota",reserva.CantidadPelotas,"STOCK_PELOTAS_INSUFICIENTE");
+                ActualizarDigitosVerificadores(conexion,transaccion);
 
-                        int idFactura = InsertarFacturaPagada(conexion, transaccion, factura);
+                _bitacoraEventoDAL.Registrar(evento,conexion,transaccion);
 
-                        int idPago = InsertarPagoAprobado(conexion,transaccion,pago,idFactura);
+                transaccion.Commit();
 
-                        reserva.IdFactura = idFactura;
+                ActualizarEntidadesRegistradas(reserva,factura,pago,idFactura,idPago,idReserva);
 
-                        int idReserva = InsertarReserva(conexion, transaccion, reserva);
-
-                        // Los DV de las tablas modificadas se generan dentro
-                        // de la misma transacción. Si cualquiera falla, no se
-                        // confirma Factura, Pago ni Reserva.
-                        _digitoVerificadorDAL.RecalcularDVEnTransaccion("Factura",conexion,transaccion);
-
-                        _digitoVerificadorDAL.RecalcularDVEnTransaccion("Pago",conexion,transaccion);
-
-                        _digitoVerificadorDAL.RecalcularDVEnTransaccion("Reserva",conexion,transaccion);
-
-                        // El evento de auditoría también forma parte del mismo
-                        // COMMIT para que nunca exista una Reserva exitosa sin
-                        // su correspondiente registro en BitacoraEvento.
-                        _bitacoraEventoDAL.Registrar(evento,conexion,transaccion);
-
-                        transaccion.Commit();
-
-                        factura.IdFactura = idFactura;
-                        factura.Estado = "Pagada";
-
-                        pago.IdPago = idPago;
-                        pago.IdFactura = idFactura;
-                        pago.Estado = "Aprobado";
-
-                        reserva.IdReserva = idReserva;
-                        reserva.Estado = "Reservada";
-
-                        return reserva;
-                    }
-                    catch
-                    {
-                        transaccion.Rollback();
-                        throw;
-                    }
-                }
+                return reserva;
             }
+            catch
+            {
+                transaccion.Rollback();
+                throw;
+            }
+        }
+
+        private void ValidarDisponibilidad(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva)
+        {
+            ValidarTurnoDisponible(conexion,transaccion,reserva);
+
+            ValidarDisponibilidadEquipamiento(conexion,transaccion,reserva.Fecha,reserva.Horario,"Paleta",reserva.CantidadPaletas,"STOCK_PALETAS_INSUFICIENTE");
+
+            ValidarDisponibilidadEquipamiento(conexion,transaccion,reserva.Fecha,reserva.Horario,"Pelota",reserva.CantidadPelotas,"STOCK_PELOTAS_INSUFICIENTE");
+        }
+
+        private (int IdFactura,int IdPago,int IdReserva) PersistirOperacion(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva,FacturaBE factura,PagoBE pago)
+        {
+            int idFactura = InsertarFacturaPagada(conexion,transaccion,factura);
+            int idPago = InsertarPagoAprobado(conexion,transaccion,pago,idFactura);
+
+            reserva.IdFactura = idFactura;
+
+            int idReserva = InsertarReserva(conexion,transaccion,reserva);
+
+            return (idFactura,idPago,idReserva);
+        }
+
+        private void ActualizarDigitosVerificadores(SqlConnection conexion,SqlTransaction transaccion)
+        {
+            // La integridad global se verifica antes de iniciar sesión. Los DV de
+            // las tablas modificadas se regeneran dentro de la misma transacción.
+            _digitoVerificadorDAL.RecalcularDVEnTransaccion("Factura",conexion,transaccion);
+            _digitoVerificadorDAL.RecalcularDVEnTransaccion("Pago",conexion,transaccion);
+            _digitoVerificadorDAL.RecalcularDVEnTransaccion("Reserva",conexion,transaccion);
+        }
+
+        private void ActualizarEntidadesRegistradas(ReservaBE reserva,FacturaBE factura,PagoBE pago,int idFactura,int idPago,int idReserva)
+        {
+            factura.IdFactura = idFactura;
+            factura.Estado = "Pagada";
+
+            pago.IdPago = idPago;
+            pago.IdFactura = idFactura;
+            pago.Estado = "Aprobado";
+
+            reserva.IdReserva = idReserva;
+            reserva.Estado = "Reservada";
         }
 
         // Valida que no exista otra reserva para la misma cancha, fecha y horario
@@ -110,13 +124,21 @@ namespace DAL
             if (cantidadSolicitada <= 0)
                 return;
 
+            int stockMaximo = ObtenerStockEquipamiento(conexion,transaccion,tipo,codigoError);
+
+            int cantidadReservada = ObtenerCantidadReservada(conexion,transaccion,fecha,horario,tipo);
+
+            if (cantidadReservada + cantidadSolicitada > stockMaximo)
+                throw new InvalidOperationException(codigoError);
+        }
+
+        private int ObtenerStockEquipamiento(SqlConnection conexion,SqlTransaction transaccion,string tipo,string codigoError)
+        {
             const string queryStock = @"
                 SELECT StockDisponible
                 FROM Equipamiento WITH (UPDLOCK, HOLDLOCK)
                 WHERE Tipo = @Tipo
                   AND Activo = 1";
-
-            int stockMaximo;
 
             using (SqlCommand comandoStock =new SqlCommand(queryStock, conexion, transaccion))
             {
@@ -127,9 +149,12 @@ namespace DAL
                 if (resultado == null || resultado == DBNull.Value)
                     throw new InvalidOperationException(codigoError);
 
-                stockMaximo = Convert.ToInt32(resultado);
+                return Convert.ToInt32(resultado);
             }
+        }
 
+        private int ObtenerCantidadReservada(SqlConnection conexion,SqlTransaction transaccion,DateTime fecha,TimeSpan horario,string tipo)
+        {
             string columna =tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)? "CantidadPaletas": "CantidadPelotas";
 
             string queryReservado = $@"
@@ -139,18 +164,13 @@ namespace DAL
                   AND Horario = @Horario
                   AND Estado <> N'Cancelada'";
 
-            int cantidadReservada;
-
             using (SqlCommand comandoReservado =new SqlCommand(queryReservado, conexion, transaccion))
             {
                 comandoReservado.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha.Date;
                 comandoReservado.Parameters.Add("@Horario", SqlDbType.Time).Value = horario;
 
-                cantidadReservada =Convert.ToInt32(comandoReservado.ExecuteScalar());
+                return Convert.ToInt32(comandoReservado.ExecuteScalar());
             }
-
-            if (cantidadReservada + cantidadSolicitada > stockMaximo)
-                throw new InvalidOperationException(codigoError);
         }
 
 
