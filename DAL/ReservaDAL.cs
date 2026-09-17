@@ -25,8 +25,7 @@ namespace DAL
             {
                 conexion.Open();
 
-                using (SqlTransaction transaccion =
-                    conexion.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlTransaction transaccion = conexion.BeginTransaction(IsolationLevel.Serializable))
                 {
                     try
                     {
