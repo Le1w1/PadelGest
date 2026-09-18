@@ -111,6 +111,7 @@ namespace UI
         // Valida que solo se puedan ingresar números y espacios en los campos de texto correspondientes
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
+            // Permite solo dígitos, espacios y teclas de control (como retroceso)
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ' ')
             {
                 e.Handled = true;
@@ -137,13 +138,15 @@ namespace UI
 
             string tarjeta = Regex.Replace(txtNumeroTarjeta.Text ?? string.Empty, @"[\s-]", "");
 
+            // Valida que el número de tarjeta tenga entre 13 y 19 dígitos y que solo contenga números
             if (!Regex.IsMatch(tarjeta, @"^\d{13,19}$"))
             {
                 MostrarError(txtNumeroTarjeta, "Errores.Cobro.TarjetaInvalida");
                 return false;
             }
 
-            if (!Regex.IsMatch(txtCodigoSeguridad.Text.Trim(), @"^\d{3,4}$"))
+            // Valida que el código de seguridad tenga 3 o 4 dígitos
+            if (!Regex.IsMatch(txtCodigoSeguridad.Text.Trim(), @"^\d{3,4}$")) 
             {
                 MostrarError(txtCodigoSeguridad,"Errores.Cobro.CodigoSeguridadInvalido");
                 return false;

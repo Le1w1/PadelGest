@@ -144,8 +144,7 @@ namespace UI
 
             using frmRegistrarCliente formRegistrar = new frmRegistrarCliente(dni);
 
-            if (formRegistrar.ShowDialog(this) == DialogResult.OK &&
-                formRegistrar.ClienteRegistrado != null)
+            if (formRegistrar.ShowDialog(this) == DialogResult.OK && formRegistrar.ClienteRegistrado != null)
             {
                 _clienteEncontrado = formRegistrar.ClienteRegistrado;
 

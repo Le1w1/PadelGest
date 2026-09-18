@@ -28,8 +28,8 @@ namespace DAL
 
 
         /// Obtiene el equipamiento disponible para una fecha y horario.
-        /// Para cada turno se descuenta solamente lo ya reservado en ese mismoturno.
-        /// las reservas de otros horarios no afectan la disponibilidad.
+        /// Para cada turno se descuenta solamente lo ya reservado en ese mismo turno.
+        /// las reservas de otros horarios no afectan la disponibilidad ya que se da como sabido que se devolvera el stock luego del turno.
         public List<EquipamientoBE> ObtenerEquipamientosDisponiblesPorTurno(DateTime fecha,TimeSpan horario)
         {
             List<EquipamientoBE> equipamientos = new List<EquipamientoBE>();

@@ -1,6 +1,7 @@
 using BE;
 using DAL.Servicios;
 using Microsoft.Data.SqlClient;
+using Servicios;
 using System.Data;
 
 namespace DAL
@@ -19,7 +20,7 @@ namespace DAL
         }
 
         //registra una reserva, su factura y su pago en una transacción atómica
-        public ReservaBE RegistrarReserva(ReservaBE reserva,FacturaBE factura,PagoBE pago,global::Servicios.BitacoraEvento evento)
+        public ReservaBE RegistrarReserva(ReservaBE reserva,FacturaBE factura,PagoBE pago, BitacoraEvento evento)
         {
             using SqlConnection conexion = _conexionDAL.ObtenerConexion();
 
@@ -37,6 +38,7 @@ namespace DAL
 
                 _bitacoraEventoDAL.Registrar(evento,conexion,transaccion);
 
+                // Si todo se ejecuta correctamente, se confirma la transacción
                 transaccion.Commit();
 
                 ActualizarEntidadesRegistradas(reserva,factura,pago,idFactura,idPago,idReserva);
@@ -45,6 +47,7 @@ namespace DAL
             }
             catch
             {
+                // Si ocurre algún error, se revierte la transacción
                 transaccion.Rollback();
                 throw;
             }
@@ -59,6 +62,8 @@ namespace DAL
             ValidarDisponibilidadEquipamiento(conexion,transaccion,reserva.Fecha,reserva.Horario,"Pelota",reserva.CantidadPelotas,"STOCK_PELOTAS_INSUFICIENTE");
         }
 
+
+        // Persiste la factura, el pago y la reserva en la base de datos dentro de la misma transacción
         private (int IdFactura,int IdPago,int IdReserva) PersistirOperacion(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva,FacturaBE factura,PagoBE pago)
         {
             int idFactura = InsertarFacturaPagada(conexion,transaccion,factura);
@@ -71,6 +76,8 @@ namespace DAL
             return (idFactura,idPago,idReserva);
         }
 
+
+        // Actualiza los dígitos verificadores de las tablas afectadas dentro de la misma transacción
         private void ActualizarDigitosVerificadores(SqlConnection conexion,SqlTransaction transaccion)
         {
             // La integridad global se verifica antes de iniciar sesión. Los DV de
@@ -80,6 +87,7 @@ namespace DAL
             _digitoVerificadorDAL.RecalcularDVEnTransaccion("Reserva",conexion,transaccion);
         }
 
+        // Actualiza los Ids generados y los estados de las entidades registradas  
         private void ActualizarEntidadesRegistradas(ReservaBE reserva,FacturaBE factura,PagoBE pago,int idFactura,int idPago,int idReserva)
         {
             factura.IdFactura = idFactura;
@@ -118,7 +126,7 @@ namespace DAL
         }
 
 
-        /// Valida que la cantidad solicitada de equipamiento no supere el stock disponible
+        // Valida que la cantidad solicitada de equipamiento no supere el stock disponible
         private void ValidarDisponibilidadEquipamiento(SqlConnection conexion,SqlTransaction transaccion,DateTime fecha,TimeSpan horario,string tipo,int cantidadSolicitada,string codigoError)
         {
             if (cantidadSolicitada <= 0)
@@ -153,6 +161,7 @@ namespace DAL
             }
         }
 
+        // Obtiene la cantidad de equipamiento reservado para una fecha y horario específicos
         private int ObtenerCantidadReservada(SqlConnection conexion,SqlTransaction transaccion,DateTime fecha,TimeSpan horario,string tipo)
         {
             string columna =tipo.Equals("Paleta", StringComparison.OrdinalIgnoreCase)? "CantidadPaletas": "CantidadPelotas";

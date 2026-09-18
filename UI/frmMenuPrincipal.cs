@@ -53,8 +53,8 @@ namespace UI
             // Recepcionista
             seleccionarTurnoToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
 
-            RecepcionistaToolStripMenuItem.Enabled =
-                seleccionarTurnoToolStripMenuItem.Enabled ||
+            // Menu Recepcionista: habilitado si tiene permisos de recepcionista o de cliente (para consultar sus reservas)
+            RecepcionistaToolStripMenuItem.Enabled = seleccionarTurnoToolStripMenuItem.Enabled ||
                 sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
                 sm.TienePermiso("RES_REPROGRAMAR") || sm.TienePermiso("RES_CANCELAR") || sm.TienePermiso("CLI_CONSULTAR") ||
                 sm.TienePermiso("CLI_REGISTRAR") || sm.TienePermiso("CLI_MODIFICAR");

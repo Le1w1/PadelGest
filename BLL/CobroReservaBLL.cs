@@ -71,6 +71,7 @@ namespace BLL
             numeroTarjeta = NormalizarNumeroTarjeta(numeroTarjeta);
             codigoSeguridad = (codigoSeguridad ?? string.Empty).Trim();
 
+            
             ValidarBanco(banco);
             ValidarNumeroTarjeta(numeroTarjeta);
             ValidarVencimiento(fechaVencimiento);

@@ -106,6 +106,7 @@ namespace UI
             nudPaletas.Value = Math.Min(_cantidadPaletasInicial, maximo);
 
             lblStockPaletasValor.Text = stock.ToString();
+            // Muestra el importe unitario de la paleta o un guion si no hay paletas disponibles
             lblImportePaletasValor.Text = _paleta == null ? "-" : _paleta.Importe.ToString("C");
             nudPaletas.Enabled = _paleta != null && stock > 0;
         }
@@ -122,6 +123,7 @@ namespace UI
             nudPelotas.Value = Math.Min(_cantidadPelotasInicial, maximo);
 
             lblStockPelotasValor.Text = stock.ToString();
+            // Muestra el importe unitario de la pelota o un guion si no hay pelotas disponibles
             lblImportePelotasValor.Text = _pelota == null ? "-" : _pelota.Importe.ToString("C");
             nudPelotas.Enabled = _pelota != null && stock > 0;
         }

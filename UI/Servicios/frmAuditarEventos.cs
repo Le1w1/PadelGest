@@ -315,12 +315,13 @@ namespace UI
         // Este método ajusta la visibilidad del grupo de detalle de reserva y desplaza los controles del formulario según corresponda.
         private void AjustarDetalleReserva(bool mostrar)
         {
+            // Si el estado actual es el mismo que el deseado, no se realiza ningún cambio.
             if (_detalleReservaVisible == mostrar)
             {
                 gbDetalleReserva.Visible = mostrar;
                 return;
             }
-
+            // Calcula el desplazamiento necesario para mover los controles del formulario hacia arriba o hacia abajo según corresponda.
             int desplazamiento =mostrar ? DesplazamientoDetalleReserva : -DesplazamientoDetalleReserva;
 
             gbDetalleReserva.Visible = mostrar;
@@ -331,6 +332,7 @@ namespace UI
             btnImprimir.Top += desplazamiento;
             btnVolver.Top += desplazamiento;
 
+            // Ajusta la altura del formulario para que se vea correctamente el grupo de detalle de reserva.
             ClientSize = new Size(ClientSize.Width,ClientSize.Height + desplazamiento);
             _detalleReservaVisible = mostrar;
         }

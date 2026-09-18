@@ -50,6 +50,7 @@ namespace BLL
             }
         }
 
+        // Validar los datos de la reserva antes de registrarla
         private void ValidarDatosReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
         {
 

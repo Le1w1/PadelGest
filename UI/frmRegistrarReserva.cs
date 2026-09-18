@@ -106,7 +106,7 @@ namespace UI
             {
                 btnRegistrar.Enabled = false;
                 lblMensaje.Text = string.Empty;
-
+                // Llamada al método RegistrarReserva de la clase ReservaBLL para registrar la reserva con los datos proporcionados.
                 ReservaRegistrada = _reservaBLL.RegistrarReserva(_cliente,_cancha,_tarifa,_facturaPagada,_pagoAprobado,_fecha,_horario,_cantidadPaletas,_cantidadPelotas);
 
                 string mensaje = string.Format(Traductor.Instancia.Traducir("frmRegistrarReserva.MsgRegistrada"),ReservaRegistrada.Codigo);

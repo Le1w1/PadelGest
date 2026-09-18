@@ -57,20 +57,12 @@ namespace DAL
                 const string query = @"
                     INSERT INTO Cliente
                     (
-                        DNI,
-                        Nombre,
-                        Apellido,
-                        Telefono,
-                        CorreoElectronico
+                        DNI,Nombre,Apellido,Telefono,CorreoElectronico
                     )
                     OUTPUT INSERTED.IdCliente
                     VALUES
                     (
-                        @DNI,
-                        @Nombre,
-                        @Apellido,
-                        @Telefono,
-                        @CorreoElectronico
+                        @DNI,@Nombre,@Apellido,@Telefono,@CorreoElectronico
                     )";
 
                 using (SqlCommand comando = new SqlCommand(query, conexion))
@@ -82,7 +74,8 @@ namespace DAL
                     comando.Parameters.Add("@CorreoElectronico", SqlDbType.NVarChar, 150).Value = cliente.CorreoElectronico;
 
                     conexion.Open();
-
+                    // Ejecuta la consulta y obtiene el IdCliente generado
+                    // ExecuteScalar devuelve el primer valor de la primera fila del resultado, que en este caso es el IdCliente insertado
                     cliente.IdCliente = Convert.ToInt32(comando.ExecuteScalar());
                     return cliente;
                 }

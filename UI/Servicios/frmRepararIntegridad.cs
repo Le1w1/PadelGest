@@ -98,14 +98,11 @@ namespace UI
 
             return tipo switch
             {
-                Inconsistencia.TipoInconsistencia.RegistroModificado =>
-                    t.Traducir("frmRepararIntegridad.TipoDVH"),
+                Inconsistencia.TipoInconsistencia.RegistroModificado => t.Traducir("frmRepararIntegridad.TipoDVH"),
 
-                Inconsistencia.TipoInconsistencia.RegistroAgregado =>
-                    ingles ? "Added record" : "Registro agregado",
+                Inconsistencia.TipoInconsistencia.RegistroAgregado => ingles ? "Added record" : "Registro agregado",
 
-                Inconsistencia.TipoInconsistencia.RegistroEliminado =>
-                    ingles ? "Deleted record" : "Registro eliminado",
+                Inconsistencia.TipoInconsistencia.RegistroEliminado => ingles ? "Deleted record" : "Registro eliminado",
 
                 _ => ingles ? "Integrity inconsistency" : "Inconsistencia de integridad"
             };
@@ -116,10 +113,7 @@ namespace UI
             if (inconsistencia.Tipo != Inconsistencia.TipoInconsistencia.RegistroEliminado)
                 return inconsistencia.IdentificadorPk;
 
-            bool ingles = string.Equals(
-                Traductor.Instancia.CodigoIdiomaActual,
-                "EN",
-                StringComparison.OrdinalIgnoreCase);
+            bool ingles = string.Equals(Traductor.Instancia.CodigoIdiomaActual,"EN",StringComparison.OrdinalIgnoreCase);
 
             // Sin guardar un snapshot historico no se puede recuperar la PK de una fila
             // que ya fue eliminada. Se informa la baja sin inventar un identificador.
@@ -151,12 +145,7 @@ namespace UI
         {
             var t = Traductor.Instancia;
 
-            DialogResult respuesta = MessageBox.Show(
-                t.Traducir("frmRepararIntegridad.ConfirmarRecalcular"),
-                t.Traducir("frmRepararIntegridad.Title"),
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning,
-                MessageBoxDefaultButton.Button2);
+            DialogResult respuesta = MessageBox.Show(t.Traducir("frmRepararIntegridad.ConfirmarRecalcular"),t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2);
 
             if (respuesta != DialogResult.Yes)
                 return;
@@ -167,11 +156,7 @@ namespace UI
                 _digitoVerificadorBLL.RecalcularTodo();
                 Cursor.Current = Cursors.Default;
 
-                MessageBox.Show(
-                    t.Traducir("frmRepararIntegridad.RecalcularExitoso"),
-                    t.Traducir("frmRepararIntegridad.Title"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                MessageBox.Show(t.Traducir("frmRepararIntegridad.RecalcularExitoso"),t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.OK,MessageBoxIcon.Information);
 
                 // Reparacion completa: reiniciar la app para estado limpio.
                 Application.Restart();
@@ -180,11 +165,7 @@ namespace UI
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show(
-                    ex.Message,
-                    t.Traducir("frmRepararIntegridad.Title"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message,t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 
