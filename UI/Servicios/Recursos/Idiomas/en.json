@@ -22,7 +22,7 @@
   "frmMenuPrincipal.SinSesion": "No active session",
   "frmMenuPrincipal.ConfirmarCerrarSesion": "Do you want to log out?",
   "frmMenuPrincipal.CerrarSesionTitulo": "Logout",
-  "frmMenuPrincipal.MenuSeleccionarTurno": "Create Reservation",
+  "frmMenuPrincipal.MenuGenerarReserva": "Create Reservation",
 
   "frmCambiarIdioma.Title": "Change Language",
   "frmCambiarIdioma.LblIdioma": "Language:",
@@ -295,8 +295,8 @@
   "Errores.Reserva.HorarioInvalido": "The selected time does not match a valid 90-minute time slot.",
 
 
-  "frmGenerarReserva.Title": "PadelGest - CREATE RESERVATION",
-  "frmGenerarReserva.LblTitulo": "SELECT TIME SLOT",
+  "frmGenerarReserva.Title": "PadelGest - Create Reservation",
+  "frmGenerarReserva.LblTitulo": "CREATE RESERVATION",
   "frmGenerarReserva.GbBusqueda": "Time slot search",
   "frmGenerarReserva.LblFecha": "Date:",
   "frmGenerarReserva.LblHorario": "Time:",

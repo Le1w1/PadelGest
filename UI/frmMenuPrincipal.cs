@@ -51,10 +51,10 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("BUF_CONSULTAR_STOCK");
 
             // Recepcionista
-            seleccionarTurnoToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
+            generarReservaToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
 
             // Menu Recepcionista: habilitado si tiene permisos de recepcionista o de cliente (para consultar sus reservas)
-            RecepcionistaToolStripMenuItem.Enabled = seleccionarTurnoToolStripMenuItem.Enabled ||
+            RecepcionistaToolStripMenuItem.Enabled = generarReservaToolStripMenuItem.Enabled ||
                 sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
                 sm.TienePermiso("RES_REPROGRAMAR") || sm.TienePermiso("RES_CANCELAR") || sm.TienePermiso("CLI_CONSULTAR") ||
                 sm.TienePermiso("CLI_REGISTRAR") || sm.TienePermiso("CLI_MODIFICAR");
@@ -101,7 +101,7 @@ namespace UI
 
             // Menus principales
             RecepcionistaToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuRecepcionista");
-            seleccionarTurnoToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuSeleccionarTurno");
+            generarReservaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGenerarReserva");
             encargadoDeCanchasToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuEncargadoCanchas");
             dueñoToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuDueño");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
@@ -181,10 +181,10 @@ namespace UI
             cambiarIdioma.ShowDialog();
         }
 
-        private void seleccionarTurnoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void generarReservaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using frmGenerarReserva formSeleccionarTurno = new frmGenerarReserva();
-            formSeleccionarTurno.ShowDialog();
+            using frmGenerarReserva formGenerarReserva = new frmGenerarReserva();
+            formGenerarReserva.ShowDialog();
         }
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)

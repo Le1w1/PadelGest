@@ -33,12 +33,12 @@ namespace UI
             _equipamientoBLL = new EquipamientoBLL();
 
             cboHorario.Format += cboHorario_Format;
-            FormClosing += frmSeleccionarTurno_FormClosing;
+            FormClosing += frmGenerarReserva_FormClosing;
 
             ActualizarIdioma();
         }
 
-        private void frmSeleccionarTurno_Load(object sender, EventArgs e)
+        private void frmGenerarReserva_Load(object sender, EventArgs e)
         {
             SM.Instancia.Suscribir(this);
 
@@ -50,13 +50,13 @@ namespace UI
             CargarHorarios();
         }
 
-        private void frmSeleccionarTurno_FormClosed(object sender, FormClosedEventArgs e)
+        private void frmGenerarReserva_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
         // Si el pago ya fue aprobado, el proceso no puede abandonarse hasta registrar la reserva.
-        private void frmSeleccionarTurno_FormClosing(object? sender, FormClosingEventArgs e)
+        private void frmGenerarReserva_FormClosing(object? sender, FormClosingEventArgs e)
         {
             if (PagoAprobado != null && ReservaRegistrada == null && e.CloseReason == CloseReason.UserClosing)
             {
@@ -129,7 +129,7 @@ namespace UI
 
                 if (horarios.Count == 0)
                 {
-                    lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSinHorarios");
+                    lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgSinHorarios");
                 }
                 else
                 {
@@ -157,7 +157,7 @@ namespace UI
                 // Validación de selección de horario
                 if (cboHorario.SelectedItem is not TimeSpan horario)
                 {
-                    string mensaje = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneHorario");
+                    string mensaje = Traductor.Instancia.Traducir("frmGenerarReserva.MsgSeleccioneHorario");
                     errorProvider.SetError(cboHorario, mensaje);
                     lblMensaje.Text = mensaje;
                     cboHorario.Focus();
@@ -176,7 +176,7 @@ namespace UI
 
                 if (canchas.Count == 0)
                 {
-                    lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSinCanchas");
+                    lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgSinCanchas");
                 }
             }
             // Manejo de excepciones para mostrar mensajes de error y limpiar resultados en caso de fallo.
@@ -205,13 +205,13 @@ namespace UI
 
             if (dgvCanchas.SelectedRows.Count != 1 || dgvCanchas.SelectedRows[0].DataBoundItem is not CanchaBE cancha)
             {
-                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgSeleccioneCancha");
                 return;
             }
 
             if (cboHorario.SelectedItem is not TimeSpan horario || _tarifaActual == null)
             {
-                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgBuscarNuevamente");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgBuscarNuevamente");
                 return;
             }
 
@@ -236,7 +236,7 @@ namespace UI
         {
             if (CanchaSeleccionada == null || TarifaSeleccionada == null)
             {
-                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgSeleccioneCancha");
                 return;
             }
 
@@ -258,11 +258,11 @@ namespace UI
         {
             if (CantidadPaletas == 0 && CantidadPelotas == 0)
             {
-                lblEquipamientoSelValor.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.SinEquipamiento");
+                lblEquipamientoSelValor.Text = Traductor.Instancia.Traducir("frmGenerarReserva.SinEquipamiento");
                 return;
             }
 
-            lblEquipamientoSelValor.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.ResumenEquipamiento"),CantidadPaletas, CantidadPelotas, ImporteEquipamiento);
+            lblEquipamientoSelValor.Text = string.Format(Traductor.Instancia.Traducir("frmGenerarReserva.ResumenEquipamiento"),CantidadPaletas, CantidadPelotas, ImporteEquipamiento);
         }
 
 
@@ -271,7 +271,7 @@ namespace UI
         {
             if (CanchaSeleccionada == null || TarifaSeleccionada == null)
             {
-                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgSeleccioneCancha");
                 return;
             }
 
@@ -280,7 +280,7 @@ namespace UI
             if (formCliente.ShowDialog(this) == DialogResult.OK && formCliente.ClienteSeleccionado != null)
             {
                 ClienteSeleccionado = formCliente.ClienteSeleccionado;
-                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgClienteSeleccionado"),ClienteSeleccionado.DNI, ClienteSeleccionado.Nombre, ClienteSeleccionado.Apellido);
+                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmGenerarReserva.MsgClienteSeleccionado"),ClienteSeleccionado.DNI, ClienteSeleccionado.Nombre, ClienteSeleccionado.Apellido);
                 btnCobrarReserva.Enabled = true;
             }
         }
@@ -289,7 +289,7 @@ namespace UI
         private void ValidarDisponibilidadAntesDelCobro()
         {
             if (CanchaSeleccionada == null)
-                throw new Exception(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgSeleccioneCancha"));
+                throw new Exception(Traductor.Instancia.Traducir("frmGenerarReserva.MsgSeleccioneCancha"));
 
             List<CanchaBE> disponibles = _canchaBLL.ObtenerCanchasDisponibles(FechaSeleccionada, HorarioSeleccionado);
             if (!disponibles.Any(c => c.IdCancha == CanchaSeleccionada.IdCancha))
@@ -306,7 +306,7 @@ namespace UI
         {
             if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null)
             {
-                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosCobro");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgFaltanDatosCobro");
                 return;
             }
 
@@ -322,7 +322,7 @@ namespace UI
                     FacturaPagada = formCobro.FacturaPagada;
                     PagoAprobado = formCobro.PagoAprobado;
 
-                    lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgPagoAprobado");
+                    lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgPagoAprobado");
                     BloquearDatosLuegoDelPago();
 
                     // Un pago aprobado obliga a continuar inmediatamente con el registro.
@@ -349,7 +349,7 @@ namespace UI
             if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null ||
                 FacturaPagada == null || PagoAprobado == null)
             {
-                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgFaltanDatosRegistro");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgFaltanDatosRegistro");
                 return;
             }
 
@@ -358,7 +358,7 @@ namespace UI
             if (formReserva.ShowDialog(this) == DialogResult.OK && formReserva.ReservaRegistrada != null)
             {
                 ReservaRegistrada = formReserva.ReservaRegistrada;
-                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmSeleccionarTurno.MsgReservaRegistrada"),ReservaRegistrada.Codigo);
+                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmGenerarReserva.MsgReservaRegistrada"),ReservaRegistrada.Codigo);
 
                 btnRegistrarReserva.Enabled = false;
                 btnVolver.Enabled = true;
@@ -415,7 +415,7 @@ namespace UI
             lblHorarioSelValor.Text = "-";
             lblCanchaSelValor.Text = "-";
             lblTarifaSelValor.Text = "-";
-            lblEquipamientoSelValor.Text = Traductor.Instancia.Traducir("frmSeleccionarTurno.SinEquipamiento");
+            lblEquipamientoSelValor.Text = Traductor.Instancia.Traducir("frmGenerarReserva.SinEquipamiento");
             btnAgregarEquipamiento.Enabled = false;
             btnContinuar.Enabled = false;
         }

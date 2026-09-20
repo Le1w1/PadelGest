@@ -291,7 +291,7 @@
   "Errores.Reserva.TurnoIniciado": "No se puede seleccionar un turno que ya haya comenzado.",
   "Errores.Reserva.HorarioInvalido": "El horario seleccionado no corresponde a una franja válida de 90 minutos.",
 
-  "frmMenuPrincipal.MenuSeleccionarTurno": "Generar Reserva",
+  "frmMenuPrincipal.MenuGenerarReserva": "Generar Reserva",
   "frmGenerarReserva.Title": "PadelGest - Generar Reserva",
   "frmGenerarReserva.LblTitulo": "GENERAR RESERVA",
   "frmGenerarReserva.GbBusqueda": "Búsqueda de turno",

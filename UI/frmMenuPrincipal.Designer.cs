@@ -35,7 +35,7 @@ namespace UI
             cambiarIdiomaToolStripMenuItem = new ToolStripMenuItem();
             cerrarSesionToolStripMenuItem = new ToolStripMenuItem();
             RecepcionistaToolStripMenuItem = new ToolStripMenuItem();
-            seleccionarTurnoToolStripMenuItem = new ToolStripMenuItem();
+            generarReservaToolStripMenuItem = new ToolStripMenuItem();
             vendedorBuffetToolStripMenuItem = new ToolStripMenuItem();
             encargadoDeCanchasToolStripMenuItem = new ToolStripMenuItem();
             dueñoToolStripMenuItem = new ToolStripMenuItem();
@@ -118,21 +118,21 @@ namespace UI
             // RecepcionistaToolStripMenuItem
             // 
             RecepcionistaToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
-            RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { seleccionarTurnoToolStripMenuItem });
+            RecepcionistaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarReservaToolStripMenuItem });
             RecepcionistaToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             RecepcionistaToolStripMenuItem.ForeColor = Color.Black;
             RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
             RecepcionistaToolStripMenuItem.Size = new Size(96, 20);
             RecepcionistaToolStripMenuItem.Text = "Recepcionista";
             // 
-            // seleccionarTurnoToolStripMenuItem
+            // generarReservaToolStripMenuItem
             // 
-            seleccionarTurnoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            seleccionarTurnoToolStripMenuItem.ForeColor = Color.White;
-            seleccionarTurnoToolStripMenuItem.Name = "seleccionarTurnoToolStripMenuItem";
-            seleccionarTurnoToolStripMenuItem.Size = new Size(180, 22);
-            seleccionarTurnoToolStripMenuItem.Text = "Reservar Cancha";
-            seleccionarTurnoToolStripMenuItem.Click += seleccionarTurnoToolStripMenuItem_Click;
+            generarReservaToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            generarReservaToolStripMenuItem.ForeColor = Color.White;
+            generarReservaToolStripMenuItem.Name = "generarReservaToolStripMenuItem";
+            generarReservaToolStripMenuItem.Size = new Size(180, 22);
+            generarReservaToolStripMenuItem.Text = "Reservar Cancha";
+            generarReservaToolStripMenuItem.Click += generarReservaToolStripMenuItem_Click;
             // 
             // vendedorBuffetToolStripMenuItem
             // 
@@ -393,7 +393,7 @@ namespace UI
         private MenuStrip menuPrincipal;
         private ToolStripMenuItem mnuSesion;
         private ToolStripMenuItem RecepcionistaToolStripMenuItem;
-        private ToolStripMenuItem seleccionarTurnoToolStripMenuItem;
+        private ToolStripMenuItem generarReservaToolStripMenuItem;
         private ToolStripMenuItem mnuAdministrador;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblUsuarioSesion;
