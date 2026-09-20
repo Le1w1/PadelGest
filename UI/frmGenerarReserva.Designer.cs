@@ -1,6 +1,6 @@
 namespace UI
 {
-    partial class frmSeleccionarTurno
+    partial class frmGenerarReserva
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -32,9 +32,6 @@ namespace UI
             lblTarifaTitulo = new Label();
             btnSeleccionar = new Button();
             dgvCanchas = new DataGridView();
-            colIdCancha = new DataGridViewTextBoxColumn();
-            colCancha = new DataGridViewTextBoxColumn();
-            colEstado = new DataGridViewTextBoxColumn();
             gbSeleccionado = new GroupBox();
             btnAgregarEquipamiento = new Button();
             lblEquipamientoSelValor = new Label();
@@ -68,7 +65,7 @@ namespace UI
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(840, 45);
             lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "Seleccionar Turno";
+            lblTitulo.Text = "Generar Reserva";
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // gbBusqueda
@@ -206,7 +203,6 @@ namespace UI
             dgvCanchas.AllowUserToAddRows = false;
             dgvCanchas.AllowUserToDeleteRows = false;
             dgvCanchas.AllowUserToResizeRows = false;
-            dgvCanchas.AutoGenerateColumns = false;
             dgvCanchas.BackgroundColor = Color.White;
             dgvCanchas.BorderStyle = BorderStyle.None;
             dgvCanchas.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
@@ -220,11 +216,10 @@ namespace UI
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvCanchas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvCanchas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCanchas.Columns.AddRange(new DataGridViewColumn[] { colIdCancha, colCancha, colEstado });
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.FromArgb(18, 18, 18);
+            dataGridViewCellStyle2.ForeColor = Color.White;
             dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(211, 230, 248);
             dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(18, 18, 18);
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
@@ -241,30 +236,6 @@ namespace UI
             dgvCanchas.Size = new Size(785, 120);
             dgvCanchas.TabIndex = 0;
             dgvCanchas.SelectionChanged += dgvCanchas_SelectionChanged;
-            // 
-            // colIdCancha
-            // 
-            colIdCancha.DataPropertyName = "IdCancha";
-            colIdCancha.HeaderText = "ID";
-            colIdCancha.Name = "colIdCancha";
-            colIdCancha.ReadOnly = true;
-            colIdCancha.Visible = false;
-            // 
-            // colCancha
-            // 
-            colCancha.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colCancha.DataPropertyName = "Nombre";
-            colCancha.HeaderText = "Cancha";
-            colCancha.Name = "colCancha";
-            colCancha.ReadOnly = true;
-            // 
-            // colEstado
-            // 
-            colEstado.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colEstado.DataPropertyName = "Estado";
-            colEstado.HeaderText = "Estado";
-            colEstado.Name = "colEstado";
-            colEstado.ReadOnly = true;
             // 
             // gbSeleccionado
             // 
@@ -482,7 +453,7 @@ namespace UI
             // 
             errorProvider.ContainerControl = this;
             // 
-            // frmSeleccionarTurno
+            // frmGenerarReserva
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -502,9 +473,9 @@ namespace UI
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "frmSeleccionarTurno";
+            Name = "frmGenerarReserva";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "PadelGest - Seleccionar Turno";
+            Text = "PadelGest - Generar Reserva";
             FormClosed += frmSeleccionarTurno_FormClosed;
             Load += frmSeleccionarTurno_Load;
             gbBusqueda.ResumeLayout(false);

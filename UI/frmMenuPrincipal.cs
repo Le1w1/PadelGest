@@ -183,7 +183,7 @@ namespace UI
 
         private void seleccionarTurnoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using frmSeleccionarTurno formSeleccionarTurno = new frmSeleccionarTurno();
+            using frmGenerarReserva formSeleccionarTurno = new frmGenerarReserva();
             formSeleccionarTurno.ShowDialog();
         }
 

@@ -4,7 +4,7 @@ using Servicios;
 
 namespace UI
 {
-    public partial class frmSeleccionarTurno : Form, IObservadorIdioma
+    public partial class frmGenerarReserva : Form, IObservadorIdioma
     {
         #region "Campos"
         private readonly CanchaBLL _canchaBLL;
@@ -25,7 +25,7 @@ namespace UI
         public ReservaBE? ReservaRegistrada { get; private set; }
         #endregion
 
-        public frmSeleccionarTurno()
+        public frmGenerarReserva()
         {
             InitializeComponent();
             _canchaBLL = new CanchaBLL();
@@ -68,28 +68,28 @@ namespace UI
         {
             var t = Traductor.Instancia;
 
-            Text = t.Traducir("frmSeleccionarTurno.Title");
-            lblTitulo.Text = t.Traducir("frmSeleccionarTurno.LblTitulo");
-            gbBusqueda.Text = t.Traducir("frmSeleccionarTurno.GbBusqueda");
-            lblFecha.Text = t.Traducir("frmSeleccionarTurno.LblFecha");
-            lblHorario.Text = t.Traducir("frmSeleccionarTurno.LblHorario");
-            btnBuscar.Text = t.Traducir("frmSeleccionarTurno.BtnBuscar");
-            gbDisponibles.Text = t.Traducir("frmSeleccionarTurno.GbDisponibles");
-            colCancha.HeaderText = t.Traducir("frmSeleccionarTurno.ColCancha");
-            colEstado.HeaderText = t.Traducir("frmSeleccionarTurno.ColEstado");
-            lblTarifaTitulo.Text = t.Traducir("frmSeleccionarTurno.LblTarifa");
-            btnSeleccionar.Text = t.Traducir("frmSeleccionarTurno.BtnSeleccionar");
-            gbSeleccionado.Text = t.Traducir("frmSeleccionarTurno.GbSeleccionado");
-            lblFechaSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblFecha");
-            lblHorarioSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblHorario");
-            lblCanchaSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblCancha");
-            lblTarifaSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblTarifa");
-            lblEquipamientoSelTitulo.Text = t.Traducir("frmSeleccionarTurno.LblEquipamiento");
-            btnAgregarEquipamiento.Text = t.Traducir("frmSeleccionarTurno.BtnAgregarEquipamiento");
-            btnCobrarReserva.Text = t.Traducir("frmSeleccionarTurno.BtnCobrarReserva");
-            btnRegistrarReserva.Text = t.Traducir("frmSeleccionarTurno.BtnRegistrarReserva");
-            btnContinuar.Text = t.Traducir("frmSeleccionarTurno.BtnContinuar");
-            btnVolver.Text = t.Traducir("frmSeleccionarTurno.BtnVolver");
+            Text = t.Traducir("frmGenerarReserva.Title");
+            lblTitulo.Text = t.Traducir("frmGenerarReserva.LblTitulo");
+            gbBusqueda.Text = t.Traducir("frmGenerarReserva.GbBusqueda");
+            lblFecha.Text = t.Traducir("frmGenerarReserva.LblFecha");
+            lblHorario.Text = t.Traducir("frmGenerarReserva.LblHorario");
+            btnBuscar.Text = t.Traducir("frmGenerarReserva.BtnBuscar");
+            gbDisponibles.Text = t.Traducir("frmGenerarReserva.GbDisponibles");
+            colCancha.HeaderText = t.Traducir("frmGenerarReserva.ColCancha");
+            colEstado.HeaderText = t.Traducir("frmGenerarReserva.ColEstado");
+            lblTarifaTitulo.Text = t.Traducir("frmGenerarReserva.LblTarifa");
+            btnSeleccionar.Text = t.Traducir("frmGenerarReserva.BtnSeleccionar");
+            gbSeleccionado.Text = t.Traducir("frmGenerarReserva.GbSeleccionado");
+            lblFechaSelTitulo.Text = t.Traducir("frmGenerarReserva.LblFecha");
+            lblHorarioSelTitulo.Text = t.Traducir("frmGenerarReserva.LblHorario");
+            lblCanchaSelTitulo.Text = t.Traducir("frmGenerarReserva.LblCancha");
+            lblTarifaSelTitulo.Text = t.Traducir("frmGenerarReserva.LblTarifa");
+            lblEquipamientoSelTitulo.Text = t.Traducir("frmGenerarReserva.LblEquipamiento");
+            btnAgregarEquipamiento.Text = t.Traducir("frmGenerarReserva.BtnAgregarEquipamiento");
+            btnCobrarReserva.Text = t.Traducir("frmGenerarReserva.BtnCobrarReserva");
+            btnRegistrarReserva.Text = t.Traducir("frmGenerarReserva.BtnRegistrarReserva");
+            btnContinuar.Text = t.Traducir("frmGenerarReserva.BtnContinuar");
+            btnVolver.Text = t.Traducir("frmGenerarReserva.BtnVolver");
 
             ActualizarResumenEquipamiento();
         }
