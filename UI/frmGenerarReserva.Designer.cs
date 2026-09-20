@@ -50,7 +50,7 @@ namespace UI
             lblMensaje = new Label();
             btnContinuar = new Button();
             btnCobrarReserva = new Button();
-            btnRegistrarReserva = new Button();
+            btnReintentarRegistro = new Button();
             btnVolver = new Button();
             errorProvider = new ErrorProvider(components);
             gbBusqueda.SuspendLayout();
@@ -448,21 +448,22 @@ namespace UI
             btnCobrarReserva.UseVisualStyleBackColor = false;
             btnCobrarReserva.Click += btnCobrarReserva_Click;
             // 
-            // btnRegistrarReserva
+            // btnReintentarRegistro
             // 
-            btnRegistrarReserva.BackColor = Color.FromArgb(214, 246, 36);
-            btnRegistrarReserva.Enabled = false;
-            btnRegistrarReserva.FlatAppearance.BorderSize = 0;
-            btnRegistrarReserva.FlatStyle = FlatStyle.Flat;
-            btnRegistrarReserva.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnRegistrarReserva.ForeColor = Color.FromArgb(18, 18, 18);
-            btnRegistrarReserva.Location = new Point(700, 605);
-            btnRegistrarReserva.Name = "btnRegistrarReserva";
-            btnRegistrarReserva.Size = new Size(160, 34);
-            btnRegistrarReserva.TabIndex = 8;
-            btnRegistrarReserva.Text = "Registrar Reserva";
-            btnRegistrarReserva.UseVisualStyleBackColor = false;
-            btnRegistrarReserva.Click += btnRegistrarReserva_Click;
+            btnReintentarRegistro.BackColor = Color.FromArgb(214, 246, 36);
+            btnReintentarRegistro.Enabled = false;
+            btnReintentarRegistro.FlatAppearance.BorderSize = 0;
+            btnReintentarRegistro.FlatStyle = FlatStyle.Flat;
+            btnReintentarRegistro.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnReintentarRegistro.ForeColor = Color.FromArgb(18, 18, 18);
+            btnReintentarRegistro.Location = new Point(700, 605);
+            btnReintentarRegistro.Name = "btnReintentarRegistro";
+            btnReintentarRegistro.Size = new Size(160, 34);
+            btnReintentarRegistro.TabIndex = 8;
+            btnReintentarRegistro.Text = "Reintentar registro";
+            btnReintentarRegistro.UseVisualStyleBackColor = false;
+            btnReintentarRegistro.Visible = false;
+            btnReintentarRegistro.Click += btnReintentarRegistro_Click;
             // 
             // btnVolver
             // 
@@ -490,7 +491,7 @@ namespace UI
             BackColor = Color.FromArgb(14, 43, 92);
             ClientSize = new Size(880, 712);
             Controls.Add(btnVolver);
-            Controls.Add(btnRegistrarReserva);
+            Controls.Add(btnReintentarRegistro);
             Controls.Add(btnCobrarReserva);
             Controls.Add(btnContinuar);
             Controls.Add(lblMensaje);
@@ -551,7 +552,7 @@ namespace UI
         private Label lblMensaje;
         private Button btnContinuar;
         private Button btnCobrarReserva;
-        private Button btnRegistrarReserva;
+        private Button btnReintentarRegistro;
         private Button btnVolver;
         private ErrorProvider errorProvider;
     }

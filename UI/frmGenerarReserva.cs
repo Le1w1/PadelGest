@@ -10,6 +10,7 @@ namespace UI
         private readonly CanchaBLL _canchaBLL;
         private readonly TarifaBLL _tarifaBLL;
         private readonly EquipamientoBLL _equipamientoBLL;
+        private readonly ReservaBLL _reservaBLL;
         private TarifaBE? _tarifaActual;
 
         public DateTime FechaSeleccionada { get; private set; }
@@ -31,6 +32,7 @@ namespace UI
             _canchaBLL = new CanchaBLL();
             _tarifaBLL = new TarifaBLL();
             _equipamientoBLL = new EquipamientoBLL();
+            _reservaBLL = new ReservaBLL();
 
             cboHorario.Format += cboHorario_Format;
             FormClosing += frmGenerarReserva_FormClosing;
@@ -87,7 +89,7 @@ namespace UI
             lblEquipamientoSelTitulo.Text = t.Traducir("frmGenerarReserva.LblEquipamiento");
             btnAgregarEquipamiento.Text = t.Traducir("frmGenerarReserva.BtnAgregarEquipamiento");
             btnCobrarReserva.Text = t.Traducir("frmGenerarReserva.BtnCobrarReserva");
-            btnRegistrarReserva.Text = t.Traducir("frmGenerarReserva.BtnRegistrarReserva");
+            btnReintentarRegistro.Text = t.Traducir("frmGenerarReserva.BtnReintentarRegistro");
             btnContinuar.Text = t.Traducir("frmGenerarReserva.BtnContinuar");
             btnVolver.Text = t.Traducir("frmGenerarReserva.BtnVolver");
 
@@ -325,8 +327,7 @@ namespace UI
                     lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgPagoAprobado");
                     BloquearDatosLuegoDelPago();
 
-                    // Un pago aprobado obliga a continuar inmediatamente con el registro.
-                    RegistrarReservaObligatoria();
+                    RegistrarReservaAutomatica();
                 }
             }
             catch (Exception ex)
@@ -336,12 +337,14 @@ namespace UI
             }
         }
 
-        private void btnRegistrarReserva_Click(object sender, EventArgs e)
+        // El flujo normal registra la reserva automáticamente luego de un cobro aprobado.
+        // Este botón solo queda disponible como recuperación si el registro automático falla.
+        private void btnReintentarRegistro_Click(object sender, EventArgs e)
         {
-            RegistrarReservaObligatoria();
+            RegistrarReservaAutomatica();
         }
 
-        private void RegistrarReservaObligatoria()
+        private void RegistrarReservaAutomatica()
         {
             if (ReservaRegistrada != null)
                 return;
@@ -353,15 +356,46 @@ namespace UI
                 return;
             }
 
-            using frmRegistrarReserva formReserva = new frmRegistrarReserva(ClienteSeleccionado, CanchaSeleccionada, TarifaSeleccionada, FacturaPagada, PagoAprobado,FechaSeleccionada, HorarioSeleccionado, CantidadPaletas, CantidadPelotas);
-
-            if (formReserva.ShowDialog(this) == DialogResult.OK && formReserva.ReservaRegistrada != null)
+            try
             {
-                ReservaRegistrada = formReserva.ReservaRegistrada;
-                lblMensaje.Text = string.Format(Traductor.Instancia.Traducir("frmGenerarReserva.MsgReservaRegistrada"),ReservaRegistrada.Codigo);
+                btnReintentarRegistro.Enabled = false;
+                btnReintentarRegistro.Visible = false;
 
-                btnRegistrarReserva.Enabled = false;
-                btnVolver.Enabled = true;
+                ReservaRegistrada = _reservaBLL.RegistrarReserva(
+                    ClienteSeleccionado,
+                    CanchaSeleccionada,
+                    TarifaSeleccionada,
+                    FacturaPagada,
+                    PagoAprobado,
+                    FechaSeleccionada,
+                    HorarioSeleccionado,
+                    CantidadPaletas,
+                    CantidadPelotas);
+
+                using frmRegistrarReserva formReserva = new frmRegistrarReserva(
+                    ReservaRegistrada,
+                    ClienteSeleccionado,
+                    CanchaSeleccionada,
+                    TarifaSeleccionada,
+                    FacturaPagada);
+
+                if (formReserva.ShowDialog(this) == DialogResult.OK)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = string.Format(
+                    Traductor.Instancia.Traducir("frmGenerarReserva.MsgErrorRegistroAutomatico"),
+                    ex.Message);
+
+                lblMensaje.Text = mensaje;
+                btnReintentarRegistro.Visible = true;
+                btnReintentarRegistro.Enabled = true;
+
+                MessageBox.Show(mensaje, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -375,7 +409,8 @@ namespace UI
             btnAgregarEquipamiento.Enabled = false;
             btnCobrarReserva.Enabled = false;
             btnContinuar.Enabled = false;
-            btnRegistrarReserva.Enabled = false;
+            btnReintentarRegistro.Enabled = false;
+            btnReintentarRegistro.Visible = false;
             btnVolver.Enabled = false;
         }
 

@@ -35,7 +35,7 @@ namespace UI
             lblClienteValor = new Label();
             lblClienteTitulo = new Label();
             lblMensaje = new Label();
-            btnRegistrar = new Button();
+            btnFinalizar = new Button();
             gbDatos.SuspendLayout();
             SuspendLayout();
             // 
@@ -47,7 +47,7 @@ namespace UI
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(700, 45);
             lblTitulo.TabIndex = 4;
-            lblTitulo.Text = "Registrar Reserva";
+            lblTitulo.Text = "Reserva Registrada";
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // gbDatos
@@ -74,7 +74,7 @@ namespace UI
             gbDatos.Size = new Size(700, 275);
             gbDatos.TabIndex = 3;
             gbDatos.TabStop = false;
-            gbDatos.Text = "Datos de la Reserva";
+            gbDatos.Text = "Detalle de la Reserva";
             // 
             // lblImporteValor
             // 
@@ -207,20 +207,20 @@ namespace UI
             lblMensaje.TabIndex = 2;
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // btnRegistrar
+            // btnFinalizar
             // 
-            btnRegistrar.BackColor = Color.FromArgb(214, 246, 36);
-            btnRegistrar.FlatAppearance.BorderSize = 0;
-            btnRegistrar.FlatStyle = FlatStyle.Flat;
-            btnRegistrar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnRegistrar.ForeColor = Color.FromArgb(18, 18, 18);
-            btnRegistrar.Location = new Point(560, 430);
-            btnRegistrar.Name = "btnRegistrar";
-            btnRegistrar.Size = new Size(160, 34);
-            btnRegistrar.TabIndex = 0;
-            btnRegistrar.Text = "Registrar Reserva";
-            btnRegistrar.UseVisualStyleBackColor = false;
-            btnRegistrar.Click += btnRegistrar_Click;
+            btnFinalizar.BackColor = Color.FromArgb(214, 246, 36);
+            btnFinalizar.FlatAppearance.BorderSize = 0;
+            btnFinalizar.FlatStyle = FlatStyle.Flat;
+            btnFinalizar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnFinalizar.ForeColor = Color.FromArgb(18, 18, 18);
+            btnFinalizar.Location = new Point(560, 430);
+            btnFinalizar.Name = "btnFinalizar";
+            btnFinalizar.Size = new Size(160, 34);
+            btnFinalizar.TabIndex = 0;
+            btnFinalizar.Text = "Finalizar";
+            btnFinalizar.UseVisualStyleBackColor = false;
+            btnFinalizar.Click += btnFinalizar_Click;
             // 
             // frmRegistrarReserva
             // 
@@ -229,7 +229,7 @@ namespace UI
             BackColor = Color.FromArgb(14, 43, 92);
             ClientSize = new Size(740, 485);
             ControlBox = false;
-            Controls.Add(btnRegistrar);
+            Controls.Add(btnFinalizar);
             Controls.Add(lblMensaje);
             Controls.Add(gbDatos);
             Controls.Add(lblTitulo);
@@ -240,7 +240,7 @@ namespace UI
             MinimizeBox = false;
             Name = "frmRegistrarReserva";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "PadelGest - Registrar Reserva";
+            Text = "PadelGest - Reserva Registrada";
             FormClosed += frmRegistrarReserva_FormClosed;
             Load += frmRegistrarReserva_Load;
             gbDatos.ResumeLayout(false);
@@ -266,6 +266,6 @@ namespace UI
         private Label lblImporteTitulo;
         private Label lblImporteValor;
         private Label lblMensaje;
-        private Button btnRegistrar;
+        private Button btnFinalizar;
     }
 }
