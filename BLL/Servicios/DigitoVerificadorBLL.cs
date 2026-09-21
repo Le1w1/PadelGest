@@ -102,10 +102,7 @@ namespace BLL.Servicios
                     string identificadorPk = ConstruirIdentificadorPk(tabla, registro);
                     string dvhCalculado = CalcularDVHDeRegistro(tabla, registro);
 
-                    string dvhGuardado =
-                        registro["DVH"] == null || registro["DVH"] == System.DBNull.Value
-                            ? null
-                            : registro["DVH"].ToString();
+                    string dvhGuardado = registro["DVH"] == null || registro["DVH"] == System.DBNull.Value? null: registro["DVH"].ToString();
 
                     // Sin DVH guardado: la fila no paso por el mecanismo normal
                     // de alta del sistema, por lo que se considera agregada externamente.
@@ -131,9 +128,7 @@ namespace BLL.Servicios
                     {
                         inconsistencias.Add(new Inconsistencia
                         {
-                            Tabla = tabla.Nombre,
-                            Tipo = Inconsistencia.TipoInconsistencia.RegistroModificado,
-                            IdentificadorPk = identificadorPk
+                            Tabla = tabla.Nombre, Tipo = Inconsistencia.TipoInconsistencia.RegistroModificado,IdentificadorPk = identificadorPk
                         });
                     }
                 }
@@ -141,17 +136,13 @@ namespace BLL.Servicios
                 // IMPORTANTE: para detectar bajas usamos los DVH GUARDADOS, no los
                 // recalculados. Asi una simple modificacion de datos no se confunde con
                 // una eliminacion. Los registros agregados ya fueron excluidos arriba.
-                string dvvRegistrosQueDeberianSeguir =
-                    _digitoVerificador.CalcularDVV(dvhGuardadosRegistrosExistentes);
+                string dvvRegistrosQueDeberianSeguir = _digitoVerificador.CalcularDVV(dvhGuardadosRegistrosExistentes);
 
                 if (dvvRegistrosQueDeberianSeguir != dvvGuardado)
                 {
                     inconsistencias.Add(new Inconsistencia
                     {
-                        Tabla = tabla.Nombre,
-                        Tipo = Inconsistencia.TipoInconsistencia.RegistroEliminado,
-                        // Sin snapshot no existe forma de recuperar la PK de la fila borrada.
-                        IdentificadorPk = string.Empty
+                        Tabla = tabla.Nombre, Tipo = Inconsistencia.TipoInconsistencia.RegistroEliminado, IdentificadorPk = string.Empty
                     });
                 }
             }
@@ -173,7 +164,7 @@ namespace BLL.Servicios
         private Dictionary<string, object> ExtraerPk(TablaProtegida tabla, Dictionary<string, object> registro)
         {
             var pk = new Dictionary<string, object>();
-            foreach (string colPk in tabla.ColumnasPk)
+            foreach (string colPk in tabla.ColumnasPk) 
                 pk[colPk] = registro[colPk];
             return pk;
         }
