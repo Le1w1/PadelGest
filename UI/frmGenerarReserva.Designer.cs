@@ -30,7 +30,7 @@ namespace UI
             gbDisponibles = new GroupBox();
             lblTarifaValor = new Label();
             lblTarifaTitulo = new Label();
-            btnSeleccionar = new Button();
+            btnConfirmarTurno = new Button();
             dgvCanchas = new DataGridView();
             colIdCancha = new DataGridViewTextBoxColumn();
             colCancha = new DataGridViewTextBoxColumn();
@@ -154,7 +154,7 @@ namespace UI
             gbDisponibles.BackColor = Color.FromArgb(24, 70, 138);
             gbDisponibles.Controls.Add(lblTarifaValor);
             gbDisponibles.Controls.Add(lblTarifaTitulo);
-            gbDisponibles.Controls.Add(btnSeleccionar);
+            gbDisponibles.Controls.Add(btnConfirmarTurno);
             gbDisponibles.Controls.Add(dgvCanchas);
             gbDisponibles.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             gbDisponibles.ForeColor = Color.White;
@@ -185,21 +185,21 @@ namespace UI
             lblTarifaTitulo.TabIndex = 2;
             lblTarifaTitulo.Text = "Tarifa:";
             // 
-            // btnSeleccionar
+            // btnConfirmarTurno
             // 
-            btnSeleccionar.BackColor = Color.FromArgb(214, 246, 36);
-            btnSeleccionar.Enabled = false;
-            btnSeleccionar.FlatAppearance.BorderSize = 0;
-            btnSeleccionar.FlatStyle = FlatStyle.Flat;
-            btnSeleccionar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnSeleccionar.ForeColor = Color.FromArgb(18, 18, 18);
-            btnSeleccionar.Location = new Point(650, 197);
-            btnSeleccionar.Name = "btnSeleccionar";
-            btnSeleccionar.Size = new Size(160, 32);
-            btnSeleccionar.TabIndex = 1;
-            btnSeleccionar.Text = "Seleccionar turno";
-            btnSeleccionar.UseVisualStyleBackColor = false;
-            btnSeleccionar.Click += btnSeleccionar_Click;
+            btnConfirmarTurno.BackColor = Color.FromArgb(214, 246, 36);
+            btnConfirmarTurno.Enabled = false;
+            btnConfirmarTurno.FlatAppearance.BorderSize = 0;
+            btnConfirmarTurno.FlatStyle = FlatStyle.Flat;
+            btnConfirmarTurno.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnConfirmarTurno.ForeColor = Color.FromArgb(18, 18, 18);
+            btnConfirmarTurno.Location = new Point(650, 197);
+            btnConfirmarTurno.Name = "btnConfirmarTurno";
+            btnConfirmarTurno.Size = new Size(160, 32);
+            btnConfirmarTurno.TabIndex = 1;
+            btnConfirmarTurno.Text = "Confirmar turno";
+            btnConfirmarTurno.UseVisualStyleBackColor = false;
+            btnConfirmarTurno.Click += btnConfirmarTurno_Click;
             // 
             // dgvCanchas
             // 
@@ -534,7 +534,7 @@ namespace UI
         private DataGridViewTextBoxColumn colIdCancha;
         private DataGridViewTextBoxColumn colCancha;
         private DataGridViewTextBoxColumn colEstado;
-        private Button btnSeleccionar;
+        private Button btnConfirmarTurno;
         private Label lblTarifaTitulo;
         private Label lblTarifaValor;
         private GroupBox gbSeleccionado;

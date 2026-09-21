@@ -85,7 +85,7 @@ namespace UI
             // AirPadel style preview END
             btnBuscar.Size = new Size(165, 32);
             btnBuscar.TabIndex = 2;
-            btnBuscar.Text = "Seleccionar";
+            btnBuscar.Text = "Buscar Cliente";
             btnBuscar.UseVisualStyleBackColor = false;
             btnBuscar.Click += btnBuscar_Click;
             // txtDNI

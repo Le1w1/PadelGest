@@ -80,7 +80,7 @@ namespace UI
             colCancha.HeaderText = t.Traducir("frmGenerarReserva.ColCancha");
             colEstado.HeaderText = t.Traducir("frmGenerarReserva.ColEstado");
             lblTarifaTitulo.Text = t.Traducir("frmGenerarReserva.LblTarifa");
-            btnSeleccionar.Text = t.Traducir("frmGenerarReserva.BtnSeleccionar");
+            btnConfirmarTurno.Text = t.Traducir("frmGenerarReserva.BtnConfirmarTurno");
             gbSeleccionado.Text = t.Traducir("frmGenerarReserva.GbSeleccionado");
             lblFechaSelTitulo.Text = t.Traducir("frmGenerarReserva.LblFecha");
             lblHorarioSelTitulo.Text = t.Traducir("frmGenerarReserva.LblHorario");
@@ -174,7 +174,7 @@ namespace UI
                 dgvCanchas.DataSource = null;
                 dgvCanchas.DataSource = canchas;
                 dgvCanchas.ClearSelection();
-                btnSeleccionar.Enabled = false;
+                btnConfirmarTurno.Enabled = false;
 
                 if (canchas.Count == 0)
                 {
@@ -187,7 +187,7 @@ namespace UI
                 dgvCanchas.DataSource = null;
                 _tarifaActual = null;
                 lblTarifaValor.Text = "-";
-                btnSeleccionar.Enabled = false;
+                btnConfirmarTurno.Enabled = false;
                 lblMensaje.Text = ex.Message;
                 MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -196,12 +196,12 @@ namespace UI
         // Habilita o deshabilita el botón de selección según la cantidad de filas seleccionadas y si hay una tarifa actual.
         private void dgvCanchas_SelectionChanged(object sender, EventArgs e)
         {
-            btnSeleccionar.Enabled = dgvCanchas.SelectedRows.Count == 1 && dgvCanchas.SelectedRows[0].DataBoundItem is CanchaBE && _tarifaActual != null;
+            btnConfirmarTurno.Enabled = dgvCanchas.SelectedRows.Count == 1 && dgvCanchas.SelectedRows[0].DataBoundItem is CanchaBE && _tarifaActual != null;
         }
 
 
         // Valida la selección de cancha y horario, y guarda los datos seleccionados para su posterior uso.
-        private void btnSeleccionar_Click(object sender, EventArgs e)
+        private void btnConfirmarTurno_Click(object sender, EventArgs e)
         {
             errorProvider.Clear();
 
@@ -405,7 +405,7 @@ namespace UI
             cboHorario.Enabled = false;
             btnBuscar.Enabled = false;
             dgvCanchas.Enabled = false;
-            btnSeleccionar.Enabled = false;
+            btnConfirmarTurno.Enabled = false;
             btnAgregarEquipamiento.Enabled = false;
             btnCobrarReserva.Enabled = false;
             btnContinuar.Enabled = false;
@@ -428,7 +428,7 @@ namespace UI
             dgvCanchas.DataSource = null;
             _tarifaActual = null;
             lblTarifaValor.Text = "-";
-            btnSeleccionar.Enabled = false;
+            btnConfirmarTurno.Enabled = false;
             LimpiarSeleccion();
         }
 
