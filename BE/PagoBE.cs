@@ -1,9 +1,8 @@
 namespace BE
 {
+    // Resultado transitorio del cobro; no se persiste en una tabla Pago.
     public class PagoBE
     {
-        public int IdPago { get; set; }
-        public int IdFactura { get; set; }
         public string Banco { get; set; } = string.Empty;
         public string Ultimos4Tarjeta { get; set; } = string.Empty;
         public decimal Importe { get; set; }

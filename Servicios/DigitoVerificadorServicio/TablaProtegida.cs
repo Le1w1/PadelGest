@@ -87,8 +87,10 @@ namespace Servicios.DigitoVerificador
                 new[] { "IdTarifa" }),
 
             new TablaProtegida("Reserva",
-                new[] { "IdReserva", "Codigo", "IdCliente", "IdCancha", "IdTarifa", "IdFactura",
-                        "Fecha", "Horario", "CantidadPaletas", "CantidadPelotas", "Estado" },
+                new[] { "IdReserva", "Codigo", "DNI", "IdCancha", "IdTarifa", "IdFactura",
+                        "Fecha", "Horario", "CantidadPaletas", "CantidadPelotas", "Estado",
+                        "Banco", "Ultimos4Tarjeta", "ImportePago", "FechaHoraPago",
+                        "EstadoPago", "CodigoAutorizacion" },
                 new[] { "IdReserva" }),
 
             new TablaProtegida("Equipamiento",
@@ -96,19 +98,14 @@ namespace Servicios.DigitoVerificador
                 new[] { "IdEquipamiento" }),
 
             new TablaProtegida("Cliente",
-                new[] { "IdCliente", "DNI", "Nombre", "Apellido", "Telefono", "CorreoElectronico" },
-                new[] { "IdCliente" }),
+                new[] { "DNI", "Nombre", "Apellido", "Telefono", "CorreoElectronico" },
+                new[] { "DNI" }),
 
             new TablaProtegida("Factura",
-                new[] { "IdFactura", "IdCliente", "IdCancha", "IdTarifa", "FechaHoraEmision",
+                new[] { "IdFactura", "DNI", "IdCancha", "IdTarifa", "FechaHoraEmision",
                         "FechaReserva", "Horario", "CantidadPaletas", "CantidadPelotas",
                         "ImporteTarifa", "ImporteEquipamiento", "ImporteTotal", "Estado" },
                 new[] { "IdFactura" }),
-
-            new TablaProtegida("Pago",
-                new[] { "IdPago", "IdFactura", "Banco", "Ultimos4Tarjeta", "Importe",
-                        "FechaHora", "Estado", "CodigoAutorizacion" },
-                new[] { "IdPago" }),
 
             // ----- Tablas puente (PK compuesta) -----
             // Sus unicas columnas son las dos FK: son a la vez su PK y todo su

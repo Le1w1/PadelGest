@@ -3,7 +3,7 @@ namespace BE
     public class FacturaBE
     {
         public int IdFactura { get; set; }
-        public int IdCliente { get; set; }
+        public string DNI { get; set; } = string.Empty;
         public int IdCancha { get; set; }
         public int IdTarifa { get; set; }
         public DateTime FechaHoraEmision { get; set; }

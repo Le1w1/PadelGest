@@ -25,13 +25,13 @@ namespace BLL
 
             facturaPagada.FechaHoraEmision = DateTime.Now;
 
-            ReservaBE reserva = CrearReserva(cliente,cancha,tarifa,fecha,horario,cantidadPaletas,cantidadPelotas);
+            ReservaBE reserva = CrearReserva(cliente,cancha,tarifa,fecha,horario,cantidadPaletas,cantidadPelotas,pagoAprobado);
 
             BitacoraEvento evento = CrearEventoBitacora(reserva,cliente,cancha,facturaPagada,cantidadPaletas,cantidadPelotas);
 
             try
             {
-                return _reservaDAL.RegistrarReserva(reserva,facturaPagada,pagoAprobado,evento);
+                return _reservaDAL.RegistrarReserva(reserva,facturaPagada,evento);
             }
             catch (InvalidOperationException ex)
                 when (ex.Message == "TURNO_NO_DISPONIBLE")
@@ -54,7 +54,7 @@ namespace BLL
         private void ValidarDatosReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
         {
 
-            if (cliente == null || cliente.IdCliente <= 0)
+            if (cliente == null || string.IsNullOrWhiteSpace(cliente.DNI))
                 throw new Exception(T("Errores.Reserva.ClienteInvalido"));
 
             if (cancha == null || cancha.IdCancha <= 0)
@@ -68,12 +68,17 @@ namespace BLL
                 throw new Exception(T("Errores.Reserva.FacturaNoPagada"));
             }
 
-            if (pagoAprobado == null || !pagoAprobado.Estado.Equals("Aprobado", StringComparison.OrdinalIgnoreCase) || pagoAprobado.Importe != facturaPagada.ImporteTotal)
+            if (pagoAprobado == null || !pagoAprobado.Estado.Equals("Aprobado", StringComparison.OrdinalIgnoreCase) || pagoAprobado.Importe != facturaPagada.ImporteTotal ||
+                string.IsNullOrWhiteSpace(pagoAprobado.Banco) ||
+                string.IsNullOrWhiteSpace(pagoAprobado.CodigoAutorizacion) ||
+                pagoAprobado.FechaHora == default ||
+                pagoAprobado.Ultimos4Tarjeta.Length != 4 ||
+                !pagoAprobado.Ultimos4Tarjeta.All(char.IsDigit))
             {
                 throw new Exception(T("Errores.Reserva.PagoInvalido"));
             }
 
-            if (facturaPagada.IdCliente != cliente.IdCliente || facturaPagada.IdCancha != cancha.IdCancha || facturaPagada.IdTarifa != tarifa.IdTarifa)
+            if (facturaPagada.DNI != cliente.DNI || facturaPagada.IdCancha != cancha.IdCancha || facturaPagada.IdTarifa != tarifa.IdTarifa)
             {
                 throw new Exception(T("Errores.Reserva.DatosInconsistentes"));
             }
@@ -94,19 +99,25 @@ namespace BLL
             }
         }
 
-        private ReservaBE CrearReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
+        private ReservaBE CrearReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,PagoBE pago)
         {
             return new ReservaBE
             {
                 Codigo = GenerarCodigoReserva(fecha),
-                IdCliente = cliente.IdCliente,
+                DNI = cliente.DNI,
                 IdCancha = cancha.IdCancha,
                 IdTarifa = tarifa.IdTarifa,
                 Fecha = fecha.Date,
                 Horario = horario,
                 CantidadPaletas = cantidadPaletas,
                 CantidadPelotas = cantidadPelotas,
-                Estado = "Reservada"
+                Estado = "Reservada",
+                Banco = pago.Banco,
+                Ultimos4Tarjeta = pago.Ultimos4Tarjeta,
+                ImportePago = pago.Importe,
+                FechaHoraPago = pago.FechaHora,
+                EstadoPago = pago.Estado,
+                CodigoAutorizacion = pago.CodigoAutorizacion
             };
         }
 
