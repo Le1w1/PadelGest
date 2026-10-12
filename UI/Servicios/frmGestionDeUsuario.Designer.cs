@@ -180,7 +180,7 @@ namespace UI
             cboRol.Font = new Font("Segoe UI", 10F);
             cboRol.ForeColor = Color.FromArgb(18, 18, 18);
             cboRol.FormattingEnabled = true;
-            cboRol.Location = new Point(150, 139);
+            cboRol.Location = new Point(164, 138);
             cboRol.Margin = new Padding(3, 2, 3, 2);
             cboRol.Name = "cboRol";
             cboRol.Size = new Size(224, 25);
@@ -191,7 +191,7 @@ namespace UI
             txtNombreUsuario.BackColor = Color.White;
             txtNombreUsuario.BorderStyle = BorderStyle.FixedSingle;
             txtNombreUsuario.ForeColor = Color.FromArgb(18, 18, 18);
-            txtNombreUsuario.Location = new Point(150, 100);
+            txtNombreUsuario.Location = new Point(164, 100);
             txtNombreUsuario.Name = "txtNombreUsuario";
             txtNombreUsuario.Size = new Size(160, 24);
             txtNombreUsuario.TabIndex = 14;
@@ -201,7 +201,7 @@ namespace UI
             lblNombreUsuario.ForeColor = Color.White;
             lblNombreUsuario.Location = new Point(20, 103);
             lblNombreUsuario.Name = "lblNombreUsuario";
-            lblNombreUsuario.Size = new Size(120, 23);
+            lblNombreUsuario.Size = new Size(145, 38);
             lblNombreUsuario.TabIndex = 13;
             lblNombreUsuario.Text = "Nombre de Usuario:";
             // 
@@ -233,7 +233,7 @@ namespace UI
             txtDNI.BackColor = Color.White;
             txtDNI.BorderStyle = BorderStyle.FixedSingle;
             txtDNI.ForeColor = Color.FromArgb(18, 18, 18);
-            txtDNI.Location = new Point(150, 62);
+            txtDNI.Location = new Point(164, 62);
             txtDNI.Name = "txtDNI";
             txtDNI.Size = new Size(160, 24);
             txtDNI.TabIndex = 6;
@@ -241,7 +241,7 @@ namespace UI
             // lblEmail
             // 
             lblEmail.ForeColor = Color.White;
-            lblEmail.Location = new Point(330, 65);
+            lblEmail.Location = new Point(350, 65);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(100, 23);
             lblEmail.TabIndex = 5;
@@ -271,7 +271,7 @@ namespace UI
             txtNombre.BackColor = Color.White;
             txtNombre.BorderStyle = BorderStyle.FixedSingle;
             txtNombre.ForeColor = Color.FromArgb(18, 18, 18);
-            txtNombre.Location = new Point(150, 27);
+            txtNombre.Location = new Point(164, 27);
             txtNombre.Name = "txtNombre";
             txtNombre.Size = new Size(160, 24);
             txtNombre.TabIndex = 2;
@@ -279,7 +279,7 @@ namespace UI
             // lblApellido
             // 
             lblApellido.ForeColor = Color.White;
-            lblApellido.Location = new Point(330, 30);
+            lblApellido.Location = new Point(350, 30);
             lblApellido.Name = "lblApellido";
             lblApellido.Size = new Size(100, 23);
             lblApellido.TabIndex = 1;
