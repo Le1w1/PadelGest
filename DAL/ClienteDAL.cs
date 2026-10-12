@@ -9,7 +9,7 @@ namespace DAL
     {
         private readonly DAO_AccesoDatos _conexionDAL;
 
-        private const string COLUMNAS_CLIENTE ="IdCliente, DNI, Nombre, Apellido, Telefono, CorreoElectronico";
+        private const string COLUMNAS_CLIENTE ="DNI, Nombre, Apellido, Telefono, CorreoElectronico";
 
         public ClienteDAL()
         {
@@ -21,7 +21,6 @@ namespace DAL
         {
             return new ClienteBE
             {
-                IdCliente = Convert.ToInt32(reader["IdCliente"]),
                 DNI = reader["DNI"].ToString() ?? string.Empty,
                 Nombre = reader["Nombre"].ToString() ?? string.Empty,
                 Apellido = reader["Apellido"].ToString() ?? string.Empty,
@@ -49,7 +48,7 @@ namespace DAL
         }
 
 
-        /// Inserta un nuevo Cliente en la base de datos y devuelve el objeto con el IdCliente asignado
+        /// Inserta un nuevo Cliente identificado por su DNI (clave primaria natural).
         public ClienteBE Insertar(ClienteBE cliente)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
@@ -59,7 +58,6 @@ namespace DAL
                     (
                         DNI,Nombre,Apellido,Telefono,CorreoElectronico
                     )
-                    OUTPUT INSERTED.IdCliente
                     VALUES
                     (
                         @DNI,@Nombre,@Apellido,@Telefono,@CorreoElectronico
@@ -74,9 +72,7 @@ namespace DAL
                     comando.Parameters.Add("@CorreoElectronico", SqlDbType.NVarChar, 150).Value = cliente.CorreoElectronico;
 
                     conexion.Open();
-                    // Ejecuta la consulta y obtiene el IdCliente generado
-                    // ExecuteScalar devuelve el primer valor de la primera fila del resultado, que en este caso es el IdCliente insertado
-                    cliente.IdCliente = Convert.ToInt32(comando.ExecuteScalar());
+                    comando.ExecuteNonQuery();
                     return cliente;
                 }
             }

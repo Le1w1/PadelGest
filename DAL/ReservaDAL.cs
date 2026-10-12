@@ -19,8 +19,8 @@ namespace DAL
             _bitacoraEventoDAL = new BitacoraEventoDAL();
         }
 
-        //registra una reserva, su factura y su pago en una transacción atómica
-        public ReservaBE RegistrarReserva(ReservaBE reserva,FacturaBE factura,PagoBE pago, BitacoraEvento evento)
+        // Registra factura y reserva (incluyendo los datos del pago) en una transacción atómica.
+        public ReservaBE RegistrarReserva(ReservaBE reserva,FacturaBE factura,BitacoraEvento evento)
         {
             using SqlConnection conexion = _conexionDAL.ObtenerConexion();
 
@@ -32,7 +32,7 @@ namespace DAL
             {
                 ValidarDisponibilidad(conexion,transaccion,reserva);
 
-                (int idFactura,int idPago,int idReserva) = PersistirOperacion(conexion,transaccion,reserva,factura,pago);
+                (int idFactura,int idReserva) = PersistirOperacion(conexion,transaccion,reserva,factura);
 
                 ActualizarDigitosVerificadores(conexion,transaccion);
 
@@ -41,7 +41,7 @@ namespace DAL
                 // Si todo se ejecuta correctamente, se confirma la transacción
                 transaccion.Commit();
 
-                ActualizarEntidadesRegistradas(reserva,factura,pago,idFactura,idPago,idReserva);
+                ActualizarEntidadesRegistradas(reserva,factura,idFactura,idReserva);
 
                 return reserva;
             }
@@ -63,17 +63,16 @@ namespace DAL
         }
 
 
-        // Persiste la factura, el pago y la reserva en la base de datos dentro de la misma transacción
-        private (int IdFactura,int IdPago,int IdReserva) PersistirOperacion(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva,FacturaBE factura,PagoBE pago)
+        // Persiste la factura y la reserva con sus datos de pago en la misma transacción.
+        private (int IdFactura,int IdReserva) PersistirOperacion(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva,FacturaBE factura)
         {
             int idFactura = InsertarFacturaPagada(conexion,transaccion,factura);
-            int idPago = InsertarPagoAprobado(conexion,transaccion,pago,idFactura);
 
             reserva.IdFactura = idFactura;
 
             int idReserva = InsertarReserva(conexion,transaccion,reserva);
 
-            return (idFactura,idPago,idReserva);
+            return (idFactura,idReserva);
         }
 
 
@@ -83,19 +82,14 @@ namespace DAL
             // La integridad global se verifica antes de iniciar sesión. Los DV de
             // las tablas modificadas se regeneran dentro de la misma transacción.
             _digitoVerificadorDAL.RecalcularDVEnTransaccion("Factura",conexion,transaccion);
-            _digitoVerificadorDAL.RecalcularDVEnTransaccion("Pago",conexion,transaccion);
             _digitoVerificadorDAL.RecalcularDVEnTransaccion("Reserva",conexion,transaccion);
         }
 
         // Actualiza los Ids generados y los estados de las entidades registradas  
-        private void ActualizarEntidadesRegistradas(ReservaBE reserva,FacturaBE factura,PagoBE pago,int idFactura,int idPago,int idReserva)
+        private void ActualizarEntidadesRegistradas(ReservaBE reserva,FacturaBE factura,int idFactura,int idReserva)
         {
             factura.IdFactura = idFactura;
             factura.Estado = "Pagada";
-
-            pago.IdPago = idPago;
-            pago.IdFactura = idFactura;
-            pago.Estado = "Aprobado";
 
             reserva.IdReserva = idReserva;
             reserva.Estado = "Reservada";
@@ -189,19 +183,19 @@ namespace DAL
             const string query = @"
                 INSERT INTO Factura
                 (
-                    IdCliente, IdCancha, IdTarifa, FechaHoraEmision, FechaReserva, Horario,
+                    DNI, IdCancha, IdTarifa, FechaHoraEmision, FechaReserva, Horario,
                     CantidadPaletas, CantidadPelotas, ImporteTarifa, ImporteEquipamiento, ImporteTotal, Estado
                 )
                 OUTPUT INSERTED.IdFactura
                 VALUES
                 (
-                    @IdCliente, @IdCancha, @IdTarifa, @FechaHoraEmision, @FechaReserva, @Horario,
+                    @DNI, @IdCancha, @IdTarifa, @FechaHoraEmision, @FechaReserva, @Horario,
                     @CantidadPaletas, @CantidadPelotas, @ImporteTarifa,@ImporteEquipamiento, @ImporteTotal, N'Pagada'
                 )";
 
             using (SqlCommand comando =new SqlCommand(query, conexion, transaccion))
             {
-                comando.Parameters.Add("@IdCliente", SqlDbType.Int).Value = factura.IdCliente;
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = factura.DNI;
                 comando.Parameters.Add("@IdCancha", SqlDbType.Int).Value = factura.IdCancha;
                 comando.Parameters.Add("@IdTarifa", SqlDbType.Int).Value = factura.IdTarifa;
                 comando.Parameters.Add("@FechaHoraEmision", SqlDbType.DateTime2).Value = factura.FechaHoraEmision;
@@ -229,59 +223,28 @@ namespace DAL
             }
         }
 
-        // Inserta el pago con estado "Aprobado" y devuelve el IdPago generado
-        private int InsertarPagoAprobado(SqlConnection conexion,SqlTransaction transaccion,PagoBE pago,int idFactura)
-        {
-            const string query = @"
-                INSERT INTO Pago
-                (
-                    IdFactura, Banco, Ultimos4Tarjeta, Importe, FechaHora, Estado, CodigoAutorizacion
-                )
-                OUTPUT INSERTED.IdPago
-                VALUES
-                (
-                    @IdFactura, @Banco, @Ultimos4Tarjeta, @Importe, @FechaHora, N'Aprobado', @CodigoAutorizacion
-                )";
-
-            using (SqlCommand comando =
-                new SqlCommand(query, conexion, transaccion))
-            {
-                comando.Parameters.Add("@IdFactura", SqlDbType.Int).Value = idFactura;
-                comando.Parameters.Add("@Banco", SqlDbType.NVarChar, 80).Value = pago.Banco;
-                comando.Parameters.Add("@Ultimos4Tarjeta", SqlDbType.Char, 4).Value = pago.Ultimos4Tarjeta;
-
-                var pImporte = comando.Parameters.Add("@Importe", SqlDbType.Decimal);
-                pImporte.Precision = 12;
-                pImporte.Scale = 2;
-                pImporte.Value = pago.Importe;
-
-                comando.Parameters.Add("@FechaHora", SqlDbType.DateTime2).Value = pago.FechaHora;
-                comando.Parameters.Add("@CodigoAutorizacion", SqlDbType.NVarChar, 50).Value = pago.CodigoAutorizacion;
-
-                return Convert.ToInt32(comando.ExecuteScalar());
-            }
-        }
-
         // Inserta la reserva con estado "Reservada" y devuelve el IdReserva generado
         private int InsertarReserva(SqlConnection conexion,SqlTransaction transaccion,ReservaBE reserva)
         {
             const string query = @"
                 INSERT INTO Reserva
                 (
-                    Codigo, IdCliente, IdCancha, IdTarifa, IdFactura, Fecha,
-                    Horario, CantidadPaletas, CantidadPelotas, Estado
+                    Codigo, DNI, IdCancha, IdTarifa, IdFactura, Fecha,
+                    Horario, CantidadPaletas, CantidadPelotas, Estado,
+                    Banco, Ultimos4Tarjeta, ImportePago, FechaHoraPago, EstadoPago, CodigoAutorizacion
                 )
                 OUTPUT INSERTED.IdReserva
                 VALUES
                 (
-                    @Codigo, @IdCliente, @IdCancha, @IdTarifa, @IdFactura, @Fecha,
-                    @Horario, @CantidadPaletas, @CantidadPelotas, N'Reservada'
+                    @Codigo, @DNI, @IdCancha, @IdTarifa, @IdFactura, @Fecha,
+                    @Horario, @CantidadPaletas, @CantidadPelotas, N'Reservada',
+                    @Banco, @Ultimos4Tarjeta, @ImportePago, @FechaHoraPago, @EstadoPago, @CodigoAutorizacion
                 )";
 
             using (SqlCommand comando =new SqlCommand(query, conexion, transaccion))
             {
                 comando.Parameters.Add("@Codigo", SqlDbType.NVarChar, 30).Value = reserva.Codigo;
-                comando.Parameters.Add("@IdCliente", SqlDbType.Int).Value = reserva.IdCliente;
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = reserva.DNI;
                 comando.Parameters.Add("@IdCancha", SqlDbType.Int).Value = reserva.IdCancha;
                 comando.Parameters.Add("@IdTarifa", SqlDbType.Int).Value = reserva.IdTarifa;
                 comando.Parameters.Add("@IdFactura", SqlDbType.Int).Value = reserva.IdFactura;
@@ -289,6 +252,17 @@ namespace DAL
                 comando.Parameters.Add("@Horario", SqlDbType.Time).Value = reserva.Horario;
                 comando.Parameters.Add("@CantidadPaletas", SqlDbType.Int).Value = reserva.CantidadPaletas;
                 comando.Parameters.Add("@CantidadPelotas", SqlDbType.Int).Value = reserva.CantidadPelotas;
+                comando.Parameters.Add("@Banco", SqlDbType.NVarChar, 80).Value = reserva.Banco;
+                comando.Parameters.Add("@Ultimos4Tarjeta", SqlDbType.Char, 4).Value = reserva.Ultimos4Tarjeta;
+
+                var importePago = comando.Parameters.Add("@ImportePago", SqlDbType.Decimal);
+                importePago.Precision = 12;
+                importePago.Scale = 2;
+                importePago.Value = reserva.ImportePago;
+
+                comando.Parameters.Add("@FechaHoraPago", SqlDbType.DateTime2).Value = reserva.FechaHoraPago;
+                comando.Parameters.Add("@EstadoPago", SqlDbType.NVarChar, 20).Value = reserva.EstadoPago;
+                comando.Parameters.Add("@CodigoAutorizacion", SqlDbType.NVarChar, 50).Value = reserva.CodigoAutorizacion;
 
                 return Convert.ToInt32(comando.ExecuteScalar());
             }

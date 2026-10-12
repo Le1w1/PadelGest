@@ -20,7 +20,7 @@ namespace BLL
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
-            if (cliente == null || cliente.IdCliente <= 0)
+            if (cliente == null || string.IsNullOrWhiteSpace(cliente.DNI))
                 throw new Exception(T("Errores.Cobro.ClienteInvalido"));
 
             if (cancha == null || cancha.IdCancha <= 0)
@@ -41,7 +41,7 @@ namespace BLL
 
             return new FacturaBE
             {
-                IdCliente = cliente.IdCliente,
+                DNI = cliente.DNI,
                 IdCancha = cancha.IdCancha,
                 IdTarifa = tarifa.IdTarifa,
                 FechaHoraEmision = DateTime.Now,
@@ -62,7 +62,7 @@ namespace BLL
         {
             SM.Instancia.RequierePermiso("RES_CREAR");
 
-            if (factura == null || cliente == null ||factura.IdCliente <= 0 ||factura.IdCliente != cliente.IdCliente ||factura.ImporteTotal <= 0)
+            if (factura == null || cliente == null || string.IsNullOrWhiteSpace(factura.DNI) || factura.DNI != cliente.DNI || factura.ImporteTotal <= 0)
             {
                 throw new Exception(T("Errores.Cobro.FacturaInvalida"));
             }
