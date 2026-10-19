@@ -454,5 +454,8 @@
   "Errores.Buffet.CantidadInvalida": "The quantity must be greater than zero.",
   "Errores.Buffet.ProductoNoDisponible": "The product does not exist or is inactive.",
   "Errores.Buffet.PrecioInvalido": "The product does not have a valid price.",
-  "Errores.Buffet.StockInsuficiente": "Insufficient stock for the requested quantity."
+  "Errores.Buffet.StockInsuficiente": "Insufficient stock for the requested quantity.",
+  "Errores.Buffet.SesionInvalida": "Sign in with a valid seller account.",
+  "Errores.Buffet.CarritoInvalido": "Select a valid cart.",
+  "Errores.Buffet.DNIInvalido": "The ID number must contain 7 or 8 digits."
 }
