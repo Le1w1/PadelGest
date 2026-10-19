@@ -554,5 +554,8 @@
   "frmAuditarEventos.Filtro.Accion.Persistir idioma": "Persistir idioma",
   "frmAuditarEventos.Filtro.Accion.Imprimir PDF": "Imprimir PDF",
   "frmAuditarEventos.Filtro.Accion.Crear Backup": "Crear Backup",
-  "frmAuditarEventos.Filtro.Accion.Restaurar Backup": "Restaurar Backup"
+  "frmAuditarEventos.Filtro.Accion.Restaurar Backup": "Restaurar Backup",
+  "frmGenerarCarrito.EstadoEnPreparacion": "En preparación",
+  "frmGenerarCarrito.EstadoListo": "Listo para cobrar",
+  "frmGenerarCarrito.EstadoVendido": "Vendido"
 }
