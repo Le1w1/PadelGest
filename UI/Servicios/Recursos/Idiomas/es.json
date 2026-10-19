@@ -371,7 +371,7 @@
   "Errores.Cobro.FacturaInvalida": "Los datos de la factura no son válidos para realizar el cobro.",
   "Errores.Cobro.BancoObligatorio": "Debe ingresar el Banco.",
   "Errores.Cobro.BancoInvalido": "El nombre del Banco posee un formato inválido.",
-  "Errores.Cobro.TarjetaInvalida": "El número de tarjeta no es válido.",
+  "Errores.Cobro.TarjetaInvalida": "El número de tarjeta debe tener entre 13 y 19 dígitos (0-9), sin letras, espacios ni símbolos.",
   "Errores.Cobro.VencimientoInvalido": "La tarjeta se encuentra vencida.",
   "Errores.Cobro.CodigoSeguridadInvalido": "El código de seguridad debe contener 3 o 4 dígitos.",
   "frmCobrarReserva.Title": "PadelGest - Cobrar Reserva",
