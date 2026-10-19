@@ -112,6 +112,40 @@ namespace DAL.Servicios
         }
 
 
+        // Opciones reales de los filtros. Se leen sin restringir la fecha para
+        // incluir tambien eventos historicos y procesos incorporados al sistema.
+        // Los nombres de columna se validan contra una lista cerrada.
+        public List<string> ObtenerValoresFiltro(string campo, string modulo = "")
+        {
+            if (campo != "Modulo" && campo != "Accion" &&
+                campo != "Criticidad" && campo != "Resultado")
+                throw new ArgumentException("Filtro de bitacora no permitido.", nameof(campo));
+
+            List<string> valores = new List<string>();
+            string sql = "SELECT DISTINCT LTRIM(RTRIM(B.[" + campo + "])) AS Valor "
+                       + "FROM dbo.BitacoraEvento B "
+                       + "WHERE B.[" + campo + "] IS NOT NULL "
+                       + "AND LTRIM(RTRIM(B.[" + campo + "])) <> N''";
+
+            if (campo == "Accion" && !string.IsNullOrWhiteSpace(modulo))
+                sql += " AND B.Modulo = @Modulo";
+
+            sql += " ORDER BY Valor";
+
+            using SqlConnection conexion = _conexionDAL.ObtenerConexion();
+            using SqlCommand comando = new SqlCommand(sql, conexion);
+            if (campo == "Accion" && !string.IsNullOrWhiteSpace(modulo))
+                comando.Parameters.Add("@Modulo", SqlDbType.NVarChar, 100).Value = modulo;
+
+            conexion.Open();
+            using SqlDataReader reader = comando.ExecuteReader();
+            while (reader.Read())
+                valores.Add(reader.GetString(0));
+
+            return valores;
+        }
+
+
         // Obtener eventos de la bitácora según los filtros proporcionados
         public List<global::Servicios.BitacoraEvento> ObtenerEventos(DateTime fechaDesde,DateTime fechaHasta,string usuario,string modulo,string accion,string criticidad,string resultado,string descripcion)
         {
