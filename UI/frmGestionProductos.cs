@@ -15,6 +15,7 @@ namespace UI
         public frmGestionProductos()
         {
             InitializeComponent();
+            dgvProductos.AutoGenerateColumns = false;
             _productoBLL = new ProductoBLL();
             ActualizarIdioma();
         }
