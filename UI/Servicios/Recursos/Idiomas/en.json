@@ -462,13 +462,14 @@
   "frmGenerarCarrito.ReintentarRegistro": "Retry registration",
   "frmGenerarCarrito.PagoPendienteRegistro": "Payment has been approved. You must register the sale before closing. Use Retry registration.",
   "frmGenerarCarrito.CobroRechazado": "The bank rejected the payment. No sale was registered and no stock was deducted.",
-  "frmGenerarCarrito.VentaRegistrada": "Sale {0} registered.\\nInvoice #{1}\\nAmount: {2}",
-  "frmGenerarCarrito.ErrorRegistro": "The payment was approved but the sale could not be recorded: {0}\\nNo new payment will be authorized. Use Retry registration.",
+  "frmGenerarCarrito.VentaRegistrada": "The sale was recorded successfully.\n\nSale reference: {0}\nInvoice no.: {1}\nTotal amount: {2}\n\nStock was updated successfully.",
+  "frmGenerarCarrito.ErrorRegistro": "The payment was approved, but the sale could not be recorded: {0}\n\nNo additional payment will be authorized. Use Retry registration.",
   "Errores.Buffet.CarritoNoListo": "Select products and assign a customer before charging.",
   "frmCobrarVenta.Title": "PadelGest - Charge Buffet Sale",
   "frmCobrarVenta.Titulo": "CHARGE SALE - BUFFET",
   "frmCobrarVenta.GbResumen": "Sale summary",
   "frmCobrarVenta.GbTarjeta": "Card payment (simulated bank)",
   "frmCobrarVenta.Productos": "Units:",
-  "frmCobrarVenta.BtnConfirmar": "Confirm payment"
+  "frmCobrarVenta.BtnConfirmar": "Confirm payment",
+  "frmGenerarCarrito.TituloVentaFinalizada": "Sale completed"
 }
