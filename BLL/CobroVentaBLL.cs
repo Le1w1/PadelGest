@@ -25,13 +25,13 @@ namespace BLL
                 throw new Exception(T("Errores.Buffet.CarritoNoListo"));
 
             banco = (banco ?? string.Empty).Trim();
-            numeroTarjeta = Regex.Replace(numeroTarjeta ?? string.Empty, @"[\s-]", "");
+            numeroTarjeta = numeroTarjeta ?? string.Empty;
             codigoSeguridad = (codigoSeguridad ?? string.Empty).Trim();
 
             if (!Regex.IsMatch(banco, @"^[\p{L}0-9 .&'-]{2,80}$"))
                 throw new Exception(T("Errores.Cobro.BancoInvalido"));
 
-            if (!Regex.IsMatch(numeroTarjeta, @"^\d{13,19}$") || !CumpleLuhn(numeroTarjeta))
+            if (!Regex.IsMatch(numeroTarjeta, @"^[0-9]{13,19}$"))
                 throw new Exception(T("Errores.Cobro.TarjetaInvalida"));
 
             DateTime finMes = new DateTime(vencimiento.Year, vencimiento.Month,DateTime.DaysInMonth(vencimiento.Year, vencimiento.Month));
@@ -63,26 +63,5 @@ namespace BLL
             };
         }
 
-        // Luhn valida el numero antes de simular su autorizacion.
-        private static bool CumpleLuhn(string numero)
-        {
-            int suma = 0;
-            bool duplicar = false;
-
-            for (int i = numero.Length - 1; i >= 0; i--)
-            {
-                int digito = numero[i] - '0';
-                if (duplicar)
-                {
-                    digito *= 2;
-                    if (digito > 9) digito -= 9;
-                }
-
-                suma += digito;
-                duplicar = !duplicar;
-            }
-
-            return suma % 10 == 0;
-        }
     }
 }
