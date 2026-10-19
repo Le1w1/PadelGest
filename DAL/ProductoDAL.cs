@@ -9,8 +9,7 @@ namespace DAL
     {
         private readonly DAO_AccesoDatos _conexionDAL;
 
-        private const string COLUMNAS_PRODUCTO =
-            "CodigoProducto, Nombre, Categoria, PrecioUnitario, StockDisponible, StockMinimo, Activo";
+        private const string COLUMNAS_PRODUCTO ="CodigoProducto, Nombre, Categoria, PrecioUnitario, StockDisponible, StockMinimo, Activo";
 
         public ProductoDAL()
         {
@@ -40,8 +39,7 @@ namespace DAL
 
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
-                string query = "SELECT " + COLUMNAS_PRODUCTO
-                    + " FROM dbo.Producto WHERE Activo = 1 ORDER BY Categoria, Nombre, CodigoProducto";
+                string query = "SELECT " + COLUMNAS_PRODUCTO+ " FROM dbo.Producto WHERE Activo = 1 ORDER BY Categoria, Nombre, CodigoProducto";
 
                 using (SqlCommand comando = new SqlCommand(query, conexion))
                 {
@@ -64,8 +62,7 @@ namespace DAL
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
-                string query = "SELECT " + COLUMNAS_PRODUCTO
-                    + " FROM dbo.Producto WHERE CodigoProducto = @CodigoProducto";
+                string query = "SELECT " + COLUMNAS_PRODUCTO+ " FROM dbo.Producto WHERE CodigoProducto = @CodigoProducto";
 
                 using (SqlCommand comando = new SqlCommand(query, conexion))
                 {

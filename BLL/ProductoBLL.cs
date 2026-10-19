@@ -18,8 +18,7 @@ namespace BLL
         // CUN09: permite consultar el catalogo a quien vende o consulta stock.
         public List<ProductoBE> ObtenerProductos()
         {
-            if (!SM.Instancia.TienePermiso("BUF_VENDER") &&
-                !SM.Instancia.TienePermiso("BUF_CONSULTAR_STOCK"))
+            if (!SM.Instancia.TienePermiso("BUF_VENDER") &&!SM.Instancia.TienePermiso("BUF_CONSULTAR_STOCK"))
             {
                 SM.Instancia.RequierePermiso("BUF_VENDER");
             }
