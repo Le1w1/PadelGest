@@ -331,9 +331,8 @@ namespace UI
             // 
             // btnCobrar
             // 
-            btnCobrar.BackColor = amarillo;
+            btnCobrar.BackColor = Color.FromArgb(214, 246, 36);
             btnCobrar.Enabled = false;
-            btnCobrar.Click += btnCobrar_Click;
             btnCobrar.FlatStyle = FlatStyle.Flat;
             btnCobrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCobrar.ForeColor = Color.Black;
@@ -343,6 +342,7 @@ namespace UI
             btnCobrar.TabIndex = 11;
             btnCobrar.Text = "Cobrar venta (próximamente)";
             btnCobrar.UseVisualStyleBackColor = false;
+            btnCobrar.Click += btnCobrar_Click;
             // 
             // btnVolver
             // 
