@@ -87,11 +87,15 @@ namespace BLL
             return _carritoDAL.AsociarCliente(idCarrito, idVendedor, dni);
         }
 
-        // Cancelar antes de cobrar no produce una venta ni descuenta stock.
-        public CarritoBE CancelarCarrito(int idCarrito)
+        // Descartar un carrito sin cobrar: se eliminan el carrito y sus detalles.
+        // El evento se registra en la bitacora en la misma transaccion SQL.
+        public void CancelarCarrito(int idCarrito)
         {
             ValidarIdCarrito(idCarrito);
-            return _carritoDAL.CancelarCarrito(idCarrito, ObtenerVendedor());
+            int idVendedor = ObtenerVendedor();
+            string usuario = SM.Instancia.UsuarioActual.NombreUsuario;
+
+            _carritoDAL.CancelarCarrito(idCarrito, idVendedor, usuario);
         }
 
         private static void ValidarIdCarrito(int idCarrito)
