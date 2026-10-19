@@ -331,7 +331,7 @@ namespace UI
             // 
             // btnCobrar
             // 
-            btnCobrar.BackColor = Color.Silver;
+            btnCobrar.BackColor = amarillo;
             btnCobrar.Enabled = false;
             btnCobrar.Click += btnCobrar_Click;
             btnCobrar.FlatStyle = FlatStyle.Flat;
