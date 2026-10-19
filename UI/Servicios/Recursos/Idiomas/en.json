@@ -369,7 +369,7 @@
   "Errores.Cobro.FacturaInvalida": "The invoice data is invalid for payment.",
   "Errores.Cobro.BancoObligatorio": "You must enter the Bank.",
   "Errores.Cobro.BancoInvalido": "The Bank name has an invalid format.",
-  "Errores.Cobro.TarjetaInvalida": "The card number is invalid.",
+  "Errores.Cobro.TarjetaInvalida": "The card number must contain 13 to 19 digits (0-9), without letters, spaces or symbols.",
   "Errores.Cobro.VencimientoInvalido": "The card is expired.",
   "Errores.Cobro.CodigoSeguridadInvalido": "The security code must contain 3 or 4 digits.",
   "frmCobrarReserva.Title": "PadelGest - Charge Reservation",
