@@ -119,6 +119,18 @@ namespace UI
             }
         }
 
+        // En el numero de tarjeta se admiten espacios entre grupos de digitos.
+        // El codigo de seguridad continua usando SoloNumeros_KeyPress.
+        private void NumerosTarjeta_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) &&
+                (e.KeyChar < '0' || e.KeyChar > '9') &&
+                e.KeyChar != ' ')
+            {
+                e.Handled = true;
+            }
+        }
+
         private void Campo_TextChanged(object sender, EventArgs e)
         {
             errorProvider.Clear();
@@ -138,9 +150,10 @@ namespace UI
             }
 
             string tarjeta = txtNumeroTarjeta.Text ?? string.Empty;
-
-            // Valida que el número de tarjeta tenga entre 13 y 19 dígitos y que solo contenga números
-            if (!Regex.IsMatch(tarjeta, @"^[0-9]{13,19}$"))
+            // Solo numeros y espacios en el campo; se cuentan 13 a 19 digitos,
+            // sin tener en cuenta los espacios que separan los grupos.
+            if (!Regex.IsMatch(tarjeta, @"^[0-9 ]+$") ||
+                !Regex.IsMatch(tarjeta.Replace(" ", ""), @"^[0-9]{13,19}$"))
             {
                 MostrarError(txtNumeroTarjeta, "Errores.Cobro.TarjetaInvalida");
                 return false;
