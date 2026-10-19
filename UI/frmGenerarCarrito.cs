@@ -252,9 +252,7 @@ namespace UI
 
             lblTotal.Text = _carrito.ImporteTotal.ToString("C2");
             lblEstado.Text = _carrito.Estado;
-            lblCliente.Text = string.IsNullOrWhiteSpace(_carrito.DNI)
-                ? T("frmGenerarCarrito.SinCliente")
-                : _carrito.DNI;
+            lblCliente.Text = string.IsNullOrWhiteSpace(_carrito.DNI)? T("frmGenerarCarrito.SinCliente"): _carrito.DNI;
 
             btnAgregar.Enabled = editable;
             btnModificar.Enabled = editable && tieneProductos;
@@ -263,11 +261,8 @@ namespace UI
             btnActualizarProductos.Enabled = editable;
             nudCantidad.Enabled = editable;
 
-            btnCobrar.Enabled = (_carrito.Estado == "Listo" && _pagoAprobado == null)
-                || (_pagoAprobado != null && _ventaRegistrada == null);
-            btnCobrar.Text = _pagoAprobado != null && _ventaRegistrada == null
-                ? T("frmGenerarCarrito.ReintentarRegistro")
-                : T("frmGenerarCarrito.Cobrar");
+            btnCobrar.Enabled = (_carrito.Estado == "Listo" && _pagoAprobado == null)|| (_pagoAprobado != null && _ventaRegistrada == null);
+            btnCobrar.Text = _pagoAprobado != null && _ventaRegistrada == null? T("frmGenerarCarrito.ReintentarRegistro"): T("frmGenerarCarrito.Cobrar");
             btnVolver.Enabled = _pagoAprobado == null;
         }
 
@@ -293,8 +288,7 @@ namespace UI
             try
             {
                 int codigo = ObtenerCodigoProducto();
-                ActualizarCarrito(_carritoBLL.AgregarProducto(
-                    _carrito.IdCarrito, codigo, (int)nudCantidad.Value));
+                ActualizarCarrito(_carritoBLL.AgregarProducto(_carrito.IdCarrito, codigo, (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.ProductoAgregado");
             }
             catch (Exception ex)
@@ -309,8 +303,7 @@ namespace UI
             try
             {
                 int codigo = ObtenerCodigoDetalle();
-                ActualizarCarrito(_carritoBLL.ModificarCantidad(
-                    _carrito.IdCarrito, codigo, (int)nudCantidad.Value));
+                ActualizarCarrito(_carritoBLL.ModificarCantidad(_carrito.IdCarrito, codigo, (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.CantidadModificada");
             }
             catch (Exception ex)
@@ -358,8 +351,7 @@ namespace UI
 
             try
             {
-                ActualizarCarrito(_carritoBLL.AsociarCliente(
-                    _carrito.IdCarrito, formCliente.ClienteSeleccionado.DNI));
+                ActualizarCarrito(_carritoBLL.AsociarCliente(_carrito.IdCarrito, formCliente.ClienteSeleccionado.DNI));
                 lblMensaje.Text = T("frmGenerarCarrito.ClienteAsignado");
             }
             catch (Exception ex)
@@ -399,8 +391,7 @@ namespace UI
                     // Pago rechazado: no existe Venta, se descarta el carrito.
                     _carritoBLL.CancelarCarrito(_carrito.IdCarrito);
                     _carrito = null;
-                    MessageBox.Show(T("frmGenerarCarrito.CobroRechazado"),
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(T("frmGenerarCarrito.CobroRechazado"),Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DialogResult = DialogResult.Cancel;
                     Close();
                     return;
@@ -429,28 +420,25 @@ namespace UI
 
             try
             {
-                _ventaRegistrada = _ventaBLL.RegistrarVenta(
-                    _carrito.IdCarrito, _pagoAprobado);
+                _ventaRegistrada = _ventaBLL.RegistrarVenta(_carrito.IdCarrito, _pagoAprobado);
 
                 _carrito = _carritoBLL.ConsultarCarrito(_carrito.IdCarrito);
                 ActualizarCarrito(_carrito);
 
-                string resumen = string.Format(
-                    T("frmGenerarCarrito.VentaRegistrada"),
-                    _ventaRegistrada.Codigo,
-                    _ventaRegistrada.Factura.IdFacturaVenta,
-                    _ventaRegistrada.ImporteTotal.ToString("C2"));
+                string resumen =
+                     "La venta se registró correctamente." + Environment.NewLine + Environment.NewLine +
+                      $"Número de venta: {_ventaRegistrada.Codigo}" + Environment.NewLine +
+                      $"Factura N.º: {_ventaRegistrada.Factura.IdFacturaVenta}" + Environment.NewLine +
+                      $"Importe total: {_ventaRegistrada.ImporteTotal:C2}" + Environment.NewLine + Environment.NewLine +
+                      "El stock fue actualizado correctamente.";
 
-                MessageBox.Show(resumen, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
+                MessageBox.Show(resumen,"Venta finalizada",MessageBoxButtons.OK,MessageBoxIcon.Information);DialogResult = DialogResult.OK;
                 Close();
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = string.Format(
-                    T("frmGenerarCarrito.ErrorRegistro"), ex.Message);
-                MessageBox.Show(lblMensaje.Text, Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                lblMensaje.Text = string.Format(T("frmGenerarCarrito.ErrorRegistro"), ex.Message);
+                MessageBox.Show(lblMensaje.Text, Text,MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             finally
             {
