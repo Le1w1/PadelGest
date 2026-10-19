@@ -73,6 +73,17 @@ namespace UI
             lblTotalValor.Text = _carrito.ImporteTotal.ToString("C2");
         }
 
+        // Impide escribir letras, espacios y simbolos en los campos numericos.
+        // La BLL vuelve a validar para impedir datos invalidos pegados.
+        private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) &&
+                (e.KeyChar < '0' || e.KeyChar > '9'))
+            {
+                e.Handled = true;
+            }
+        }
+
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             btnConfirmar.Enabled = false;
