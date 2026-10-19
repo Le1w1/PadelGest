@@ -299,7 +299,7 @@ namespace UI
             txtNumeroTarjeta.BorderStyle = BorderStyle.FixedSingle;
             txtNumeroTarjeta.ForeColor = Color.FromArgb(18, 18, 18);
             txtNumeroTarjeta.Location = new Point(170, 75);
-            txtNumeroTarjeta.MaxLength = 23;
+            txtNumeroTarjeta.MaxLength = 19;
             txtNumeroTarjeta.Name = "txtNumeroTarjeta";
             txtNumeroTarjeta.Size = new Size(250, 24);
             txtNumeroTarjeta.TabIndex = 14;
