@@ -11,12 +11,16 @@ namespace UI
         private readonly CarritoBLL _carritoBLL;
         private readonly ProductoBLL _productoBLL;
         private CarritoBE? _carrito;
+        private readonly VentaBLL _ventaBLL;
+        private PagoBE? _pagoAprobado;
+        private VentaBE? _ventaRegistrada;
 
         public frmGenerarCarrito()
         {
             InitializeComponent();
             _carritoBLL = new CarritoBLL();
             _productoBLL = new ProductoBLL();
+            _ventaBLL = new VentaBLL();
             ActualizarIdioma();
         }
 
@@ -46,6 +50,16 @@ namespace UI
         // Evita dejar carritos en preparacion sin cerrar cuando se usa la X.
         private void frmGenerarCarrito_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Igual que en PN1: si el banco aprobo el pago, no se puede
+            // descartar la operacion antes de registrar la venta.
+            if (_pagoAprobado != null && _ventaRegistrada == null)
+            {
+                e.Cancel = true;
+                MessageBox.Show(T("frmGenerarCarrito.PagoPendienteRegistro"),
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (_carrito == null ||
                 (_carrito.Estado != "EnPreparacion" && _carrito.Estado != "Listo"))
                 return;
@@ -146,7 +160,7 @@ namespace UI
             if (_carrito == null)
                 return;
 
-            bool editable = _carrito.Estado == "EnPreparacion";
+            bool editable = _carrito.Estado == "EnPreparacion" && _pagoAprobado == null;
             bool tieneProductos = _carrito.Detalles.Count > 0;
 
             lblTotal.Text = _carrito.ImporteTotal.ToString("C2");
@@ -162,8 +176,12 @@ namespace UI
             btnActualizarProductos.Enabled = editable;
             nudCantidad.Enabled = editable;
 
-            // El pago se habilitara recien cuando CUN12 este implementado.
-            btnCobrar.Enabled = false;
+            btnCobrar.Enabled = (_carrito.Estado == "Listo" && _pagoAprobado == null)
+                || (_pagoAprobado != null && _ventaRegistrada == null);
+            btnCobrar.Text = _pagoAprobado != null && _ventaRegistrada == null
+                ? T("frmGenerarCarrito.ReintentarRegistro")
+                : T("frmGenerarCarrito.Cobrar");
+            btnVolver.Enabled = _pagoAprobado == null;
         }
 
         private int ObtenerCodigoProducto()
@@ -260,6 +278,97 @@ namespace UI
             catch (Exception ex)
             {
                 lblMensaje.Text = ex.Message;
+            }
+        }
+
+        private void btnCobrar_Click(object sender, EventArgs e)
+        {
+            if (_carrito == null)
+                return;
+
+            // Una autorizacion ya aprobada SOLO permite reintentar el registro.
+            // Nunca se vuelve a llamar al banco para ese mismo pago.
+            if (_pagoAprobado != null)
+            {
+                RegistrarVentaAutomatica();
+                return;
+            }
+
+            if (_carrito.Estado != "Listo")
+            {
+                lblMensaje.Text = T("Errores.Buffet.CarritoNoListo");
+                return;
+            }
+
+            try
+            {
+                _ventaBLL.ValidarAntesDeCobrar(_carrito.IdCarrito);
+
+                using frmCobrarVenta formCobro = new frmCobrarVenta(_carrito);
+                DialogResult respuesta = formCobro.ShowDialog(this);
+
+                if (respuesta == DialogResult.No && formCobro.PagoRechazado)
+                {
+                    // Pago rechazado: no existe Venta, se descarta el carrito.
+                    _carritoBLL.CancelarCarrito(_carrito.IdCarrito);
+                    _carrito = null;
+                    MessageBox.Show(T("frmGenerarCarrito.CobroRechazado"),
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.Cancel;
+                    Close();
+                    return;
+                }
+
+                if (respuesta == DialogResult.OK && formCobro.PagoAprobado != null)
+                {
+                    _pagoAprobado = formCobro.PagoAprobado;
+                    ActualizarResumen();
+                    RegistrarVentaAutomatica();
+                }
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = ex.Message;
+                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void RegistrarVentaAutomatica()
+        {
+            if (_carrito == null || _pagoAprobado == null || _ventaRegistrada != null)
+                return;
+
+            btnCobrar.Enabled = false;
+
+            try
+            {
+                _ventaRegistrada = _ventaBLL.RegistrarVenta(
+                    _carrito.IdCarrito, _pagoAprobado);
+
+                _carrito = _carritoBLL.ConsultarCarrito(_carrito.IdCarrito);
+                ActualizarCarrito(_carrito);
+
+                string resumen = string.Format(
+                    T("frmGenerarCarrito.VentaRegistrada"),
+                    _ventaRegistrada.Codigo,
+                    _ventaRegistrada.Factura.IdFacturaVenta,
+                    _ventaRegistrada.ImporteTotal.ToString("C2"));
+
+                MessageBox.Show(resumen, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = string.Format(
+                    T("frmGenerarCarrito.ErrorRegistro"), ex.Message);
+                MessageBox.Show(lblMensaje.Text, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                if (!IsDisposed && _ventaRegistrada == null)
+                    ActualizarResumen();
             }
         }
 
