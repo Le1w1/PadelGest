@@ -5,7 +5,7 @@
     REQUISITOS:
     - Ejecutar en PadelGestDB DESPUES de crear las tablas PN2.
     - Realizar backup antes de ejecutar.
-    - No ejecutar el archivo completo Pad elGestDB.sql de reconstruccion.
+    - No ejecutar el archivo completo PadelGestDB.sql de reconstruccion.
     - El script SOLO agrega productos si dbo.Producto esta VACIA.
       Si hay datos, se detiene y no toca el stock existente.
     - El script calcula DVH / DVV de Producto con el orden de
