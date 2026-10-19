@@ -205,7 +205,10 @@ namespace DAL
                     Accion = accion,
                     Criticidad = "Media",
                     Resultado = "Exitoso",
-                    Descripcion = descripcion
+                    // La columna de BitacoraEvento admite como maximo 500 caracteres.
+                    Descripcion = descripcion.Length > 500
+                        ? descripcion.Substring(0, 500)
+                        : descripcion
                 }, conexion, tx);
                 tx.Commit();
             }
