@@ -96,7 +96,8 @@ namespace UI
                     lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgNoRegistrado");
 
                     btnRegistrarCliente.Visible = true;
-                    btnRegistrarCliente.Enabled =SM.Instancia.TienePermiso("CLI_REGISTRAR");
+                    btnRegistrarCliente.Enabled = SM.Instancia.TienePermiso("CLI_REGISTRAR") ||
+                                                   SM.Instancia.TienePermiso("BUF_VENDER");
                     return;
                 }
 
