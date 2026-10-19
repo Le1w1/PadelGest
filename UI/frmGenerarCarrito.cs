@@ -425,14 +425,19 @@ namespace UI
                 _carrito = _carritoBLL.ConsultarCarrito(_carrito.IdCarrito);
                 ActualizarCarrito(_carrito);
 
-                string resumen =
-                     "La venta se registró correctamente." + Environment.NewLine + Environment.NewLine +
-                      $"Número de venta: {_ventaRegistrada.Codigo}" + Environment.NewLine +
-                      $"Factura N.º: {_ventaRegistrada.Factura.IdFacturaVenta}" + Environment.NewLine +
-                      $"Importe total: {_ventaRegistrada.ImporteTotal:C2}" + Environment.NewLine + Environment.NewLine +
-                      "El stock fue actualizado correctamente.";
+                // Traduccion del mensaje y del titulo segun el idioma seleccionado.
+                // Los saltos de linea se configuran en es.json y en.json.
+                string resumen = string.Format(
+                    T("frmGenerarCarrito.VentaRegistrada"),
+                    _ventaRegistrada.Codigo,
+                    _ventaRegistrada.Factura.IdFacturaVenta,
+                    _ventaRegistrada.ImporteTotal.ToString("C2"));
 
-                MessageBox.Show(resumen, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    resumen,
+                    T("frmGenerarCarrito.TituloVentaFinalizada"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
