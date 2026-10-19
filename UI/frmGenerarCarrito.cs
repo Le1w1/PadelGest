@@ -5,7 +5,7 @@ using Servicios;
 namespace UI
 {
     // CUN08 Generar Carrito, CUN09 Seleccionar Productos y CUN10/11 Cliente.
-    // CUN12 (cobro) se incorporara despues; aqui no se registra una venta.
+    // CUN12 a CUN14: cobro simulado, registro de venta y stock automatico.
     public partial class frmGenerarCarrito : Form, IObservadorIdioma
     {
         private readonly CarritoBLL _carritoBLL;
@@ -251,7 +251,13 @@ namespace UI
             bool tieneProductos = _carrito.Detalles.Count > 0;
 
             lblTotal.Text = _carrito.ImporteTotal.ToString("C2");
-            lblEstado.Text = _carrito.Estado;
+            lblEstado.Text = _carrito.Estado switch
+            {
+                "EnPreparacion" => T("frmGenerarCarrito.EstadoEnPreparacion"),
+                "Listo" => T("frmGenerarCarrito.EstadoListo"),
+                "Vendido" => T("frmGenerarCarrito.EstadoVendido"),
+                _ => _carrito.Estado
+            };
             lblCliente.Text = string.IsNullOrWhiteSpace(_carrito.DNI)? T("frmGenerarCarrito.SinCliente"): _carrito.DNI;
 
             btnAgregar.Enabled = editable;
