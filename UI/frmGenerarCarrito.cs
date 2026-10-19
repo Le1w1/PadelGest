@@ -432,7 +432,8 @@ namespace UI
                       $"Importe total: {_ventaRegistrada.ImporteTotal:C2}" + Environment.NewLine + Environment.NewLine +
                       "El stock fue actualizado correctamente.";
 
-                MessageBox.Show(resumen,"Venta finalizada",MessageBoxButtons.OK,MessageBoxIcon.Information);DialogResult = DialogResult.OK;
+                MessageBox.Show(resumen, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = DialogResult.OK;
                 Close();
             }
             catch (Exception ex)
