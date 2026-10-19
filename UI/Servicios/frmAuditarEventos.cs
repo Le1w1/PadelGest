@@ -143,7 +143,16 @@ namespace UI
         // Este método maneja el evento de clic del botón "Buscar", llamando al método BuscarEventos.
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            BuscarEventos();
+            try
+            {
+                ActualizarOpcionesFiltros();
+                BuscarEventos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
 
@@ -260,6 +269,55 @@ namespace UI
             }
 
             CargarAcciones();
+        }
+
+        // Refresca listas en cada busqueda y mantiene la seleccion actual.
+        // De esta manera, nuevos procesos aparecen sin cerrar el formulario.
+        private static void SeleccionarPorValor(ComboBox combo, string valor)
+        {
+            for (int i = 0; i < combo.Items.Count; i++)
+            {
+                if (combo.Items[i] is OpcionFiltro opcion &&
+                    string.Equals(opcion.Valor, valor, StringComparison.Ordinal))
+                {
+                    combo.SelectedIndex = i;
+                    return;
+                }
+            }
+            combo.SelectedIndex = 0;
+        }
+
+        private void ActualizarOpcionesFiltros()
+        {
+            string modulo = ValorSeleccionado(cmbModulo);
+            string accion = ValorSeleccionado(cmbAccion);
+            string criticidad = ValorSeleccionado(cmbCriticidad);
+            string resultado = ValorSeleccionado(cmbResultado);
+
+            _configurandoFiltros = true;
+            try
+            {
+                LlenarCombo(cmbModulo, "Modulo",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro("Modulo"));
+                SeleccionarPorValor(cmbModulo, modulo);
+
+                LlenarCombo(cmbCriticidad, "Criticidad",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro("Criticidad"));
+                SeleccionarPorValor(cmbCriticidad, criticidad);
+
+                LlenarCombo(cmbResultado, "Resultado",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro("Resultado"));
+                SeleccionarPorValor(cmbResultado, resultado);
+
+                LlenarCombo(cmbAccion, "Accion",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro(
+                        "Accion", ValorSeleccionado(cmbModulo)));
+                SeleccionarPorValor(cmbAccion, accion);
+            }
+            finally
+            {
+                _configurandoFiltros = false;
+            }
         }
 
         private void cmbModulo_SelectedIndexChanged(object? sender, EventArgs e)
