@@ -107,6 +107,39 @@ namespace Servicios.DigitoVerificador
                         "ImporteTarifa", "ImporteEquipamiento", "ImporteTotal", "Estado" },
                 new[] { "IdFactura" }),
 
+            // ----- Tablas del negocio PN2 - Buffet -----
+
+            new TablaProtegida("Producto",
+                new[] { "CodigoProducto", "Nombre", "Categoria", "PrecioUnitario",
+                        "StockDisponible", "StockMinimo", "Activo" },
+                new[] { "CodigoProducto" }),
+
+            new TablaProtegida("Carrito",
+                new[] { "IdCarrito", "DNI", "IdVendedor", "FechaHoraCreacion",
+                        "ImporteTotal", "Estado" },
+                new[] { "IdCarrito" }),
+
+            new TablaProtegida("DetalleCarrito",
+                new[] { "IdDetalleCarrito", "IdCarrito", "CodigoProducto",
+                        "NombreProducto", "Cantidad", "PrecioUnitario" },
+                new[] { "IdDetalleCarrito" }),
+
+            new TablaProtegida("Venta",
+                new[] { "IdVenta", "Codigo", "IdCarrito", "DNI",
+                        "IdVendedor", "FechaHora", "ImporteTotal", "Estado" },
+                new[] { "IdVenta" }),
+
+            new TablaProtegida("FacturaVenta",
+                new[] { "IdFacturaVenta", "IdVenta", "FechaHoraEmision",
+                        "ImporteTotal", "Estado" },
+                new[] { "IdFacturaVenta" }),
+
+            new TablaProtegida("PagoVenta",
+                new[] { "IdPagoVenta", "IdFacturaVenta", "Banco",
+                        "Ultimos4Tarjeta", "Importe", "FechaHora",
+                        "Estado", "CodigoAutorizacion" },
+                new[] { "IdPagoVenta" }),
+
             // ----- Tablas puente (PK compuesta) -----
             // Sus unicas columnas son las dos FK: son a la vez su PK y todo su
             // contenido, por eso ColumnasDatos == ColumnasPk.
