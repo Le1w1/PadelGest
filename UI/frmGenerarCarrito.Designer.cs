@@ -15,13 +15,15 @@ namespace UI
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             lblTitulo = new Label();
             gbCatalogo = new GroupBox();
             dgvProductos = new DataGridView();
-            colProductoNombre = new DataGridViewTextBoxColumn();
-            colProductoCategoria = new DataGridViewTextBoxColumn();
-            colProductoPrecio = new DataGridViewTextBoxColumn();
-            colProductoStock = new DataGridViewTextBoxColumn();
             gbSeleccion = new GroupBox();
             lblCantidad = new Label();
             nudCantidad = new NumericUpDown();
@@ -31,10 +33,6 @@ namespace UI
             btnActualizarProductos = new Button();
             gbCarrito = new GroupBox();
             dgvDetalles = new DataGridView();
-            colDetalleProducto = new DataGridViewTextBoxColumn();
-            colDetalleCantidad = new DataGridViewTextBoxColumn();
-            colDetallePrecio = new DataGridViewTextBoxColumn();
-            colDetalleSubtotal = new DataGridViewTextBoxColumn();
             lblTituloEstado = new Label();
             lblEstado = new Label();
             lblTituloCliente = new Label();
@@ -52,293 +50,330 @@ namespace UI
             gbCarrito.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetalles).BeginInit();
             SuspendLayout();
-
-            // Colores AirPadel, configurados solamente desde el Designer.
-            Color azulFondo = Color.FromArgb(14, 43, 92);
-            Color azulPanel = Color.FromArgb(24, 70, 138);
-            Color amarillo = Color.FromArgb(214, 246, 36);
-            Color blanco = Color.White;
-            Color negro = Color.Black;
-
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
             lblTitulo.Location = new Point(25, 14);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(700, 46);
-            lblTitulo.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
-            lblTitulo.ForeColor = amarillo;
+            lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Generar Carrito";
-
+            // 
+            // gbCatalogo
+            // 
+            gbCatalogo.BackColor = Color.FromArgb(24, 70, 138);
+            gbCatalogo.Controls.Add(dgvProductos);
+            gbCatalogo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            gbCatalogo.ForeColor = Color.White;
             gbCatalogo.Location = new Point(25, 75);
             gbCatalogo.Name = "gbCatalogo";
             gbCatalogo.Size = new Size(540, 400);
+            gbCatalogo.TabIndex = 1;
+            gbCatalogo.TabStop = false;
             gbCatalogo.Text = "Productos disponibles";
-            gbCatalogo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            gbCatalogo.BackColor = azulPanel;
-            gbCatalogo.ForeColor = blanco;
-            gbCatalogo.Controls.Add(dgvProductos);
-
-            dgvProductos.Location = new Point(15, 29);
-            dgvProductos.Name = "dgvProductos";
-            dgvProductos.Size = new Size(510, 355);
+            // 
+            // dgvProductos
+            // 
             dgvProductos.AllowUserToAddRows = false;
             dgvProductos.AllowUserToDeleteRows = false;
             dgvProductos.AllowUserToResizeRows = false;
-            dgvProductos.AutoGenerateColumns = false;
-            dgvProductos.ReadOnly = true;
-            dgvProductos.MultiSelect = false;
-            dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvProductos.RowHeadersVisible = false;
-            dgvProductos.BackgroundColor = blanco;
+            dgvProductos.BackgroundColor = Color.White;
             dgvProductos.BorderStyle = BorderStyle.None;
-            dgvProductos.ColumnHeadersDefaultCellStyle.BackColor = azulPanel;
-            dgvProductos.ColumnHeadersDefaultCellStyle.ForeColor = blanco;
-            dgvProductos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(24, 70, 138);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(214, 246, 36);
+            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvProductos.DefaultCellStyle = dataGridViewCellStyle2;
             dgvProductos.EnableHeadersVisualStyles = false;
-            dgvProductos.DefaultCellStyle.BackColor = blanco;
-            dgvProductos.DefaultCellStyle.ForeColor = negro;
-            dgvProductos.DefaultCellStyle.SelectionBackColor = amarillo;
-            dgvProductos.DefaultCellStyle.SelectionForeColor = negro;
-            dgvProductos.RowsDefaultCellStyle.ForeColor = negro;
-            dgvProductos.RowsDefaultCellStyle.SelectionForeColor = negro;
-            dgvProductos.Columns.AddRange(new DataGridViewColumn[]
-            {
-                colProductoNombre, colProductoCategoria,
-                colProductoPrecio, colProductoStock
-            });
-
-            colProductoNombre.DataPropertyName = "Nombre";
-            colProductoNombre.Name = "colProductoNombre";
-            colProductoNombre.HeaderText = "Producto";
-            colProductoNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colProductoCategoria.DataPropertyName = "Categoria";
-            colProductoCategoria.Name = "colProductoCategoria";
-            colProductoCategoria.HeaderText = "Categoría";
-            colProductoCategoria.Width = 100;
-            colProductoPrecio.DataPropertyName = "PrecioUnitario";
-            colProductoPrecio.Name = "colProductoPrecio";
-            colProductoPrecio.HeaderText = "Precio";
-            colProductoPrecio.Width = 85;
-            colProductoPrecio.DefaultCellStyle.Format = "C2";
-            colProductoStock.DataPropertyName = "StockDisponible";
-            colProductoStock.Name = "colProductoStock";
-            colProductoStock.HeaderText = "Stock";
-            colProductoStock.Width = 60;
-
-            gbSeleccion.Location = new Point(25, 492);
-            gbSeleccion.Name = "gbSeleccion";
-            gbSeleccion.Size = new Size(540, 142);
-            gbSeleccion.Text = "Seleccionar productos";
-            gbSeleccion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            gbSeleccion.BackColor = azulPanel;
-            gbSeleccion.ForeColor = blanco;
+            dgvProductos.Location = new Point(15, 29);
+            dgvProductos.MultiSelect = false;
+            dgvProductos.Name = "dgvProductos";
+            dgvProductos.ReadOnly = true;
+            dgvProductos.RowHeadersVisible = false;
+            dataGridViewCellStyle3.ForeColor = Color.Black;
+            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
+            dgvProductos.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvProductos.Size = new Size(510, 355);
+            dgvProductos.TabIndex = 0;
+            // 
+            // gbSeleccion
+            // 
+            gbSeleccion.BackColor = Color.FromArgb(24, 70, 138);
             gbSeleccion.Controls.Add(lblCantidad);
             gbSeleccion.Controls.Add(nudCantidad);
             gbSeleccion.Controls.Add(btnAgregar);
             gbSeleccion.Controls.Add(btnModificar);
             gbSeleccion.Controls.Add(btnQuitar);
             gbSeleccion.Controls.Add(btnActualizarProductos);
-
+            gbSeleccion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            gbSeleccion.ForeColor = Color.White;
+            gbSeleccion.Location = new Point(25, 492);
+            gbSeleccion.Name = "gbSeleccion";
+            gbSeleccion.Size = new Size(540, 157);
+            gbSeleccion.TabIndex = 2;
+            gbSeleccion.TabStop = false;
+            gbSeleccion.Text = "Seleccionar productos";
+            // 
+            // lblCantidad
+            // 
+            lblCantidad.ForeColor = Color.White;
             lblCantidad.Location = new Point(15, 31);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(93, 25);
+            lblCantidad.TabIndex = 0;
             lblCantidad.Text = "Cantidad:";
-            lblCantidad.ForeColor = blanco;
+            // 
+            // nudCantidad
+            // 
+            nudCantidad.BackColor = Color.White;
+            nudCantidad.ForeColor = Color.Black;
             nudCantidad.Location = new Point(116, 31);
+            nudCantidad.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            nudCantidad.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidad.Name = "nudCantidad";
             nudCantidad.Size = new Size(85, 25);
-            nudCantidad.Minimum = 1;
-            nudCantidad.Maximum = 100000;
-            nudCantidad.Value = 1;
-            nudCantidad.BackColor = blanco;
-            nudCantidad.ForeColor = negro;
-
+            nudCantidad.TabIndex = 1;
+            nudCantidad.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // btnAgregar
+            // 
+            btnAgregar.BackColor = Color.FromArgb(214, 246, 36);
+            btnAgregar.FlatAppearance.BorderSize = 0;
+            btnAgregar.FlatStyle = FlatStyle.Flat;
+            btnAgregar.ForeColor = Color.Black;
             btnAgregar.Location = new Point(214, 28);
             btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(135, 34);
-            btnAgregar.Text = "Agregar";
-            btnAgregar.FlatStyle = FlatStyle.Flat;
-            btnAgregar.FlatAppearance.BorderSize = 0;
-            btnAgregar.BackColor = amarillo;
-            btnAgregar.ForeColor = negro;
+            btnAgregar.Size = new Size(135, 52);
+            btnAgregar.TabIndex = 2;
+            btnAgregar.Text = "Agregar al carrito";
+            btnAgregar.UseVisualStyleBackColor = false;
             btnAgregar.Click += btnAgregar_Click;
-
+            // 
+            // btnModificar
+            // 
+            btnModificar.BackColor = Color.FromArgb(214, 246, 36);
+            btnModificar.FlatAppearance.BorderSize = 0;
+            btnModificar.FlatStyle = FlatStyle.Flat;
+            btnModificar.ForeColor = Color.Black;
             btnModificar.Location = new Point(359, 28);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(165, 34);
+            btnModificar.Size = new Size(165, 52);
+            btnModificar.TabIndex = 3;
             btnModificar.Text = "Modificar cantidad";
-            btnModificar.FlatStyle = FlatStyle.Flat;
-            btnModificar.FlatAppearance.BorderSize = 0;
-            btnModificar.BackColor = amarillo;
-            btnModificar.ForeColor = negro;
+            btnModificar.UseVisualStyleBackColor = false;
             btnModificar.Click += btnModificar_Click;
-
-            btnQuitar.Location = new Point(15, 86);
+            // 
+            // btnQuitar
+            // 
+            btnQuitar.BackColor = Color.FromArgb(24, 70, 138);
+            btnQuitar.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
+            btnQuitar.FlatStyle = FlatStyle.Flat;
+            btnQuitar.ForeColor = Color.White;
+            btnQuitar.Location = new Point(15, 93);
             btnQuitar.Name = "btnQuitar";
             btnQuitar.Size = new Size(225, 34);
+            btnQuitar.TabIndex = 4;
             btnQuitar.Text = "Quitar producto";
-            btnQuitar.FlatStyle = FlatStyle.Flat;
-            btnQuitar.FlatAppearance.BorderSize = 1;
-            btnQuitar.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
-            btnQuitar.BackColor = azulPanel;
-            btnQuitar.ForeColor = blanco;
+            btnQuitar.UseVisualStyleBackColor = false;
             btnQuitar.Click += btnQuitar_Click;
-
-            btnActualizarProductos.Location = new Point(260, 86);
+            // 
+            // btnActualizarProductos
+            // 
+            btnActualizarProductos.BackColor = Color.FromArgb(24, 70, 138);
+            btnActualizarProductos.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
+            btnActualizarProductos.FlatStyle = FlatStyle.Flat;
+            btnActualizarProductos.ForeColor = Color.White;
+            btnActualizarProductos.Location = new Point(260, 93);
             btnActualizarProductos.Name = "btnActualizarProductos";
             btnActualizarProductos.Size = new Size(264, 34);
+            btnActualizarProductos.TabIndex = 5;
             btnActualizarProductos.Text = "Actualizar catálogo";
-            btnActualizarProductos.FlatStyle = FlatStyle.Flat;
-            btnActualizarProductos.FlatAppearance.BorderSize = 1;
-            btnActualizarProductos.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
-            btnActualizarProductos.BackColor = azulPanel;
-            btnActualizarProductos.ForeColor = blanco;
+            btnActualizarProductos.UseVisualStyleBackColor = false;
             btnActualizarProductos.Click += btnActualizarProductos_Click;
-
+            // 
+            // gbCarrito
+            // 
+            gbCarrito.BackColor = Color.FromArgb(24, 70, 138);
+            gbCarrito.Controls.Add(dgvDetalles);
+            gbCarrito.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            gbCarrito.ForeColor = Color.White;
             gbCarrito.Location = new Point(585, 75);
             gbCarrito.Name = "gbCarrito";
             gbCarrito.Size = new Size(540, 400);
+            gbCarrito.TabIndex = 3;
+            gbCarrito.TabStop = false;
             gbCarrito.Text = "Carrito";
-            gbCarrito.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            gbCarrito.BackColor = azulPanel;
-            gbCarrito.ForeColor = blanco;
-            gbCarrito.Controls.Add(dgvDetalles);
-
-            dgvDetalles.Location = new Point(15, 29);
-            dgvDetalles.Name = "dgvDetalles";
-            dgvDetalles.Size = new Size(510, 355);
+            // 
+            // dgvDetalles
+            // 
             dgvDetalles.AllowUserToAddRows = false;
             dgvDetalles.AllowUserToDeleteRows = false;
             dgvDetalles.AllowUserToResizeRows = false;
-            dgvDetalles.AutoGenerateColumns = false;
-            dgvDetalles.ReadOnly = true;
-            dgvDetalles.MultiSelect = false;
-            dgvDetalles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDetalles.RowHeadersVisible = false;
-            dgvDetalles.BackgroundColor = blanco;
+            dgvDetalles.BackgroundColor = Color.White;
             dgvDetalles.BorderStyle = BorderStyle.None;
-            dgvDetalles.ColumnHeadersDefaultCellStyle.BackColor = azulPanel;
-            dgvDetalles.ColumnHeadersDefaultCellStyle.ForeColor = blanco;
-            dgvDetalles.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(24, 70, 138);
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle4.ForeColor = Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvDetalles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = Color.White;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(214, 246, 36);
+            dataGridViewCellStyle5.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            dgvDetalles.DefaultCellStyle = dataGridViewCellStyle5;
             dgvDetalles.EnableHeadersVisualStyles = false;
-            dgvDetalles.DefaultCellStyle.BackColor = blanco;
-            dgvDetalles.DefaultCellStyle.ForeColor = negro;
-            dgvDetalles.DefaultCellStyle.SelectionBackColor = amarillo;
-            dgvDetalles.DefaultCellStyle.SelectionForeColor = negro;
-            dgvDetalles.RowsDefaultCellStyle.ForeColor = negro;
-            dgvDetalles.RowsDefaultCellStyle.SelectionForeColor = negro;
-            dgvDetalles.Columns.AddRange(new DataGridViewColumn[]
-            {
-                colDetalleProducto, colDetalleCantidad, colDetallePrecio, colDetalleSubtotal
-            });
+            dgvDetalles.Location = new Point(15, 29);
+            dgvDetalles.MultiSelect = false;
+            dgvDetalles.Name = "dgvDetalles";
+            dgvDetalles.ReadOnly = true;
+            dgvDetalles.RowHeadersVisible = false;
+            dataGridViewCellStyle6.ForeColor = Color.Black;
+            dataGridViewCellStyle6.SelectionForeColor = Color.Black;
+            dgvDetalles.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dgvDetalles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvDetalles.Size = new Size(510, 355);
+            dgvDetalles.TabIndex = 0;
             dgvDetalles.SelectionChanged += dgvDetalles_SelectionChanged;
-
-            colDetalleProducto.DataPropertyName = "NombreProducto";
-            colDetalleProducto.Name = "colDetalleProducto";
-            colDetalleProducto.HeaderText = "Producto";
-            colDetalleProducto.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colDetalleCantidad.DataPropertyName = "Cantidad";
-            colDetalleCantidad.Name = "colDetalleCantidad";
-            colDetalleCantidad.HeaderText = "Cantidad";
-            colDetalleCantidad.Width = 75;
-            colDetallePrecio.DataPropertyName = "PrecioUnitario";
-            colDetallePrecio.Name = "colDetallePrecio";
-            colDetallePrecio.HeaderText = "Precio";
-            colDetallePrecio.DefaultCellStyle.Format = "C2";
-            colDetallePrecio.Width = 100;
-            colDetalleSubtotal.DataPropertyName = "Subtotal";
-            colDetalleSubtotal.Name = "colDetalleSubtotal";
-            colDetalleSubtotal.HeaderText = "Subtotal";
-            colDetalleSubtotal.DefaultCellStyle.Format = "C2";
-            colDetalleSubtotal.Width = 100;
-
+            // 
+            // lblTituloEstado
+            // 
+            lblTituloEstado.ForeColor = Color.White;
             lblTituloEstado.Location = new Point(595, 503);
             lblTituloEstado.Name = "lblTituloEstado";
             lblTituloEstado.Size = new Size(80, 25);
-            lblTituloEstado.ForeColor = blanco;
+            lblTituloEstado.TabIndex = 4;
             lblTituloEstado.Text = "Estado:";
+            // 
+            // lblEstado
+            // 
+            lblEstado.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblEstado.ForeColor = Color.FromArgb(214, 246, 36);
             lblEstado.Location = new Point(685, 503);
             lblEstado.Name = "lblEstado";
             lblEstado.Size = new Size(170, 25);
-            lblEstado.ForeColor = amarillo;
-            lblEstado.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblEstado.TabIndex = 5;
             lblEstado.Text = "-";
-
+            // 
+            // lblTituloCliente
+            // 
+            lblTituloCliente.ForeColor = Color.White;
             lblTituloCliente.Location = new Point(595, 540);
             lblTituloCliente.Name = "lblTituloCliente";
             lblTituloCliente.Size = new Size(80, 25);
-            lblTituloCliente.ForeColor = blanco;
+            lblTituloCliente.TabIndex = 6;
             lblTituloCliente.Text = "Cliente:";
+            // 
+            // lblCliente
+            // 
+            lblCliente.ForeColor = Color.White;
             lblCliente.Location = new Point(685, 540);
             lblCliente.Name = "lblCliente";
             lblCliente.Size = new Size(170, 25);
-            lblCliente.ForeColor = blanco;
+            lblCliente.TabIndex = 7;
             lblCliente.Text = "-";
-
+            // 
+            // lblTituloTotal
+            // 
+            lblTituloTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblTituloTotal.ForeColor = Color.White;
             lblTituloTotal.Location = new Point(865, 495);
             lblTituloTotal.Name = "lblTituloTotal";
             lblTituloTotal.Size = new Size(110, 38);
-            lblTituloTotal.ForeColor = blanco;
-            lblTituloTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblTituloTotal.TabIndex = 8;
             lblTituloTotal.Text = "Total:";
+            // 
+            // lblTotal
+            // 
+            lblTotal.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblTotal.ForeColor = Color.FromArgb(214, 246, 36);
             lblTotal.Location = new Point(965, 490);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(160, 42);
-            lblTotal.ForeColor = amarillo;
-            lblTotal.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblTotal.TextAlign = ContentAlignment.MiddleRight;
+            lblTotal.TabIndex = 9;
             lblTotal.Text = "$ 0,00";
-
-            btnSeleccionarCliente.Location = new Point(585, 585);
+            lblTotal.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // btnSeleccionarCliente
+            // 
+            btnSeleccionarCliente.BackColor = Color.FromArgb(214, 246, 36);
+            btnSeleccionarCliente.Enabled = false;
+            btnSeleccionarCliente.FlatAppearance.BorderSize = 0;
+            btnSeleccionarCliente.FlatStyle = FlatStyle.Flat;
+            btnSeleccionarCliente.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnSeleccionarCliente.ForeColor = Color.Black;
+            btnSeleccionarCliente.Location = new Point(585, 600);
             btnSeleccionarCliente.Name = "btnSeleccionarCliente";
             btnSeleccionarCliente.Size = new Size(240, 49);
+            btnSeleccionarCliente.TabIndex = 10;
             btnSeleccionarCliente.Text = "Seleccionar cliente";
-            btnSeleccionarCliente.FlatStyle = FlatStyle.Flat;
-            btnSeleccionarCliente.FlatAppearance.BorderSize = 0;
-            btnSeleccionarCliente.BackColor = amarillo;
-            btnSeleccionarCliente.ForeColor = negro;
-            btnSeleccionarCliente.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnSeleccionarCliente.Enabled = false;
+            btnSeleccionarCliente.UseVisualStyleBackColor = false;
             btnSeleccionarCliente.Click += btnSeleccionarCliente_Click;
-
-            btnCobrar.Location = new Point(840, 585);
+            // 
+            // btnCobrar
+            // 
+            btnCobrar.BackColor = Color.Silver;
+            btnCobrar.Enabled = false;
+            btnCobrar.FlatStyle = FlatStyle.Flat;
+            btnCobrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnCobrar.ForeColor = Color.Black;
+            btnCobrar.Location = new Point(840, 597);
             btnCobrar.Name = "btnCobrar";
             btnCobrar.Size = new Size(285, 49);
+            btnCobrar.TabIndex = 11;
             btnCobrar.Text = "Cobrar venta (próximamente)";
-            btnCobrar.FlatStyle = FlatStyle.Flat;
-            btnCobrar.BackColor = Color.Silver;
-            btnCobrar.ForeColor = negro;
-            btnCobrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnCobrar.Enabled = false;
-
+            btnCobrar.UseVisualStyleBackColor = false;
+            // 
+            // btnVolver
+            // 
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
+            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnVolver.ForeColor = Color.White;
+            btnVolver.Location = new Point(970, 660);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(155, 36);
+            btnVolver.TabIndex = 13;
+            btnVolver.Text = "Volver / Cancelar";
+            btnVolver.UseVisualStyleBackColor = false;
+            btnVolver.Click += btnVolver_Click;
+            // 
+            // lblMensaje
+            // 
+            lblMensaje.Font = new Font("Segoe UI", 10F);
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
             lblMensaje.Location = new Point(25, 652);
             lblMensaje.Name = "lblMensaje";
             lblMensaje.Size = new Size(875, 44);
-            lblMensaje.ForeColor = amarillo;
-            lblMensaje.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            lblMensaje.TabIndex = 12;
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
-
-            btnVolver.Location = new Point(970, 652);
-            btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(155, 36);
-            btnVolver.Text = "Volver / Cancelar";
-            btnVolver.FlatStyle = FlatStyle.Flat;
-            btnVolver.FlatAppearance.BorderSize = 1;
-            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
-            btnVolver.BackColor = azulPanel;
-            btnVolver.ForeColor = blanco;
-            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnVolver.Click += btnVolver_Click;
-
+            // 
+            // frmGenerarCarrito
+            // 
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = azulFondo;
-            ForeColor = blanco;
-            Font = new Font("Segoe UI", 9.5F);
+            BackColor = Color.FromArgb(14, 43, 92);
             ClientSize = new Size(1150, 708);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            StartPosition = FormStartPosition.CenterParent;
-            Name = "frmGenerarCarrito";
-            Text = "PadelGest - Generar Carrito";
             Controls.Add(lblTitulo);
             Controls.Add(gbCatalogo);
             Controls.Add(gbSeleccion);
@@ -353,10 +388,17 @@ namespace UI
             Controls.Add(btnCobrar);
             Controls.Add(lblMensaje);
             Controls.Add(btnVolver);
+            Font = new Font("Segoe UI", 9.5F);
+            ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "frmGenerarCarrito";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "PadelGest - Generar Carrito";
             FormClosing += frmGenerarCarrito_FormClosing;
             FormClosed += frmGenerarCarrito_FormClosed;
             Load += frmGenerarCarrito_Load;
-
             gbCatalogo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
             gbSeleccion.ResumeLayout(false);
