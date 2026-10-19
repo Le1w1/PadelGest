@@ -82,11 +82,7 @@ namespace UI
                 if (cboRespuestaBanco.SelectedIndex < 0)
                     throw new Exception(T("Errores.Cobro.RespuestaBancoObligatoria"));
 
-                ResultadoCobroVentaBE resultado = _cobroBLL.CobrarVenta(
-                    _carrito,
-                    txtBanco.Text, txtNumeroTarjeta.Text,
-                    dtpVencimiento.Value, txtCodigoSeguridad.Text,
-                    cboRespuestaBanco.SelectedIndex == 0);
+                ResultadoCobroVentaBE resultado = _cobroBLL.CobrarVenta(_carrito,txtBanco.Text, txtNumeroTarjeta.Text,dtpVencimiento.Value, txtCodigoSeguridad.Text,cboRespuestaBanco.SelectedIndex == 0);
 
                 // Limpiar datos sensibles tan pronto como el banco responde.
                 txtNumeroTarjeta.Clear();

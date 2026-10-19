@@ -6,7 +6,7 @@ using System.Data;
 
 namespace DAL
 {
-    // CUN13 Registrar Venta y CUN14 Actualizar Stock.
+    // Registrar Venta y Actualizar Stock.
     // Venta, FacturaVenta, stock, estado del carrito, DVH/DVV y bitacora
     // se escriben en la MISMA transaccion SQL Server.
     public class VentaDAL
@@ -71,10 +71,7 @@ namespace DAL
                     using SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        detalles.Add((
-                            Convert.ToInt32(reader["CodigoProducto"]),
-                            Convert.ToInt32(reader["Cantidad"]),
-                            Convert.ToDecimal(reader["PrecioUnitario"])));
+                        detalles.Add((Convert.ToInt32(reader["CodigoProducto"]),Convert.ToInt32(reader["Cantidad"]),Convert.ToDecimal(reader["PrecioUnitario"])));
                     }
                 }
 
@@ -116,8 +113,7 @@ namespace DAL
                 }
 
                 DateTime ahora = DateTime.Now;
-                string codigoVenta = "VEN-" + ahora.ToString("yyyyMMdd") + "-"
-                    + Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
+                string codigoVenta = "VEN-" + ahora.ToString("yyyyMMdd") + "-"+ Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
                 int idVenta;
 
                 const string queryVenta = @"

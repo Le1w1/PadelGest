@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace BLL
 {
-    // CUN12: valida los datos de tarjeta y obtiene la autorizacion bancaria
+    // valida los datos de tarjeta y obtiene la autorizacion bancaria
     // simulada, siguiendo la misma mecanica de PN1.
     public class CobroVentaBLL
     {
@@ -17,15 +17,11 @@ namespace BLL
 
         private static string T(string clave) => Traductor.Instancia.Traducir(clave);
 
-        public ResultadoCobroVentaBE CobrarVenta(
-            CarritoBE carrito, string banco, string numeroTarjeta,
-            DateTime vencimiento, string codigoSeguridad, bool respuestaSimuladaAprobada)
+        public ResultadoCobroVentaBE CobrarVenta(CarritoBE carrito, string banco, string numeroTarjeta,DateTime vencimiento, string codigoSeguridad, bool respuestaSimuladaAprobada)
         {
             SM.Instancia.RequierePermiso("BUF_VENDER");
 
-            if (carrito == null || carrito.Estado != "Listo" ||
-                string.IsNullOrWhiteSpace(carrito.DNI) ||
-                carrito.ImporteTotal <= 0 || carrito.Detalles.Count == 0)
+            if (carrito == null || carrito.Estado != "Listo" ||string.IsNullOrWhiteSpace(carrito.DNI) || carrito.ImporteTotal <= 0 || carrito.Detalles.Count == 0)
                 throw new Exception(T("Errores.Buffet.CarritoNoListo"));
 
             banco = (banco ?? string.Empty).Trim();
@@ -38,8 +34,7 @@ namespace BLL
             if (!Regex.IsMatch(numeroTarjeta, @"^\d{13,19}$") || !CumpleLuhn(numeroTarjeta))
                 throw new Exception(T("Errores.Cobro.TarjetaInvalida"));
 
-            DateTime finMes = new DateTime(vencimiento.Year, vencimiento.Month,
-                DateTime.DaysInMonth(vencimiento.Year, vencimiento.Month));
+            DateTime finMes = new DateTime(vencimiento.Year, vencimiento.Month,DateTime.DaysInMonth(vencimiento.Year, vencimiento.Month));
 
             if (finMes < DateTime.Today)
                 throw new Exception(T("Errores.Cobro.VencimientoInvalido"));
