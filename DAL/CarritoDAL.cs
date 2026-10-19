@@ -1,6 +1,7 @@
 using BE;
 using DAL.Servicios;
 using Microsoft.Data.SqlClient;
+using Servicios;
 using System.Data;
 
 namespace DAL
@@ -9,11 +10,13 @@ namespace DAL
     {
         private readonly DAO_AccesoDatos _conexionDAL;
         private readonly DigitoVerificadorDAL _digitoVerificadorDAL;
+        private readonly BitacoraEventoDAL _bitacoraEventoDAL;
 
         public CarritoDAL()
         {
             _conexionDAL = new DAO_AccesoDatos();
             _digitoVerificadorDAL = new DigitoVerificadorDAL();
+            _bitacoraEventoDAL = new BitacoraEventoDAL();
         }
 
         // Crea el encabezado del carrito sin DNI: el cliente se selecciona en CUN10.
@@ -322,7 +325,10 @@ namespace DAL
             return ObtenerCarrito(idCarrito, idVendedor);
         }
 
-        public CarritoBE CancelarCarrito(int idCarrito, int idVendedor)
+        // Se descarta el carrito que aun no origino una venta.
+        // La eliminacion fisica y la auditoria se confirman juntas:
+        // si falla cualquier paso, se revierte toda la transaccion.
+        public void CancelarCarrito(int idCarrito, int idVendedor, string nombreUsuario)
         {
             using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
             {
@@ -330,21 +336,85 @@ namespace DAL
                 using SqlTransaction transaccion = conexion.BeginTransaction(IsolationLevel.Serializable);
                 try
                 {
-                    const string sql = @"
-                        UPDATE dbo.Carrito SET Estado = N'Cancelado'
+                    string estadoAnterior;
+                    decimal importeAnterior;
+
+                    // Bloquear el carrito y verificar que es del vendedor actual.
+                    const string sqlCarrito = @"
+                        SELECT Estado, ImporteTotal
+                        FROM dbo.Carrito WITH (UPDLOCK, HOLDLOCK)
+                        WHERE IdCarrito = @IdCarrito AND IdVendedor = @IdVendedor";
+
+                    using (SqlCommand comando = new SqlCommand(sqlCarrito, conexion, transaccion))
+                    {
+                        comando.Parameters.Add("@IdCarrito", SqlDbType.Int).Value = idCarrito;
+                        comando.Parameters.Add("@IdVendedor", SqlDbType.Int).Value = idVendedor;
+
+                        using SqlDataReader reader = comando.ExecuteReader();
+                        if (!reader.Read())
+                            throw new Exception("El carrito no existe o no pertenece al vendedor actual.");
+
+                        estadoAnterior = reader["Estado"].ToString() ?? string.Empty;
+                        importeAnterior = Convert.ToDecimal(reader["ImporteTotal"]);
+                    }
+
+                    // Un carrito ya vendido no se borra porque es soporte de
+                    // Venta / FacturaVenta. En ese caso corresponde una anulacion.
+                    if (estadoAnterior != "EnPreparacion" && estadoAnterior != "Listo")
+                        throw new Exception("No se puede descartar un carrito en ese estado.");
+
+                    int cantidadRenglones;
+                    const string sqlCantidad = @"
+                        SELECT COUNT(*) FROM dbo.DetalleCarrito
+                        WHERE IdCarrito = @IdCarrito";
+
+                    using (SqlCommand comando = new SqlCommand(sqlCantidad, conexion, transaccion))
+                    {
+                        comando.Parameters.Add("@IdCarrito", SqlDbType.Int).Value = idCarrito;
+                        cantidadRenglones = Convert.ToInt32(comando.ExecuteScalar());
+                    }
+
+                    const string sqlEliminarDetalles = @"
+                        DELETE FROM dbo.DetalleCarrito WHERE IdCarrito = @IdCarrito";
+
+                    using (SqlCommand comando = new SqlCommand(sqlEliminarDetalles, conexion, transaccion))
+                    {
+                        comando.Parameters.Add("@IdCarrito", SqlDbType.Int).Value = idCarrito;
+                        comando.ExecuteNonQuery();
+                    }
+
+                    const string sqlEliminarCarrito = @"
+                        DELETE FROM dbo.Carrito
                         WHERE IdCarrito = @IdCarrito
                           AND IdVendedor = @IdVendedor
                           AND Estado IN (N'EnPreparacion', N'Listo')";
 
-                    using (SqlCommand comando = new SqlCommand(sql, conexion, transaccion))
+                    using (SqlCommand comando = new SqlCommand(sqlEliminarCarrito, conexion, transaccion))
                     {
                         comando.Parameters.Add("@IdCarrito", SqlDbType.Int).Value = idCarrito;
                         comando.Parameters.Add("@IdVendedor", SqlDbType.Int).Value = idVendedor;
                         if (comando.ExecuteNonQuery() != 1)
-                            throw new Exception("El carrito no existe o no puede cancelarse.");
+                            throw new Exception("No se pudo descartar el carrito.");
                     }
 
+                    _digitoVerificadorDAL.RecalcularDVEnTransaccion("DetalleCarrito", conexion, transaccion);
                     _digitoVerificadorDAL.RecalcularDVEnTransaccion("Carrito", conexion, transaccion);
+
+                    BitacoraEvento evento = new BitacoraEvento
+                    {
+                        IdUsuario = idVendedor,
+                        Usuario = nombreUsuario,
+                        FechaHora = DateTime.Now,
+                        Modulo = "Buffet",
+                        Accion = "Cancelar carrito",
+                        Criticidad = "Baja",
+                        Resultado = "Exitoso",
+                        Descripcion = $"Carrito interno {idCarrito} descartado sin venta ni cobro. "
+                            + $"Estado previo: {estadoAnterior}. Renglones: {cantidadRenglones}. "
+                            + $"Total previo: {importeAnterior:N2}."
+                    };
+
+                    _bitacoraEventoDAL.Registrar(evento, conexion, transaccion);
                     transaccion.Commit();
                 }
                 catch
@@ -353,8 +423,6 @@ namespace DAL
                     throw;
                 }
             }
-
-            return ObtenerCarrito(idCarrito, idVendedor);
         }
 
         private static void ValidarCarritoEditable(SqlConnection conexion, SqlTransaction transaccion,
