@@ -17,12 +17,14 @@ namespace UI
     {
         private readonly BitacoraEventoBLL _bitacoraEventoBLL;
         private bool _detalleReservaVisible;
+        private bool _configurandoFiltros;
         private const int DesplazamientoDetalleReserva = 92;
 
         public frmAuditarEventos()
         {
             InitializeComponent();
             _bitacoraEventoBLL = new BitacoraEventoBLL();
+            cmbModulo.SelectedIndexChanged += cmbModulo_SelectedIndexChanged;
 
             // Traducir  los labels/botones, antes de que el form se cargue.
             // Las cabeceras de la grilla se traducen mas abajo, despues del BuscarEventos.
@@ -34,9 +36,19 @@ namespace UI
         // Este método maneja el evento de carga del formulario, configurando los combos, el estado inicial y buscando eventos.
         private void frmAuditarEventos_Load(object sender, EventArgs e)
         {
-            ConfigurarCombos();
-            ConfigurarEstadoInicial();
-            BuscarEventos();
+            try
+            {
+                ConfigurarCombos();
+                ConfigurarEstadoInicial();
+                BuscarEventos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+                return;
+            }
 
             // Aplica permisos por boton. btnImprimir requiere BIT_IMPRIMIR_PDF (codigo distinto a BIT_AUDITAR).
             AplicarPermisos();
@@ -84,12 +96,19 @@ namespace UI
             label7.Text = t.Traducir("frmAuditarEventos.LblEvento");
             label8.Text = t.Traducir("frmAuditarEventos.LblNombre");
             label9.Text = t.Traducir("frmAuditarEventos.LblApellido");
-            gbDetalleReserva.Text = t.Traducir("frmAuditarEventos.GbDetalleReserva");
+            gbDetalleReserva.Text = t.Traducir("frmAuditarEventos.GbDetalleEvento");
             lblDescripcionReserva.Text = t.Traducir("frmAuditarEventos.LblDescripcionCompleta");
             btnBuscar.Text = t.Traducir("frmAuditarEventos.BtnBuscar");
             btnLimpiar.Text = t.Traducir("frmAuditarEventos.BtnLimpiar");
             btnImprimir.Text = t.Traducir("frmAuditarEventos.BtnImprimir");
             btnVolver.Text = t.Traducir("frmAuditarEventos.BtnVolver");
+
+            // Los valores almacenados permanecen inalterados; solo cambia el
+            // texto visible en las opciones de los filtros.
+            cmbModulo.Refresh();
+            cmbAccion.Refresh();
+            cmbCriticidad.Refresh();
+            cmbResultado.Refresh();
 
             // Headers del DataGridView
             ActualizarCabecerasGrilla();
@@ -136,7 +155,7 @@ namespace UI
             txtApellido.Clear();
             txtDescripcion.Clear();
 
-            DtpFechaDesde.Value = DateTime.Today.AddDays(-3);
+            DtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             dtpFechaHasta.Value = DateTime.Today;
 
             cmbModulo.SelectedIndex = 0;
@@ -159,7 +178,7 @@ namespace UI
         #region "Configuracion de Estados y Combos"
         private void ConfigurarEstadoInicial()
         {
-            DtpFechaDesde.Value = DateTime.Today.AddDays(-3);
+            DtpFechaDesde.Value = DateTime.Today.AddDays(-30);
             dtpFechaHasta.Value = DateTime.Today;
 
             txtNombre.Clear();
@@ -178,51 +197,92 @@ namespace UI
             dgvEventos.ClearSelection();
         }
 
+        // El Valor siempre es el texto exacto de la BD; la etiqueta puede
+        // mostrarse en ES o EN sin alterar lo que recibe la DAL.
+        private sealed class OpcionFiltro
+        {
+            public string Valor { get; }
+            private readonly string _tipo;
+
+            public OpcionFiltro(string valor, string tipo)
+            {
+                Valor = valor;
+                _tipo = tipo;
+            }
+
+            public override string ToString()
+            {
+                if (Valor.Length == 0)
+                    return Traductor.Instancia.Traducir(
+                        _tipo == "Criticidad"
+                            ? "frmAuditarEventos.FiltroTodas"
+                            : "frmAuditarEventos.FiltroTodos");
+
+                string clave = "frmAuditarEventos.Filtro." + _tipo + "." + Valor;
+                string traducido = Traductor.Instancia.Traducir(clave);
+                // Procesos futuros sin traduccion siguen apareciendo con su valor real.
+                return traducido == clave ? Valor : traducido;
+            }
+        }
+
+        private static string ValorSeleccionado(ComboBox combo)
+        {
+            return (combo.SelectedItem as OpcionFiltro)?.Valor ?? string.Empty;
+        }
+
+        private static void LlenarCombo(ComboBox combo, string tipo, List<string> valores)
+        {
+            combo.Items.Clear();
+            combo.Items.Add(new OpcionFiltro(string.Empty, tipo));
+
+            foreach (string valor in valores.Where(v => !string.IsNullOrWhiteSpace(v))
+                         .Distinct(StringComparer.OrdinalIgnoreCase))
+                combo.Items.Add(new OpcionFiltro(valor, tipo));
+
+            combo.SelectedIndex = 0;
+        }
+
         private void ConfigurarCombos()
         {
-            // Nota: Los items de los combos NO se traducen porque son los valores exactos por los que se filtra en la bitacora
-            // (deben // coincidir con los strings guardados en BD).
-            cmbModulo.Items.Clear();
-            cmbModulo.Items.Add("Todos");
-            cmbModulo.Items.Add("Usuario");
-            cmbModulo.Items.Add("Administrador");
-            cmbModulo.Items.Add("Idioma");
-            cmbModulo.Items.Add("Respaldo");
-            cmbModulo.Items.Add("Reserva");
-            cmbModulo.SelectedIndex = 0;
+            _configurandoFiltros = true;
+            try
+            {
+                LlenarCombo(cmbModulo, "Modulo",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro("Modulo"));
+                LlenarCombo(cmbCriticidad, "Criticidad",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro("Criticidad"));
+                LlenarCombo(cmbResultado, "Resultado",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro("Resultado"));
+            }
+            finally
+            {
+                _configurandoFiltros = false;
+            }
 
-            cmbAccion.Items.Clear();
-            cmbAccion.Items.Add("Todos");
-            cmbAccion.Items.Add("Inicio de sesión");
-            cmbAccion.Items.Add("Cierre de sesión");
-            cmbAccion.Items.Add("Re-Login");
-            cmbAccion.Items.Add("Bloqueo de cuenta");
-            cmbAccion.Items.Add("Crear Usuario");
-            cmbAccion.Items.Add("Modificar Usuario");
-            cmbAccion.Items.Add("Activar Usuario");
-            cmbAccion.Items.Add("Desactivar Usuario");
-            cmbAccion.Items.Add("Desbloquear Usuario");
-            cmbAccion.Items.Add("Cambio de clave");
-            cmbAccion.Items.Add("Cambio de idioma");
-            cmbAccion.Items.Add("Persistir idioma");
-            cmbAccion.Items.Add("Imprimir PDF");
-            cmbAccion.Items.Add("Crear Backup");
-            cmbAccion.Items.Add("Restaurar Backup");
-            cmbAccion.Items.Add("Registrar reserva");
-            cmbAccion.SelectedIndex = 0;
+            CargarAcciones();
+        }
 
-            cmbCriticidad.Items.Clear();
-            cmbCriticidad.Items.Add("Todas");
-            cmbCriticidad.Items.Add("Baja");
-            cmbCriticidad.Items.Add("Media");
-            cmbCriticidad.Items.Add("Alta");
-            cmbCriticidad.SelectedIndex = 0;
+        private void cmbModulo_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (!_configurandoFiltros)
+                CargarAcciones();
+        }
 
-            cmbResultado.Items.Clear();
-            cmbResultado.Items.Add("Todos");
-            cmbResultado.Items.Add("Exitoso");
-            cmbResultado.Items.Add("Fallido");
-            cmbResultado.SelectedIndex = 0;
+        // Cuando se elige Buffet solo aparecen las acciones de Buffet,
+        // y asi sucesivamente. Con Todos se ven todas las acciones registradas.
+        private void CargarAcciones()
+        {
+            string modulo = ValorSeleccionado(cmbModulo);
+            _configurandoFiltros = true;
+            try
+            {
+                LlenarCombo(cmbAccion, "Accion",
+                    _bitacoraEventoBLL.ObtenerValoresFiltro("Accion", modulo));
+            }
+            finally
+            {
+                _configurandoFiltros = false;
+            }
         }
         #endregion
 
@@ -238,10 +298,10 @@ namespace UI
                 DateTime fechaDesde = DtpFechaDesde.Value.Date;
                 DateTime fechaHasta = dtpFechaHasta.Value.Date;
                 string usuario = txtUsuario.Text.Trim();
-                string modulo = cmbModulo.SelectedItem.ToString();
-                string accion = cmbAccion.SelectedItem.ToString();
-                string criticidad = cmbCriticidad.SelectedItem.ToString();
-                string resultado = cmbResultado.SelectedItem.ToString();
+                string modulo = ValorSeleccionado(cmbModulo);
+                string accion = ValorSeleccionado(cmbAccion);
+                string criticidad = ValorSeleccionado(cmbCriticidad);
+                string resultado = ValorSeleccionado(cmbResultado);
                 string descripcion = txtDescripcion.Text.Trim();
 
                 List<BitacoraEvento> eventos = _bitacoraEventoBLL.ObtenerEventos(fechaDesde, fechaHasta, usuario, modulo, accion, criticidad, resultado, descripcion);
@@ -301,14 +361,10 @@ namespace UI
             txtNombre.Text = evento.Nombre;
             txtApellido.Text = evento.Apellido;
 
-            bool esReserva = evento.Modulo.Equals("Reserva",StringComparison.OrdinalIgnoreCase);
-
-            AjustarDetalleReserva(esReserva);
-
-            if (esReserva)
-            {
-                txtDescripcionReserva.Text = evento.Descripcion;
-            }
+            // Antes solo se podia consultar la descripcion completa de reservas.
+            // Ahora aplica a Buffet, productos, seguridad y cualquier otro modulo.
+            AjustarDetalleReserva(true);
+            txtDescripcionReserva.Text = evento.Descripcion;
         }
 
 
