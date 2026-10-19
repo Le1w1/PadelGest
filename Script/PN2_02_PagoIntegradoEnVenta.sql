@@ -36,28 +36,36 @@ BEGIN TRY
        OR COL_LENGTH(N'dbo.Venta', N'CodigoAutorizacion') IS NOT NULL
         THROW 52003, 'Venta ya tiene alguna columna de pago. Revisar el esquema; no se realizaron cambios.', 1;
 
-    ALTER TABLE dbo.Venta ADD
-        Banco NVARCHAR(80) NOT NULL,
-        Ultimos4Tarjeta CHAR(4) NOT NULL,
-        ImportePago DECIMAL(12,2) NOT NULL,
-        FechaHoraPago DATETIME2(7) NOT NULL,
-        EstadoPago NVARCHAR(20) NOT NULL,
-        CodigoAutorizacion NVARCHAR(50) NOT NULL;
+    -- Compilar cada cambio de esquema despues de ejecutar el anterior,
+    -- sin salir de la transaccion ni del bloque TRY/CATCH.
+    EXEC sys.sp_executesql N'
+        ALTER TABLE dbo.Venta ADD
+            Banco NVARCHAR(80) NOT NULL,
+            Ultimos4Tarjeta CHAR(4) NOT NULL,
+            ImportePago DECIMAL(12,2) NOT NULL,
+            FechaHoraPago DATETIME2(7) NOT NULL,
+            EstadoPago NVARCHAR(20) NOT NULL,
+            CodigoAutorizacion NVARCHAR(50) NOT NULL;
+    ';
 
-    ALTER TABLE dbo.Venta ADD
-        CONSTRAINT CK_Venta_Banco
-            CHECK (LEN(LTRIM(RTRIM(Banco))) > 0),
-        CONSTRAINT CK_Venta_Ultimos4Tarjeta
-            CHECK (LEN(Ultimos4Tarjeta) = 4 AND Ultimos4Tarjeta NOT LIKE '%[^0-9]%'),
-        CONSTRAINT CK_Venta_ImportePago
-            CHECK (ImportePago > 0),
-        CONSTRAINT CK_Venta_EstadoPago
-            CHECK (EstadoPago IN (N'Aprobado', N'Revertido')),
-        CONSTRAINT CK_Venta_CodigoAutorizacion
-            CHECK (LEN(LTRIM(RTRIM(CodigoAutorizacion))) > 0);
+    EXEC sys.sp_executesql N'
+        ALTER TABLE dbo.Venta ADD
+            CONSTRAINT CK_Venta_Banco
+                CHECK (LEN(LTRIM(RTRIM(Banco))) > 0),
+            CONSTRAINT CK_Venta_Ultimos4Tarjeta
+                CHECK (LEN(Ultimos4Tarjeta) = 4 AND Ultimos4Tarjeta NOT LIKE ''%[^0-9]%''),
+            CONSTRAINT CK_Venta_ImportePago
+                CHECK (ImportePago > 0),
+            CONSTRAINT CK_Venta_EstadoPago
+                CHECK (EstadoPago IN (N''Aprobado'', N''Revertido'')),
+            CONSTRAINT CK_Venta_CodigoAutorizacion
+                CHECK (LEN(LTRIM(RTRIM(CodigoAutorizacion))) > 0);
+    ';
 
-    ALTER TABLE dbo.Venta
-        ADD CONSTRAINT UQ_Venta_CodigoAutorizacion UNIQUE (CodigoAutorizacion);
+    EXEC sys.sp_executesql N'
+        ALTER TABLE dbo.Venta
+            ADD CONSTRAINT UQ_Venta_CodigoAutorizacion UNIQUE (CodigoAutorizacion);
+    ';
 
     DROP TABLE dbo.PagoVenta;
 
