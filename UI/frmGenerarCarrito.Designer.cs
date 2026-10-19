@@ -16,10 +16,8 @@ namespace UI
         private void InitializeComponent()
         {
             lblTitulo = new Label();
-            lblCodigo = new Label();
             gbCatalogo = new GroupBox();
             dgvProductos = new DataGridView();
-            colProductoCodigo = new DataGridViewTextBoxColumn();
             colProductoNombre = new DataGridViewTextBoxColumn();
             colProductoCategoria = new DataGridViewTextBoxColumn();
             colProductoPrecio = new DataGridViewTextBoxColumn();
@@ -69,14 +67,6 @@ namespace UI
             lblTitulo.ForeColor = amarillo;
             lblTitulo.Text = "Generar Carrito";
 
-            lblCodigo.Location = new Point(960, 24);
-            lblCodigo.Name = "lblCodigo";
-            lblCodigo.Size = new Size(165, 32);
-            lblCodigo.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-            lblCodigo.ForeColor = blanco;
-            lblCodigo.TextAlign = ContentAlignment.MiddleRight;
-            lblCodigo.Text = "#";
-
             gbCatalogo.Location = new Point(25, 75);
             gbCatalogo.Name = "gbCatalogo";
             gbCatalogo.Size = new Size(540, 400);
@@ -111,14 +101,10 @@ namespace UI
             dgvProductos.RowsDefaultCellStyle.SelectionForeColor = negro;
             dgvProductos.Columns.AddRange(new DataGridViewColumn[]
             {
-                colProductoCodigo, colProductoNombre, colProductoCategoria,
+                colProductoNombre, colProductoCategoria,
                 colProductoPrecio, colProductoStock
             });
 
-            colProductoCodigo.DataPropertyName = "CodigoProducto";
-            colProductoCodigo.Name = "colProductoCodigo";
-            colProductoCodigo.HeaderText = "Código";
-            colProductoCodigo.Width = 64;
             colProductoNombre.DataPropertyName = "Nombre";
             colProductoNombre.Name = "colProductoNombre";
             colProductoNombre.HeaderText = "Producto";
@@ -354,7 +340,6 @@ namespace UI
             Name = "frmGenerarCarrito";
             Text = "PadelGest - Generar Carrito";
             Controls.Add(lblTitulo);
-            Controls.Add(lblCodigo);
             Controls.Add(gbCatalogo);
             Controls.Add(gbSeleccion);
             Controls.Add(gbCarrito);
@@ -383,10 +368,8 @@ namespace UI
         #endregion
 
         private Label lblTitulo;
-        private Label lblCodigo;
         private GroupBox gbCatalogo;
         private DataGridView dgvProductos;
-        private DataGridViewTextBoxColumn colProductoCodigo;
         private DataGridViewTextBoxColumn colProductoNombre;
         private DataGridViewTextBoxColumn colProductoCategoria;
         private DataGridViewTextBoxColumn colProductoPrecio;
