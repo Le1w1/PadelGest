@@ -37,6 +37,15 @@ namespace BLL.Servicios
         }
 
 
+        // Recupera los modulos, acciones, criticidades o resultados existentes.
+        // El combo Evento puede restringirse al modulo seleccionado.
+        public List<string> ObtenerValoresFiltro(string campo, string modulo = "")
+        {
+            SM.Instancia.RequierePermiso("BIT_AUDITAR");
+            return _bitacoraEventoDAL.ObtenerValoresFiltro(campo, modulo);
+        }
+
+
         // Obtener eventos de la bitácora según los filtros proporcionados
         public List<BitacoraEvento> ObtenerEventos(DateTime fechaDesde,DateTime fechaHasta,string usuario,string modulo,string accion,string criticidad,string resultado,string descripcion)
         {
