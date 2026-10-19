@@ -62,7 +62,10 @@ namespace UI
 
             try
             {
-                _carrito = _carritoBLL.CancelarCarrito(_carrito.IdCarrito);
+                // El carrito sin cobro se descarta de las tablas operativas.
+                // Su cancelacion queda registrada en BitacoraEvento.
+                _carritoBLL.CancelarCarrito(_carrito.IdCarrito);
+                _carrito = null;
             }
             catch (Exception ex)
             {
@@ -93,7 +96,6 @@ namespace UI
             // Los encabezados se buscan dentro de la grilla. Si Visual Studio
             // regenero el Designer y alguna columna ya no existe, evitamos
             // NullReferenceException y conservamos las traducciones disponibles.
-            TraducirColumna(dgvProductos, "colProductoCodigo", "frmGenerarCarrito.Codigo");
             TraducirColumna(dgvProductos, "colProductoNombre", "frmGenerarCarrito.Producto");
             TraducirColumna(dgvProductos, "colProductoCategoria", "frmGenerarCarrito.Categoria");
             TraducirColumna(dgvProductos, "colProductoPrecio", "frmGenerarCarrito.Precio");
@@ -147,7 +149,6 @@ namespace UI
             bool editable = _carrito.Estado == "EnPreparacion";
             bool tieneProductos = _carrito.Detalles.Count > 0;
 
-            lblCodigo.Text = "#" + _carrito.IdCarrito;
             lblTotal.Text = _carrito.ImporteTotal.ToString("C2");
             lblEstado.Text = _carrito.Estado;
             lblCliente.Text = string.IsNullOrWhiteSpace(_carrito.DNI)
