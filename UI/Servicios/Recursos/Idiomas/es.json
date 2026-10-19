@@ -457,6 +457,7 @@
   "Errores.Buffet.SesionInvalida": "Debe iniciar sesión con un vendedor válido.",
   "Errores.Buffet.CarritoInvalido": "Debe seleccionar un carrito válido.",
   "Errores.Buffet.DNIInvalido": "El DNI debe contener entre 7 y 8 dígitos.",
+
   "frmGenerarCarrito.Menu": "Generar Carrito",
   "frmGenerarCarrito.Title": "PadelGest - Generar Carrito",
   "frmGenerarCarrito.Titulo": "GENERAR CARRITO - BUFFET",
