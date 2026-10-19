@@ -453,5 +453,8 @@
   "Errores.Buffet.CantidadInvalida": "La cantidad debe ser mayor que cero.",
   "Errores.Buffet.ProductoNoDisponible": "El producto no existe o está desactivado.",
   "Errores.Buffet.PrecioInvalido": "El producto no tiene un precio válido.",
-  "Errores.Buffet.StockInsuficiente": "No hay stock suficiente para la cantidad solicitada."
+  "Errores.Buffet.StockInsuficiente": "No hay stock suficiente para la cantidad solicitada.",
+  "Errores.Buffet.SesionInvalida": "Debe iniciar sesión con un vendedor válido.",
+  "Errores.Buffet.CarritoInvalido": "Debe seleccionar un carrito válido.",
+  "Errores.Buffet.DNIInvalido": "El DNI debe contener entre 7 y 8 dígitos."
 }
