@@ -24,6 +24,10 @@ namespace UI
             lblTitulo = new Label();
             gbCatalogo = new GroupBox();
             dgvProductos = new DataGridView();
+            colProductoNombre = new DataGridViewTextBoxColumn();
+            colProductoCategoria = new DataGridViewTextBoxColumn();
+            colProductoPrecio = new DataGridViewTextBoxColumn();
+            colProductoStock = new DataGridViewTextBoxColumn();
             gbSeleccion = new GroupBox();
             lblCantidad = new Label();
             nudCantidad = new NumericUpDown();
@@ -33,6 +37,10 @@ namespace UI
             btnActualizarProductos = new Button();
             gbCarrito = new GroupBox();
             dgvDetalles = new DataGridView();
+            colDetalleProducto = new DataGridViewTextBoxColumn();
+            colDetalleCantidad = new DataGridViewTextBoxColumn();
+            colDetallePrecio = new DataGridViewTextBoxColumn();
+            colDetalleSubtotal = new DataGridViewTextBoxColumn();
             lblTituloEstado = new Label();
             lblEstado = new Label();
             lblTituloCliente = new Label();
@@ -79,6 +87,10 @@ namespace UI
             dgvProductos.AllowUserToAddRows = false;
             dgvProductos.AllowUserToDeleteRows = false;
             dgvProductos.AllowUserToResizeRows = false;
+            dgvProductos.AutoGenerateColumns = false;
+            dgvProductos.Columns.AddRange(new DataGridViewColumn[] {
+                colProductoNombre, colProductoCategoria, colProductoPrecio, colProductoStock
+            });
             dgvProductos.BackgroundColor = Color.White;
             dgvProductos.BorderStyle = BorderStyle.None;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -92,7 +104,7 @@ namespace UI
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = Color.White;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.ForeColor = Color.Black;
             dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(214, 246, 36);
             dataGridViewCellStyle2.SelectionForeColor = Color.Black;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
@@ -109,6 +121,25 @@ namespace UI
             dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvProductos.Size = new Size(510, 355);
             dgvProductos.TabIndex = 0;
+            // No mostrar identificadores de SQL en el catalogo.
+            colProductoNombre.Name = "colProductoNombre";
+            colProductoNombre.DataPropertyName = "Nombre";
+            colProductoNombre.HeaderText = "Producto";
+            colProductoNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colProductoNombre.MinimumWidth = 135;
+            colProductoCategoria.Name = "colProductoCategoria";
+            colProductoCategoria.DataPropertyName = "Categoria";
+            colProductoCategoria.HeaderText = "Categoria";
+            colProductoCategoria.Width = 104;
+            colProductoPrecio.Name = "colProductoPrecio";
+            colProductoPrecio.DataPropertyName = "PrecioUnitario";
+            colProductoPrecio.HeaderText = "Precio";
+            colProductoPrecio.Width = 96;
+            colProductoPrecio.DefaultCellStyle.Format = "C2";
+            colProductoStock.Name = "colProductoStock";
+            colProductoStock.DataPropertyName = "StockDisponible";
+            colProductoStock.HeaderText = "Stock";
+            colProductoStock.Width = 65;
             // 
             // gbSeleccion
             // 
@@ -223,6 +254,10 @@ namespace UI
             dgvDetalles.AllowUserToAddRows = false;
             dgvDetalles.AllowUserToDeleteRows = false;
             dgvDetalles.AllowUserToResizeRows = false;
+            dgvDetalles.AutoGenerateColumns = false;
+            dgvDetalles.Columns.AddRange(new DataGridViewColumn[] {
+                colDetalleProducto, colDetalleCantidad, colDetallePrecio, colDetalleSubtotal
+            });
             dgvDetalles.BackgroundColor = Color.White;
             dgvDetalles.BorderStyle = BorderStyle.None;
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -236,7 +271,7 @@ namespace UI
             dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = Color.White;
             dataGridViewCellStyle5.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle5.ForeColor = Color.White;
+            dataGridViewCellStyle5.ForeColor = Color.Black;
             dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(214, 246, 36);
             dataGridViewCellStyle5.SelectionForeColor = Color.Black;
             dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
@@ -253,6 +288,26 @@ namespace UI
             dgvDetalles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDetalles.Size = new Size(510, 355);
             dgvDetalles.TabIndex = 0;
+            // No mostrar IdCarrito, IdDetalleCarrito ni CodigoProducto.
+            colDetalleProducto.Name = "colDetalleProducto";
+            colDetalleProducto.DataPropertyName = "NombreProducto";
+            colDetalleProducto.HeaderText = "Producto";
+            colDetalleProducto.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colDetalleProducto.MinimumWidth = 120;
+            colDetalleCantidad.Name = "colDetalleCantidad";
+            colDetalleCantidad.DataPropertyName = "Cantidad";
+            colDetalleCantidad.HeaderText = "Cantidad";
+            colDetalleCantidad.Width = 80;
+            colDetallePrecio.Name = "colDetallePrecio";
+            colDetallePrecio.DataPropertyName = "PrecioUnitario";
+            colDetallePrecio.HeaderText = "Precio";
+            colDetallePrecio.Width = 98;
+            colDetallePrecio.DefaultCellStyle.Format = "C2";
+            colDetalleSubtotal.Name = "colDetalleSubtotal";
+            colDetalleSubtotal.DataPropertyName = "Subtotal";
+            colDetalleSubtotal.HeaderText = "Subtotal";
+            colDetalleSubtotal.Width = 110;
+            colDetalleSubtotal.DefaultCellStyle.Format = "C2";
             dgvDetalles.SelectionChanged += dgvDetalles_SelectionChanged;
             // 
             // lblTituloEstado
