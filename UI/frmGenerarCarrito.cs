@@ -18,6 +18,9 @@ namespace UI
         public frmGenerarCarrito()
         {
             InitializeComponent();
+            // Si Visual Studio regenera el Designer sin columnas, las restaura
+            // antes de asignar DataSource o traducir los encabezados.
+            AsegurarColumnasGrillas();
             _carritoBLL = new CarritoBLL();
             _productoBLL = new ProductoBLL();
             _ventaBLL = new VentaBLL();
@@ -135,8 +138,85 @@ namespace UI
                 columna.HeaderText = T(clave);
         }
 
+        // Solo controla el mapeo de datos. El estilo visual sigue configurado
+        // en el Designer. Esta proteccion evita que un Designer regenerado
+        // deje ambas grillas vacias al tener AutoGenerateColumns = false.
+        private void AsegurarColumnasGrillas()
+        {
+            dgvProductos.AutoGenerateColumns = false;
+            dgvDetalles.AutoGenerateColumns = false;
+
+            AsegurarColumnas(
+                dgvProductos,
+                new[] { "colProductoNombre", "colProductoCategoria",
+                        "colProductoPrecio", "colProductoStock" },
+                new[] { "Nombre", "Categoria", "PrecioUnitario", "StockDisponible" },
+                new[] { "Producto", "Categoría", "Precio", "Stock" });
+
+            AsegurarColumnas(
+                dgvDetalles,
+                new[] { "colDetalleProducto", "colDetalleCantidad",
+                        "colDetallePrecio", "colDetalleSubtotal" },
+                new[] { "NombreProducto", "Cantidad", "PrecioUnitario", "Subtotal" },
+                new[] { "Producto", "Cantidad", "Precio", "Subtotal" });
+        }
+
+        private static void AsegurarColumnas(DataGridView grilla,
+            string[] nombres, string[] propiedades, string[] titulos)
+        {
+            bool columnasCorrectas = grilla.Columns.Count == nombres.Length;
+
+            if (columnasCorrectas)
+            {
+                for (int i = 0; i < nombres.Length; i++)
+                {
+                    DataGridViewColumn col = grilla.Columns[i];
+                    if (col.Name != nombres[i] || col.DataPropertyName != propiedades[i])
+                    {
+                        columnasCorrectas = false;
+                        break;
+                    }
+                }
+            }
+
+            if (columnasCorrectas)
+                return;
+
+            // Al reconstruir las columnas no se agrega ningun ID tecnico.
+            grilla.Columns.Clear();
+
+            for (int i = 0; i < nombres.Length; i++)
+            {
+                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn
+                {
+                    Name = nombres[i],
+                    DataPropertyName = propiedades[i],
+                    HeaderText = titulos[i],
+                    ReadOnly = true,
+                    SortMode = DataGridViewColumnSortMode.Automatic
+                };
+
+                if (i == 0)
+                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                else if (propiedades[i] == "Categoria")
+                    col.Width = 103;
+                else if (propiedades[i] == "StockDisponible")
+                    col.Width = 63;
+                else if (propiedades[i] == "Cantidad")
+                    col.Width = 79;
+                else
+                    col.Width = 95;
+
+                if (propiedades[i] == "PrecioUnitario" || propiedades[i] == "Subtotal")
+                    col.DefaultCellStyle.Format = "C2";
+
+                grilla.Columns.Add(col);
+            }
+        }
+
         private void CargarProductos()
         {
+            AsegurarColumnasGrillas();
             List<ProductoBE> productos = _productoBLL.ObtenerProductos();
             // El Designer define las cuatro columnas visibles. El enlace de datos
             // nunca debe generar otras propiedades, como CodigoProducto o Activo.
@@ -153,6 +233,7 @@ namespace UI
         private void ActualizarCarrito(CarritoBE carrito)
         {
             _carrito = carrito;
+            AsegurarColumnasGrillas();
             // Evita exponer los IDs tecnicos del detalle aunque se regenere
             // el Designer de Windows Forms.
             dgvDetalles.AutoGenerateColumns = false;
