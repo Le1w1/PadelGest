@@ -422,8 +422,8 @@ namespace UI
             {
                 _ventaRegistrada = _ventaBLL.RegistrarVenta(_carrito.IdCarrito, _pagoAprobado);
 
-                _carrito = _carritoBLL.ConsultarCarrito(_carrito.IdCarrito);
-                ActualizarCarrito(_carrito);
+                _carrito.Estado = "Vendido";
+                ActualizarResumen();
 
                 // Traduccion del mensaje y del titulo segun el idioma seleccionado.
                 // Los saltos de linea se configuran en es.json y en.json.
