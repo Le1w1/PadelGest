@@ -460,13 +460,14 @@
   "frmGenerarCarrito.ReintentarRegistro": "Reintentar registro",
   "frmGenerarCarrito.PagoPendienteRegistro": "El pago ya fue aprobado. Debe registrar la venta antes de cerrar. Use Reintentar registro.",
   "frmGenerarCarrito.CobroRechazado": "El banco rechazo el pago. No se registro la venta ni se desconto stock.",
-  "frmGenerarCarrito.VentaRegistrada": "Venta {0} registrada correctamente.\\nFactura N.º {1}\\nImporte: {2}",
-  "frmGenerarCarrito.ErrorRegistro": "El pago fue aprobado, pero no se pudo registrar la venta: {0}\\nNo se realizara otro cobro. Use Reintentar registro.",
+  "frmGenerarCarrito.VentaRegistrada": "La venta se registró correctamente.\n\nNúmero de venta: {0}\nFactura N.º: {1}\nImporte total: {2}\n\nEl stock fue actualizado correctamente.",
+  "frmGenerarCarrito.ErrorRegistro": "El pago fue aprobado, pero no se pudo registrar la venta: {0}\n\nNo se realizará otro cobro. Utilizá Reintentar registro.",
   "Errores.Buffet.CarritoNoListo": "Debe seleccionar productos y asociar un cliente antes de cobrar.",
   "frmCobrarVenta.Title": "PadelGest - Cobrar Venta de Buffet",
   "frmCobrarVenta.Titulo": "COBRAR VENTA - BUFFET",
   "frmCobrarVenta.GbResumen": "Resumen de la venta",
   "frmCobrarVenta.GbTarjeta": "Pago con tarjeta (banco simulado)",
   "frmCobrarVenta.Productos": "Unidades:",
-  "frmCobrarVenta.BtnConfirmar": "Confirmar cobro"
+  "frmCobrarVenta.BtnConfirmar": "Confirmar cobro",
+  "frmGenerarCarrito.TituloVentaFinalizada": "Venta finalizada"
 }
