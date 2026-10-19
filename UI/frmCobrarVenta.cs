@@ -84,6 +84,18 @@ namespace UI
             }
         }
 
+        // Permite separar visualmente el numero de tarjeta con espacios.
+        // El CVV sigue aceptando exclusivamente digitos.
+        private void NumerosTarjeta_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) &&
+                (e.KeyChar < '0' || e.KeyChar > '9') &&
+                e.KeyChar != ' ')
+            {
+                e.Handled = true;
+            }
+        }
+
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             btnConfirmar.Enabled = false;
