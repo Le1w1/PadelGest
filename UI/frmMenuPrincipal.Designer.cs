@@ -37,6 +37,7 @@ namespace UI
             RecepcionistaToolStripMenuItem = new ToolStripMenuItem();
             generarReservaToolStripMenuItem = new ToolStripMenuItem();
             vendedorBuffetToolStripMenuItem = new ToolStripMenuItem();
+            generarCarritoToolStripMenuItem = new ToolStripMenuItem();
             encargadoDeCanchasToolStripMenuItem = new ToolStripMenuItem();
             dueñoToolStripMenuItem = new ToolStripMenuItem();
             mnuAdministrador = new ToolStripMenuItem();
@@ -137,11 +138,19 @@ namespace UI
             // vendedorBuffetToolStripMenuItem
             // 
             vendedorBuffetToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            vendedorBuffetToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarCarritoToolStripMenuItem });
             vendedorBuffetToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             vendedorBuffetToolStripMenuItem.ForeColor = Color.Black;
             vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
             vendedorBuffetToolStripMenuItem.Size = new Size(113, 20);
             vendedorBuffetToolStripMenuItem.Text = "Vendedor Buffet";
+            // Generar carrito - PN2
+            generarCarritoToolStripMenuItem.Name = "generarCarritoToolStripMenuItem";
+            generarCarritoToolStripMenuItem.Text = "Generar Carrito";
+            generarCarritoToolStripMenuItem.Size = new Size(180, 22);
+            generarCarritoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            generarCarritoToolStripMenuItem.ForeColor = Color.White;
+            generarCarritoToolStripMenuItem.Click += generarCarritoToolStripMenuItem_Click;
             // 
             // encargadoDeCanchasToolStripMenuItem
             // 
@@ -413,5 +422,6 @@ namespace UI
         private ToolStripMenuItem dueñoToolStripMenuItem;
         private ToolStripMenuItem gestionDeRespaldoToolStripMenuItem;
         private ToolStripMenuItem vendedorBuffetToolStripMenuItem;
+        private ToolStripMenuItem generarCarritoToolStripMenuItem;
     }
 }
