@@ -68,7 +68,7 @@ namespace BLL
             }
 
             banco = (banco ?? string.Empty).Trim();
-            numeroTarjeta = NormalizarNumeroTarjeta(numeroTarjeta);
+            numeroTarjeta = numeroTarjeta ?? string.Empty;
             codigoSeguridad = (codigoSeguridad ?? string.Empty).Trim();
 
             
@@ -123,7 +123,7 @@ namespace BLL
 
         private void ValidarNumeroTarjeta(string numeroTarjeta)
         {
-            if (!Regex.IsMatch(numeroTarjeta, @"^\d{13,19}$"))
+            if (!Regex.IsMatch(numeroTarjeta, @"^[0-9]{13,19}$"))
                 throw new Exception(T("Errores.Cobro.TarjetaInvalida"));
         }
 
@@ -141,10 +141,6 @@ namespace BLL
                 throw new Exception(T("Errores.Cobro.CodigoSeguridadInvalido"));
         }
 
-        private string NormalizarNumeroTarjeta(string numeroTarjeta)
-        {
-            return Regex.Replace(numeroTarjeta ?? string.Empty, @"[\s-]", string.Empty);
-        }
         #endregion
 
     }
