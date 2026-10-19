@@ -449,6 +449,10 @@
 
   "Errores.Cobro.RespuestaBancoObligatoria": "You must select the simulated Bank response.",
   "Errores.Equipamiento.StockInsuficienteRegistro": "There is not enough {0} availability for that time slot. The reservation was not saved.",
-  "Errores.Reserva.PagoInvalido": "The approved payment is invalid or does not match the invoice amount."
-
+  "Errores.Reserva.PagoInvalido": "The approved payment is invalid or does not match the invoice amount.",
+  "Errores.Buffet.CodigoProductoInvalido": "Select a valid product.",
+  "Errores.Buffet.CantidadInvalida": "The quantity must be greater than zero.",
+  "Errores.Buffet.ProductoNoDisponible": "The product does not exist or is inactive.",
+  "Errores.Buffet.PrecioInvalido": "The product does not have a valid price.",
+  "Errores.Buffet.StockInsuficiente": "Insufficient stock for the requested quantity."
 }
