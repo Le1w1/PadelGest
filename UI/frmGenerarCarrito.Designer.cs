@@ -333,6 +333,7 @@ namespace UI
             // 
             btnCobrar.BackColor = Color.Silver;
             btnCobrar.Enabled = false;
+            btnCobrar.Click += btnCobrar_Click;
             btnCobrar.FlatStyle = FlatStyle.Flat;
             btnCobrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCobrar.ForeColor = Color.Black;
