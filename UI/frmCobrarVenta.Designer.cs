@@ -119,10 +119,10 @@ namespace UI
             txtNumeroTarjeta.Name = "txtNumeroTarjeta";
             txtNumeroTarjeta.Location = new Point(220, 80);
             txtNumeroTarjeta.Size = new Size(418, 28);
-            txtNumeroTarjeta.MaxLength = 19;
+            txtNumeroTarjeta.MaxLength = 23;
             txtNumeroTarjeta.BackColor = Color.White;
             txtNumeroTarjeta.ForeColor = Color.Black;
-            txtNumeroTarjeta.KeyPress += SoloNumeros_KeyPress;
+            txtNumeroTarjeta.KeyPress += NumerosTarjeta_KeyPress;
 
             lblVencimiento.Name = "lblVencimiento";
             lblVencimiento.Location = new Point(22, 127);
