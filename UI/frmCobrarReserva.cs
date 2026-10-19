@@ -108,11 +108,12 @@ namespace UI
         }
 
 
-        // Valida que solo se puedan ingresar números y espacios en los campos de texto correspondientes
+        // Solo permite los digitos 0-9 y teclas de control como retroceso.
+        // Los datos pegados tambien se validan antes de simular el cobro.
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permite solo dígitos, espacios y teclas de control (como retroceso)
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ' ')
+            if (!char.IsControl(e.KeyChar) &&
+                (e.KeyChar < '0' || e.KeyChar > '9'))
             {
                 e.Handled = true;
             }
@@ -136,10 +137,10 @@ namespace UI
                 return false;
             }
 
-            string tarjeta = Regex.Replace(txtNumeroTarjeta.Text ?? string.Empty, @"[\s-]", "");
+            string tarjeta = txtNumeroTarjeta.Text ?? string.Empty;
 
             // Valida que el número de tarjeta tenga entre 13 y 19 dígitos y que solo contenga números
-            if (!Regex.IsMatch(tarjeta, @"^\d{13,19}$"))
+            if (!Regex.IsMatch(tarjeta, @"^[0-9]{13,19}$"))
             {
                 MostrarError(txtNumeroTarjeta, "Errores.Cobro.TarjetaInvalida");
                 return false;
