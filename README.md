@@ -1,168 +1,223 @@
-[LEEME.md](https://github.com/user-attachments/files/29397174/LEEME.md)
 # PadelGest
 
-Sistema integral de gestión para un club de padel.
+Sistema de gestión desarrollado para **AirPadel**, un club de pádel ubicado en General San Martín, Provincia de Buenos Aires. El proyecto busca centralizar y ordenar la operatoria del club, reemplazando registros manuales por una solución de escritorio con control de accesos, auditoría e integridad de datos.
 
----
-
-## Información del proyecto
+## Información académica
 
 | Dato | Valor |
 |---|---|
-| **Nombre del sistema** | PadelGest |
+| **Sistema** | PadelGest |
+| **Organización** | AirPadel |
 | **Materia** | Trabajo de Diploma |
+| **Carrera** | Ingeniería en Sistemas Informáticos |
 | **Comisión** | 3-B |
 | **Turno** | Mañana |
 | **Sede** | Centro |
-| **Año de cursada** | 2026 |
+| **Año** | 2026 |
 | **Universidad** | UAI – Universidad Abierta Interamericana |
+| **Alumno** | Rodríguez Leonel Jesús |
+| **Docente** | Leonel Jimenez Gamboa |
 
-### Integrantes
+## Objetivo del sistema
 
-- Rodríguez Leonel Jesús
-- 
-### Docentes
+PadelGest está orientado a la administración de las actividades principales de AirPadel. El alcance funcional contempla la gestión de reservas de canchas y clientes, la venta de productos del buffet, la consulta y administración de canchas, y las funciones administrativas y técnicas necesarias para operar el sistema de forma segura y trazable.
 
-- Leonel Jimenez Gamboa
-
----
+Actualmente el repositorio contiene la infraestructura técnica del sistema y la base de control de accesos sobre la cual se implementarán progresivamente los procesos de negocio.
 
 ## Tecnologías utilizadas
 
-- **Lenguaje y framework**: C# con .NET 9.0
-- **Interfaz de usuario**: Windows Forms
-- **Base de datos**: Microsoft SQL Server (cliente `Microsoft.Data.SqlClient`)
-- **Encriptación de contraseñas**: SHA-256 (irreversible)
-- **Internacionalización**: archivos JSON cargados en runtime (`es.json`, `en.json`)
-- **Exportación**: `iTextSharp` para generación de reportes PDF (auditoría de bitácora)
-- **IDE**: Microsoft Visual Studio 2022
-
----
+- **Lenguaje:** C#
+- **Framework:** .NET 9.0
+- **Interfaz gráfica:** Windows Forms
+- **Base de datos:** Microsoft SQL Server
+- **Acceso a datos:** `Microsoft.Data.SqlClient`
+- **IDE:** Microsoft Visual Studio 2022
+- **Internacionalización:** archivos JSON (`es.json` y `en.json`)
+- **Generación de PDF:** iTextSharp
+- **Hash de contraseñas:** SHA-256
 
 ## Arquitectura
 
-El sistema sigue una **arquitectura en cuatro capas** sin uso de frameworks de persistencia de terceros:
+El proyecto utiliza una arquitectura en capas distribuida en los siguientes proyectos:
 
-| Capa | Proyecto | Responsabilidad |
-|---|---|---|
-| Presentación | `UI` | Formularios Windows Forms |
-| Lógica de Negocio | `BLL` | Validaciones y reglas del dominio |
-| Acceso a Datos | `DAL` | Operaciones SQL y transacciones |
-| Servicios | `Servicios` | Entidades del dominio + servicios transversales (SM, Traductor, Cripto, IObservadorIdioma) |
-
-
-### Patrones de diseño aplicados
-
-- **Singleton**: `SM` (sesión activa) y `Traductor` (servicio de traducción).
-- **Observer**: cambio dinámico de idioma sobre formularios abiertos (`IObservadorIdioma`).
-- **Composite**: jerarquía recursiva `Componente / PermisoSimple / Familia / Rol` para el modelo de control de accesos.
-
----
-
-## Módulos implementados en esta entrega
-
-| Módulo | Descripción |
+| Proyecto | Responsabilidad |
 |---|---|
-| **Gestión de Sesión** | Inicio de sesión con email y contraseña, cierre de sesión, re-login, cambio de clave, bloqueo automático tras 3 intentos fallidos |
-| **Gestión de Usuarios** | Crear, modificar, activar/desactivar, desbloquear, asignación de rol |
-| **Encriptación** | Hash SHA-256 irreversible sobre las contraseñas (clase `Cripto`) |
-| **Gestión de Roles y Familias** | Composite recursivo de permisos. Crear, modificar y eliminar Roles y Familias con validación de unicidad, ciclos y duplicados |
-| **Cambio de Idioma** | Patrón Observer. Soporte para Español e Inglés. Persistencia del idioma del usuario al cerrar sesión |
-| **Bitácora y Auditoría** | Registro automático de eventos sensibles. Consulta filtrada por usuario, fecha, módulo, criticidad y resultado. Exportación a PDF |
+| `UI` | Formularios Windows Forms, interacción con el usuario y control visual de permisos |
+| `BLL` | Reglas de negocio, validaciones, auditoría, integridad, respaldos y gestión de usuarios/perfiles |
+| `DAL` | Acceso a SQL Server, consultas, persistencia y operaciones de backup/restore |
+| `Servicios` | Servicios transversales como sesión, traducción, criptografía y componentes del modelo de permisos |
+| `BE` | Capa destinada a las entidades del dominio funcional de PadelGest |
 
+La capa `BE` se encuentra preparada para incorporar las entidades del negocio a medida que avance la implementación de los procesos funcionales.
 
----
+## Patrones de diseño
 
-## Instrucciones de instalación
+El sistema implementa actualmente los siguientes patrones:
 
-### Requisitos previos
+- **Singleton:** utilizado en `SM` para la sesión activa y en `Traductor` para el servicio de idiomas.
+- **Observer:** permite actualizar dinámicamente los formularios abiertos cuando el usuario cambia el idioma.
+- **Composite:** utilizado en el esquema de autorización mediante `Rol`, `Familia` y `PermisoSimple`, permitiendo construir jerarquías de permisos reutilizables.
 
-- Windows 10 / 11
-- Microsoft SQL Server (versión 2019 o superior) — Express edition es suficiente
-- .NET 9.0 SDK
-- Microsoft Visual Studio 2022 (o compatible con .NET 9.0)
-- Resolución mínima 1366×768
+## Seguridad y control de acceso
+
+PadelGest utiliza un esquema de autorización basado en permisos simples agrupados mediante Familias y Roles. Cada usuario posee un Rol, pero las operaciones habilitadas se determinan por sus permisos efectivos.
+
+El sistema permite de esta forma que un usuario tenga acceso únicamente a las operaciones que le corresponden. Los formularios y acciones verifican permisos específicos mediante la sesión activa, evitando depender únicamente del nombre del Rol.
+
+### Roles definidos actualmente
+
+- Administrador
+- Dueño
+- Recepcionista
+- Vendedor de Buffet
+- Encargado de Canchas
+
+### Áreas de permisos
+
+Actualmente existen permisos para:
+
+- Sesión y cambio de credenciales.
+- Gestión de usuarios.
+- Auditoría de bitácora.
+- Gestión de Roles, Familias y Permisos.
+- Gestión de respaldos.
+- Reservas de canchas.
+- Gestión de clientes.
+- Venta y consulta de stock del buffet.
+- Consulta de agenda de canchas.
+
+## Módulos técnicos implementados
+
+| Módulo | Funcionalidad |
+|---|---|
+| **Sesión** | Inicio y cierre de sesión, re-login, cambio de contraseña y bloqueo por intentos fallidos |
+| **Usuarios** | Alta, modificación, activación/desactivación, desbloqueo y asignación de Rol |
+| **Roles y Familias** | Gestión del modelo Composite y asignación jerárquica de permisos |
+| **Idiomas** | Cambio dinámico entre Español e Inglés mediante Observer |
+| **Bitácora** | Registro y auditoría de eventos relevantes del sistema |
+| **PDF** | Exportación de resultados de auditoría |
+| **Dígitos verificadores** | Control de integridad mediante DVH y DVV |
+| **Respaldos** | Creación y restauración de backups de la base de datos con control de permisos |
+
+## Funcionalidades del negocio en desarrollo
+
+Los procesos principales definidos para PadelGest son:
+
+- **Reserva de Canchas:** clientes, disponibilidad, tarifas, reservas, pagos y comprobantes.
+- **Venta de Productos del Buffet:** productos, ventas y control de stock.
+- **Gestión de Canchas:** consulta de agenda y posteriores operaciones de bloqueo/mantenimiento.
+
+La implementación funcional se incorporará de manera incremental sobre la infraestructura ya existente.
+
+## Integridad de datos
+
+El sistema implementa Dígitos Verificadores Horizontales (**DVH**) y Verticales (**DVV**) para detectar modificaciones no autorizadas sobre información crítica.
+
+La lógica de integridad se encuentra centralizada en `DigitoVerificadorBLL` y contempla tanto registros individuales como el conjunto de registros de las tablas protegidas.
+
+## Bitácora
+
+Las operaciones relevantes generan eventos de auditoría con información como:
+
+- Usuario.
+- Fecha y hora.
+- Módulo.
+- Acción realizada.
+- Criticidad.
+- Resultado.
+- Descripción.
+
+La bitácora puede consultarse mediante filtros y exportarse a PDF.
+
+## Respaldos de base de datos
+
+El módulo de respaldos permite ejecutar operaciones `BACKUP DATABASE` y `RESTORE DATABASE` sobre `PadelGestDB`.
+
+El acceso se encuentra protegido mediante el permiso:
+
+```text
+BAK_GESTIONAR
+```
+
+Los archivos de backup generados utilizan el formato:
+
+```text
+PadelGestDB_Backup_yyyyMMdd_HHmmss.bak
+```
+
+## Base de datos
+
+La base utilizada por el sistema es:
+
+```text
+PadelGestDB
+```
+
+El script disponible actualmente se encuentra en:
+
+```text
+Script/PadelGestDB.sql
+```
+
+El script contiene la estructura de tablas, relaciones y datos utilizados por el entorno académico actual del proyecto.
+
+## Instalación
+
+### Requisitos
+
+- Windows 10 u 11.
+- Microsoft SQL Server 2019 o superior.
+- SQL Server Management Studio.
+- .NET 9.0 SDK.
+- Microsoft Visual Studio 2022 o compatible con .NET 9.0.
 
 ### Pasos
 
-1. **Clonar o descomprimir** el proyecto en una carpeta local.
+1. Clonar o descargar el repositorio.
+2. Crear en SQL Server una base de datos llamada `PadelGestDB`.
+3. Ejecutar `Script/PadelGestDB.sql` sobre esa base.
+4. Verificar la configuración de conexión en `DAL/DAO_AccesoDatos.cs`.
+5. Abrir `PadelGest.slnx` en Visual Studio 2022.
+6. Establecer `UI` como proyecto de inicio.
+7. Compilar la solución y ejecutar la aplicación.
 
-2. **Crear la base de datos** en SQL Server Management Studio:
-   - Crear una base con el nombre `CineGestDB`.
+### Configuración de conexión
 
-3. **Ejecutar los scripts SQL en el siguiente orden** (ubicados en la carpeta raíz del proyecto):
+El acceso a datos utiliza la variable de entorno:
 
-   | Orden | Script | Propósito |
-   |---|---|---|
-   | 1 | `CineGestDB.sql` | Crea las tablas base (`Usuario`, `BitacoraEvento`) e inserta el usuario administrador inicial. |
-   | 2 | `Script_Idioma.sql` | Crea la tabla `Idioma` y agrega `IdIdioma` a `Usuario`. |
-   | 3 | `Script_Roles_Familias_Permisos.sql` | Crea las tablas del modelo RBAC (8 tablas) y carga los permisos, familias y roles iniciales. |
-   | 4 | `Script_Migrar_UsuarioRol_a_Usuario.sql` | Migra el modelo a 1 Rol por Usuario (elimina la tabla `Usuario_Rol` y agrega la columna `IdRol` a `Usuario`). |
-   | 5 | `Script_Quitar_Activo_FamiliaRol.sql` | Elimina la columna `Activo` de las tablas `Familia` y `Rol` (al pasar a eliminación física). |
+```text
+PADELGEST_ENTORNO
+```
 
-   Cada script es **idempotente**: puede ejecutarse varias veces sin generar errores.
+Actualmente se encuentran configurados los siguientes entornos:
 
-4. **Configurar la cadena de conexión** abriendo el archivo `DAL/DAO_AccesoDatos.cs` y ajustando el campo `_cadenaConexion` según tu instalación de SQL Server:
-
-   ```csharp
-   _cadenaConexion = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=CineGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-   ```
-
-   - Para SQL Server Express local con instancia nombrada: `Data Source=localhost\SQLEXPRESS`
-   - Para SQL Server Express con instancia default: `Data Source=.` o `Data Source=localhost`
-
-5. **Abrir la solución** `CineGest.slnx` en Visual Studio 2022.
-
-6. **Compilar la solución** (Build → Rebuild Solution).
-
-7. **Ejecutar** estableciendo el proyecto `UI` como proyecto de inicio (Set as Startup Project) y presionando F5.
-
----
-
-## Credenciales iniciales
-
-El usuario administrador se crea automáticamente al ejecutar `CineGestDB.sql`:
-
-| Campo | Valor |
+| Valor | SQL Server |
 |---|---|
-| **Email** | `admin1@cinegest.com` |
-| **Contraseña inicial** | (definida por el equipo de desarrollo — solicitar a los integrantes) |
+| `LEO` | `localhost\SQLEXPRESS` |
+| `UAI` | `.` |
 
-**Nota**: Al primer ingreso, el sistema sugerirá cambiar la contraseña por motivos de seguridad.
+Si la variable no está definida, el sistema utiliza `LEO` como valor predeterminado. Para ejecutar el proyecto sobre otra instancia de SQL Server se deben adaptar las cadenas definidas en `DAL/DAO_AccesoDatos.cs`.
 
----
+## Estructura del repositorio
 
-## Estructura de carpetas
-
+```text
+PadelGest/
+├── BE/                    # Entidades de negocio
+├── BLL/                   # Lógica y reglas del sistema
+├── DAL/                   # Acceso a datos
+├── Servicios/             # Servicios transversales
+├── UI/                    # Aplicación Windows Forms
+│   └── Recursos/Idiomas/  # Archivos es.json y en.json
+├── Script/
+│   └── PadelGestDB.sql    # Script de base de datos
+├── PadelGest.slnx         # Solución de Visual Studio
+└── README.md
 ```
-CineGest/
-├── UI/                     # Proyecto Windows Forms (presentación)
-│   ├── Recursos/Idiomas/   # Archivos JSON de traducción (es.json, en.json)
-│   └── *.cs, *.Designer.cs # Formularios
-├── BLL/                    # Proyecto lógica de negocio
-├── DAL/                    # Proyecto acceso a datos
-├── Servicios/              # Proyecto entidades y servicios transversales
-├── *.sql                   # Scripts de creación y migración de base de datos
-├── CineGest.slnx           # Solución de Visual Studio
-└── LEEME.md                # Este archivo
-```
+
+## Estado del proyecto
+
+PadelGest se encuentra **en desarrollo**. La infraestructura técnica de seguridad, perfiles, internacionalización, auditoría, integridad y respaldos ya está implementada. Los módulos funcionales correspondientes a los procesos de negocio de AirPadel se incorporarán en las próximas etapas del Trabajo de Diploma.
 
 ---
 
-## Consideraciones para la evaluación
-
-- El sistema está pensado para ejecutarse en **entorno local** (PC standalone con SQL Server local).
-- Las contraseñas se almacenan únicamente como **hash SHA-256**, nunca en texto plano.
-- La aplicación cuenta con soporte multi-idioma (Español / Inglés). El idioma del usuario se persiste al cerrar sesión.
-- El módulo de Bitácora registra automáticamente las operaciones sensibles del sistema. Su consulta es accesible desde el menú **Administrador → Bitácora Eventos** y permite filtrar y exportar los resultados a PDF.
-- El modelo RBAC implementa el **patrón Composite recursivo**: un Rol puede contener Familias, una Familia puede contener otras Familias y Permisos Simples. La eliminación física de un Rol o Familia solo se permite si la entidad NO está en uso por otra Familia/Rol o Usuario.
-- Cada usuario tiene **exactamente un Rol asignado** (relación 1:N entre Rol y Usuario), gestionado a través de la columna `IdRol` en la tabla `Usuario`.
-
----
-
-## Soporte y contacto
-
-Ante cualquier consulta sobre la corrección o evaluación del proyecto, contactar a:
-
-- Rodríguez Leonel Jesús
-- Riccio Sebastián Gael
+**PadelGest — Trabajo de Diploma, Ingeniería en Sistemas Informáticos, UAI 2026.**
