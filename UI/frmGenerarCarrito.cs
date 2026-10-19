@@ -90,18 +90,33 @@ namespace UI
             lblTituloCliente.Text = T("frmGenerarCarrito.Cliente");
             lblTituloEstado.Text = T("frmGenerarCarrito.Estado");
 
-            colProductoCodigo.HeaderText = T("frmGenerarCarrito.Codigo");
-            colProductoNombre.HeaderText = T("frmGenerarCarrito.Producto");
-            colProductoCategoria.HeaderText = T("frmGenerarCarrito.Categoria");
-            colProductoPrecio.HeaderText = T("frmGenerarCarrito.Precio");
-            colProductoStock.HeaderText = T("frmGenerarCarrito.Stock");
-            colDetalleProducto.HeaderText = T("frmGenerarCarrito.Producto");
-            colDetalleCantidad.HeaderText = T("frmGenerarCarrito.Cantidad");
-            colDetallePrecio.HeaderText = T("frmGenerarCarrito.Precio");
-            colDetalleSubtotal.HeaderText = T("frmGenerarCarrito.Subtotal");
+            // Los encabezados se buscan dentro de la grilla. Si Visual Studio
+            // regenero el Designer y alguna columna ya no existe, evitamos
+            // NullReferenceException y conservamos las traducciones disponibles.
+            TraducirColumna(dgvProductos, "colProductoCodigo", "frmGenerarCarrito.Codigo");
+            TraducirColumna(dgvProductos, "colProductoNombre", "frmGenerarCarrito.Producto");
+            TraducirColumna(dgvProductos, "colProductoCategoria", "frmGenerarCarrito.Categoria");
+            TraducirColumna(dgvProductos, "colProductoPrecio", "frmGenerarCarrito.Precio");
+            TraducirColumna(dgvProductos, "colProductoStock", "frmGenerarCarrito.Stock");
+            TraducirColumna(dgvDetalles, "colDetalleProducto", "frmGenerarCarrito.Producto");
+            TraducirColumna(dgvDetalles, "colDetalleCantidad", "frmGenerarCarrito.Cantidad");
+            TraducirColumna(dgvDetalles, "colDetallePrecio", "frmGenerarCarrito.Precio");
+            TraducirColumna(dgvDetalles, "colDetalleSubtotal", "frmGenerarCarrito.Subtotal");
 
             if (_carrito != null)
                 ActualizarResumen();
+        }
+
+        // Se usa el nombre de columna declarado por el Designer en vez del
+        // campo parcial, que puede haber sido regenerado en Visual Studio.
+        private static void TraducirColumna(DataGridView grilla, string nombreColumna, string clave)
+        {
+            if (grilla == null || !grilla.Columns.Contains(nombreColumna))
+                return;
+
+            DataGridViewColumn? columna = grilla.Columns[nombreColumna];
+            if (columna != null)
+                columna.HeaderText = T(clave);
         }
 
         private void CargarProductos()
