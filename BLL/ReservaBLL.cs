@@ -1,0 +1,155 @@
+using BE;
+using BLL.Servicios;
+using DAL;
+using Servicios;
+
+namespace BLL
+{
+    public class ReservaBLL
+    {
+        private readonly ReservaDAL _reservaDAL;
+
+        public ReservaBLL()
+        {
+            _reservaDAL = new ReservaDAL();
+        }
+
+        private static string T(string clave) =>Traductor.Instancia.Traducir(clave);
+
+        // Registrar una nueva reserva con validaciones y creación de evento en la bitácora
+        public ReservaBE RegistrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
+        {
+            SM.Instancia.RequierePermiso("RES_CREAR");
+
+            ValidarDatosReserva(cliente,cancha,tarifa,facturaPagada,pagoAprobado,fecha,horario,cantidadPaletas,cantidadPelotas);
+
+            facturaPagada.FechaHoraEmision = DateTime.Now;
+
+            ReservaBE reserva = CrearReserva(cliente,cancha,tarifa,fecha,horario,cantidadPaletas,cantidadPelotas,pagoAprobado);
+
+            BitacoraEvento evento = CrearEventoBitacora(reserva,cliente,cancha,facturaPagada,cantidadPaletas,cantidadPelotas);
+
+            try
+            {
+                return _reservaDAL.RegistrarReserva(reserva,facturaPagada,evento);
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "TURNO_NO_DISPONIBLE")
+            {
+                throw new Exception(T("Errores.Reserva.TurnoYaNoDisponible"));
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "STOCK_PALETAS_INSUFICIENTE")
+            {
+                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Paleta")));
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message == "STOCK_PELOTAS_INSUFICIENTE")
+            {
+                throw new Exception(string.Format(T("Errores.Equipamiento.StockInsuficienteRegistro"),T("Equipamiento.Pelota")));
+            }
+        }
+
+        // Validar los datos de la reserva antes de registrarla
+        private void ValidarDatosReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada,PagoBE pagoAprobado,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas)
+        {
+
+            if (cliente == null || string.IsNullOrWhiteSpace(cliente.DNI))
+                throw new Exception(T("Errores.Reserva.ClienteInvalido"));
+
+            if (cancha == null || cancha.IdCancha <= 0)
+                throw new Exception(T("Errores.Reserva.CanchaInvalida"));
+
+            if (tarifa == null || tarifa.IdTarifa <= 0)
+                throw new Exception(T("Errores.Reserva.TarifaInvalida"));
+
+            if (facturaPagada == null ||!facturaPagada.Estado.Equals("Pagada", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception(T("Errores.Reserva.FacturaNoPagada"));
+            }
+
+            if (pagoAprobado == null || !pagoAprobado.Estado.Equals("Aprobado", StringComparison.OrdinalIgnoreCase) || pagoAprobado.Importe != facturaPagada.ImporteTotal ||
+                string.IsNullOrWhiteSpace(pagoAprobado.Banco) ||
+                string.IsNullOrWhiteSpace(pagoAprobado.CodigoAutorizacion) ||
+                pagoAprobado.FechaHora == default ||
+                pagoAprobado.Ultimos4Tarjeta.Length != 4 ||
+                !pagoAprobado.Ultimos4Tarjeta.All(char.IsDigit))
+            {
+                throw new Exception(T("Errores.Reserva.PagoInvalido"));
+            }
+
+            if (facturaPagada.DNI != cliente.DNI || facturaPagada.IdCancha != cancha.IdCancha || facturaPagada.IdTarifa != tarifa.IdTarifa)
+            {
+                throw new Exception(T("Errores.Reserva.DatosInconsistentes"));
+            }
+
+            ReglasReserva.ValidarFechaYHorario(fecha, horario);
+
+            if (cantidadPaletas < 0 || cantidadPelotas < 0)
+                throw new Exception(T("Errores.Reserva.EquipamientoInvalido"));
+
+            if (cantidadPaletas > EquipamientoBLL.MaximoPaletasPorReserva)
+            {
+                throw new Exception(string.Format(T("Errores.Equipamiento.MaximoPaletas"),EquipamientoBLL.MaximoPaletasPorReserva));
+            }
+
+            if (cantidadPelotas > EquipamientoBLL.MaximoPelotasPorReserva)
+            {
+                throw new Exception(string.Format(T("Errores.Equipamiento.MaximoPelotas"),EquipamientoBLL.MaximoPelotasPorReserva));
+            }
+        }
+
+        private ReservaBE CrearReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fecha,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,PagoBE pago)
+        {
+            return new ReservaBE
+            {
+                Codigo = GenerarCodigoReserva(fecha),
+                DNI = cliente.DNI,
+                IdCancha = cancha.IdCancha,
+                IdTarifa = tarifa.IdTarifa,
+                Fecha = fecha.Date,
+                Horario = horario,
+                CantidadPaletas = cantidadPaletas,
+                CantidadPelotas = cantidadPelotas,
+                Estado = "Reservada",
+                Banco = pago.Banco,
+                Ultimos4Tarjeta = pago.Ultimos4Tarjeta,
+                ImportePago = pago.Importe,
+                FechaHoraPago = pago.FechaHora,
+                EstadoPago = pago.Estado,
+                CodigoAutorizacion = pago.CodigoAutorizacion
+            };
+        }
+
+        private BitacoraEvento CrearEventoBitacora(ReservaBE reserva,ClienteBE cliente,CanchaBE cancha,FacturaBE factura,int cantidadPaletas,int cantidadPelotas)
+        {
+            Usuario usuario = SM.Instancia.UsuarioActual;
+
+            if (usuario == null)
+            {
+                throw new Exception("No hay un usuario activo para registrar la reserva.");
+            }
+
+            string descripcion =
+                $"Reserva {reserva.Codigo} registrada para el Cliente DNI {cliente.DNI}. " +
+                $"Cancha: {cancha.Nombre}. " + $"Fecha: {reserva.Fecha:dd/MM/yyyy}. " +
+                $"Horario: {reserva.Horario:hh\\:mm}. " +
+                $"Paletas: {cantidadPaletas}. " + $"Pelotas: {cantidadPelotas}. " + $"Importe abonado: {factura.ImporteTotal:C}.";
+
+            return new BitacoraEvento
+            {
+                IdUsuario = usuario.IdUsuario,Usuario = usuario.NombreUsuario,
+                FechaHora = DateTime.Now, Modulo = "Reserva", Accion = "Registrar reserva",
+                Criticidad = "Alta", Resultado = "Exitoso", Descripcion = descripcion
+            };
+        }
+
+        // Generar un código único para la reserva basado en la fecha y un identificador aleatorio
+        private string GenerarCodigoReserva(DateTime fecha)
+        {
+            string aleatorio = Guid.NewGuid().ToString("N")[..6].ToUpperInvariant();
+
+            return $"RES-{fecha:yyyyMMdd}-{aleatorio}";
+        }
+    }
+}

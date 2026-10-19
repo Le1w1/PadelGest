@@ -1,4 +1,4 @@
-﻿using Servicios;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BLL;
+using BLL.Servicios;
 
 namespace UI
 {
@@ -19,11 +19,12 @@ namespace UI
         public frmMenuPrincipal()
         {
             InitializeComponent();
-
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
         }
 
+
+        // Suscripcion al Observer de idioma y carga de datos de sesion al cargar el form.
         private void frmMenuPrincipal_Load(object sender, EventArgs e)
         {
             // Suscripcion al Observer de idioma.
@@ -32,9 +33,10 @@ namespace UI
             AplicarPermisos();
         }
 
+   
+        
         /// Recorre los items del menu y los habilita/deshabilita segun los permisos del usuario logueado. 
         /// Excepcion: "Cerrar Sesion" SIEMPRE habilitado por seguridad operativa, sin importar los permisos del rol.
-
         private void AplicarPermisos()
         {
             var sm = SM.Instancia;
@@ -49,8 +51,11 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("BUF_CONSULTAR_STOCK");
 
             // Recepcionista
-            RecepcionistaToolStripMenuItem.Enabled =
-                sm.TienePermiso("RES_CREAR") || sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
+            generarReservaToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
+
+            // Menu Recepcionista: habilitado si tiene permisos de recepcionista o de cliente (para consultar sus reservas)
+            RecepcionistaToolStripMenuItem.Enabled = generarReservaToolStripMenuItem.Enabled ||
+                sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
                 sm.TienePermiso("RES_REPROGRAMAR") || sm.TienePermiso("RES_CANCELAR") || sm.TienePermiso("CLI_CONSULTAR") ||
                 sm.TienePermiso("CLI_REGISTRAR") || sm.TienePermiso("CLI_MODIFICAR");
 
@@ -73,11 +78,13 @@ namespace UI
 
         }
 
+     
         private void frmMenuPrincipal_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
         }
 
+ 
         /// Implementacion del Observer: el SM nos llama cuando cambia el idioma. Recorre todos los textos del form y aplica las traducciones.
         public void ActualizarIdioma()
         {
@@ -94,6 +101,7 @@ namespace UI
 
             // Menus principales
             RecepcionistaToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuRecepcionista");
+            generarReservaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGenerarReserva");
             encargadoDeCanchasToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuEncargadoCanchas");
             dueñoToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuDueño");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
@@ -112,6 +120,7 @@ namespace UI
             CargarDatosSesion();
         }
 
+        // Carga los datos de la sesion en la barra de estado. Si no hay sesion activa, muestra "Sin Sesion".
         private void CargarDatosSesion()
         {
             var t = Traductor.Instancia;
@@ -130,6 +139,8 @@ namespace UI
             }
         }
 
+
+        /// Evento del menu "Cerrar Sesion": pregunta al usuario si desea cerrar la sesion, y si confirma, llama al BLL para cerrar la sesion y cierra el form.
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var t = Traductor.Instancia;
@@ -150,6 +161,8 @@ namespace UI
             }
         }
 
+
+        #region "MENUs"
         private void reLoginToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmLogin formSesion = new frmLogin(true);
@@ -166,6 +179,12 @@ namespace UI
         {
             frmCambiarIdioma cambiarIdioma = new frmCambiarIdioma();
             cambiarIdioma.ShowDialog();
+        }
+
+        private void generarReservaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmGenerarReserva formGenerarReserva = new frmGenerarReserva();
+            formGenerarReserva.ShowDialog();
         }
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -191,7 +210,7 @@ namespace UI
             frmGestionarRespaldo formGestionarRespaldo = new frmGestionarRespaldo();
             formGestionarRespaldo.ShowDialog();
         }
+        #endregion
 
-       
     }
 }

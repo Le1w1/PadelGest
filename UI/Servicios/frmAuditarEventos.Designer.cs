@@ -1,0 +1,550 @@
+namespace UI
+{
+    partial class frmAuditarEventos
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            gbFiltros = new GroupBox();
+            txtDescripcion = new TextBox();
+            cmbAccion = new ComboBox();
+            label7 = new Label();
+            label6 = new Label();
+            cmbResultado = new ComboBox();
+            label5 = new Label();
+            cmbCriticidad = new ComboBox();
+            label4 = new Label();
+            cmbModulo = new ComboBox();
+            label3 = new Label();
+            txtUsuario = new TextBox();
+            label2 = new Label();
+            lblFechaHasta = new Label();
+            dtpFechaHasta = new DateTimePicker();
+            DtpFechaDesde = new DateTimePicker();
+            lblFechaDesde = new Label();
+            dgvEventos = new DataGridView();
+            btnBuscar = new Button();
+            btnLimpiar = new Button();
+            btnVolver = new Button();
+            lblMensaje = new Label();
+            btnImprimir = new Button();
+            txtNombre = new TextBox();
+            txtApellido = new TextBox();
+            label8 = new Label();
+            label9 = new Label();
+            gbDetalleReserva = new GroupBox();
+            txtDescripcionReserva = new TextBox();
+            lblDescripcionReserva = new Label();
+            gbFiltros.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvEventos).BeginInit();
+            gbDetalleReserva.SuspendLayout();
+            SuspendLayout();
+            // 
+            // gbFiltros
+            // 
+            gbFiltros.BackColor = Color.FromArgb(24, 70, 138);
+            gbFiltros.Controls.Add(txtDescripcion);
+            gbFiltros.Controls.Add(cmbAccion);
+            gbFiltros.Controls.Add(label7);
+            gbFiltros.Controls.Add(label6);
+            gbFiltros.Controls.Add(cmbResultado);
+            gbFiltros.Controls.Add(label5);
+            gbFiltros.Controls.Add(cmbCriticidad);
+            gbFiltros.Controls.Add(label4);
+            gbFiltros.Controls.Add(cmbModulo);
+            gbFiltros.Controls.Add(label3);
+            gbFiltros.Controls.Add(txtUsuario);
+            gbFiltros.Controls.Add(label2);
+            gbFiltros.Controls.Add(lblFechaHasta);
+            gbFiltros.Controls.Add(dtpFechaHasta);
+            gbFiltros.Controls.Add(DtpFechaDesde);
+            gbFiltros.Controls.Add(lblFechaDesde);
+            gbFiltros.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            gbFiltros.ForeColor = Color.White;
+            gbFiltros.Location = new Point(12, 278);
+            gbFiltros.Margin = new Padding(3, 2, 3, 2);
+            gbFiltros.Name = "gbFiltros";
+            gbFiltros.Padding = new Padding(3, 2, 3, 2);
+            gbFiltros.Size = new Size(794, 262);
+            gbFiltros.TabIndex = 1;
+            gbFiltros.TabStop = false;
+            gbFiltros.Text = "Filtros de busqueda";
+            // 
+            // txtDescripcion
+            // 
+            txtDescripcion.BackColor = Color.White;
+            txtDescripcion.BorderStyle = BorderStyle.FixedSingle;
+            txtDescripcion.ForeColor = Color.FromArgb(18, 18, 18);
+            txtDescripcion.Location = new Point(512, 53);
+            txtDescripcion.Margin = new Padding(3, 2, 3, 2);
+            txtDescripcion.Name = "txtDescripcion";
+            txtDescripcion.Size = new Size(261, 24);
+            txtDescripcion.TabIndex = 15;
+            // 
+            // cmbAccion
+            // 
+            cmbAccion.BackColor = Color.White;
+            cmbAccion.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAccion.FlatStyle = FlatStyle.Flat;
+            cmbAccion.ForeColor = Color.FromArgb(18, 18, 18);
+            cmbAccion.FormattingEnabled = true;
+            cmbAccion.Location = new Point(110, 191);
+            cmbAccion.Margin = new Padding(3, 2, 3, 2);
+            cmbAccion.Name = "cmbAccion";
+            cmbAccion.Size = new Size(261, 25);
+            cmbAccion.TabIndex = 14;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.ForeColor = Color.White;
+            label7.Location = new Point(14, 194);
+            label7.Name = "label7";
+            label7.Size = new Size(50, 17);
+            label7.TabIndex = 13;
+            label7.Text = "Evento";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.ForeColor = Color.White;
+            label6.Location = new Point(409, 56);
+            label6.Name = "label6";
+            label6.Size = new Size(80, 17);
+            label6.TabIndex = 12;
+            label6.Text = "Descripcion";
+            // 
+            // cmbResultado
+            // 
+            cmbResultado.BackColor = Color.White;
+            cmbResultado.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbResultado.FlatStyle = FlatStyle.Flat;
+            cmbResultado.ForeColor = Color.FromArgb(18, 18, 18);
+            cmbResultado.FormattingEnabled = true;
+            cmbResultado.Location = new Point(110, 159);
+            cmbResultado.Margin = new Padding(3, 2, 3, 2);
+            cmbResultado.Name = "cmbResultado";
+            cmbResultado.Size = new Size(261, 25);
+            cmbResultado.TabIndex = 11;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = Color.White;
+            label5.Location = new Point(14, 159);
+            label5.Name = "label5";
+            label5.Size = new Size(77, 17);
+            label5.TabIndex = 11;
+            label5.Text = "Resultado: ";
+            // 
+            // cmbCriticidad
+            // 
+            cmbCriticidad.BackColor = Color.White;
+            cmbCriticidad.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCriticidad.FlatStyle = FlatStyle.Flat;
+            cmbCriticidad.ForeColor = Color.FromArgb(18, 18, 18);
+            cmbCriticidad.FormattingEnabled = true;
+            cmbCriticidad.Location = new Point(110, 126);
+            cmbCriticidad.Margin = new Padding(3, 2, 3, 2);
+            cmbCriticidad.Name = "cmbCriticidad";
+            cmbCriticidad.Size = new Size(261, 25);
+            cmbCriticidad.TabIndex = 10;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = Color.White;
+            label4.Location = new Point(14, 128);
+            label4.Name = "label4";
+            label4.Size = new Size(75, 17);
+            label4.TabIndex = 9;
+            label4.Text = "Criticidad: ";
+            // 
+            // cmbModulo
+            // 
+            cmbModulo.BackColor = Color.White;
+            cmbModulo.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbModulo.FlatStyle = FlatStyle.Flat;
+            cmbModulo.ForeColor = Color.FromArgb(18, 18, 18);
+            cmbModulo.FormattingEnabled = true;
+            cmbModulo.Location = new Point(110, 88);
+            cmbModulo.Margin = new Padding(3, 2, 3, 2);
+            cmbModulo.Name = "cmbModulo";
+            cmbModulo.Size = new Size(261, 25);
+            cmbModulo.TabIndex = 8;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(14, 90);
+            label3.Name = "label3";
+            label3.Size = new Size(64, 17);
+            label3.TabIndex = 7;
+            label3.Text = "Modulo: ";
+            // 
+            // txtUsuario
+            // 
+            txtUsuario.BackColor = Color.White;
+            txtUsuario.BorderStyle = BorderStyle.FixedSingle;
+            txtUsuario.ForeColor = Color.FromArgb(18, 18, 18);
+            txtUsuario.Location = new Point(110, 53);
+            txtUsuario.Margin = new Padding(3, 2, 3, 2);
+            txtUsuario.Name = "txtUsuario";
+            txtUsuario.Size = new Size(261, 24);
+            txtUsuario.TabIndex = 6;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.ForeColor = Color.White;
+            label2.Location = new Point(14, 53);
+            label2.Name = "label2";
+            label2.Size = new Size(63, 17);
+            label2.TabIndex = 5;
+            label2.Text = "Usuario: ";
+            // 
+            // lblFechaHasta
+            // 
+            lblFechaHasta.AutoSize = true;
+            lblFechaHasta.ForeColor = Color.White;
+            lblFechaHasta.Location = new Point(409, 23);
+            lblFechaHasta.Name = "lblFechaHasta";
+            lblFechaHasta.Size = new Size(86, 17);
+            lblFechaHasta.TabIndex = 4;
+            lblFechaHasta.Text = "Fecha Hasta:";
+            // 
+            // dtpFechaHasta
+            // 
+            dtpFechaHasta.CalendarForeColor = Color.FromArgb(18, 18, 18);
+            dtpFechaHasta.CalendarMonthBackground = Color.White;
+            dtpFechaHasta.CalendarTitleBackColor = Color.FromArgb(24, 70, 138);
+            dtpFechaHasta.CalendarTitleForeColor = Color.White;
+            dtpFechaHasta.Location = new Point(512, 20);
+            dtpFechaHasta.Margin = new Padding(3, 2, 3, 2);
+            dtpFechaHasta.Name = "dtpFechaHasta";
+            dtpFechaHasta.Size = new Size(261, 24);
+            dtpFechaHasta.TabIndex = 3;
+            // 
+            // DtpFechaDesde
+            // 
+            DtpFechaDesde.CalendarForeColor = Color.FromArgb(18, 18, 18);
+            DtpFechaDesde.CalendarMonthBackground = Color.White;
+            DtpFechaDesde.CalendarTitleBackColor = Color.FromArgb(24, 70, 138);
+            DtpFechaDesde.CalendarTitleForeColor = Color.White;
+            DtpFechaDesde.Location = new Point(110, 19);
+            DtpFechaDesde.Margin = new Padding(3, 2, 3, 2);
+            DtpFechaDesde.Name = "DtpFechaDesde";
+            DtpFechaDesde.Size = new Size(261, 24);
+            DtpFechaDesde.TabIndex = 2;
+            DtpFechaDesde.Value = new DateTime(2026, 6, 2, 21, 21, 5, 0);
+            // 
+            // lblFechaDesde
+            // 
+            lblFechaDesde.AutoSize = true;
+            lblFechaDesde.ForeColor = Color.White;
+            lblFechaDesde.Location = new Point(14, 22);
+            lblFechaDesde.Name = "lblFechaDesde";
+            lblFechaDesde.Size = new Size(93, 17);
+            lblFechaDesde.TabIndex = 0;
+            lblFechaDesde.Text = "Fecha Desde: ";
+            // 
+            // dgvEventos
+            // 
+            dgvEventos.AllowUserToAddRows = false;
+            dgvEventos.AllowUserToDeleteRows = false;
+            dgvEventos.BackgroundColor = Color.White;
+            dgvEventos.BorderStyle = BorderStyle.None;
+            dgvEventos.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvEventos.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(214, 246, 36);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9.5F);
+            dataGridViewCellStyle1.ForeColor = Color.FromArgb(18, 18, 18);
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvEventos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvEventos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9.5F);
+            dataGridViewCellStyle2.ForeColor = Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(211, 230, 248);
+            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(18, 18, 18);
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvEventos.DefaultCellStyle = dataGridViewCellStyle2;
+
+            
+            dgvEventos.ForeColor = Color.FromArgb(18, 18, 18);
+
+            dgvEventos.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvEventos.RowsDefaultCellStyle.ForeColor = Color.FromArgb(18, 18, 18);
+            dgvEventos.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(211, 230, 248);
+            dgvEventos.RowsDefaultCellStyle.SelectionForeColor = Color.FromArgb(18, 18, 18);
+
+            dgvEventos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(244, 247, 251);
+            dgvEventos.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(18, 18, 18);
+            dgvEventos.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(211, 230, 248);
+            dgvEventos.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.FromArgb(18, 18, 18);
+
+            dgvEventos.EnableHeadersVisualStyles = false;
+            dgvEventos.GridColor = Color.FromArgb(64, 103, 166);
+            dgvEventos.Location = new Point(12, 11);
+            dgvEventos.Margin = new Padding(3, 2, 3, 2);
+            dgvEventos.Name = "dgvEventos";
+            dgvEventos.ReadOnly = true;
+            dgvEventos.RowHeadersVisible = false;
+            dgvEventos.RowHeadersWidth = 51;
+            dgvEventos.RowTemplate.Height = 30;
+            dgvEventos.Size = new Size(1013, 211);
+            dgvEventos.TabIndex = 2;
+            dgvEventos.SelectionChanged += dgvEventos_SelectionChanged;
+            // 
+            // btnBuscar
+            // 
+            btnBuscar.BackColor = Color.FromArgb(214, 246, 36);
+            btnBuscar.FlatAppearance.BorderSize = 0;
+            btnBuscar.FlatStyle = FlatStyle.Flat;
+            btnBuscar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnBuscar.ForeColor = Color.FromArgb(18, 18, 18);
+            btnBuscar.Location = new Point(861, 278);
+            btnBuscar.Margin = new Padding(3, 2, 3, 2);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(128, 44);
+            btnBuscar.TabIndex = 3;
+            btnBuscar.Text = "Aplicar";
+            btnBuscar.UseVisualStyleBackColor = false;
+            btnBuscar.Click += btnBuscar_Click;
+            // 
+            // btnLimpiar
+            // 
+            btnLimpiar.BackColor = Color.FromArgb(24, 70, 138);
+            btnLimpiar.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnLimpiar.FlatStyle = FlatStyle.Flat;
+            btnLimpiar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnLimpiar.ForeColor = Color.White;
+            btnLimpiar.Location = new Point(861, 334);
+            btnLimpiar.Margin = new Padding(3, 2, 3, 2);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(129, 44);
+            btnLimpiar.TabIndex = 4;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = false;
+            btnLimpiar.Click += btnLimpiar_Click;
+            // 
+            // btnVolver
+            // 
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
+            btnVolver.FlatAppearance.BorderColor = Color.FromArgb(64, 103, 166);
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnVolver.ForeColor = Color.White;
+            btnVolver.Location = new Point(861, 449);
+            btnVolver.Margin = new Padding(3, 2, 3, 2);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(129, 43);
+            btnVolver.TabIndex = 5;
+            btnVolver.Text = "Volver";
+            btnVolver.UseVisualStyleBackColor = false;
+            btnVolver.Click += btnVolver_Click;
+            // 
+            // lblMensaje
+            // 
+            lblMensaje.AutoSize = true;
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
+            lblMensaje.Location = new Point(900, 233);
+            lblMensaje.Name = "lblMensaje";
+            lblMensaje.Size = new Size(0, 17);
+            lblMensaje.TabIndex = 6;
+            // 
+            // btnImprimir
+            // 
+            btnImprimir.BackColor = Color.FromArgb(214, 246, 36);
+            btnImprimir.FlatAppearance.BorderSize = 0;
+            btnImprimir.FlatStyle = FlatStyle.Flat;
+            btnImprimir.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnImprimir.ForeColor = Color.FromArgb(18, 18, 18);
+            btnImprimir.Location = new Point(861, 393);
+            btnImprimir.Margin = new Padding(3, 2, 3, 2);
+            btnImprimir.Name = "btnImprimir";
+            btnImprimir.Size = new Size(129, 42);
+            btnImprimir.TabIndex = 7;
+            btnImprimir.Text = "Imprimir";
+            btnImprimir.UseVisualStyleBackColor = false;
+            btnImprimir.Click += btnImprimir_Click;
+            // 
+            // txtNombre
+            // 
+            txtNombre.BackColor = Color.White;
+            txtNombre.BorderStyle = BorderStyle.FixedSingle;
+            txtNombre.ForeColor = Color.FromArgb(18, 18, 18);
+            txtNombre.Location = new Point(122, 233);
+            txtNombre.Margin = new Padding(3, 2, 3, 2);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(127, 24);
+            txtNombre.TabIndex = 16;
+            // 
+            // txtApellido
+            // 
+            txtApellido.BackColor = Color.White;
+            txtApellido.BorderStyle = BorderStyle.FixedSingle;
+            txtApellido.ForeColor = Color.FromArgb(18, 18, 18);
+            txtApellido.Location = new Point(358, 233);
+            txtApellido.Margin = new Padding(3, 2, 3, 2);
+            txtApellido.Name = "txtApellido";
+            txtApellido.Size = new Size(127, 24);
+            txtApellido.TabIndex = 17;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.ForeColor = Color.White;
+            label8.Location = new Point(48, 235);
+            label8.Name = "label8";
+            label8.Size = new Size(57, 17);
+            label8.TabIndex = 18;
+            label8.Text = "Nombre";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.ForeColor = Color.White;
+            label9.Location = new Point(295, 235);
+            label9.Name = "label9";
+            label9.Size = new Size(56, 17);
+            label9.TabIndex = 19;
+            label9.Text = "Apellido";
+            // 
+            // gbDetalleReserva
+            // 
+            gbDetalleReserva.BackColor = Color.FromArgb(24, 70, 138);
+            gbDetalleReserva.Controls.Add(txtDescripcionReserva);
+            gbDetalleReserva.Controls.Add(lblDescripcionReserva);
+            gbDetalleReserva.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            gbDetalleReserva.ForeColor = Color.White;
+            gbDetalleReserva.Location = new Point(12, 278);
+            gbDetalleReserva.Name = "gbDetalleReserva";
+            gbDetalleReserva.Size = new Size(794, 85);
+            gbDetalleReserva.TabIndex = 20;
+            gbDetalleReserva.TabStop = false;
+            gbDetalleReserva.Text = "Detalle de la reserva";
+            gbDetalleReserva.Visible = false;
+            // 
+            // txtDescripcionReserva
+            // 
+            txtDescripcionReserva.BackColor = Color.FromArgb(236, 241, 248);
+            txtDescripcionReserva.BorderStyle = BorderStyle.FixedSingle;
+            txtDescripcionReserva.ForeColor = Color.FromArgb(18, 18, 18);
+            txtDescripcionReserva.Location = new Point(165, 20);
+            txtDescripcionReserva.Multiline = true;
+            txtDescripcionReserva.Name = "txtDescripcionReserva";
+            txtDescripcionReserva.ReadOnly = true;
+            txtDescripcionReserva.ScrollBars = ScrollBars.Vertical;
+            txtDescripcionReserva.Size = new Size(608, 52);
+            txtDescripcionReserva.TabIndex = 1;
+            // 
+            // lblDescripcionReserva
+            // 
+            lblDescripcionReserva.AutoSize = true;
+            lblDescripcionReserva.ForeColor = Color.White;
+            lblDescripcionReserva.Location = new Point(14, 24);
+            lblDescripcionReserva.Name = "lblDescripcionReserva";
+            lblDescripcionReserva.Size = new Size(145, 17);
+            lblDescripcionReserva.TabIndex = 0;
+            lblDescripcionReserva.Text = "Descripción completa:";
+            // 
+            // frmAuditarEventos
+            // 
+            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(14, 43, 92);
+            ClientSize = new Size(1064, 507);
+            Controls.Add(gbDetalleReserva);
+            Controls.Add(label9);
+            Controls.Add(label8);
+            Controls.Add(txtApellido);
+            Controls.Add(txtNombre);
+            Controls.Add(btnImprimir);
+            Controls.Add(lblMensaje);
+            Controls.Add(btnVolver);
+            Controls.Add(btnLimpiar);
+            Controls.Add(btnBuscar);
+            Controls.Add(dgvEventos);
+            Controls.Add(gbFiltros);
+            Font = new Font("Segoe UI", 9.5F);
+            ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "frmAuditarEventos";
+            Text = "Auditoria de Eventos";
+            Load += frmAuditarEventos_Load;
+            gbFiltros.ResumeLayout(false);
+            gbFiltros.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvEventos).EndInit();
+            gbDetalleReserva.ResumeLayout(false);
+            gbDetalleReserva.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+        private GroupBox gbFiltros;
+        private ComboBox cmbModulo;
+        private Label label4;
+        private ComboBox cmbCriticidad;
+        private Label label3;
+        private TextBox txtUsuario;
+        private Label label2;
+        private Label lblFechaHasta;
+        private DateTimePicker dtpFechaHasta;
+        private DateTimePicker DtpFechaDesde;
+        private Label lblFechaDesde;
+        private ComboBox cmbResultado;
+        private Label label5;
+        private DataGridView dgvEventos;
+        private Button btnBuscar;
+        private Button btnLimpiar;
+        private Button btnVolver;
+        private Label lblMensaje;
+        private TextBox txtDescripcion;
+        private ComboBox cmbAccion;
+        private Label label7;
+        private Label label6;
+        private Button btnImprimir;
+        private TextBox txtNombre;
+        private TextBox txtApellido;
+        private Label label8;
+        private Label label9;
+        private GroupBox gbDetalleReserva;
+        private Label lblDescripcionReserva;
+        private TextBox txtDescripcionReserva;
+    }
+}

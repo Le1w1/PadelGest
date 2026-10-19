@@ -1,4 +1,4 @@
-﻿
+
 
 namespace Servicios.DigitoVerificador
 {
@@ -37,8 +37,8 @@ namespace Servicios.DigitoVerificador
         }
     }
 
-    /// Catalogo de las 10 tablas protegidas por Digito Verificador.
-    /// BitacoraEvento queda EXCLUIDA por no ser tabla sensible
+    /// Catalogo de las tablas protegidas por Digito Verificador.
+    /// BitacoraEvento queda EXCLUIDA por no ser tabla sensible.
 
     /// El orden de las columnas en ColumnasDatos es el ORDEN CONGELADO del DVH.
     /// Cambiar este orden obliga a regenerar todos los DVH de la base.
@@ -75,6 +75,37 @@ namespace Servicios.DigitoVerificador
                 new[] { "IdRespaldo", "FechaHora", "TipoOperacion","RutaArchivo",
                         "NombreArchivo","Resultado","Descripcion","IdUsuario"},
                 new[] { "IdRespaldo" }),
+
+            // ----- Tablas de negocio PN1 -----
+
+            new TablaProtegida("Cancha",
+                new[] { "IdCancha", "Nombre", "Estado" },
+                new[] { "IdCancha" }),
+
+            new TablaProtegida("Tarifa",
+                new[] { "IdTarifa", "TipoTarifa", "Importe", "HoraDesde", "HoraHasta", "Activo" },
+                new[] { "IdTarifa" }),
+
+            new TablaProtegida("Reserva",
+                new[] { "IdReserva", "Codigo", "DNI", "IdCancha", "IdTarifa", "IdFactura",
+                        "Fecha", "Horario", "CantidadPaletas", "CantidadPelotas", "Estado",
+                        "Banco", "Ultimos4Tarjeta", "ImportePago", "FechaHoraPago",
+                        "EstadoPago", "CodigoAutorizacion" },
+                new[] { "IdReserva" }),
+
+            new TablaProtegida("Equipamiento",
+                new[] { "IdEquipamiento", "Tipo", "Importe", "StockDisponible", "Activo" },
+                new[] { "IdEquipamiento" }),
+
+            new TablaProtegida("Cliente",
+                new[] { "DNI", "Nombre", "Apellido", "Telefono", "CorreoElectronico" },
+                new[] { "DNI" }),
+
+            new TablaProtegida("Factura",
+                new[] { "IdFactura", "DNI", "IdCancha", "IdTarifa", "FechaHoraEmision",
+                        "FechaReserva", "Horario", "CantidadPaletas", "CantidadPelotas",
+                        "ImporteTarifa", "ImporteEquipamiento", "ImporteTotal", "Estado" },
+                new[] { "IdFactura" }),
 
             // ----- Tablas puente (PK compuesta) -----
             // Sus unicas columnas son las dos FK: son a la vez su PK y todo su
