@@ -38,6 +38,7 @@ namespace UI
             generarReservaToolStripMenuItem = new ToolStripMenuItem();
             vendedorBuffetToolStripMenuItem = new ToolStripMenuItem();
             generarCarritoToolStripMenuItem = new ToolStripMenuItem();
+            gestionarProductosToolStripMenuItem = new ToolStripMenuItem();
             encargadoDeCanchasToolStripMenuItem = new ToolStripMenuItem();
             dueñoToolStripMenuItem = new ToolStripMenuItem();
             mnuAdministrador = new ToolStripMenuItem();
@@ -138,7 +139,7 @@ namespace UI
             // vendedorBuffetToolStripMenuItem
             // 
             vendedorBuffetToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
-            vendedorBuffetToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarCarritoToolStripMenuItem });
+            vendedorBuffetToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarCarritoToolStripMenuItem, gestionarProductosToolStripMenuItem });
             vendedorBuffetToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             vendedorBuffetToolStripMenuItem.ForeColor = Color.Black;
             vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
@@ -151,6 +152,13 @@ namespace UI
             generarCarritoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             generarCarritoToolStripMenuItem.ForeColor = Color.White;
             generarCarritoToolStripMenuItem.Click += generarCarritoToolStripMenuItem_Click;
+            // Gestion de productos - PN2
+            gestionarProductosToolStripMenuItem.Name = "gestionarProductosToolStripMenuItem";
+            gestionarProductosToolStripMenuItem.Text = "Gestionar Productos";
+            gestionarProductosToolStripMenuItem.Size = new Size(200, 22);
+            gestionarProductosToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            gestionarProductosToolStripMenuItem.ForeColor = Color.White;
+            gestionarProductosToolStripMenuItem.Click += gestionarProductosToolStripMenuItem_Click;
             // 
             // encargadoDeCanchasToolStripMenuItem
             // 
@@ -423,5 +431,6 @@ namespace UI
         private ToolStripMenuItem gestionDeRespaldoToolStripMenuItem;
         private ToolStripMenuItem vendedorBuffetToolStripMenuItem;
         private ToolStripMenuItem generarCarritoToolStripMenuItem;
+        private ToolStripMenuItem gestionarProductosToolStripMenuItem;
     }
 }
