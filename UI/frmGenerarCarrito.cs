@@ -441,7 +441,9 @@ namespace UI
                     _ventaRegistrada.Factura.IdFacturaVenta,
                     _ventaRegistrada.ImporteTotal.ToString("C2"));
 
-                MessageBox.Show(resumen, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(resumen,
+                    T("frmGenerarCarrito.TituloVentaFinalizada"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
