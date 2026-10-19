@@ -138,6 +138,9 @@ namespace UI
         private void CargarProductos()
         {
             List<ProductoBE> productos = _productoBLL.ObtenerProductos();
+            // El Designer define las cuatro columnas visibles. El enlace de datos
+            // nunca debe generar otras propiedades, como CodigoProducto o Activo.
+            dgvProductos.AutoGenerateColumns = false;
             dgvProductos.DataSource = null;
             dgvProductos.DataSource = productos;
 
@@ -150,6 +153,9 @@ namespace UI
         private void ActualizarCarrito(CarritoBE carrito)
         {
             _carrito = carrito;
+            // Evita exponer los IDs tecnicos del detalle aunque se regenere
+            // el Designer de Windows Forms.
+            dgvDetalles.AutoGenerateColumns = false;
             dgvDetalles.DataSource = null;
             dgvDetalles.DataSource = carrito.Detalles.ToList();
             ActualizarResumen();
