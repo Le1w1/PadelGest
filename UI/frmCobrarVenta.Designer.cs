@@ -119,9 +119,10 @@ namespace UI
             txtNumeroTarjeta.Name = "txtNumeroTarjeta";
             txtNumeroTarjeta.Location = new Point(220, 80);
             txtNumeroTarjeta.Size = new Size(418, 28);
-            txtNumeroTarjeta.MaxLength = 25;
+            txtNumeroTarjeta.MaxLength = 19;
             txtNumeroTarjeta.BackColor = Color.White;
             txtNumeroTarjeta.ForeColor = Color.Black;
+            txtNumeroTarjeta.KeyPress += SoloNumeros_KeyPress;
 
             lblVencimiento.Name = "lblVencimiento";
             lblVencimiento.Location = new Point(22, 127);
@@ -142,6 +143,7 @@ namespace UI
             txtCodigoSeguridad.PasswordChar = '*';
             txtCodigoSeguridad.BackColor = Color.White;
             txtCodigoSeguridad.ForeColor = Color.Black;
+            txtCodigoSeguridad.KeyPress += SoloNumeros_KeyPress;
 
             lblRespuesta.Name = "lblRespuesta";
             lblRespuesta.Location = new Point(22, 184);
