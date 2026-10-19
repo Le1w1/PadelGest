@@ -7,7 +7,7 @@ namespace Servicios
     /// simular lo que en un entorno real respondería el sistema del Banco.
     public class BancoServicio
     {
-        public ResultadoAutorizacionBanco AutorizarPago(string dniCliente,string numeroTarjeta,decimal importe,bool respuestaSimuladaAprobada)
+        public ResultadoAutorizacionBanco AutorizarPago(string dniCliente,string numeroTarjeta,decimal importe,bool respuestaSimuladaAprobada,string prefijoCodigo = "RES")
         {
             if (!respuestaSimuladaAprobada)
             {
@@ -21,7 +21,7 @@ namespace Servicios
             return new ResultadoAutorizacionBanco
             {
                 Aprobado = true,
-                CodigoAutorizacion = "RES-" + Guid.NewGuid().ToString("N")[..12].ToUpperInvariant()
+                CodigoAutorizacion = prefijoCodigo + "-" + Guid.NewGuid().ToString("N")[..12].ToUpperInvariant()
             };
         }
     }
