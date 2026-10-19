@@ -50,6 +50,7 @@ namespace UI
             // Vendedor de Buffet
             vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("BUF_CONSULTAR_STOCK");
             generarCarritoToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER");
+            gestionarProductosToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER");
 
             // Recepcionista
             generarReservaToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
@@ -107,6 +108,7 @@ namespace UI
             dueñoToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuDueño");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
             generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
+            gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
 
             // Menu Administrador
             mnuAdministrador.Text = t.Traducir("frmMenuPrincipal.MenuAdministrador");
@@ -187,6 +189,12 @@ namespace UI
         {
             using frmGenerarCarrito formCarrito = new frmGenerarCarrito();
             formCarrito.ShowDialog(this);
+        }
+
+        private void gestionarProductosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmGestionProductos gestion = new frmGestionProductos();
+            gestion.ShowDialog(this);
         }
 
         private void generarReservaToolStripMenuItem_Click(object sender, EventArgs e)
