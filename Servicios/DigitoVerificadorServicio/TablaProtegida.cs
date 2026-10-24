@@ -114,28 +114,6 @@ namespace Servicios.DigitoVerificador
                         "StockDisponible", "StockMinimo", "Activo" },
                 new[] { "CodigoProducto" }),
 
-            new TablaProtegida("Carrito",
-                new[] { "IdCarrito", "DNI", "IdVendedor", "FechaHoraCreacion",
-                        "ImporteTotal", "Estado" },
-                new[] { "IdCarrito" }),
-
-            new TablaProtegida("DetalleCarrito",
-                new[] { "IdDetalleCarrito", "IdCarrito", "CodigoProducto",
-                        "NombreProducto", "Cantidad", "PrecioUnitario" },
-                new[] { "IdDetalleCarrito" }),
-
-            new TablaProtegida("Venta",
-                new[] { "IdVenta", "Codigo", "IdCarrito", "DNI",
-                        "IdVendedor", "FechaHora", "ImporteTotal", "Estado",
-                        "Banco", "Ultimos4Tarjeta", "ImportePago", "FechaHoraPago",
-                        "EstadoPago", "CodigoAutorizacion" },
-                new[] { "IdVenta" }),
-
-            new TablaProtegida("FacturaVenta",
-                new[] { "IdFacturaVenta", "IdVenta", "FechaHoraEmision",
-                        "ImporteTotal", "Estado" },
-                new[] { "IdFacturaVenta" }),
-
             // PN2: facturación del buffet sin carrito persistente.
             new TablaProtegida("FacturaBuffet",
                 new[] { "IdFactura", "NumeroFactura", "DNI", "IdVendedor",
