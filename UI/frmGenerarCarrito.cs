@@ -97,7 +97,6 @@ namespace UI
             TraducirColumna(dgvProductos, "colProductoStock", "frmGenerarCarrito.Stock");
             TraducirColumna(dgvDetalles, "colDetalleProducto", "frmGenerarCarrito.Producto");
             TraducirColumna(dgvDetalles, "colDetalleCantidad", "frmGenerarCarrito.Cantidad");
-            TraducirColumna(dgvDetalles, "colDetallePrecio", "frmGenerarCarrito.Precio");
             TraducirColumna(dgvDetalles, "colDetalleSubtotal", "frmGenerarCarrito.Subtotal");
 
             if (_factura != null)
@@ -133,10 +132,9 @@ namespace UI
 
             AsegurarColumnas(
                 dgvDetalles,
-                new[] { "colDetalleProducto", "colDetalleCantidad",
-                        "colDetallePrecio", "colDetalleSubtotal" },
-                new[] { "NombreProducto", "Cantidad", "PrecioUnitario", "Subtotal" },
-                new[] { "Producto", "Cantidad", "Precio", "Subtotal" });
+                new[] { "colDetalleProducto", "colDetalleCantidad", "colDetalleSubtotal" },
+                new[] { "NombreProducto", "Cantidad", "Subtotal" },
+                new[] { "Producto", "Cantidad", "Subtotal" });
         }
 
         private static void AsegurarColumnas(DataGridView grilla,
