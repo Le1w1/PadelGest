@@ -47,12 +47,12 @@ namespace UI
             lblTitulo.Size = new Size(680, 44);
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblTitulo.ForeColor = acento;
-            lblTitulo.Text = "COBRAR VENTA";
+            lblTitulo.Text = "COBRAR FACTURA";
 
             gbResumen.Name = "gbResumen";
             gbResumen.Location = new Point(24, 69);
             gbResumen.Size = new Size(680, 142);
-            gbResumen.Text = "Resumen de venta";
+            gbResumen.Text = "Resumen de la factura";
             gbResumen.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             gbResumen.BackColor = panel;
             gbResumen.ForeColor = Color.White;
@@ -193,7 +193,7 @@ namespace UI
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmCobrarVenta";
-            Text = "PadelGest - Cobrar Venta";
+            Text = "PadelGest - Cobrar Factura";
             Controls.Add(lblTitulo);
             Controls.Add(gbResumen);
             Controls.Add(gbTarjeta);
