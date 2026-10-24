@@ -30,22 +30,6 @@ CREATE TABLE [dbo].[Cancha](
 	[IdCancha] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
-/****** Object:  Table [dbo].[Carrito]    Script Date: 19/10/2026 15:17:06 ******/
-SET ANSI_NULLS ON
-SET QUOTED_IDENTIFIER ON
-CREATE TABLE [dbo].[Carrito](
-	[IdCarrito] [int] IDENTITY(1,1) NOT NULL,
-	[DNI] [nvarchar](8) NULL,
-	[IdVendedor] [int] NOT NULL,
-	[FechaHoraCreacion] [datetime2](7) NOT NULL,
-	[ImporteTotal] [decimal](12, 2) NOT NULL,
-	[Estado] [nvarchar](20) NOT NULL,
-	[DVH] [varchar](64) NULL,
- CONSTRAINT [PK_Carrito] PRIMARY KEY CLUSTERED 
-(
-	[IdCarrito] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
 /****** Object:  Table [dbo].[Cliente]    Script Date: 19/10/2026 15:17:06 ******/
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
@@ -59,22 +43,6 @@ CREATE TABLE [dbo].[Cliente](
  CONSTRAINT [PK_Cliente] PRIMARY KEY CLUSTERED 
 (
 	[DNI] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-/****** Object:  Table [dbo].[DetalleCarrito]    Script Date: 19/10/2026 15:17:06 ******/
-SET ANSI_NULLS ON
-SET QUOTED_IDENTIFIER ON
-CREATE TABLE [dbo].[DetalleCarrito](
-	[IdDetalleCarrito] [int] IDENTITY(1,1) NOT NULL,
-	[IdCarrito] [int] NOT NULL,
-	[CodigoProducto] [int] NOT NULL,
-	[NombreProducto] [nvarchar](120) NOT NULL,
-	[Cantidad] [int] NOT NULL,
-	[PrecioUnitario] [decimal](12, 2) NOT NULL,
-	[DVH] [varchar](64) NULL,
- CONSTRAINT [PK_DetalleCarrito] PRIMARY KEY CLUSTERED 
-(
-	[IdDetalleCarrito] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 /****** Object:  Table [dbo].[DigitoVerificador]    Script Date: 19/10/2026 15:17:06 ******/
@@ -124,21 +92,6 @@ CREATE TABLE [dbo].[Factura](
  CONSTRAINT [PK_Factura] PRIMARY KEY CLUSTERED 
 (
 	[IdFactura] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-/****** Object:  Table [dbo].[FacturaVenta]    Script Date: 19/10/2026 15:17:06 ******/
-SET ANSI_NULLS ON
-SET QUOTED_IDENTIFIER ON
-CREATE TABLE [dbo].[FacturaVenta](
-	[IdFacturaVenta] [int] IDENTITY(1,1) NOT NULL,
-	[IdVenta] [int] NOT NULL,
-	[FechaHoraEmision] [datetime2](7) NOT NULL,
-	[ImporteTotal] [decimal](12, 2) NOT NULL,
-	[Estado] [nvarchar](20) NOT NULL,
-	[DVH] [varchar](64) NULL,
- CONSTRAINT [PK_FacturaVenta] PRIMARY KEY CLUSTERED 
-(
-	[IdFacturaVenta] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 /****** Object:  Table [dbo].[Familia]    Script Date: 19/10/2026 15:17:06 ******/
@@ -345,30 +298,51 @@ CREATE TABLE [dbo].[Usuario](
 	[IdUsuario] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
-/****** Object:  Table [dbo].[Venta]    Script Date: 19/10/2026 15:17:06 ******/
-SET ANSI_NULLS ON
-SET QUOTED_IDENTIFIER ON
-CREATE TABLE [dbo].[Venta](
-	[IdVenta] [int] IDENTITY(1,1) NOT NULL,
-	[Codigo] [nvarchar](30) NOT NULL,
-	[IdCarrito] [int] NOT NULL,
-	[DNI] [nvarchar](8) NOT NULL,
-	[IdVendedor] [int] NOT NULL,
-	[FechaHora] [datetime2](7) NOT NULL,
-	[ImporteTotal] [decimal](12, 2) NOT NULL,
-	[Estado] [nvarchar](20) NOT NULL,
-	[Banco] [nvarchar](80) NOT NULL,
-	[Ultimos4Tarjeta] [char](4) NOT NULL,
-	[ImportePago] [decimal](12, 2) NOT NULL,
-	[FechaHoraPago] [datetime2](7) NOT NULL,
-	[EstadoPago] [nvarchar](20) NOT NULL,
-	[CodigoAutorizacion] [nvarchar](50) NOT NULL,
-	[DVH] [varchar](64) NULL,
- CONSTRAINT [PK_Venta] PRIMARY KEY CLUSTERED 
-(
-	[IdVenta] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+/****** PN2 NUEVO: FacturaBuffet y DetalleFactura (Factura de PN1 intacta) ******/
+CREATE TABLE [dbo].[FacturaBuffet] (
+ [IdFactura] int IDENTITY(1,1) NOT NULL,
+ [NumeroFactura] nvarchar(30) NOT NULL,
+ [DNI] nvarchar(8) NOT NULL,
+ [IdVendedor] int NOT NULL,
+ [FechaHoraEmision] datetime2(7) NOT NULL CONSTRAINT [DF_FacturaBuffet_FechaHoraEmision] DEFAULT (SYSDATETIME()),
+ [ImporteTotal] decimal(12,2) NOT NULL,
+ [Estado] nvarchar(20) NOT NULL CONSTRAINT [DF_FacturaBuffet_Estado] DEFAULT (N'Pagada'),
+ [Banco] nvarchar(80) NOT NULL,
+ [Ultimos4Tarjeta] char(4) NOT NULL,
+ [FechaHoraPago] datetime2(7) NOT NULL,
+ [CodigoAutorizacion] nvarchar(50) NOT NULL,
+ [DVH] varchar(64) NULL,
+ CONSTRAINT [PK_FacturaBuffet] PRIMARY KEY ([IdFactura]),
+ CONSTRAINT [UQ_FacturaBuffet_NumeroFactura] UNIQUE ([NumeroFactura]),
+ CONSTRAINT [UQ_FacturaBuffet_CodigoAutorizacion] UNIQUE ([CodigoAutorizacion]),
+ CONSTRAINT [FK_FacturaBuffet_Cliente] FOREIGN KEY ([DNI]) REFERENCES [dbo].[Cliente]([DNI]),
+ CONSTRAINT [FK_FacturaBuffet_Vendedor] FOREIGN KEY ([IdVendedor]) REFERENCES [dbo].[Usuario]([IdUsuario]),
+ CONSTRAINT [CK_FacturaBuffet_Importe] CHECK ([ImporteTotal] > 0),
+ CONSTRAINT [CK_FacturaBuffet_Estado] CHECK ([Estado] IN (N'Pagada', N'Anulada')),
+ CONSTRAINT [CK_FacturaBuffet_Numero] CHECK (LEN(LTRIM(RTRIM([NumeroFactura]))) > 0),
+ CONSTRAINT [CK_FacturaBuffet_Banco] CHECK (LEN(LTRIM(RTRIM([Banco]))) > 0),
+ CONSTRAINT [CK_FacturaBuffet_Tarjeta] CHECK (LEN([Ultimos4Tarjeta])=4 AND [Ultimos4Tarjeta] NOT LIKE '%[^0-9]%'),
+ CONSTRAINT [CK_FacturaBuffet_Autorizacion] CHECK (LEN(LTRIM(RTRIM([CodigoAutorizacion]))) > 0)
+);
+CREATE TABLE [dbo].[DetalleFactura] (
+ [IdDetalleFactura] int IDENTITY(1,1) NOT NULL,
+ [IdFactura] int NOT NULL,
+ [CodigoProducto] int NOT NULL,
+ [Cantidad] int NOT NULL,
+ [PrecioUnitario] decimal(12,2) NOT NULL,
+ [Subtotal] AS CONVERT(decimal(18,2), CONVERT(decimal(18,2), [Cantidad]) * [PrecioUnitario]) PERSISTED,
+ [DVH] varchar(64) NULL,
+ CONSTRAINT [PK_DetalleFactura] PRIMARY KEY ([IdDetalleFactura]),
+ CONSTRAINT [UQ_DetalleFactura_FacturaProducto] UNIQUE ([IdFactura],[CodigoProducto]),
+ CONSTRAINT [FK_DetalleFactura_FacturaBuffet] FOREIGN KEY ([IdFactura]) REFERENCES [dbo].[FacturaBuffet]([IdFactura]),
+ CONSTRAINT [FK_DetalleFactura_Producto] FOREIGN KEY ([CodigoProducto]) REFERENCES [dbo].[Producto]([CodigoProducto]),
+ CONSTRAINT [CK_DetalleFactura_Cantidad] CHECK ([Cantidad] > 0),
+ CONSTRAINT [CK_DetalleFactura_Precio] CHECK ([PrecioUnitario] > 0)
+);
+CREATE INDEX [IX_FacturaBuffet_DNI_Fecha] ON [dbo].[FacturaBuffet]([DNI],[FechaHoraEmision]);
+CREATE INDEX [IX_FacturaBuffet_Vendedor_Fecha] ON [dbo].[FacturaBuffet]([IdVendedor],[FechaHoraEmision]);
+CREATE INDEX [IX_DetalleFactura_Producto] ON [dbo].[DetalleFactura]([CodigoProducto]);
+
 SET IDENTITY_INSERT [dbo].[BitacoraEvento] ON 
 
 INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (1, NULL, N'recepcionista@padelgest.com', CAST(N'2026-10-04T14:44:51.8551037' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla RespaldoBD: se detecto al menos un registro eliminado fuera del sistema.')
@@ -421,12 +395,11 @@ SET IDENTITY_INSERT [dbo].[Cancha] OFF
 INSERT [dbo].[Cliente] ([DNI], [Nombre], [Apellido], [Telefono], [CorreoElectronico], [DVH]) VALUES (N'11111111', N'Prueba', N'Prueba', N'1234567890', N'Prueba@gmail.com', N'ec3be973343c5f3d7c22cf3e662ac0b6847054920461a7ba3f3b731f14703035')
 INSERT [dbo].[Cliente] ([DNI], [Nombre], [Apellido], [Telefono], [CorreoElectronico], [DVH]) VALUES (N'12345678', N'Leo', N'Rod', N'11223344', N'leo@gmail.com', N'cdcc6763b1c89b568b83c035d6e8b6d99eede4e64213704242e3e85717a187e9')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cancha', N'91129657cbb5230efd409301669fd05b677f7331542c2192547bd4da1b7bd1bd')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Carrito', NULL)
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cliente', N'c03015b3d9ef698e79b624cdec9770b67232579d5c09d00cfabf3f9c474d69bb')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'DetalleCarrito', NULL)
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Equipamiento', N'1fb47453d7dee2f1e004895302f0abd6dcaa3a456f677af737b2669d1fe365f5')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Factura', N'1c7f1fe929094cfca32ee9dc21322ede6cad2728b8a5839f817bf869499bba6a')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'FacturaVenta', NULL)
+INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'FacturaBuffet', NULL)
+INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'DetalleFactura', NULL)
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia', N'fdd294e73b3531a63b8e55aff07cf3c5d17090230a00fa065860d52642a31e97')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia_Familia', N'18c42e63ad2b66da1312f3417e15d5d971f8a253fbfb4897fbeb267656f4be79')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Idioma', N'b8206deae9aaca74a25998ec9d26c6b2b41fdf430ccc455979a8aed7a298a234')
@@ -440,7 +413,6 @@ INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', 
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', N'9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', N'161a8edb1f52eabd4bda9294b36ace3cec0c41c79b92b2e34627034f59f780a9')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Venta', NULL)
 SET IDENTITY_INSERT [dbo].[Equipamiento] ON 
 
 INSERT [dbo].[Equipamiento] ([IdEquipamiento], [Tipo], [Importe], [StockDisponible], [Activo], [DVH]) VALUES (1, N'Paleta', CAST(8000.00 AS Decimal(12, 2)), 8, 1, N'345646ab25ac506c73da5a5ecdcd9dd10858d9a5d96d33c46ab6ccf715f6a6f1')
@@ -578,22 +550,11 @@ ALTER TABLE [dbo].[Cancha] ADD  CONSTRAINT [UQ_Cancha_Nombre] UNIQUE NONCLUSTERE
 (
 	[Nombre] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-/****** Object:  Index [UQ_DetalleCarrito_CarritoProducto]    Script Date: 19/10/2026 15:17:06 ******/
-ALTER TABLE [dbo].[DetalleCarrito] ADD  CONSTRAINT [UQ_DetalleCarrito_CarritoProducto] UNIQUE NONCLUSTERED 
-(
-	[IdCarrito] ASC,
-	[CodigoProducto] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 SET ANSI_PADDING ON
 /****** Object:  Index [UQ_Equipamiento_Tipo]    Script Date: 19/10/2026 15:17:06 ******/
 ALTER TABLE [dbo].[Equipamiento] ADD  CONSTRAINT [UQ_Equipamiento_Tipo] UNIQUE NONCLUSTERED 
 (
 	[Tipo] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-/****** Object:  Index [UQ_FacturaVenta_IdVenta]    Script Date: 19/10/2026 15:17:06 ******/
-ALTER TABLE [dbo].[FacturaVenta] ADD  CONSTRAINT [UQ_FacturaVenta_IdVenta] UNIQUE NONCLUSTERED 
-(
-	[IdVenta] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 SET ANSI_PADDING ON
 /****** Object:  Index [UQ_Familia_Nombre]    Script Date: 19/10/2026 15:17:06 ******/
@@ -639,26 +600,9 @@ ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [UQ_Usuario_NombreUsuario] UNIQUE NO
 	[NombreUsuario] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 SET ANSI_PADDING ON
-/****** Object:  Index [UQ_Venta_Codigo]    Script Date: 19/10/2026 15:17:06 ******/
-ALTER TABLE [dbo].[Venta] ADD  CONSTRAINT [UQ_Venta_Codigo] UNIQUE NONCLUSTERED 
-(
-	[Codigo] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-/****** Object:  Index [UQ_Venta_CodigoAutorizacion] ******/
-ALTER TABLE [dbo].[Venta] ADD CONSTRAINT [UQ_Venta_CodigoAutorizacion] UNIQUE NONCLUSTERED ([CodigoAutorizacion] ASC)
 GO
-/****** Object:  Index [UQ_Venta_IdCarrito]    Script Date: 19/10/2026 15:17:06 ******/
-ALTER TABLE [dbo].[Venta] ADD  CONSTRAINT [UQ_Venta_IdCarrito] UNIQUE NONCLUSTERED 
-(
-	[IdCarrito] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ALTER TABLE [dbo].[BitacoraEvento] ADD  CONSTRAINT [DF_BitacoraEvento_FechaHora]  DEFAULT (sysdatetime()) FOR [FechaHora]
-ALTER TABLE [dbo].[Carrito] ADD  CONSTRAINT [DF_Carrito_FechaHoraCreacion]  DEFAULT (sysdatetime()) FOR [FechaHoraCreacion]
-ALTER TABLE [dbo].[Carrito] ADD  CONSTRAINT [DF_Carrito_ImporteTotal]  DEFAULT ((0)) FOR [ImporteTotal]
-ALTER TABLE [dbo].[Carrito] ADD  CONSTRAINT [DF_Carrito_Estado]  DEFAULT (N'EnPreparacion') FOR [Estado]
 ALTER TABLE [dbo].[Equipamiento] ADD  CONSTRAINT [DF_Equipamiento_Activo]  DEFAULT ((1)) FOR [Activo]
-ALTER TABLE [dbo].[FacturaVenta] ADD  CONSTRAINT [DF_FacturaVenta_Fecha]  DEFAULT (sysdatetime()) FOR [FechaHoraEmision]
-ALTER TABLE [dbo].[FacturaVenta] ADD  CONSTRAINT [DF_FacturaVenta_Estado]  DEFAULT (N'Pagada') FOR [Estado]
 ALTER TABLE [dbo].[Producto] ADD  CONSTRAINT [DF_Producto_Stock]  DEFAULT ((0)) FOR [StockDisponible]
 ALTER TABLE [dbo].[Producto] ADD  CONSTRAINT [DF_Producto_StockMinimo]  DEFAULT ((0)) FOR [StockMinimo]
 ALTER TABLE [dbo].[Producto] ADD  CONSTRAINT [DF_Producto_Activo]  DEFAULT ((1)) FOR [Activo]
@@ -668,23 +612,9 @@ ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [DF_Usuario_Bloqueado]  DEFAULT ((0)
 ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [DF_Usuario_IntentosFallidos]  DEFAULT ((0)) FOR [IntentosFallidos]
 ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [DF_Usuario_DebeCambiarClave]  DEFAULT ((1)) FOR [DebeCambiarClave]
 ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [DF_Usuario_IdIdioma]  DEFAULT ((1)) FOR [IdIdioma]
-ALTER TABLE [dbo].[Venta] ADD  CONSTRAINT [DF_Venta_FechaHora]  DEFAULT (sysdatetime()) FOR [FechaHora]
-ALTER TABLE [dbo].[Venta] ADD  CONSTRAINT [DF_Venta_Estado]  DEFAULT (N'Registrada') FOR [Estado]
 ALTER TABLE [dbo].[BitacoraEvento]  WITH CHECK ADD  CONSTRAINT [FK_BitacoraEvento_Usuario] FOREIGN KEY([IdUsuario])
 REFERENCES [dbo].[Usuario] ([IdUsuario])
 ALTER TABLE [dbo].[BitacoraEvento] CHECK CONSTRAINT [FK_BitacoraEvento_Usuario]
-ALTER TABLE [dbo].[Carrito]  WITH CHECK ADD  CONSTRAINT [FK_Carrito_Cliente] FOREIGN KEY([DNI])
-REFERENCES [dbo].[Cliente] ([DNI])
-ALTER TABLE [dbo].[Carrito] CHECK CONSTRAINT [FK_Carrito_Cliente]
-ALTER TABLE [dbo].[Carrito]  WITH CHECK ADD  CONSTRAINT [FK_Carrito_Vendedor] FOREIGN KEY([IdVendedor])
-REFERENCES [dbo].[Usuario] ([IdUsuario])
-ALTER TABLE [dbo].[Carrito] CHECK CONSTRAINT [FK_Carrito_Vendedor]
-ALTER TABLE [dbo].[DetalleCarrito]  WITH CHECK ADD  CONSTRAINT [FK_DetalleCarrito_Carrito] FOREIGN KEY([IdCarrito])
-REFERENCES [dbo].[Carrito] ([IdCarrito])
-ALTER TABLE [dbo].[DetalleCarrito] CHECK CONSTRAINT [FK_DetalleCarrito_Carrito]
-ALTER TABLE [dbo].[DetalleCarrito]  WITH CHECK ADD  CONSTRAINT [FK_DetalleCarrito_Producto] FOREIGN KEY([CodigoProducto])
-REFERENCES [dbo].[Producto] ([CodigoProducto])
-ALTER TABLE [dbo].[DetalleCarrito] CHECK CONSTRAINT [FK_DetalleCarrito_Producto]
 ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [FK_Factura_Cancha] FOREIGN KEY([IdCancha])
 REFERENCES [dbo].[Cancha] ([IdCancha])
 ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [FK_Factura_Cancha]
@@ -695,9 +625,6 @@ ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [FK_Factura_Cliente]
 ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [FK_Factura_Tarifa] FOREIGN KEY([IdTarifa])
 REFERENCES [dbo].[Tarifa] ([IdTarifa])
 ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [FK_Factura_Tarifa]
-ALTER TABLE [dbo].[FacturaVenta]  WITH CHECK ADD  CONSTRAINT [FK_FacturaVenta_Venta] FOREIGN KEY([IdVenta])
-REFERENCES [dbo].[Venta] ([IdVenta])
-ALTER TABLE [dbo].[FacturaVenta] CHECK CONSTRAINT [FK_FacturaVenta_Venta]
 ALTER TABLE [dbo].[Familia_Familia]  WITH CHECK ADD  CONSTRAINT [FK_FamFam_Hija] FOREIGN KEY([IdFamiliaHija])
 REFERENCES [dbo].[Familia] ([IdFamilia])
 ALTER TABLE [dbo].[Familia_Familia] CHECK CONSTRAINT [FK_FamFam_Hija]
@@ -744,29 +671,8 @@ ALTER TABLE [dbo].[Usuario] CHECK CONSTRAINT [FK_Usuario_Idioma]
 ALTER TABLE [dbo].[Usuario]  WITH CHECK ADD  CONSTRAINT [FK_Usuario_Rol] FOREIGN KEY([IdRol])
 REFERENCES [dbo].[Rol] ([IdRol])
 ALTER TABLE [dbo].[Usuario] CHECK CONSTRAINT [FK_Usuario_Rol]
-ALTER TABLE [dbo].[Venta]  WITH CHECK ADD  CONSTRAINT [FK_Venta_Carrito] FOREIGN KEY([IdCarrito])
-REFERENCES [dbo].[Carrito] ([IdCarrito])
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [FK_Venta_Carrito]
-ALTER TABLE [dbo].[Venta]  WITH CHECK ADD  CONSTRAINT [FK_Venta_Cliente] FOREIGN KEY([DNI])
-REFERENCES [dbo].[Cliente] ([DNI])
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [FK_Venta_Cliente]
-ALTER TABLE [dbo].[Venta]  WITH CHECK ADD  CONSTRAINT [FK_Venta_Vendedor] FOREIGN KEY([IdVendedor])
-REFERENCES [dbo].[Usuario] ([IdUsuario])
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [FK_Venta_Vendedor]
-ALTER TABLE [dbo].[Carrito]  WITH CHECK ADD  CONSTRAINT [CK_Carrito_DNI] CHECK  (([Estado]=N'EnPreparacion' OR [Estado]=N'Cancelado' OR [DNI] IS NOT NULL))
-ALTER TABLE [dbo].[Carrito] CHECK CONSTRAINT [CK_Carrito_DNI]
-ALTER TABLE [dbo].[Carrito]  WITH CHECK ADD  CONSTRAINT [CK_Carrito_Estado] CHECK  (([Estado]=N'Cancelado' OR [Estado]=N'Vendido' OR [Estado]=N'Listo' OR [Estado]=N'EnPreparacion'))
-ALTER TABLE [dbo].[Carrito] CHECK CONSTRAINT [CK_Carrito_Estado]
-ALTER TABLE [dbo].[Carrito]  WITH CHECK ADD  CONSTRAINT [CK_Carrito_Importe] CHECK  (([ImporteTotal]>=(0)))
-ALTER TABLE [dbo].[Carrito] CHECK CONSTRAINT [CK_Carrito_Importe]
 ALTER TABLE [dbo].[Cliente]  WITH CHECK ADD  CONSTRAINT [CK_Cliente_DNI] CHECK  ((len([DNI])>=(7) AND len([DNI])<=(8) AND NOT [DNI] like '%[^0-9]%'))
 ALTER TABLE [dbo].[Cliente] CHECK CONSTRAINT [CK_Cliente_DNI]
-ALTER TABLE [dbo].[DetalleCarrito]  WITH CHECK ADD  CONSTRAINT [CK_DetalleCarrito_Cantidad] CHECK  (([Cantidad]>(0)))
-ALTER TABLE [dbo].[DetalleCarrito] CHECK CONSTRAINT [CK_DetalleCarrito_Cantidad]
-ALTER TABLE [dbo].[DetalleCarrito]  WITH CHECK ADD  CONSTRAINT [CK_DetalleCarrito_Nombre] CHECK  ((len(ltrim(rtrim([NombreProducto])))>(0)))
-ALTER TABLE [dbo].[DetalleCarrito] CHECK CONSTRAINT [CK_DetalleCarrito_Nombre]
-ALTER TABLE [dbo].[DetalleCarrito]  WITH CHECK ADD  CONSTRAINT [CK_DetalleCarrito_Precio] CHECK  (([PrecioUnitario]>(0)))
-ALTER TABLE [dbo].[DetalleCarrito] CHECK CONSTRAINT [CK_DetalleCarrito_Precio]
 ALTER TABLE [dbo].[Equipamiento]  WITH CHECK ADD  CONSTRAINT [CK_Equipamiento_Importe] CHECK  (([Importe]>=(0)))
 ALTER TABLE [dbo].[Equipamiento] CHECK CONSTRAINT [CK_Equipamiento_Importe]
 ALTER TABLE [dbo].[Equipamiento]  WITH CHECK ADD  CONSTRAINT [CK_Equipamiento_Stock] CHECK  (([StockDisponible]>=(0)))
@@ -785,10 +691,6 @@ ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [CK_Factura_ImporteTarif
 ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [CK_Factura_ImporteTarifa]
 ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [CK_Factura_ImporteTotal] CHECK  (([ImporteTotal]>(0)))
 ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [CK_Factura_ImporteTotal]
-ALTER TABLE [dbo].[FacturaVenta]  WITH CHECK ADD  CONSTRAINT [CK_FacturaVenta_Estado] CHECK  (([Estado]=N'Anulada' OR [Estado]=N'Pagada'))
-ALTER TABLE [dbo].[FacturaVenta] CHECK CONSTRAINT [CK_FacturaVenta_Estado]
-ALTER TABLE [dbo].[FacturaVenta]  WITH CHECK ADD  CONSTRAINT [CK_FacturaVenta_Importe] CHECK  (([ImporteTotal]>(0)))
-ALTER TABLE [dbo].[FacturaVenta] CHECK CONSTRAINT [CK_FacturaVenta_Importe]
 ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_Categoria] CHECK  ((len(ltrim(rtrim([Categoria])))>(0)))
 ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [CK_Producto_Categoria]
 ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_Nombre] CHECK  ((len(ltrim(rtrim([Nombre])))>(0)))
@@ -815,27 +717,13 @@ ALTER TABLE [dbo].[Tarifa]  WITH CHECK ADD  CONSTRAINT [CK_Tarifa_Importe] CHECK
 ALTER TABLE [dbo].[Tarifa] CHECK CONSTRAINT [CK_Tarifa_Importe]
 ALTER TABLE [dbo].[Usuario]  WITH CHECK ADD  CONSTRAINT [CK_Usuario_IntentosFallidos] CHECK  (([IntentosFallidos]>=(0)))
 ALTER TABLE [dbo].[Usuario] CHECK CONSTRAINT [CK_Usuario_IntentosFallidos]
-ALTER TABLE [dbo].[Venta]  WITH CHECK ADD  CONSTRAINT [CK_Venta_Estado] CHECK  (([Estado]=N'Anulada' OR [Estado]=N'Registrada'))
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [CK_Venta_Estado]
-ALTER TABLE [dbo].[Venta]  WITH CHECK ADD  CONSTRAINT [CK_Venta_Importe] CHECK  (([ImporteTotal]>(0)))
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [CK_Venta_Importe]
-ALTER TABLE [dbo].[Venta] WITH CHECK ADD CONSTRAINT [CK_Venta_Banco] CHECK (LEN(LTRIM(RTRIM([Banco]))) > 0)
 GO
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [CK_Venta_Banco]
 GO
-ALTER TABLE [dbo].[Venta] WITH CHECK ADD CONSTRAINT [CK_Venta_Ultimos4Tarjeta] CHECK (LEN([Ultimos4Tarjeta]) = 4 AND [Ultimos4Tarjeta] NOT LIKE '%[^0-9]%')
 GO
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [CK_Venta_Ultimos4Tarjeta]
 GO
-ALTER TABLE [dbo].[Venta] WITH CHECK ADD CONSTRAINT [CK_Venta_ImportePago] CHECK ([ImportePago] > 0)
 GO
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [CK_Venta_ImportePago]
 GO
-ALTER TABLE [dbo].[Venta] WITH CHECK ADD CONSTRAINT [CK_Venta_EstadoPago] CHECK ([EstadoPago] IN (N'Aprobado', N'Revertido'))
 GO
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [CK_Venta_EstadoPago]
 GO
-ALTER TABLE [dbo].[Venta] WITH CHECK ADD CONSTRAINT [CK_Venta_CodigoAutorizacion] CHECK (LEN(LTRIM(RTRIM([CodigoAutorizacion]))) > 0)
 GO
-ALTER TABLE [dbo].[Venta] CHECK CONSTRAINT [CK_Venta_CodigoAutorizacion]
 GO
