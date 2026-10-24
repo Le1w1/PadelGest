@@ -4,26 +4,22 @@ using Servicios;
 
 namespace UI
 {
-    // CUN08 Generar Carrito, CUN09 Seleccionar Productos y CUN10/11 Cliente.
-    // CUN12 a CUN14: cobro simulado, registro de venta y stock automatico.
+    // CUN08 Generar Factura (en memoria) y CUN10 Cobrar Factura.
+    // CUN09 Registrar Cliente reutiliza el formulario de PN1.
     public partial class frmGenerarCarrito : Form, IObservadorIdioma
     {
-        private readonly CarritoBLL _carritoBLL;
+        private readonly FacturaBuffetBLL _facturaBLL;
         private readonly ProductoBLL _productoBLL;
-        private CarritoBE? _carrito;
-        private readonly VentaBLL _ventaBLL;
+        private FacturaBuffetBE? _factura;
         private PagoBE? _pagoAprobado;
-        private VentaBE? _ventaRegistrada;
+        private FacturaBuffetBE? _facturaRegistrada;
 
         public frmGenerarCarrito()
         {
             InitializeComponent();
-            // Si Visual Studio regenera el Designer sin columnas, las restaura
-            // antes de asignar DataSource o traducir los encabezados.
             AsegurarColumnasGrillas();
-            _carritoBLL = new CarritoBLL();
+            _facturaBLL = new FacturaBuffetBLL();
             _productoBLL = new ProductoBLL();
-            _ventaBLL = new VentaBLL();
             ActualizarIdioma();
         }
 
@@ -34,9 +30,10 @@ namespace UI
             SM.Instancia.Suscribir(this);
             try
             {
-                _carrito = _carritoBLL.GenerarCarrito();
+                // CUN08: factura local, sin INSERT de cabecera ni detalles hasta cobrar.
+                _factura = _facturaBLL.GenerarFactura();
                 CargarProductos();
-                ActualizarCarrito(_carrito);
+                ActualizarFactura(_factura);
             }
             catch (Exception ex)
             {
@@ -50,12 +47,10 @@ namespace UI
             SM.Instancia.Desuscribir(this);
         }
 
-        // Evita dejar carritos en preparacion sin cerrar cuando se usa la X.
         private void frmGenerarCarrito_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Igual que en PN1: si el banco aprobo el pago, no se puede
-            // descartar la operacion antes de registrar la venta.
-            if (_pagoAprobado != null && _ventaRegistrada == null)
+            // El pago aprobado no se puede descartar: reintentar SOLO el registro.
+            if (_pagoAprobado != null && _facturaRegistrada == null)
             {
                 e.Cancel = true;
                 MessageBox.Show(T("frmGenerarCarrito.PagoPendienteRegistro"),
@@ -63,32 +58,15 @@ namespace UI
                 return;
             }
 
-            if (_carrito == null ||
-                (_carrito.Estado != "EnPreparacion" && _carrito.Estado != "Listo"))
+            if (_factura == null || _facturaRegistrada != null ||
+                _factura.Estado == "Pagada")
                 return;
 
-            DialogResult decision = MessageBox.Show(
-                T("frmGenerarCarrito.ConfirmarCancelar"),
-                Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (decision != DialogResult.Yes)
-            {
+            if (MessageBox.Show(T("frmGenerarCarrito.ConfirmarCancelar"),
+                    Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 e.Cancel = true;
-                return;
-            }
 
-            try
-            {
-                // El carrito sin cobro se descarta de las tablas operativas.
-                // Su cancelacion queda registrada en BitacoraEvento.
-                _carritoBLL.CancelarCarrito(_carrito.IdCarrito);
-                _carrito = null;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true;
-            }
+            // No se persiste ni borra nada: el detalle de la factura estaba en memoria.
         }
 
         public void ActualizarIdioma()
@@ -122,7 +100,7 @@ namespace UI
             TraducirColumna(dgvDetalles, "colDetallePrecio", "frmGenerarCarrito.Precio");
             TraducirColumna(dgvDetalles, "colDetalleSubtotal", "frmGenerarCarrito.Subtotal");
 
-            if (_carrito != null)
+            if (_factura != null)
                 ActualizarResumen();
         }
 
@@ -230,9 +208,9 @@ namespace UI
                 lblMensaje.Text = string.Empty;
         }
 
-        private void ActualizarCarrito(CarritoBE carrito)
+        private void ActualizarFactura(FacturaBuffetBE carrito)
         {
-            _carrito = carrito;
+            _factura = carrito;
             AsegurarColumnasGrillas();
             // Evita exponer los IDs tecnicos del detalle aunque se regenere
             // el Designer de Windows Forms.
@@ -244,21 +222,20 @@ namespace UI
 
         private void ActualizarResumen()
         {
-            if (_carrito == null)
-                return;
+            if (_factura == null) return;
+            bool editable = _factura.Estado == "EnPreparacion" && _pagoAprobado == null;
+            bool tieneProductos = _factura.Detalles.Count > 0;
 
-            bool editable = _carrito.Estado == "EnPreparacion" && _pagoAprobado == null;
-            bool tieneProductos = _carrito.Detalles.Count > 0;
-
-            lblTotal.Text = _carrito.ImporteTotal.ToString("C2");
-            lblEstado.Text = _carrito.Estado switch
+            lblTotal.Text = _factura.ImporteTotal.ToString("C2");
+            lblEstado.Text = _factura.Estado switch
             {
                 "EnPreparacion" => T("frmGenerarCarrito.EstadoEnPreparacion"),
                 "Listo" => T("frmGenerarCarrito.EstadoListo"),
-                "Vendido" => T("frmGenerarCarrito.EstadoVendido"),
-                _ => _carrito.Estado
+                "Pagada" => T("frmGenerarCarrito.EstadoVendido"),
+                _ => _factura.Estado
             };
-            lblCliente.Text = string.IsNullOrWhiteSpace(_carrito.DNI)? T("frmGenerarCarrito.SinCliente"): _carrito.DNI;
+            lblCliente.Text = string.IsNullOrWhiteSpace(_factura.DNI)
+                ? T("frmGenerarCarrito.SinCliente") : _factura.DNI;
 
             btnAgregar.Enabled = editable;
             btnModificar.Enabled = editable && tieneProductos;
@@ -267,8 +244,10 @@ namespace UI
             btnActualizarProductos.Enabled = editable;
             nudCantidad.Enabled = editable;
 
-            btnCobrar.Enabled = (_carrito.Estado == "Listo" && _pagoAprobado == null)|| (_pagoAprobado != null && _ventaRegistrada == null);
-            btnCobrar.Text = _pagoAprobado != null && _ventaRegistrada == null? T("frmGenerarCarrito.ReintentarRegistro"): T("frmGenerarCarrito.Cobrar");
+            btnCobrar.Enabled = (_factura.Estado == "Listo" && _pagoAprobado == null)
+                || (_pagoAprobado != null && _facturaRegistrada == null);
+            btnCobrar.Text = _pagoAprobado != null && _facturaRegistrada == null
+                ? T("frmGenerarCarrito.ReintentarRegistro") : T("frmGenerarCarrito.Cobrar");
             btnVolver.Enabled = _pagoAprobado == null;
         }
 
@@ -282,7 +261,7 @@ namespace UI
 
         private int ObtenerCodigoDetalle()
         {
-            if (dgvDetalles.CurrentRow?.DataBoundItem is not DetalleCarritoBE detalle)
+            if (dgvDetalles.CurrentRow?.DataBoundItem is not DetalleFacturaBuffetBE detalle)
                 throw new Exception(T("frmGenerarCarrito.SeleccioneDetalle"));
 
             return detalle.CodigoProducto;
@@ -290,47 +269,37 @@ namespace UI
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            if (_carrito == null) return;
+            if (_factura == null) return;
             try
             {
-                int codigo = ObtenerCodigoProducto();
-                ActualizarCarrito(_carritoBLL.AgregarProducto(_carrito.IdCarrito, codigo, (int)nudCantidad.Value));
+                ActualizarFactura(_facturaBLL.AgregarProducto(
+                    _factura, ObtenerCodigoProducto(), (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.ProductoAgregado");
             }
-            catch (Exception ex)
-            {
-                lblMensaje.Text = ex.Message;
-            }
+            catch (Exception ex) { lblMensaje.Text = ex.Message; }
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            if (_carrito == null) return;
+            if (_factura == null) return;
             try
             {
-                int codigo = ObtenerCodigoDetalle();
-                ActualizarCarrito(_carritoBLL.ModificarCantidad(_carrito.IdCarrito, codigo, (int)nudCantidad.Value));
+                ActualizarFactura(_facturaBLL.ModificarCantidad(
+                    _factura, ObtenerCodigoDetalle(), (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.CantidadModificada");
             }
-            catch (Exception ex)
-            {
-                lblMensaje.Text = ex.Message;
-            }
+            catch (Exception ex) { lblMensaje.Text = ex.Message; }
         }
 
         private void btnQuitar_Click(object sender, EventArgs e)
         {
-            if (_carrito == null) return;
+            if (_factura == null) return;
             try
             {
-                int codigo = ObtenerCodigoDetalle();
-                ActualizarCarrito(_carritoBLL.QuitarProducto(_carrito.IdCarrito, codigo));
+                ActualizarFactura(_facturaBLL.QuitarProducto(_factura, ObtenerCodigoDetalle()));
                 lblMensaje.Text = T("frmGenerarCarrito.ProductoQuitado");
             }
-            catch (Exception ex)
-            {
-                lblMensaje.Text = ex.Message;
-            }
+            catch (Exception ex) { lblMensaje.Text = ex.Message; }
         }
 
         private void btnActualizarProductos_Click(object sender, EventArgs e)
@@ -347,67 +316,54 @@ namespace UI
 
         private void btnSeleccionarCliente_Click(object sender, EventArgs e)
         {
-            if (_carrito == null || _carrito.Detalles.Count == 0) return;
-
-            // Reutiliza la seleccion y el registro de Cliente del PN1.
+            if (_factura == null || _factura.Detalles.Count == 0) return;
+            // Reutiliza PN1: CUN09 Registrar Cliente se ejecuta solo si es necesario.
             using frmSeleccionarCliente formCliente = new frmSeleccionarCliente();
             if (formCliente.ShowDialog(this) != DialogResult.OK ||
-                formCliente.ClienteSeleccionado == null)
-                return;
-
+                formCliente.ClienteSeleccionado == null) return;
             try
             {
-                ActualizarCarrito(_carritoBLL.AsociarCliente(_carrito.IdCarrito, formCliente.ClienteSeleccionado.DNI));
+                ActualizarFactura(_facturaBLL.AsociarCliente(
+                    _factura, formCliente.ClienteSeleccionado.DNI));
                 lblMensaje.Text = T("frmGenerarCarrito.ClienteAsignado");
             }
-            catch (Exception ex)
-            {
-                lblMensaje.Text = ex.Message;
-            }
+            catch (Exception ex) { lblMensaje.Text = ex.Message; }
         }
 
         private void btnCobrar_Click(object sender, EventArgs e)
         {
-            if (_carrito == null)
-                return;
-
-            // Una autorizacion ya aprobada SOLO permite reintentar el registro.
-            // Nunca se vuelve a llamar al banco para ese mismo pago.
+            if (_factura == null) return;
             if (_pagoAprobado != null)
             {
-                RegistrarVentaAutomatica();
+                RegistrarFacturaAutomatica();
                 return;
             }
-
-            if (_carrito.Estado != "Listo")
+            if (_factura.Estado != "Listo")
             {
-                lblMensaje.Text = T("Errores.Buffet.CarritoNoListo");
+                lblMensaje.Text = T("Errores.Cobro.FacturaInvalida");
                 return;
             }
 
             try
             {
-                _ventaBLL.ValidarAntesDeCobrar(_carrito.IdCarrito);
-
-                using frmCobrarVenta formCobro = new frmCobrarVenta(_carrito);
+                _facturaBLL.ValidarAntesDeCobrar(_factura);
+                using frmCobrarVenta formCobro = new frmCobrarVenta(_factura);
                 DialogResult respuesta = formCobro.ShowDialog(this);
-
                 if (respuesta == DialogResult.No && formCobro.PagoRechazado)
                 {
-                    // Pago rechazado: no existe Venta, se descarta el carrito.
-                    _carritoBLL.CancelarCarrito(_carrito.IdCarrito);
-                    _carrito = null;
-                    MessageBox.Show(T("frmGenerarCarrito.CobroRechazado"),Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // No hubo factura persistida ni unidades descontadas.
+                    _factura = null;
+                    MessageBox.Show(T("frmGenerarCarrito.CobroRechazado"),
+                        Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DialogResult = DialogResult.Cancel;
                     Close();
                     return;
                 }
-
                 if (respuesta == DialogResult.OK && formCobro.PagoAprobado != null)
                 {
                     _pagoAprobado = formCobro.PagoAprobado;
                     ActualizarResumen();
-                    RegistrarVentaAutomatica();
+                    RegistrarFacturaAutomatica();
                 }
             }
             catch (Exception ex)
@@ -417,44 +373,34 @@ namespace UI
             }
         }
 
-        private void RegistrarVentaAutomatica()
+        private void RegistrarFacturaAutomatica()
         {
-            if (_carrito == null || _pagoAprobado == null || _ventaRegistrada != null)
+            if (_factura == null || _pagoAprobado == null || _facturaRegistrada != null)
                 return;
 
             btnCobrar.Enabled = false;
-
             try
             {
-                _ventaRegistrada = _ventaBLL.RegistrarVenta(_carrito.IdCarrito, _pagoAprobado);
-
-                _carrito.Estado = "Vendido";
+                _facturaRegistrada = _facturaBLL.RegistrarFactura(_factura, _pagoAprobado);
                 ActualizarResumen();
-
-                // Traduccion del mensaje y del titulo segun el idioma seleccionado.
-                // Los saltos de linea se configuran en es.json y en.json.
                 string resumen = string.Format(
                     T("frmGenerarCarrito.VentaRegistrada"),
-                    _ventaRegistrada.Codigo,
-                    _ventaRegistrada.Factura.IdFacturaVenta,
-                    _ventaRegistrada.ImporteTotal.ToString("C2"));
-
-                MessageBox.Show(
-                    resumen,
-                    T("frmGenerarCarrito.TituloVentaFinalizada"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    _facturaRegistrada.NumeroFactura,
+                    _facturaRegistrada.IdFactura,
+                    _facturaRegistrada.ImporteTotal.ToString("C2"));
+                MessageBox.Show(resumen, T("frmGenerarCarrito.TituloVentaFinalizada"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
             catch (Exception ex)
             {
                 lblMensaje.Text = string.Format(T("frmGenerarCarrito.ErrorRegistro"), ex.Message);
-                MessageBox.Show(lblMensaje.Text, Text,MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lblMensaje.Text, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             finally
             {
-                if (!IsDisposed && _ventaRegistrada == null)
+                if (!IsDisposed && _facturaRegistrada == null)
                     ActualizarResumen();
             }
         }
@@ -466,7 +412,7 @@ namespace UI
 
         private void dgvDetalles_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvDetalles.CurrentRow?.DataBoundItem is DetalleCarritoBE detalle)
+            if (dgvDetalles.CurrentRow?.DataBoundItem is DetalleFacturaBuffetBE detalle)
             {
                 nudCantidad.Value = Math.Min(nudCantidad.Maximum,
                     Math.Max(nudCantidad.Minimum, detalle.Cantidad));
