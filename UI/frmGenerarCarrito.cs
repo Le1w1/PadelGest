@@ -208,15 +208,15 @@ namespace UI
                 lblMensaje.Text = string.Empty;
         }
 
-        private void ActualizarFactura(FacturaBuffetBE carrito)
+        private void ActualizarFactura(FacturaBuffetBE factura)
         {
-            _factura = carrito;
+            _factura = factura;
             AsegurarColumnasGrillas();
             // Evita exponer los IDs tecnicos del detalle aunque se regenere
             // el Designer de Windows Forms.
             dgvDetalles.AutoGenerateColumns = false;
             dgvDetalles.DataSource = null;
-            dgvDetalles.DataSource = carrito.Detalles.ToList();
+            dgvDetalles.DataSource = factura.Detalles.ToList();
             ActualizarResumen();
         }
 
@@ -261,7 +261,7 @@ namespace UI
 
         private int ObtenerCodigoDetalle()
         {
-            if (dgvDetalles.CurrentRow?.DataBoundItem is not DetalleFacturaBuffetBE detalle)
+            if (dgvDetalles.CurrentRow?.DataBoundItem is not DetalleFacturaBE detalle)
                 throw new Exception(T("frmGenerarCarrito.SeleccioneDetalle"));
 
             return detalle.CodigoProducto;
@@ -412,7 +412,7 @@ namespace UI
 
         private void dgvDetalles_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvDetalles.CurrentRow?.DataBoundItem is DetalleFacturaBuffetBE detalle)
+            if (dgvDetalles.CurrentRow?.DataBoundItem is DetalleFacturaBE detalle)
             {
                 nudCantidad.Value = Math.Min(nudCantidad.Maximum,
                     Math.Max(nudCantidad.Minimum, detalle.Cantidad));
