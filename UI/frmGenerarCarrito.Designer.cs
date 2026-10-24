@@ -67,7 +67,7 @@ namespace UI
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(700, 46);
             lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "Generar Carrito";
+            lblTitulo.Text = "Generar Factura";
             // 
             // gbCatalogo
             // 
@@ -190,7 +190,7 @@ namespace UI
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(135, 52);
             btnAgregar.TabIndex = 2;
-            btnAgregar.Text = "Agregar al carrito";
+            btnAgregar.Text = "Agregar a la factura";
             btnAgregar.UseVisualStyleBackColor = false;
             btnAgregar.Click += btnAgregar_Click;
             // 
@@ -247,7 +247,7 @@ namespace UI
             gbCarrito.Size = new Size(540, 400);
             gbCarrito.TabIndex = 3;
             gbCarrito.TabStop = false;
-            gbCarrito.Text = "Carrito";
+            gbCarrito.Text = "Detalle de la factura";
             // 
             // dgvDetalles
             // 
@@ -395,7 +395,7 @@ namespace UI
             btnCobrar.Name = "btnCobrar";
             btnCobrar.Size = new Size(285, 49);
             btnCobrar.TabIndex = 11;
-            btnCobrar.Text = "Cobrar venta (próximamente)";
+            btnCobrar.Text = "Cobrar factura";
             btnCobrar.UseVisualStyleBackColor = false;
             btnCobrar.Click += btnCobrar_Click;
             // 
@@ -451,7 +451,7 @@ namespace UI
             MinimizeBox = false;
             Name = "frmGenerarCarrito";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "PadelGest - Generar Carrito";
+            Text = "PadelGest - Generar Factura";
             FormClosing += frmGenerarCarrito_FormClosing;
             FormClosed += frmGenerarCarrito_FormClosed;
             Load += frmGenerarCarrito_Load;
