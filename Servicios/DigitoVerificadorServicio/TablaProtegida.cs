@@ -136,6 +136,18 @@ namespace Servicios.DigitoVerificador
                         "ImporteTotal", "Estado" },
                 new[] { "IdFacturaVenta" }),
 
+            // PN2: facturación del buffet sin carrito persistente.
+            new TablaProtegida("FacturaBuffet",
+                new[] { "IdFactura", "NumeroFactura", "DNI", "IdVendedor",
+                        "FechaHoraEmision", "ImporteTotal", "Estado", "Banco",
+                        "Ultimos4Tarjeta", "FechaHoraPago", "CodigoAutorizacion" },
+                new[] { "IdFactura" }),
+
+            new TablaProtegida("DetalleFactura",
+                new[] { "IdDetalleFactura", "IdFactura", "CodigoProducto",
+                        "Cantidad", "PrecioUnitario", "Subtotal" },
+                new[] { "IdDetalleFactura" }),
+
             // ----- Tablas puente (PK compuesta) -----
             // Sus unicas columnas son las dos FK: son a la vez su PK y todo su
             // contenido, por eso ColumnasDatos == ColumnasPk.
