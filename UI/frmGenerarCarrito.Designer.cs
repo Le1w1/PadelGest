@@ -39,7 +39,6 @@ namespace UI
             dgvDetalles = new DataGridView();
             colDetalleProducto = new DataGridViewTextBoxColumn();
             colDetalleCantidad = new DataGridViewTextBoxColumn();
-            colDetallePrecio = new DataGridViewTextBoxColumn();
             colDetalleSubtotal = new DataGridViewTextBoxColumn();
             lblTituloEstado = new Label();
             lblEstado = new Label();
@@ -256,7 +255,7 @@ namespace UI
             dgvDetalles.AllowUserToResizeRows = false;
             dgvDetalles.AutoGenerateColumns = false;
             dgvDetalles.Columns.AddRange(new DataGridViewColumn[] {
-                colDetalleProducto, colDetalleCantidad, colDetallePrecio, colDetalleSubtotal
+                colDetalleProducto, colDetalleCantidad, colDetalleSubtotal
             });
             dgvDetalles.BackgroundColor = Color.White;
             dgvDetalles.BorderStyle = BorderStyle.None;
@@ -298,15 +297,10 @@ namespace UI
             colDetalleCantidad.DataPropertyName = "Cantidad";
             colDetalleCantidad.HeaderText = "Cantidad";
             colDetalleCantidad.Width = 80;
-            colDetallePrecio.Name = "colDetallePrecio";
-            colDetallePrecio.DataPropertyName = "PrecioUnitario";
-            colDetallePrecio.HeaderText = "Precio";
-            colDetallePrecio.Width = 98;
-            colDetallePrecio.DefaultCellStyle.Format = "C2";
             colDetalleSubtotal.Name = "colDetalleSubtotal";
             colDetalleSubtotal.DataPropertyName = "Subtotal";
             colDetalleSubtotal.HeaderText = "Subtotal";
-            colDetalleSubtotal.Width = 110;
+            colDetalleSubtotal.Width = 145;
             colDetalleSubtotal.DefaultCellStyle.Format = "C2";
             dgvDetalles.SelectionChanged += dgvDetalles_SelectionChanged;
             // 
@@ -483,7 +477,6 @@ namespace UI
         private DataGridView dgvDetalles;
         private DataGridViewTextBoxColumn colDetalleProducto;
         private DataGridViewTextBoxColumn colDetalleCantidad;
-        private DataGridViewTextBoxColumn colDetallePrecio;
         private DataGridViewTextBoxColumn colDetalleSubtotal;
         private Label lblTituloEstado;
         private Label lblEstado;
