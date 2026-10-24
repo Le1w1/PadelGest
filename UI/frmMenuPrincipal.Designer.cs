@@ -147,7 +147,7 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Text = "Vendedor Buffet";
             // Generar carrito - PN2
             generarCarritoToolStripMenuItem.Name = "generarCarritoToolStripMenuItem";
-            generarCarritoToolStripMenuItem.Text = "Generar Carrito";
+            generarCarritoToolStripMenuItem.Text = "Generar Factura";
             generarCarritoToolStripMenuItem.Size = new Size(180, 22);
             generarCarritoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             generarCarritoToolStripMenuItem.ForeColor = Color.White;
