@@ -10,14 +10,14 @@ namespace UI
     public partial class frmCobrarVenta : Form, IObservadorIdioma
     {
         private readonly CobroVentaBLL _cobroBLL;
-        private readonly CarritoBE _carrito;
+        private readonly FacturaBuffetBE _factura;
         public PagoBE? PagoAprobado { get; private set; }
         public bool PagoRechazado { get; private set; }
 
-        public frmCobrarVenta(CarritoBE carrito)
+        public frmCobrarVenta(FacturaBuffetBE factura)
         {
             InitializeComponent();
-            _carrito = carrito;
+            _factura = factura;
             _cobroBLL = new CobroVentaBLL();
             ActualizarIdioma();
             MostrarResumen();
@@ -67,10 +67,10 @@ namespace UI
 
         private void MostrarResumen()
         {
-            lblClienteValor.Text = _carrito.DNI ?? "-";
-            int cantidad = _carrito.Detalles.Sum(d => d.Cantidad);
+            lblClienteValor.Text = _factura.DNI ?? "-";
+            int cantidad = _factura.Detalles.Sum(d => d.Cantidad);
             lblProductosValor.Text = cantidad.ToString();
-            lblTotalValor.Text = _carrito.ImporteTotal.ToString("C2");
+            lblTotalValor.Text = _factura.ImporteTotal.ToString("C2");
         }
 
         // Impide escribir letras, espacios y simbolos en los campos numericos.
@@ -105,7 +105,7 @@ namespace UI
                 if (cboRespuestaBanco.SelectedIndex < 0)
                     throw new Exception(T("Errores.Cobro.RespuestaBancoObligatoria"));
 
-                ResultadoCobroVentaBE resultado = _cobroBLL.CobrarVenta(_carrito,txtBanco.Text, txtNumeroTarjeta.Text,dtpVencimiento.Value, txtCodigoSeguridad.Text,cboRespuestaBanco.SelectedIndex == 0);
+                ResultadoCobroVentaBE resultado = _cobroBLL.CobrarFactura(_factura,txtBanco.Text, txtNumeroTarjeta.Text,dtpVencimiento.Value, txtCodigoSeguridad.Text,cboRespuestaBanco.SelectedIndex == 0);
 
                 // Limpiar datos sensibles tan pronto como el banco responde.
                 txtNumeroTarjeta.Clear();
