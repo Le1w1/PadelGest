@@ -6,11 +6,11 @@ namespace BLL
 {
     // valida los datos de tarjeta y obtiene la autorizacion bancaria
     // simulada, siguiendo la misma mecanica de PN1.
-    public class CobroVentaBLL
+    public class CobroFacturaBLL
     {
         private readonly BancoServicio _bancoServicio;
 
-        public CobroVentaBLL()
+        public CobroFacturaBLL()
         {
             _bancoServicio = new BancoServicio();
         }

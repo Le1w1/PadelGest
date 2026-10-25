@@ -6,7 +6,7 @@ namespace UI
 {
     // CUN08 Generar Factura (en memoria) y CUN10 Cobrar Factura.
     // CUN09 Registrar Cliente reutiliza el formulario de PN1.
-    public partial class frmGenerarCarrito : Form, IObservadorIdioma
+    public partial class frmGenerarFactura : Form, IObservadorIdioma
     {
         private readonly FacturaBuffetBLL _facturaBLL;
         private readonly ProductoBLL _productoBLL;
@@ -14,7 +14,7 @@ namespace UI
         private PagoBE? _pagoAprobado;
         private FacturaBuffetBE? _facturaRegistrada;
 
-        public frmGenerarCarrito()
+        public frmGenerarFactura()
         {
             InitializeComponent();
             AsegurarColumnasGrillas();
@@ -345,7 +345,7 @@ namespace UI
             try
             {
                 _facturaBLL.ValidarAntesDeCobrar(_factura);
-                using frmCobrarVenta formCobro = new frmCobrarVenta(_factura);
+                using frmCobrarFactura formCobro = new frmCobrarFactura(_factura);
                 DialogResult respuesta = formCobro.ShowDialog(this);
                 if (respuesta == DialogResult.No && formCobro.PagoRechazado)
                 {

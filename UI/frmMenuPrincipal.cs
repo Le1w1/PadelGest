@@ -187,7 +187,7 @@ namespace UI
 
         private void generarCarritoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using frmGenerarCarrito formCarrito = new frmGenerarCarrito();
+            using frmGenerarFactura formCarrito = new frmGenerarFactura();
             formCarrito.ShowDialog(this);
         }
 

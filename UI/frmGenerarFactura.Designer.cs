@@ -1,6 +1,6 @@
 namespace UI
 {
-    partial class frmGenerarCarrito
+    partial class frmGenerarFactura
     {
         private System.ComponentModel.IContainer components = null;
 

@@ -7,18 +7,18 @@ namespace UI
     // CUN12: formulario de cobro simulado, basado en PN1.
     // La venta se registra automaticamente desde frmGenerarCarrito
     // cuando este formulario devuelve un Pago aprobado.
-    public partial class frmCobrarVenta : Form, IObservadorIdioma
+    public partial class frmCobrarFactura : Form, IObservadorIdioma
     {
-        private readonly CobroVentaBLL _cobroBLL;
+        private readonly CobroFacturaBLL _cobroBLL;
         private readonly FacturaBuffetBE _factura;
         public PagoBE? PagoAprobado { get; private set; }
         public bool PagoRechazado { get; private set; }
 
-        public frmCobrarVenta(FacturaBuffetBE factura)
+        public frmCobrarFactura(FacturaBuffetBE factura)
         {
             InitializeComponent();
             _factura = factura;
-            _cobroBLL = new CobroVentaBLL();
+            _cobroBLL = new CobroFacturaBLL();
             ActualizarIdioma();
             MostrarResumen();
         }

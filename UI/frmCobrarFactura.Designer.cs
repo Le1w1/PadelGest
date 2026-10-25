@@ -1,6 +1,6 @@
 namespace UI
 {
-    partial class frmCobrarVenta
+    partial class frmCobrarFactura
     {
         private System.ComponentModel.IContainer components = null;
 
