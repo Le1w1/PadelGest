@@ -104,8 +104,8 @@ namespace BLL
                 throw new Exception(T("Errores.Productos.StockMinimoInvalido"));
         }
 
-        // CUN09: verifica la seleccion y devuelve el producto actualizado.
-        // No reserva unidades ni modifica el stock: eso corresponde a CUN13/CUN14.
+        // CUN010: verifica la seleccion y devuelve el producto actualizado.
+       
         public ProductoBE SeleccionarProducto(int codigoProducto, int cantidad)
         {
             SM.Instancia.RequierePermiso("BUF_VENDER");

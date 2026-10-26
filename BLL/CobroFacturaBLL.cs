@@ -27,6 +27,7 @@ namespace BLL
 
             banco = (banco ?? string.Empty).Trim();
             numeroTarjeta = numeroTarjeta ?? string.Empty;
+            
             // Se admiten espacios para separar grupos (ej.: 1111 2222 3333 4444),
             // pero no letras, guiones ni otros simbolos.
             if (!Regex.IsMatch(numeroTarjeta, @"^[0-9 ]+$"))
@@ -50,8 +51,7 @@ namespace BLL
             if (!Regex.IsMatch(codigoSeguridad, @"^\d{3,4}$"))
                 throw new Exception(T("Errores.Cobro.CodigoSeguridadInvalido"));
 
-            ResultadoAutorizacionBanco autorizacion = _bancoServicio.AutorizarPago(
-                factura.DNI, numeroTarjeta, factura.ImporteTotal, respuestaSimuladaAprobada, "FB");
+            ResultadoAutorizacionBanco autorizacion = _bancoServicio.AutorizarPago(factura.DNI, numeroTarjeta, factura.ImporteTotal, respuestaSimuladaAprobada, "FB");
 
             if (!autorizacion.Aprobado)
                 return new ResultadoCobroVentaBE { Aprobado = false };

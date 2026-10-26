@@ -34,10 +34,7 @@ namespace DAL
                 PrecioUnitario = d.PrecioUnitario
             }).OrderBy(d => d.CodigoProducto).ToList();
 
-            if (detalles.Any(d => d.CodigoProducto <= 0 || d.Cantidad <= 0 ||
-                d.PrecioUnitario <= 0 || d.PrecioUnitario > 9999999999.99m ||
-                decimal.Round(d.PrecioUnitario, 2) != d.PrecioUnitario) ||
-                detalles.GroupBy(d => d.CodigoProducto).Any(g => g.Count() > 1))
+            if (detalles.Any(d => d.CodigoProducto <= 0 || d.Cantidad <= 0 ||d.PrecioUnitario <= 0 || d.PrecioUnitario > 9999999999.99m || decimal.Round(d.PrecioUnitario, 2) != d.PrecioUnitario) ||detalles.GroupBy(d => d.CodigoProducto).Any(g => g.Count() > 1))
                 throw new Exception("Detalles inválidos o productos duplicados.");
 
             decimal total = 0m;
@@ -48,19 +45,17 @@ namespace DAL
 
             using SqlConnection conexion = _acceso.ObtenerConexion();
             conexion.Open();
+            
             using SqlTransaction tx = conexion.BeginTransaction(IsolationLevel.Serializable);
+            
             try
             {
                 FacturaBuffetBE existente = BuscarPorAutorizacion(conexion, tx, pago.CodigoAutorizacion);
                 if (existente != null)
                 {
                     if (existente.DNI != factura.DNI || existente.IdVendedor != factura.IdVendedor ||
-                        existente.ImporteTotal != total || existente.Banco != pago.Banco ||
-                        existente.Ultimos4Tarjeta != pago.Ultimos4Tarjeta ||
-                        existente.Detalles.Count != detalles.Count ||
-                        existente.Detalles.Any(e => !detalles.Any(d =>
-                            e.CodigoProducto == d.CodigoProducto && e.Cantidad == d.Cantidad &&
-                            e.PrecioUnitario == d.PrecioUnitario)))
+                        existente.ImporteTotal != total || existente.Banco != pago.Banco || existente.Ultimos4Tarjeta != pago.Ultimos4Tarjeta || existente.Detalles.Count != detalles.Count ||
+                        existente.Detalles.Any(e => !detalles.Any(d =>e.CodigoProducto == d.CodigoProducto && e.Cantidad == d.Cantidad &&e.PrecioUnitario == d.PrecioUnitario)))
                         throw new Exception("La autorización ya se utilizó para una factura diferente.");
                     tx.Commit();
                     return existente;
@@ -115,6 +110,7 @@ namespace DAL
                     (IdFactura,CodigoProducto,Cantidad,PrecioUnitario)
                     OUTPUT INSERTED.IdDetalleFactura
                     VALUES (@Factura,@Producto,@Cantidad,@Precio)";
+                
                 foreach (DetalleFacturaBE detalle in detalles)
                 {
                     using SqlCommand cmd = new SqlCommand(altaDetalle, conexion, tx);

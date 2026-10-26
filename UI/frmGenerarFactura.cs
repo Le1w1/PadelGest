@@ -381,13 +381,10 @@ namespace UI
             {
                 _facturaRegistrada = _facturaBLL.RegistrarFactura(_factura, _pagoAprobado);
                 ActualizarResumen();
-                string resumen = string.Format(
-                    T("frmGenerarCarrito.VentaRegistrada"),
-                    _facturaRegistrada.NumeroFactura,
-                    _facturaRegistrada.IdFactura,
-                    _facturaRegistrada.ImporteTotal.ToString("C2"));
-                MessageBox.Show(resumen, T("frmGenerarCarrito.TituloVentaFinalizada"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+               
+                string resumen = string.Format(T("frmGenerarCarrito.VentaRegistrada"),_facturaRegistrada.NumeroFactura,_facturaRegistrada.IdFactura,_facturaRegistrada.ImporteTotal.ToString("C2"));
+              
+                MessageBox.Show(resumen, T("frmGenerarCarrito.TituloVentaFinalizada"),MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
