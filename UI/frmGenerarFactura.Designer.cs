@@ -49,6 +49,7 @@ namespace UI
             btnSeleccionarCliente = new Button();
             btnCobrar = new Button();
             btnVolver = new Button();
+            btnExportarPdf = new Button();
             lblMensaje = new Label();
             gbCatalogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
@@ -408,13 +409,29 @@ namespace UI
             btnVolver.UseVisualStyleBackColor = false;
             btnVolver.Click += btnVolver_Click;
             // 
+            // btnExportarPdf
+            // 
+            btnExportarPdf.BackColor = Color.FromArgb(214, 246, 36);
+            btnExportarPdf.Enabled = false;
+            btnExportarPdf.FlatAppearance.BorderSize = 0;
+            btnExportarPdf.FlatStyle = FlatStyle.Flat;
+            btnExportarPdf.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnExportarPdf.ForeColor = Color.Black;
+            btnExportarPdf.Location = new Point(745, 660);
+            btnExportarPdf.Name = "btnExportarPdf";
+            btnExportarPdf.Size = new Size(210, 36);
+            btnExportarPdf.TabIndex = 14;
+            btnExportarPdf.Text = "Exportar factura PDF";
+            btnExportarPdf.UseVisualStyleBackColor = false;
+            btnExportarPdf.Click += btnExportarPdf_Click;
+            // 
             // lblMensaje
             // 
             lblMensaje.Font = new Font("Segoe UI", 10F);
             lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
             lblMensaje.Location = new Point(25, 652);
             lblMensaje.Name = "lblMensaje";
-            lblMensaje.Size = new Size(875, 44);
+            lblMensaje.Size = new Size(700, 44);
             lblMensaje.TabIndex = 12;
             lblMensaje.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -438,6 +455,7 @@ namespace UI
             Controls.Add(btnCobrar);
             Controls.Add(lblMensaje);
             Controls.Add(btnVolver);
+            Controls.Add(btnExportarPdf);
             Font = new Font("Segoe UI", 9.5F);
             ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -487,6 +505,7 @@ namespace UI
         private Button btnSeleccionarCliente;
         private Button btnCobrar;
         private Button btnVolver;
+        private Button btnExportarPdf;
         private Label lblMensaje;
     }
 }
