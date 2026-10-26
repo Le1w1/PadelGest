@@ -559,5 +559,14 @@
   "frmAuditarEventos.Filtro.Accion.Persistir idioma": "Save language",
   "frmAuditarEventos.Filtro.Accion.Imprimir PDF": "Export PDF",
   "frmAuditarEventos.Filtro.Accion.Crear Backup": "Create backup",
-  "frmAuditarEventos.Filtro.Accion.Restaurar Backup": "Restore backup"
+  "frmAuditarEventos.Filtro.Accion.Restaurar Backup": "Restore backup",
+  "frmRegistrarReserva.BtnExportarPdf": "Export PDF",
+  "frmGenerarCarrito.ExportarPdf": "Export invoice PDF",
+  "frmGenerarCarrito.FinalizarVenta": "Finish",
+  "frmGenerarCarrito.PdfDisponible": "Invoice paid and registered. You can export the PDF or finish.",
+  "Pdf.GuardarReserva": "Save reservation receipt as PDF",
+  "Pdf.GuardarFactura": "Save buffet invoice as PDF",
+  "Pdf.ExportacionOk": "The PDF was saved successfully.",
+  "Pdf.AbrirArchivo": "Would you like to open the file?",
+  "Pdf.ErrorExportacion": "Could not export the PDF."
 }
