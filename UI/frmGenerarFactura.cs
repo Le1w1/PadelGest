@@ -1,7 +1,6 @@
 using BE;
 using BLL;
 using Servicios;
-using UI.Servicios;
 
 namespace UI
 {
@@ -85,9 +84,7 @@ namespace UI
             btnActualizarProductos.Text = T("frmGenerarCarrito.ActualizarProductos");
             btnSeleccionarCliente.Text = T("frmGenerarCarrito.SeleccionarCliente");
             btnCobrar.Text = T("frmGenerarCarrito.Cobrar");
-            btnVolver.Text = _facturaRegistrada != null
-                ? T("frmGenerarCarrito.FinalizarVenta") : T("frmGenerarCarrito.Volver");
-            btnExportarPdf.Text = T("frmGenerarCarrito.ExportarPdf");
+            btnVolver.Text = T("frmGenerarCarrito.Volver");
             lblTituloTotal.Text = T("frmGenerarCarrito.Total");
             lblTituloCliente.Text = T("frmGenerarCarrito.Cliente");
             lblTituloEstado.Text = T("frmGenerarCarrito.Estado");
@@ -250,10 +247,8 @@ namespace UI
                 || (_pagoAprobado != null && _facturaRegistrada == null);
             btnCobrar.Text = _pagoAprobado != null && _facturaRegistrada == null
                 ? T("frmGenerarCarrito.ReintentarRegistro") : T("frmGenerarCarrito.Cobrar");
-            btnVolver.Enabled = _pagoAprobado == null || _facturaRegistrada != null;
-            btnVolver.Text = _facturaRegistrada != null
-                ? T("frmGenerarCarrito.FinalizarVenta") : T("frmGenerarCarrito.Volver");
-            btnExportarPdf.Enabled = _facturaRegistrada != null;
+            btnVolver.Enabled = _pagoAprobado == null;
+            btnVolver.Text = T("frmGenerarCarrito.Volver");
         }
 
         private int ObtenerCodigoProducto()
@@ -387,77 +382,39 @@ namespace UI
             btnCobrar.Enabled = false;
             try
             {
+                // Una sola persistencia: factura, detalle y descuento de stock.
                 _facturaRegistrada = _facturaBLL.RegistrarFactura(_factura, _pagoAprobado);
-                ActualizarResumen();
-                string resumen = string.Format(
-                    T("frmGenerarCarrito.VentaRegistrada"),
-                    _facturaRegistrada.NumeroFactura,
-                    _facturaRegistrada.IdFactura,
-                    _facturaRegistrada.ImporteTotal.ToString("C2"));
-                MessageBox.Show(resumen, T("frmGenerarCarrito.TituloVentaFinalizada"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Mantener visible la venta pagada para exportarla o finalizar.
-                // La factura y el stock ya fueron registrados; exportar no los modifica.
-                lblMensaje.Text = T("frmGenerarCarrito.PdfDisponible");
             }
             catch (Exception ex)
             {
                 lblMensaje.Text = string.Format(T("frmGenerarCarrito.ErrorRegistro"), ex.Message);
                 MessageBox.Show(lblMensaje.Text, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ActualizarResumen(); // Reintentar registro sin repetir el cobro.
+                return;
             }
-            finally
-            {
-                if (!IsDisposed && _facturaRegistrada == null)
-                    ActualizarResumen();
-            }
-        }
 
-        private void btnExportarPdf_Click(object sender, EventArgs e)
-        {
-            if (_facturaRegistrada == null) return;
-            var t = Traductor.Instancia;
-
-            using SaveFileDialog guardar = new SaveFileDialog
-            {
-                Title = t.Traducir("Pdf.GuardarFactura"),
-                Filter = "PDF (*.pdf)|*.pdf",
-                DefaultExt = "pdf",
-                AddExtension = true,
-                OverwritePrompt = true,
-                FileName = "FacturaBuffet_" + _facturaRegistrada.NumeroFactura + ".pdf"
-            };
-            if (guardar.ShowDialog(this) != DialogResult.OK) return;
-
+            // El cobro ya fue aprobado y la factura registrada. Un error visual
+            // o de PDF no debe confundirse con un error de persistencia.
+            ActualizarResumen();
             try
             {
-                ClienteBE cliente = _clienteSeleccionado
-                    ?? new ClienteBLL().BuscarPorDNI(_facturaRegistrada.DNI)
-                    ?? throw new InvalidOperationException("No se encontraron los datos del cliente.");
-
-                ComprobantePdf.ExportarFacturaBuffet(guardar.FileName, _facturaRegistrada, cliente);
-
-                DialogResult abrir = MessageBox.Show(
-                    t.Traducir("Pdf.ExportacionOk") + "\n" + t.Traducir("Pdf.AbrirArchivo"),
-                    Text, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (abrir == DialogResult.Yes)
-                {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(guardar.FileName)
-                    {
-                        UseShellExecute = true
-                    });
-                }
+                using frmFacturaRegistrada formFactura =
+                    new frmFacturaRegistrada(_facturaRegistrada, _clienteSeleccionado);
+                formFactura.ShowDialog(this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(t.Traducir("Pdf.ErrorExportacion") + "\n" + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    string.Format(T("frmGenerarCarrito.ErrorMostrarComprobante"), ex.Message),
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
         {
-            if (_facturaRegistrada != null)
-                DialogResult = DialogResult.OK;
             Close();
         }
 
