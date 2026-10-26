@@ -1,6 +1,7 @@
 using BE;
 using BLL;
 using Servicios;
+using UI.Servicios;
 
 namespace UI
 {
@@ -13,6 +14,7 @@ namespace UI
         private FacturaBuffetBE? _factura;
         private PagoBE? _pagoAprobado;
         private FacturaBuffetBE? _facturaRegistrada;
+        private ClienteBE? _clienteSeleccionado;
 
         public frmGenerarFactura()
         {
@@ -83,7 +85,9 @@ namespace UI
             btnActualizarProductos.Text = T("frmGenerarCarrito.ActualizarProductos");
             btnSeleccionarCliente.Text = T("frmGenerarCarrito.SeleccionarCliente");
             btnCobrar.Text = T("frmGenerarCarrito.Cobrar");
-            btnVolver.Text = T("frmGenerarCarrito.Volver");
+            btnVolver.Text = _facturaRegistrada != null
+                ? T("frmGenerarCarrito.FinalizarVenta") : T("frmGenerarCarrito.Volver");
+            btnExportarPdf.Text = T("frmGenerarCarrito.ExportarPdf");
             lblTituloTotal.Text = T("frmGenerarCarrito.Total");
             lblTituloCliente.Text = T("frmGenerarCarrito.Cliente");
             lblTituloEstado.Text = T("frmGenerarCarrito.Estado");
@@ -246,7 +250,10 @@ namespace UI
                 || (_pagoAprobado != null && _facturaRegistrada == null);
             btnCobrar.Text = _pagoAprobado != null && _facturaRegistrada == null
                 ? T("frmGenerarCarrito.ReintentarRegistro") : T("frmGenerarCarrito.Cobrar");
-            btnVolver.Enabled = _pagoAprobado == null;
+            btnVolver.Enabled = _pagoAprobado == null || _facturaRegistrada != null;
+            btnVolver.Text = _facturaRegistrada != null
+                ? T("frmGenerarCarrito.FinalizarVenta") : T("frmGenerarCarrito.Volver");
+            btnExportarPdf.Enabled = _facturaRegistrada != null;
         }
 
         private int ObtenerCodigoProducto()
@@ -323,6 +330,7 @@ namespace UI
             {
                 ActualizarFactura(_facturaBLL.AsociarCliente(
                     _factura, formCliente.ClienteSeleccionado.DNI));
+                _clienteSeleccionado = formCliente.ClienteSeleccionado;
                 lblMensaje.Text = T("frmGenerarCarrito.ClienteAsignado");
             }
             catch (Exception ex) { lblMensaje.Text = ex.Message; }
@@ -388,8 +396,9 @@ namespace UI
                     _facturaRegistrada.ImporteTotal.ToString("C2"));
                 MessageBox.Show(resumen, T("frmGenerarCarrito.TituloVentaFinalizada"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close();
+                // Mantener visible la venta pagada para exportarla o finalizar.
+                // La factura y el stock ya fueron registrados; exportar no los modifica.
+                lblMensaje.Text = T("frmGenerarCarrito.PdfDisponible");
             }
             catch (Exception ex)
             {
@@ -403,8 +412,52 @@ namespace UI
             }
         }
 
+        private void btnExportarPdf_Click(object sender, EventArgs e)
+        {
+            if (_facturaRegistrada == null) return;
+            var t = Traductor.Instancia;
+
+            using SaveFileDialog guardar = new SaveFileDialog
+            {
+                Title = t.Traducir("Pdf.GuardarFactura"),
+                Filter = "PDF (*.pdf)|*.pdf",
+                DefaultExt = "pdf",
+                AddExtension = true,
+                OverwritePrompt = true,
+                FileName = "FacturaBuffet_" + _facturaRegistrada.NumeroFactura + ".pdf"
+            };
+            if (guardar.ShowDialog(this) != DialogResult.OK) return;
+
+            try
+            {
+                ClienteBE cliente = _clienteSeleccionado
+                    ?? new ClienteBLL().BuscarPorDNI(_facturaRegistrada.DNI)
+                    ?? throw new InvalidOperationException("No se encontraron los datos del cliente.");
+
+                ComprobantePdf.ExportarFacturaBuffet(guardar.FileName, _facturaRegistrada, cliente);
+
+                DialogResult abrir = MessageBox.Show(
+                    t.Traducir("Pdf.ExportacionOk") + "\n" + t.Traducir("Pdf.AbrirArchivo"),
+                    Text, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (abrir == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(guardar.FileName)
+                    {
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(t.Traducir("Pdf.ErrorExportacion") + "\n" + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void btnVolver_Click(object sender, EventArgs e)
         {
+            if (_facturaRegistrada != null)
+                DialogResult = DialogResult.OK;
             Close();
         }
 
