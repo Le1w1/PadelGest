@@ -36,6 +36,7 @@ namespace UI
             lblClienteTitulo = new Label();
             lblMensaje = new Label();
             btnFinalizar = new Button();
+            btnExportarPdf = new Button();
             gbDatos.SuspendLayout();
             SuspendLayout();
             // 
@@ -222,6 +223,21 @@ namespace UI
             btnFinalizar.UseVisualStyleBackColor = false;
             btnFinalizar.Click += btnFinalizar_Click;
             // 
+            // btnExportarPdf
+            // 
+            btnExportarPdf.BackColor = Color.FromArgb(24, 70, 138);
+            btnExportarPdf.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
+            btnExportarPdf.FlatStyle = FlatStyle.Flat;
+            btnExportarPdf.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnExportarPdf.ForeColor = Color.White;
+            btnExportarPdf.Location = new Point(355, 430);
+            btnExportarPdf.Name = "btnExportarPdf";
+            btnExportarPdf.Size = new Size(185, 34);
+            btnExportarPdf.TabIndex = 1;
+            btnExportarPdf.Text = "Exportar PDF";
+            btnExportarPdf.UseVisualStyleBackColor = false;
+            btnExportarPdf.Click += btnExportarPdf_Click;
+            // 
             // frmRegistrarReserva
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -230,6 +246,7 @@ namespace UI
             ClientSize = new Size(740, 485);
             ControlBox = false;
             Controls.Add(btnFinalizar);
+            Controls.Add(btnExportarPdf);
             Controls.Add(lblMensaje);
             Controls.Add(gbDatos);
             Controls.Add(lblTitulo);
@@ -267,5 +284,6 @@ namespace UI
         private Label lblImporteValor;
         private Label lblMensaje;
         private Button btnFinalizar;
+        private Button btnExportarPdf;
     }
 }
