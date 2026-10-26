@@ -568,5 +568,22 @@
   "Pdf.GuardarFactura": "Save buffet invoice as PDF",
   "Pdf.ExportacionOk": "The PDF was saved successfully.",
   "Pdf.AbrirArchivo": "Would you like to open the file?",
-  "Pdf.ErrorExportacion": "Could not export the PDF."
+  "Pdf.ErrorExportacion": "Could not export the PDF.",
+  "frmFacturaRegistrada.Title": "PadelGest - Invoice registered",
+  "frmFacturaRegistrada.Titulo": "INVOICE REGISTERED",
+  "frmFacturaRegistrada.Detalle": "Invoice details",
+  "frmFacturaRegistrada.Numero": "Invoice number:",
+  "frmFacturaRegistrada.Fecha": "Date:",
+  "frmFacturaRegistrada.Cliente": "Client:",
+  "frmFacturaRegistrada.Dni": "ID:",
+  "frmFacturaRegistrada.Banco": "Payment:",
+  "frmFacturaRegistrada.Total": "Paid:",
+  "frmFacturaRegistrada.ExportarPdf": "Export PDF",
+  "frmFacturaRegistrada.Finalizar": "Finish",
+  "frmFacturaRegistrada.Mensaje": "Invoice {0} was registered successfully.",
+  "frmFacturaRegistrada.Producto": "Product",
+  "frmFacturaRegistrada.Cantidad": "Quantity",
+  "frmFacturaRegistrada.Precio": "Unit price",
+  "frmFacturaRegistrada.Subtotal": "Subtotal",
+  "frmGenerarCarrito.ErrorMostrarComprobante": "The invoice is registered and paid, but the final receipt could not be opened: {0}"
 }
