@@ -557,5 +557,14 @@
   "frmAuditarEventos.Filtro.Accion.Restaurar Backup": "Restaurar Backup",
   "frmGenerarCarrito.EstadoEnPreparacion": "En preparación",
   "frmGenerarCarrito.EstadoListo": "Listo para cobrar",
-  "frmGenerarCarrito.EstadoVendido": "Pagada"
+  "frmGenerarCarrito.EstadoVendido": "Pagada",
+  "frmRegistrarReserva.BtnExportarPdf": "Exportar PDF",
+  "frmGenerarCarrito.ExportarPdf": "Exportar factura PDF",
+  "frmGenerarCarrito.FinalizarVenta": "Finalizar",
+  "frmGenerarCarrito.PdfDisponible": "Factura pagada y registrada. Puede exportar el PDF o finalizar.",
+  "Pdf.GuardarReserva": "Guardar comprobante de reserva en PDF",
+  "Pdf.GuardarFactura": "Guardar factura de buffet en PDF",
+  "Pdf.ExportacionOk": "El PDF se guardó correctamente.",
+  "Pdf.AbrirArchivo": "¿Desea abrir el archivo?",
+  "Pdf.ErrorExportacion": "No se pudo exportar el PDF."
 }
