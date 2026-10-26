@@ -1,5 +1,6 @@
 using BE;
 using Servicios;
+using UI.Servicios;
 
 namespace UI
 {
@@ -59,6 +60,7 @@ namespace UI
             lblEquipamientoTitulo.Text = t.Traducir("frmRegistrarReserva.LblEquipamiento");
             lblImporteTitulo.Text = t.Traducir("frmRegistrarReserva.LblImporte");
             btnFinalizar.Text = t.Traducir("frmRegistrarReserva.BtnFinalizar");
+            btnExportarPdf.Text = t.Traducir("frmRegistrarReserva.BtnExportarPdf");
 
             lblMensaje.Text = string.Format(
                 t.Traducir("frmRegistrarReserva.MsgRegistrada"),
@@ -74,6 +76,45 @@ namespace UI
             lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_tarifa.Importe:C}";
             lblEquipamientoValor.Text = $"Paletas: {_reserva.CantidadPaletas} | Pelotas: {_reserva.CantidadPelotas}";
             lblImporteValor.Text = _facturaPagada.ImporteTotal.ToString("C");
+        }
+
+        // El comprobante se exporta únicamente con la reserva ya registrada.
+        // Un fallo de PDF no altera la reserva ni vuelve a cobrar.
+        private void btnExportarPdf_Click(object sender, EventArgs e)
+        {
+            var t = Traductor.Instancia;
+            using SaveFileDialog guardar = new SaveFileDialog
+            {
+                Title = t.Traducir("Pdf.GuardarReserva"),
+                Filter = "PDF (*.pdf)|*.pdf",
+                DefaultExt = "pdf",
+                AddExtension = true,
+                OverwritePrompt = true,
+                FileName = "Reserva_" + _reserva.Codigo + ".pdf"
+            };
+            if (guardar.ShowDialog(this) != DialogResult.OK) return;
+
+            try
+            {
+                ComprobantePdf.ExportarReserva(
+                    guardar.FileName, _reserva, _cliente, _cancha, _tarifa, _facturaPagada);
+
+                DialogResult abrir = MessageBox.Show(
+                    t.Traducir("Pdf.ExportacionOk") + "\n" + t.Traducir("Pdf.AbrirArchivo"),
+                    Text, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (abrir == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(guardar.FileName)
+                    {
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(t.Traducir("Pdf.ErrorExportacion") + "\n" + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnFinalizar_Click(object sender, EventArgs e)
