@@ -18,13 +18,9 @@ namespace UI.Servicios
                 string usuario = usuarioActual != null
                     ? usuarioActual.NombreUsuario : "Sistema";
 
-                string descripcion = exitoso
-                    ? "Se exportó a PDF el comprobante de " + modulo + " " + referencia + "."
-                    : "Falló la exportación a PDF del comprobante de " + modulo + " " + referencia + ".";
+                string descripcion = exitoso ? "Se exportó a PDF el comprobante de " + modulo + " " + referencia + "." : "Falló la exportación a PDF del comprobante de " + modulo + " " + referencia + ".";
 
-                new BitacoraEventoBLL().Registrar(
-                    idUsuario, usuario, modulo, "Imprimir PDF", "Media",
-                    exitoso ? "Exitoso" : "Fallido", descripcion);
+                new BitacoraEventoBLL().Registrar(idUsuario, usuario, modulo, "Imprimir PDF", "Media",exitoso ? "Exitoso" : "Fallido", descripcion);
             }
             catch (Exception ex)
             {

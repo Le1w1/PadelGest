@@ -19,9 +19,7 @@ namespace UI
                 throw new ArgumentException("La factura debe estar registrada y pagada.", nameof(factura));
 
             _factura = factura;
-            _cliente = cliente != null && cliente.DNI == factura.DNI
-                ? cliente
-                : new ClienteBE { DNI = factura.DNI };
+            _cliente = cliente != null && cliente.DNI == factura.DNI? cliente: new ClienteBE { DNI = factura.DNI };
 
             MostrarDatos();
             ActualizarIdioma();
@@ -51,8 +49,7 @@ namespace UI
             lblTotalTitulo.Text = t.Traducir("frmFacturaRegistrada.Total");
             btnExportarPdf.Text = t.Traducir("frmFacturaRegistrada.ExportarPdf");
             btnFinalizar.Text = t.Traducir("frmFacturaRegistrada.Finalizar");
-            lblMensaje.Text = string.Format(t.Traducir("frmFacturaRegistrada.Mensaje"),
-                _factura.NumeroFactura);
+            lblMensaje.Text = string.Format(t.Traducir("frmFacturaRegistrada.Mensaje"),_factura.NumeroFactura);
 
             colProducto.HeaderText = t.Traducir("frmFacturaRegistrada.Producto");
             colCantidad.HeaderText = t.Traducir("frmFacturaRegistrada.Cantidad");
@@ -68,18 +65,12 @@ namespace UI
             if (string.IsNullOrEmpty(lblClienteValor.Text))
                 lblClienteValor.Text = "-";
             lblDniValor.Text = _factura.DNI;
-            lblBancoValor.Text = _factura.Banco +
-                (string.IsNullOrWhiteSpace(_factura.Ultimos4Tarjeta)
-                    ? "" : "  -  **** " + _factura.Ultimos4Tarjeta);
+            lblBancoValor.Text = _factura.Banco + (string.IsNullOrWhiteSpace(_factura.Ultimos4Tarjeta)? "" : "  -  **** " + _factura.Ultimos4Tarjeta);
             lblTotalValor.Text = _factura.ImporteTotal.ToString("C2");
 
             dgvDetalles.Rows.Clear();
             foreach (DetalleFacturaBE detalle in _factura.Detalles)
-                dgvDetalles.Rows.Add(
-                    detalle.NombreProducto,
-                    detalle.Cantidad,
-                    detalle.PrecioUnitario,
-                    detalle.Subtotal);
+                dgvDetalles.Rows.Add(detalle.NombreProducto,detalle.Cantidad,detalle.PrecioUnitario,detalle.Subtotal);
             dgvDetalles.ClearSelection();
         }
 
@@ -106,16 +97,14 @@ namespace UI
             catch (Exception ex)
             {
                 AuditoriaExportacionPdf.Registrar("Buffet", _factura.NumeroFactura, false);
-                MessageBox.Show(t.Traducir("Pdf.ErrorExportacion") + "\n" + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(t.Traducir("Pdf.ErrorExportacion") + "\n" + ex.Message,Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             // Si falla la apertura con el visor del equipo, el PDF ya está
             // generado; no se registra un falso error de exportación.
-            DialogResult abrir = MessageBox.Show(
-                t.Traducir("Pdf.ExportacionOk") + "\n" + t.Traducir("Pdf.AbrirArchivo"),
-                Text, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            DialogResult abrir = MessageBox.Show(t.Traducir("Pdf.ExportacionOk") + "\n" + t.Traducir("Pdf.AbrirArchivo"),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
             if (abrir != DialogResult.Yes) return;
 
             try
@@ -133,7 +122,7 @@ namespace UI
             }
         }
 
-                private void btnFinalizar_Click(object sender, EventArgs e)
+        private void btnFinalizar_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             Close();

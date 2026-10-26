@@ -96,22 +96,7 @@ namespace UI.Servicios
             });
         }
 
-        private static void Pie(Document documento, BaseFont fuente)
-        {
-            documento.Add(new Paragraph(
-                "Comprobante informativo generado por PadelGest para AirPadel. " +
-                "La autorización bancaria se simula en esta implementación académica. " +
-                "Este documento no reemplaza un comprobante fiscal oficial.",
-                new PdfFont(fuente, 8, PdfFont.ITALIC, BaseColor.GRAY))
-            {
-                SpacingBefore = 20,
-                Alignment = Element.ALIGN_CENTER
-            });
-        }
-
-        public static void ExportarReserva(
-            string ruta, ReservaBE reserva, ClienteBE cliente,
-            CanchaBE cancha, TarifaBE tarifa, FacturaBE factura)
+        public static void ExportarReserva(string ruta, ReservaBE reserva, ClienteBE cliente,CanchaBE cancha, TarifaBE tarifa, FacturaBE factura)
         {
             if (string.IsNullOrWhiteSpace(reserva.Codigo) || factura.ImporteTotal <= 0)
                 throw new InvalidOperationException("La reserva debe estar registrada y pagada antes de exportar.");
@@ -157,15 +142,12 @@ namespace UI.Servicios
             documento.Add(pago);
 
             Total(documento, factura.ImporteTotal, fuente);
-            Pie(documento, fuente);
             documento.Close();
         }
 
         public static void ExportarFacturaBuffet(string ruta, FacturaBuffetBE factura, ClienteBE cliente)
         {
-            if (factura.IdFactura <= 0 || factura.Estado != "Pagada" ||
-                factura.Detalles == null || factura.Detalles.Count == 0 ||
-                factura.DNI != cliente.DNI)
+            if (factura.IdFactura <= 0 || factura.Estado != "Pagada" ||factura.Detalles == null || factura.Detalles.Count == 0 ||factura.DNI != cliente.DNI)
                 throw new InvalidOperationException("La factura debe estar registrada y pagada antes de exportar.");
 
             using FileStream archivo = new FileStream(ruta, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -207,8 +189,7 @@ namespace UI.Servicios
 
             foreach (DetalleFacturaBE renglon in factura.Detalles)
             {
-                string nombre = string.IsNullOrWhiteSpace(renglon.NombreProducto)
-                    ? "Producto " + renglon.CodigoProducto : renglon.NombreProducto;
+                string nombre = string.IsNullOrWhiteSpace(renglon.NombreProducto) ? "Producto " + renglon.CodigoProducto : renglon.NombreProducto;
                 string[] valores =
                 {
                     nombre,
@@ -239,7 +220,6 @@ namespace UI.Servicios
             Dato(pago, "Autorización", factura.CodigoAutorizacion, fuente);
             documento.Add(pago);
 
-            Pie(documento, fuente);
             documento.Close();
         }
     }
