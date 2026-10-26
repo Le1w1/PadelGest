@@ -566,5 +566,22 @@
   "Pdf.GuardarFactura": "Guardar factura de buffet en PDF",
   "Pdf.ExportacionOk": "El PDF se guardó correctamente.",
   "Pdf.AbrirArchivo": "¿Desea abrir el archivo?",
-  "Pdf.ErrorExportacion": "No se pudo exportar el PDF."
+  "Pdf.ErrorExportacion": "No se pudo exportar el PDF.",
+  "frmFacturaRegistrada.Title": "PadelGest - Factura registrada",
+  "frmFacturaRegistrada.Titulo": "FACTURA REGISTRADA",
+  "frmFacturaRegistrada.Detalle": "Detalle de la factura",
+  "frmFacturaRegistrada.Numero": "N° de factura:",
+  "frmFacturaRegistrada.Fecha": "Fecha:",
+  "frmFacturaRegistrada.Cliente": "Cliente:",
+  "frmFacturaRegistrada.Dni": "DNI:",
+  "frmFacturaRegistrada.Banco": "Pago:",
+  "frmFacturaRegistrada.Total": "Abonado:",
+  "frmFacturaRegistrada.ExportarPdf": "Exportar PDF",
+  "frmFacturaRegistrada.Finalizar": "Finalizar",
+  "frmFacturaRegistrada.Mensaje": "La factura {0} fue registrada correctamente.",
+  "frmFacturaRegistrada.Producto": "Producto",
+  "frmFacturaRegistrada.Cantidad": "Cantidad",
+  "frmFacturaRegistrada.Precio": "Precio unitario",
+  "frmFacturaRegistrada.Subtotal": "Subtotal",
+  "frmGenerarCarrito.ErrorMostrarComprobante": "La factura está registrada y pagada, pero no se pudo abrir el comprobante final: {0}"
 }
