@@ -583,5 +583,6 @@
   "frmFacturaRegistrada.Cantidad": "Cantidad",
   "frmFacturaRegistrada.Precio": "Precio unitario",
   "frmFacturaRegistrada.Subtotal": "Subtotal",
-  "frmGenerarCarrito.ErrorMostrarComprobante": "La factura está registrada y pagada, pero no se pudo abrir el comprobante final: {0}"
+  "frmGenerarCarrito.ErrorMostrarComprobante": "La factura está registrada y pagada, pero no se pudo abrir el comprobante final: {0}",
+  "Pdf.ErrorAbrirArchivo": "No se pudo abrir el PDF. El archivo ya fue guardado correctamente."
 }
