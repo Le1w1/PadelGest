@@ -13,6 +13,7 @@ namespace BLL
         private readonly ClienteBLL _clienteBLL = new ClienteBLL();
         private readonly FacturaBuffetDAL _facturaDAL = new FacturaBuffetDAL();
 
+        //vendedor actual de la sesión activa; lanza excepción si no hay sesión activa o no tiene permiso de venta
         private static int Vendedor()
         {
             SM.Instancia.RequierePermiso("BUF_VENDER");
@@ -22,12 +23,14 @@ namespace BLL
             return usuario.IdUsuario;
         }
 
+        //valida que la factura sea del vendedor actual; lanza excepción si no lo es
         private static void Propietario(FacturaBuffetBE factura)
         {
             if (factura == null || factura.IdVendedor != Vendedor())
                 throw new Exception("Factura inválida o de otro vendedor.");
         }
 
+        //valida que la factura sea editable; lanza excepción si no lo es
         private static void Editable(FacturaBuffetBE factura)
         {
             Propietario(factura);
@@ -35,6 +38,7 @@ namespace BLL
                 throw new Exception("La factura no admite cambios.");
         }
 
+        //genera una nueva factura en memoria, sin persistirla
         public FacturaBuffetBE GenerarFactura()
         {
             return new FacturaBuffetBE
@@ -45,6 +49,8 @@ namespace BLL
             };
         }
 
+
+        //agrega un producto a la factura en memoria; si ya estaba, suma la cantidad
         public FacturaBuffetBE AgregarProducto(FacturaBuffetBE factura, int codigoProducto, int cantidad)
         {
             Editable(factura);
@@ -52,6 +58,7 @@ namespace BLL
             DetalleFacturaBE detalle = factura.Detalles.FirstOrDefault(x => x.CodigoProducto == codigoProducto);
             int total = checked(cantidad + (detalle == null ? 0 : detalle.Cantidad));
             ProductoBE producto = _productoBLL.SeleccionarProducto(codigoProducto, total);
+          
             if (detalle == null)
                 factura.Detalles.Add(new DetalleFacturaBE
                 {
@@ -65,6 +72,8 @@ namespace BLL
             return factura;
         }
 
+
+        //modifica la cantidad de un producto ya agregado a la factura en memoria
         public FacturaBuffetBE ModificarCantidad(FacturaBuffetBE factura, int codigoProducto, int cantidad)
         {
             Editable(factura);
@@ -77,6 +86,7 @@ namespace BLL
             return factura;
         }
 
+        //quita un producto de la factura en memoria
         public FacturaBuffetBE QuitarProducto(FacturaBuffetBE factura, int codigoProducto)
         {
             Editable(factura);
@@ -86,6 +96,8 @@ namespace BLL
             return factura;
         }
 
+
+        //asocia un cliente a la factura en memoria; si no existe, lanza excepción
         public FacturaBuffetBE AsociarCliente(FacturaBuffetBE factura, string dni)
         {
             Editable(factura);
@@ -97,6 +109,8 @@ namespace BLL
             return factura;
         }
 
+
+        //calcula el total de la factura en memoria; lanza excepción si el total es mayor a 9999999999.99
         private static void CalcularTotal(FacturaBuffetBE factura)
         {
             decimal total = factura.Detalles.Aggregate(0m, (s, d) => checked(s + d.Subtotal));
@@ -104,6 +118,8 @@ namespace BLL
             factura.ImporteTotal = total;
         }
 
+
+        //valida que la factura esté lista para cobrar; lanza excepción si no lo está
         public void ValidarAntesDeCobrar(FacturaBuffetBE factura)
         {
             Propietario(factura);
@@ -113,6 +129,7 @@ namespace BLL
             if (_clienteBLL.BuscarPorDNI(factura.DNI) == null)
                 throw new Exception("El cliente no existe.");
             decimal total = 0;
+
             foreach (DetalleFacturaBE d in factura.Detalles)
             {
                 if (d.Cantidad <= 0 || d.PrecioUnitario <= 0)
@@ -120,21 +137,21 @@ namespace BLL
                 _productoBLL.SeleccionarProducto(d.CodigoProducto, d.Cantidad);
                 total = checked(total + d.Subtotal);
             }
+
             if (total != factura.ImporteTotal) throw new Exception("Total inconsistente.");
         }
 
+
+        //registra la factura en la base de datos, junto con el pago aprobado; devuelve la factura con los datos actualizados
         public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, PagoBE pago)
         {
             Propietario(factura);
             if (factura.Estado != "Listo" && factura.Estado != "Pagada")
                 throw new Exception("Factura no lista.");
-            if (pago == null || pago.Estado != "Aprobado" ||
-                string.IsNullOrWhiteSpace(pago.CodigoAutorizacion) ||
-                string.IsNullOrWhiteSpace(pago.Banco) ||
-                string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) ||
-                pago.Ultimos4Tarjeta.Length != 4 ||
-                pago.Importe <= 0 || pago.Importe != factura.ImporteTotal)
+            if (pago == null || pago.Estado != "Aprobado" ||string.IsNullOrWhiteSpace(pago.CodigoAutorizacion) ||string.IsNullOrWhiteSpace(pago.Banco) ||
+                string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) ||pago.Ultimos4Tarjeta.Length != 4 ||pago.Importe <= 0 || pago.Importe != factura.ImporteTotal)
                 throw new Exception("Pago aprobado inválido.");
+            
             FacturaBuffetBE resultado = _facturaDAL.RegistrarFactura(factura, SM.Instancia.UsuarioActual.NombreUsuario, pago);
             factura.IdFactura = resultado.IdFactura;
             factura.NumeroFactura = resultado.NumeroFactura;

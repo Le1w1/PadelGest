@@ -85,9 +85,7 @@ namespace UI
 
             string textoCategoria = cmbCategoria.Text;
             cmbCategoria.Items.Clear();
-            foreach (string categoria in _productos.Select(p => p.Categoria)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .OrderBy(c => c))
+            foreach (string categoria in _productos.Select(p => p.Categoria).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(c => c))
             {
                 cmbCategoria.Items.Add(categoria);
             }
@@ -99,11 +97,9 @@ namespace UI
         private void FiltrarProductos()
         {
             string buscar = txtBuscar.Text.Trim();
-            List<ProductoBE> resultado = _productos
-                .Where(p => (chkMostrarInactivos.Checked || p.Activo)
-                    && (p.Nombre.Contains(buscar, StringComparison.OrdinalIgnoreCase)
-                        || p.Categoria.Contains(buscar, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
+            List<ProductoBE> resultado = _productos.Where(p => (chkMostrarInactivos.Checked || p.Activo)
+                    && (p.Nombre.Contains(buscar, StringComparison.OrdinalIgnoreCase)|| 
+                    p.Categoria.Contains(buscar, StringComparison.OrdinalIgnoreCase))).ToList();
 
             dgvProductos.AutoGenerateColumns = false;
             dgvProductos.DataSource = null;
@@ -131,8 +127,7 @@ namespace UI
 
         private void dgvProductos_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvProductos.CurrentRow?.Selected != true ||
-                dgvProductos.CurrentRow.DataBoundItem is not ProductoBE p)
+            if (dgvProductos.CurrentRow?.Selected != true ||dgvProductos.CurrentRow.DataBoundItem is not ProductoBE p)
                 return;
 
             _seleccionado = p;
@@ -153,9 +148,7 @@ namespace UI
             btnCrear.Enabled = gestion && !elegido;
             btnModificar.Enabled = gestion && elegido;
             btnEstado.Enabled = gestion && elegido;
-            btnEstado.Text = elegido && !_seleccionado!.Activo
-                ? T("frmGestionProductos.Reactivar")
-                : T("frmGestionProductos.Desactivar");
+            btnEstado.Text = elegido && !_seleccionado!.Activo? T("frmGestionProductos.Reactivar"): T("frmGestionProductos.Desactivar");
             btnReponer.Enabled = gestion && elegido && _seleccionado!.Activo;
             nudStockInicial.Enabled = !elegido;
             nudReposicion.Enabled = gestion && elegido && _seleccionado!.Activo;
@@ -190,37 +183,27 @@ namespace UI
         private void btnCrear_Click(object sender, EventArgs e)
         {
             EjecutarCambio(() => _productoBLL.CrearProducto(
-                txtNombre.Text, cmbCategoria.Text, nudPrecio.Value,
-                (int)nudStockInicial.Value, (int)nudMinimo.Value),
-                "frmGestionProductos.Creado");
+                txtNombre.Text, cmbCategoria.Text, nudPrecio.Value,(int)nudStockInicial.Value, (int)nudMinimo.Value),"frmGestionProductos.Creado");
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
             if (_seleccionado == null) return;
             int codigo = _seleccionado.CodigoProducto;
-            EjecutarCambio(() => _productoBLL.ModificarProducto(
-                codigo, txtNombre.Text, cmbCategoria.Text, nudPrecio.Value,
-                (int)nudMinimo.Value),
-                "frmGestionProductos.Modificado");
+            EjecutarCambio(() => _productoBLL.ModificarProducto(codigo, txtNombre.Text, cmbCategoria.Text, nudPrecio.Value,(int)nudMinimo.Value),"frmGestionProductos.Modificado");
         }
 
         private void btnEstado_Click(object sender, EventArgs e)
         {
             if (_seleccionado == null) return;
             bool activar = !_seleccionado.Activo;
-            string clave = activar ? "frmGestionProductos.ConfirmarReactivar"
-                                  : "frmGestionProductos.ConfirmarDesactivar";
-            DialogResult respuesta = MessageBox.Show(
-                string.Format(T(clave), _seleccionado.Nombre),
-                Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            string clave = activar ? "frmGestionProductos.ConfirmarReactivar": "frmGestionProductos.ConfirmarDesactivar";
+            DialogResult respuesta = MessageBox.Show(string.Format(T(clave), _seleccionado.Nombre),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (respuesta != DialogResult.Yes) return;
 
             int codigo = _seleccionado.CodigoProducto;
-            EjecutarCambio(() => _productoBLL.CambiarEstado(codigo, activar),
-                activar ? "frmGestionProductos.Reactivado"
-                       : "frmGestionProductos.Desactivado");
+            EjecutarCambio(() => _productoBLL.CambiarEstado(codigo, activar),activar ? "frmGestionProductos.Reactivado": "frmGestionProductos.Desactivado");
         }
 
         private void btnReponer_Click(object sender, EventArgs e)
@@ -228,14 +211,10 @@ namespace UI
             if (_seleccionado == null) return;
             int codigo = _seleccionado.CodigoProducto;
             int cantidad = (int)nudReposicion.Value;
-            DialogResult respuesta = MessageBox.Show(
-                string.Format(T("frmGestionProductos.ConfirmarReposicion"),
-                    cantidad, _seleccionado.Nombre),
-                Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult respuesta = MessageBox.Show(string.Format(T("frmGestionProductos.ConfirmarReposicion"),cantidad, _seleccionado.Nombre),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (respuesta != DialogResult.Yes) return;
 
-            EjecutarCambio(() => _productoBLL.ReponerStock(codigo, cantidad),
-                "frmGestionProductos.Repuesto");
+            EjecutarCambio(() => _productoBLL.ReponerStock(codigo, cantidad),"frmGestionProductos.Repuesto");
         }
 
         private void EjecutarCambio(Action operacion, string claveMensaje)
@@ -246,8 +225,7 @@ namespace UI
                 CargarProductos();
                 NuevoProducto();
                 lblMensaje.Text = T(claveMensaje);
-                MessageBox.Show(T(claveMensaje), Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(T(claveMensaje), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

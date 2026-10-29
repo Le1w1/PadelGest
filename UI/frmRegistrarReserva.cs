@@ -16,12 +16,7 @@ namespace UI
 
         // La reserva ya llega registrada. Este formulario solo muestra el resultado
         // del CUN06 y permite finalizar el proceso de reserva.
-        public frmRegistrarReserva(
-            ReservaBE reserva,
-            ClienteBE cliente,
-            CanchaBE cancha,
-            TarifaBE tarifa,
-            FacturaBE facturaPagada)
+        public frmRegistrarReserva(ReservaBE reserva,ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada)
         {
             InitializeComponent();
 
@@ -97,41 +92,35 @@ namespace UI
             // El archivo y la exportación son independientes de la transacción comercial.
             try
             {
-                ComprobantePdf.ExportarReserva(
-                    guardar.FileName, _reserva, _cliente, _cancha, _tarifa, _facturaPagada);
+                ComprobantePdf.ExportarReserva(guardar.FileName, _reserva, _cliente, _cancha, _tarifa, _facturaPagada);
                 AuditoriaExportacionPdf.Registrar("Reserva", _reserva.Codigo, true);
             }
             catch (Exception ex)
             {
                 AuditoriaExportacionPdf.Registrar("Reserva", _reserva.Codigo, false);
-                MessageBox.Show(t.Traducir("Pdf.ErrorExportacion") + "\n" + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(t.Traducir("Pdf.ErrorExportacion") + "\n" + ex.Message,Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             // Si falla la apertura con el visor del equipo, el PDF ya está
             // generado; no se registra un falso error de exportación.
-            DialogResult abrir = MessageBox.Show(
-                t.Traducir("Pdf.ExportacionOk") + "\n" + t.Traducir("Pdf.AbrirArchivo"),
-                Text, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            DialogResult abrir = MessageBox.Show(t.Traducir("Pdf.ExportacionOk") + "\n" + t.Traducir("Pdf.AbrirArchivo"),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (abrir != DialogResult.Yes) return;
 
             try
             {
-                System.Diagnostics.Process.Start(
-                    new System.Diagnostics.ProcessStartInfo(guardar.FileName)
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(guardar.FileName)
                     {
                         UseShellExecute = true
                     });
             }
             catch (Exception ex)
             {
-                MessageBox.Show(t.Traducir("Pdf.ErrorAbrirArchivo") + "\n" + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(t.Traducir("Pdf.ErrorAbrirArchivo") + "\n" + ex.Message,Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
-                private void btnFinalizar_Click(object sender, EventArgs e)
+        private void btnFinalizar_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             Close();

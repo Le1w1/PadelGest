@@ -54,17 +54,14 @@ namespace UI
             if (_pagoAprobado != null && _facturaRegistrada == null)
             {
                 e.Cancel = true;
-                MessageBox.Show(T("frmGenerarCarrito.PagoPendienteRegistro"),
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(T("frmGenerarCarrito.PagoPendienteRegistro"),Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (_factura == null || _facturaRegistrada != null ||
-                _factura.Estado == "Pagada")
+            if (_factura == null || _facturaRegistrada != null || _factura.Estado == "Pagada")
                 return;
 
-            if (MessageBox.Show(T("frmGenerarCarrito.ConfirmarCancelar"),
-                    Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show(T("frmGenerarCarrito.ConfirmarCancelar"),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 e.Cancel = true;
 
             // No se persiste ni borra nada: el detalle de la factura estaba en memoria.
@@ -124,22 +121,18 @@ namespace UI
             dgvProductos.AutoGenerateColumns = false;
             dgvDetalles.AutoGenerateColumns = false;
 
-            AsegurarColumnas(
-                dgvProductos,
-                new[] { "colProductoNombre", "colProductoCategoria",
-                        "colProductoPrecio", "colProductoStock" },
+            AsegurarColumnas(dgvProductos,
+                new[] { "colProductoNombre", "colProductoCategoria","colProductoPrecio", "colProductoStock" },
                 new[] { "Nombre", "Categoria", "PrecioUnitario", "StockDisponible" },
                 new[] { "Producto", "Categoría", "Precio", "Stock" });
 
-            AsegurarColumnas(
-                dgvDetalles,
+            AsegurarColumnas(dgvDetalles,
                 new[] { "colDetalleProducto", "colDetalleCantidad", "colDetalleSubtotal" },
                 new[] { "NombreProducto", "Cantidad", "Subtotal" },
                 new[] { "Producto", "Cantidad", "Subtotal" });
         }
 
-        private static void AsegurarColumnas(DataGridView grilla,
-            string[] nombres, string[] propiedades, string[] titulos)
+        private static void AsegurarColumnas(DataGridView grilla,string[] nombres, string[] propiedades, string[] titulos)
         {
             bool columnasCorrectas = grilla.Columns.Count == nombres.Length;
 
@@ -233,8 +226,7 @@ namespace UI
                 "Pagada" => T("frmGenerarCarrito.EstadoVendido"),
                 _ => _factura.Estado
             };
-            lblCliente.Text = string.IsNullOrWhiteSpace(_factura.DNI)
-                ? T("frmGenerarCarrito.SinCliente") : _factura.DNI;
+            lblCliente.Text = string.IsNullOrWhiteSpace(_factura.DNI)? T("frmGenerarCarrito.SinCliente") : _factura.DNI;
 
             btnAgregar.Enabled = editable;
             btnModificar.Enabled = editable && tieneProductos;
@@ -243,10 +235,8 @@ namespace UI
             btnActualizarProductos.Enabled = editable;
             nudCantidad.Enabled = editable;
 
-            btnCobrar.Enabled = (_factura.Estado == "Listo" && _pagoAprobado == null)
-                || (_pagoAprobado != null && _facturaRegistrada == null);
-            btnCobrar.Text = _pagoAprobado != null && _facturaRegistrada == null
-                ? T("frmGenerarCarrito.ReintentarRegistro") : T("frmGenerarCarrito.Cobrar");
+            btnCobrar.Enabled = (_factura.Estado == "Listo" && _pagoAprobado == null)|| (_pagoAprobado != null && _facturaRegistrada == null);
+            btnCobrar.Text = _pagoAprobado != null && _facturaRegistrada == null? T("frmGenerarCarrito.ReintentarRegistro") : T("frmGenerarCarrito.Cobrar");
             btnVolver.Enabled = _pagoAprobado == null;
             btnVolver.Text = T("frmGenerarCarrito.Volver");
         }
@@ -272,8 +262,7 @@ namespace UI
             if (_factura == null) return;
             try
             {
-                ActualizarFactura(_facturaBLL.AgregarProducto(
-                    _factura, ObtenerCodigoProducto(), (int)nudCantidad.Value));
+                ActualizarFactura(_facturaBLL.AgregarProducto(_factura, ObtenerCodigoProducto(), (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.ProductoAgregado");
             }
             catch (Exception ex) { lblMensaje.Text = ex.Message; }
@@ -284,8 +273,7 @@ namespace UI
             if (_factura == null) return;
             try
             {
-                ActualizarFactura(_facturaBLL.ModificarCantidad(
-                    _factura, ObtenerCodigoDetalle(), (int)nudCantidad.Value));
+                ActualizarFactura(_facturaBLL.ModificarCantidad(_factura, ObtenerCodigoDetalle(), (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.CantidadModificada");
             }
             catch (Exception ex) { lblMensaje.Text = ex.Message; }
@@ -319,12 +307,10 @@ namespace UI
             if (_factura == null || _factura.Detalles.Count == 0) return;
             // Reutiliza PN1: CUN09 Registrar Cliente se ejecuta solo si es necesario.
             using frmSeleccionarCliente formCliente = new frmSeleccionarCliente();
-            if (formCliente.ShowDialog(this) != DialogResult.OK ||
-                formCliente.ClienteSeleccionado == null) return;
+            if (formCliente.ShowDialog(this) != DialogResult.OK ||formCliente.ClienteSeleccionado == null) return;
             try
             {
-                ActualizarFactura(_facturaBLL.AsociarCliente(
-                    _factura, formCliente.ClienteSeleccionado.DNI));
+                ActualizarFactura(_facturaBLL.AsociarCliente(_factura, formCliente.ClienteSeleccionado.DNI));
                 _clienteSeleccionado = formCliente.ClienteSeleccionado;
                 lblMensaje.Text = T("frmGenerarCarrito.ClienteAsignado");
             }
@@ -354,8 +340,7 @@ namespace UI
                 {
                     // No hubo factura persistida ni unidades descontadas.
                     _factura = null;
-                    MessageBox.Show(T("frmGenerarCarrito.CobroRechazado"),
-                        Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(T("frmGenerarCarrito.CobroRechazado"),Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DialogResult = DialogResult.Cancel;
                     Close();
                     return;
@@ -398,15 +383,12 @@ namespace UI
             ActualizarResumen();
             try
             {
-                using frmFacturaRegistrada formFactura =
-                    new frmFacturaRegistrada(_facturaRegistrada, _clienteSeleccionado);
+                using frmFacturaRegistrada formFactura =new frmFacturaRegistrada(_facturaRegistrada, _clienteSeleccionado);
                 formFactura.ShowDialog(this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    string.Format(T("frmGenerarCarrito.ErrorMostrarComprobante"), ex.Message),
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(string.Format(T("frmGenerarCarrito.ErrorMostrarComprobante"), ex.Message),Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             DialogResult = DialogResult.OK;

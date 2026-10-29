@@ -16,14 +16,12 @@ namespace DAL
         private readonly DigitoVerificadorDAL _dv = new DigitoVerificadorDAL();
         private readonly BitacoraEventoDAL _bitacora = new BitacoraEventoDAL();
 
+
+        /// Registra una factura de buffet con sus detalles y actualiza el stock de productos.
         public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, string usuario, PagoBE pago)
         {
-            if (factura == null || pago == null || factura.Detalles == null ||
-                factura.Detalles.Count == 0 || string.IsNullOrWhiteSpace(factura.DNI) ||
-                factura.IdVendedor <= 0 || factura.ImporteTotal <= 0 || pago.Estado != "Aprobado" ||
-                pago.Importe != factura.ImporteTotal || string.IsNullOrWhiteSpace(pago.Banco) ||
-                string.IsNullOrWhiteSpace(pago.CodigoAutorizacion) ||
-                string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) || pago.Ultimos4Tarjeta.Length != 4)
+            if (factura == null || pago == null || factura.Detalles == null ||factura.Detalles.Count == 0 || string.IsNullOrWhiteSpace(factura.DNI) ||factura.IdVendedor <= 0 || factura.ImporteTotal <= 0 || pago.Estado != "Aprobado" ||
+                pago.Importe != factura.ImporteTotal || string.IsNullOrWhiteSpace(pago.Banco) ||string.IsNullOrWhiteSpace(pago.CodigoAutorizacion) ||string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) || pago.Ultimos4Tarjeta.Length != 4)
                 throw new Exception("Factura o pago aprobado inválidos.");
 
             List<DetalleFacturaBE> detalles = factura.Detalles.Select(d => new DetalleFacturaBE
@@ -53,16 +51,15 @@ namespace DAL
                 FacturaBuffetBE existente = BuscarPorAutorizacion(conexion, tx, pago.CodigoAutorizacion);
                 if (existente != null)
                 {
-                    if (existente.DNI != factura.DNI || existente.IdVendedor != factura.IdVendedor ||
-                        existente.ImporteTotal != total || existente.Banco != pago.Banco || existente.Ultimos4Tarjeta != pago.Ultimos4Tarjeta || existente.Detalles.Count != detalles.Count ||
+                    if (existente.DNI != factura.DNI || existente.IdVendedor != factura.IdVendedor ||existente.ImporteTotal != total ||
+                        existente.Banco != pago.Banco || existente.Ultimos4Tarjeta != pago.Ultimos4Tarjeta || existente.Detalles.Count != detalles.Count ||
                         existente.Detalles.Any(e => !detalles.Any(d =>e.CodigoProducto == d.CodigoProducto && e.Cantidad == d.Cantidad &&e.PrecioUnitario == d.PrecioUnitario)))
                         throw new Exception("La autorización ya se utilizó para una factura diferente.");
                     tx.Commit();
                     return existente;
                 }
 
-                using (SqlCommand cmd = new SqlCommand(
-                    "SELECT COUNT(1) FROM dbo.Cliente WITH (HOLDLOCK) WHERE DNI = @DNI", conexion, tx))
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM dbo.Cliente WITH (HOLDLOCK) WHERE DNI = @DNI", conexion, tx))
                 {
                     cmd.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = factura.DNI;
                     if (Convert.ToInt32(cmd.ExecuteScalar()) != 1)
@@ -83,8 +80,7 @@ namespace DAL
                 }
 
                 DateTime fecha = DateTime.Now;
-                string numero = "FB-" + fecha.ToString("yyyyMMdd") + "-" +
-                                Guid.NewGuid().ToString("N")[..10].ToUpperInvariant();
+                string numero = "FB-" + fecha.ToString("yyyyMMdd") + "-" + Guid.NewGuid().ToString("N")[..10].ToUpperInvariant();
                 int idFactura;
                 const string alta = @"INSERT INTO dbo.FacturaBuffet
                     (NumeroFactura,DNI,IdVendedor,FechaHoraEmision,ImporteTotal,
@@ -122,8 +118,7 @@ namespace DAL
                     detalle.IdFactura = idFactura;
                 }
 
-                foreach (string tabla in new[] { "Producto", "FacturaBuffet", "DetalleFactura" })
-                    _dv.RecalcularDVEnTransaccion(tabla, conexion, tx);
+                foreach (string tabla in new[] { "Producto", "FacturaBuffet", "DetalleFactura" })_dv.RecalcularDVEnTransaccion(tabla, conexion, tx);
 
                 _bitacora.Registrar(new BitacoraEvento
                 {

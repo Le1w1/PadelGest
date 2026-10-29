@@ -88,9 +88,7 @@ namespace UI
         // El CVV sigue aceptando exclusivamente digitos.
         private void NumerosTarjeta_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) &&
-                (e.KeyChar < '0' || e.KeyChar > '9') &&
-                e.KeyChar != ' ')
+            if (!char.IsControl(e.KeyChar) && (e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != ' ')
             {
                 e.Handled = true;
             }

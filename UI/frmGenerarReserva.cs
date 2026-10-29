@@ -349,8 +349,7 @@ namespace UI
             if (ReservaRegistrada != null)
                 return;
 
-            if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null ||
-                FacturaPagada == null || PagoAprobado == null)
+            if (ClienteSeleccionado == null || CanchaSeleccionada == null || TarifaSeleccionada == null ||FacturaPagada == null || PagoAprobado == null)
             {
                 lblMensaje.Text = Traductor.Instancia.Traducir("frmGenerarReserva.MsgFaltanDatosRegistro");
                 return;
@@ -387,9 +386,7 @@ namespace UI
             }
             catch (Exception ex)
             {
-                string mensaje = string.Format(
-                    Traductor.Instancia.Traducir("frmGenerarReserva.MsgErrorRegistroAutomatico"),
-                    ex.Message);
+                string mensaje = string.Format(Traductor.Instancia.Traducir("frmGenerarReserva.MsgErrorRegistroAutomatico"),ex.Message);
 
                 lblMensaje.Text = mensaje;
                 btnReintentarRegistro.Visible = true;

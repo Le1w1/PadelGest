@@ -109,16 +109,14 @@ namespace UI
 
             try
             {
-                System.Diagnostics.Process.Start(
-                    new System.Diagnostics.ProcessStartInfo(guardar.FileName)
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(guardar.FileName)
                     {
                         UseShellExecute = true
                     });
             }
             catch (Exception ex)
             {
-                MessageBox.Show(t.Traducir("Pdf.ErrorAbrirArchivo") + "\n" + ex.Message,
-                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(t.Traducir("Pdf.ErrorAbrirArchivo") + "\n" + ex.Message,Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

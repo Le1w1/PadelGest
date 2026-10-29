@@ -112,8 +112,7 @@ namespace UI
         // Los datos pegados tambien se validan antes de simular el cobro.
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) &&
-                (e.KeyChar < '0' || e.KeyChar > '9'))
+            if (!char.IsControl(e.KeyChar) && (e.KeyChar < '0' || e.KeyChar > '9'))
             {
                 e.Handled = true;
             }
@@ -123,9 +122,7 @@ namespace UI
         // El codigo de seguridad continua usando SoloNumeros_KeyPress.
         private void NumerosTarjeta_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) &&
-                (e.KeyChar < '0' || e.KeyChar > '9') &&
-                e.KeyChar != ' ')
+            if (!char.IsControl(e.KeyChar) && (e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != ' ')
             {
                 e.Handled = true;
             }
