@@ -159,6 +159,16 @@ namespace UI
                 }
 
                 lblMensaje.Text = string.Empty;
+
+                // En el arranque normal el menu principal ya existe detras del Login.
+                // Al confirmar, se cierra solo este dialogo y se habilita el menu segun los permisos.
+                if (Owner is frmMenuPrincipal)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                    return;
+                }
+
                 frmMenuPrincipal menu = new frmMenuPrincipal();
 
                 // ELogin no debe recibir notificaciones de cambio de idioma:
