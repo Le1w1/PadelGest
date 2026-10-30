@@ -39,8 +39,6 @@ namespace UI
             vendedorBuffetToolStripMenuItem = new ToolStripMenuItem();
             generarCarritoToolStripMenuItem = new ToolStripMenuItem();
             gestionarProductosToolStripMenuItem = new ToolStripMenuItem();
-            encargadoDeCanchasToolStripMenuItem = new ToolStripMenuItem();
-            dueñoToolStripMenuItem = new ToolStripMenuItem();
             mnuAdministrador = new ToolStripMenuItem();
             usuariosToolStripMenuItem = new ToolStripMenuItem();
             bitacoraEventosToolStripMenuItem = new ToolStripMenuItem();
@@ -64,7 +62,6 @@ namespace UI
             menuPrincipal.BackColor = Color.FromArgb(214, 246, 36);
             menuPrincipal.ForeColor = Color.White;
             menuPrincipal.ImageScalingSize = new Size(20, 20);
-            menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, RecepcionistaToolStripMenuItem, vendedorBuffetToolStripMenuItem, encargadoDeCanchasToolStripMenuItem, dueñoToolStripMenuItem, mnuAdministrador });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
             menuPrincipal.Size = new Size(800, 24);
@@ -160,23 +157,9 @@ namespace UI
             gestionarProductosToolStripMenuItem.ForeColor = Color.White;
             gestionarProductosToolStripMenuItem.Click += gestionarProductosToolStripMenuItem_Click;
             // 
-            // encargadoDeCanchasToolStripMenuItem
             // 
-            encargadoDeCanchasToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
-            encargadoDeCanchasToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            encargadoDeCanchasToolStripMenuItem.ForeColor = Color.Black;
-            encargadoDeCanchasToolStripMenuItem.Name = "encargadoDeCanchasToolStripMenuItem";
-            encargadoDeCanchasToolStripMenuItem.Size = new Size(140, 20);
-            encargadoDeCanchasToolStripMenuItem.Text = "Encargado de Canchas";
             // 
-            // dueñoToolStripMenuItem
             // 
-            dueñoToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
-            dueñoToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dueñoToolStripMenuItem.ForeColor = Color.Black;
-            dueñoToolStripMenuItem.Name = "dueñoToolStripMenuItem";
-            dueñoToolStripMenuItem.Size = new Size(56, 20);
-            dueñoToolStripMenuItem.Text = "Dueño";
             // 
             // mnuAdministrador
             // 
@@ -426,8 +409,6 @@ namespace UI
         private ToolStripMenuItem usuariosToolStripMenuItem;
         private ToolStripMenuItem bitacoraEventosToolStripMenuItem;
         private ToolStripMenuItem gestionarPerfilToolStripMenuItem;
-        private ToolStripMenuItem encargadoDeCanchasToolStripMenuItem;
-        private ToolStripMenuItem dueñoToolStripMenuItem;
         private ToolStripMenuItem gestionDeRespaldoToolStripMenuItem;
         private ToolStripMenuItem vendedorBuffetToolStripMenuItem;
         private ToolStripMenuItem generarCarritoToolStripMenuItem;
