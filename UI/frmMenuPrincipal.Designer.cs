@@ -62,6 +62,7 @@ namespace UI
             menuPrincipal.BackColor = Color.FromArgb(214, 246, 36);
             menuPrincipal.ForeColor = Color.White;
             menuPrincipal.ImageScalingSize = new Size(20, 20);
+            menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, RecepcionistaToolStripMenuItem, vendedorBuffetToolStripMenuItem, mnuAdministrador });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
             menuPrincipal.Size = new Size(800, 24);
