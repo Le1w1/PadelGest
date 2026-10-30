@@ -1,3 +1,4 @@
+using System.Globalization;
 using BE;
 using Servicios;
 
@@ -71,9 +72,9 @@ namespace UI
             lblFechaValor.Text = _reserva.Fecha.ToString("d");
             lblHorarioValor.Text = _reserva.Horario.ToString(@"hh\:mm");
             lblCanchaValor.Text = _cancha.Nombre;
-            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_tarifa.Importe:C}";
+            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_tarifa.Importe.ToString("C", CultureInfo.GetCultureInfo("es-AR"))}";
             lblEquipamientoValor.Text = $"Paletas: {_reserva.CantidadPaletas} | Pelotas: {_reserva.CantidadPelotas}";
-            lblImporteValor.Text = _facturaPagada.ImporteTotal.ToString("C");
+            lblImporteValor.Text = _facturaPagada.ImporteTotal.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
         }
 
         private void btnFinalizar_Click(object sender, EventArgs e)
