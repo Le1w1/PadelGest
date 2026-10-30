@@ -125,7 +125,7 @@ namespace UI
             RecepcionistaToolStripMenuItem.ForeColor = Color.Black;
             RecepcionistaToolStripMenuItem.Name = "RecepcionistaToolStripMenuItem";
             RecepcionistaToolStripMenuItem.Size = new Size(96, 20);
-            RecepcionistaToolStripMenuItem.Text = "Recepcionista";
+            RecepcionistaToolStripMenuItem.Text = "Canchas de Pádel";
             // 
             // generarReservaToolStripMenuItem
             // 
@@ -144,7 +144,7 @@ namespace UI
             vendedorBuffetToolStripMenuItem.ForeColor = Color.Black;
             vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
             vendedorBuffetToolStripMenuItem.Size = new Size(113, 20);
-            vendedorBuffetToolStripMenuItem.Text = "Vendedor Buffet";
+            vendedorBuffetToolStripMenuItem.Text = "Buffet";
             // Generar carrito - PN2
             generarCarritoToolStripMenuItem.Name = "generarCarritoToolStripMenuItem";
             generarCarritoToolStripMenuItem.Text = "Generar Factura";
