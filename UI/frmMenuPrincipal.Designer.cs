@@ -170,7 +170,7 @@ namespace UI
             mnuAdministrador.ForeColor = Color.Black;
             mnuAdministrador.Name = "mnuAdministrador";
             mnuAdministrador.Size = new Size(98, 20);
-            mnuAdministrador.Text = "Administrador";
+            mnuAdministrador.Text = "Administración PadelGest";
             // 
             // usuariosToolStripMenuItem
             // 
