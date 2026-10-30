@@ -90,8 +90,6 @@ namespace UI
             RecepcionistaToolStripMenuItem.Visible = reservas;
             generarReservaToolStripMenuItem.Visible = reservas;
 
-            encargadoDeCanchasToolStripMenuItem.Visible = false;
-            dueñoToolStripMenuItem.Visible = false;
 
             mnuAdministrador.Visible = usuarios || bitacora || perfiles || respaldos;
             usuariosToolStripMenuItem.Visible = usuarios;
@@ -124,8 +122,6 @@ namespace UI
             // Menus principales
             RecepcionistaToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuRecepcionista");
             generarReservaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGenerarReserva");
-            encargadoDeCanchasToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuEncargadoCanchas");
-            dueñoToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuDueño");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
             generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
             gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
