@@ -1,5 +1,6 @@
 using BE;
 using BLL;
+using System.Linq;
 using Servicios;
 
 namespace UI
@@ -241,12 +242,23 @@ namespace UI
             btnVolver.Text = T("frmGenerarCarrito.Volver");
         }
 
-        private int ObtenerCodigoProducto()
+        private ProductoBE ObtenerProductoSeleccionado()
         {
             if (dgvProductos.CurrentRow?.DataBoundItem is not ProductoBE producto)
                 throw new Exception(T("Errores.Buffet.CodigoProductoInvalido"));
+            return producto;
+        }
 
-            return producto.CodigoProducto;
+        // Busca el producto en el catálogo ya cargado, incluso si la fila
+        // seleccionada en la grilla del catálogo es otra.
+        private ProductoBE ObtenerProductoDelCatalogo(int codigoProducto)
+        {
+            if (dgvProductos.DataSource is List<ProductoBE> productos)
+            {
+                ProductoBE? producto = productos.FirstOrDefault(p => p.CodigoProducto == codigoProducto);
+                if (producto != null) return producto;
+            }
+            throw new Exception(T("Errores.Buffet.ProductoNoDisponible"));
         }
 
         private int ObtenerCodigoDetalle()
@@ -262,7 +274,7 @@ namespace UI
             if (_factura == null) return;
             try
             {
-                ActualizarFactura(_facturaBLL.AgregarProducto(_factura, ObtenerCodigoProducto(), (int)nudCantidad.Value));
+                ActualizarFactura(_facturaBLL.AgregarProducto(_factura, ObtenerProductoSeleccionado(), (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.ProductoAgregado");
             }
             catch (Exception ex) { lblMensaje.Text = ex.Message; }
@@ -273,7 +285,7 @@ namespace UI
             if (_factura == null) return;
             try
             {
-                ActualizarFactura(_facturaBLL.ModificarCantidad(_factura, ObtenerCodigoDetalle(), (int)nudCantidad.Value));
+                ActualizarFactura(_facturaBLL.ModificarCantidad(_factura, ObtenerProductoDelCatalogo(ObtenerCodigoDetalle()), (int)nudCantidad.Value));
                 lblMensaje.Text = T("frmGenerarCarrito.CantidadModificada");
             }
             catch (Exception ex) { lblMensaje.Text = ex.Message; }
