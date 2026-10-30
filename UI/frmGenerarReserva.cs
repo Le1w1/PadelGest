@@ -1,3 +1,4 @@
+using System.Globalization;
 using BE;
 using BLL;
 using Servicios;
@@ -170,7 +171,7 @@ namespace UI
                 _tarifaActual = _tarifaBLL.ObtenerTarifa(horario);
                 List<CanchaBE> canchas = _canchaBLL.ObtenerCanchasDisponibles(fecha, horario);
 
-                lblTarifaValor.Text = $"{_tarifaActual.TipoTarifa} - {_tarifaActual.Importe:C}";
+                lblTarifaValor.Text = $"{_tarifaActual.TipoTarifa} - {_tarifaActual.Importe.ToString("C", CultureInfo.GetCultureInfo("es-AR"))}";
                 dgvCanchas.DataSource = null;
                 dgvCanchas.DataSource = canchas;
                 dgvCanchas.ClearSelection();
@@ -225,7 +226,7 @@ namespace UI
             lblFechaSelValor.Text = FechaSeleccionada.ToShortDateString();
             lblHorarioSelValor.Text = HorarioSeleccionado.ToString(@"hh\:mm");
             lblCanchaSelValor.Text = cancha.Nombre;
-            lblTarifaSelValor.Text = $"{_tarifaActual.TipoTarifa} - {_tarifaActual.Importe:C}";
+            lblTarifaSelValor.Text = $"{_tarifaActual.TipoTarifa} - {_tarifaActual.Importe.ToString("C", CultureInfo.GetCultureInfo("es-AR"))}";
 
             btnAgregarEquipamiento.Enabled = true;
             btnContinuar.Enabled = true;
@@ -264,7 +265,7 @@ namespace UI
                 return;
             }
 
-            lblEquipamientoSelValor.Text = string.Format(Traductor.Instancia.Traducir("frmGenerarReserva.ResumenEquipamiento"),CantidadPaletas, CantidadPelotas, ImporteEquipamiento);
+            lblEquipamientoSelValor.Text = string.Format(CultureInfo.GetCultureInfo("es-AR"), Traductor.Instancia.Traducir("frmGenerarReserva.ResumenEquipamiento"),CantidadPaletas, CantidadPelotas, ImporteEquipamiento);
         }
 
 
