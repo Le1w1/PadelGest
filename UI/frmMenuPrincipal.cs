@@ -66,35 +66,38 @@ namespace UI
         {
             var sm = SM.Instancia;
 
+            // Calcular permisos antes de asignar Visible: la visibilidad efectiva
+            // de un item hijo depende tambien de la visibilidad de su menu padre.
+            bool buffet = sm.TienePermiso("BUF_VENDER");
+            bool reservas = sm.TienePermiso("RES_CREAR");
+            bool usuarios = sm.TienePermiso("USR_LISTAR") ||
+                sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
+            bool bitacora = sm.TienePermiso("BIT_AUDITAR");
+            bool perfiles = sm.TienePermiso("ROL_GESTIONAR") ||
+                sm.TienePermiso("FAM_GESTIONAR");
+            bool respaldos = sm.TienePermiso("BAK_GESTIONAR");
+
+            mnuSesion.Visible = true;
             reLoginToolStripMenuItem.Visible = sm.TienePermiso("SES_RELOGIN");
             cambiarClaveToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_CLAVE");
             cambiarIdiomaToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
             cerrarSesionToolStripMenuItem.Visible = true;
-            mnuSesion.Visible = true;
 
-            generarCarritoToolStripMenuItem.Visible = sm.TienePermiso("BUF_VENDER");
-            gestionarProductosToolStripMenuItem.Visible = sm.TienePermiso("BUF_VENDER");
-            vendedorBuffetToolStripMenuItem.Visible =
-                generarCarritoToolStripMenuItem.Visible || gestionarProductosToolStripMenuItem.Visible;
+            vendedorBuffetToolStripMenuItem.Visible = buffet;
+            generarCarritoToolStripMenuItem.Visible = buffet;
+            gestionarProductosToolStripMenuItem.Visible = buffet;
 
-            generarReservaToolStripMenuItem.Visible = sm.TienePermiso("RES_CREAR");
-            RecepcionistaToolStripMenuItem.Visible = generarReservaToolStripMenuItem.Visible;
+            RecepcionistaToolStripMenuItem.Visible = reservas;
+            generarReservaToolStripMenuItem.Visible = reservas;
 
-            // Aun no tienen acciones implementadas en el menu; no mostrar accesos vacios.
             encargadoDeCanchasToolStripMenuItem.Visible = false;
             dueñoToolStripMenuItem.Visible = false;
 
-            usuariosToolStripMenuItem.Visible = sm.TienePermiso("USR_LISTAR") ||
-                sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
-            bitacoraEventosToolStripMenuItem.Visible = sm.TienePermiso("BIT_AUDITAR");
-            gestionarPerfilToolStripMenuItem.Visible = sm.TienePermiso("ROL_GESTIONAR") ||
-                sm.TienePermiso("FAM_GESTIONAR");
-            gestionDeRespaldoToolStripMenuItem.Visible = sm.TienePermiso("BAK_GESTIONAR");
-
-            mnuAdministrador.Visible = usuariosToolStripMenuItem.Visible ||
-                bitacoraEventosToolStripMenuItem.Visible ||
-                gestionarPerfilToolStripMenuItem.Visible ||
-                gestionDeRespaldoToolStripMenuItem.Visible;
+            mnuAdministrador.Visible = usuarios || bitacora || perfiles || respaldos;
+            usuariosToolStripMenuItem.Visible = usuarios;
+            bitacoraEventosToolStripMenuItem.Visible = bitacora;
+            gestionarPerfilToolStripMenuItem.Visible = perfiles;
+            gestionDeRespaldoToolStripMenuItem.Visible = respaldos;
         }
 
 
