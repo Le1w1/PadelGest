@@ -51,18 +51,18 @@ namespace BLL
 
 
         //agrega un producto a la factura en memoria; si ya estaba, suma la cantidad
-        public FacturaBuffetBE AgregarProducto(FacturaBuffetBE factura, int codigoProducto, int cantidad)
+        public FacturaBuffetBE AgregarProducto(FacturaBuffetBE factura, ProductoBE producto, int cantidad)
         {
             Editable(factura);
-            if (cantidad <= 0) throw new Exception("Cantidad inválida.");
-            DetalleFacturaBE detalle = factura.Detalles.FirstOrDefault(x => x.CodigoProducto == codigoProducto);
+            if (producto == null) throw new Exception("Producto inválido.");
+            DetalleFacturaBE detalle = factura.Detalles.FirstOrDefault(x => x.CodigoProducto == producto.CodigoProducto);
             int total = checked(cantidad + (detalle == null ? 0 : detalle.Cantidad));
-            ProductoBE producto = _productoBLL.SeleccionarProducto(codigoProducto, total);
+            ValidarProductoEnMemoria(producto, total);
           
             if (detalle == null)
                 factura.Detalles.Add(new DetalleFacturaBE
                 {
-                    CodigoProducto = codigoProducto,
+                    CodigoProducto = producto.CodigoProducto,
                     NombreProducto = producto.Nombre,
                     Cantidad = cantidad,
                     PrecioUnitario = producto.PrecioUnitario
@@ -74,16 +74,27 @@ namespace BLL
 
 
         //modifica la cantidad de un producto ya agregado a la factura en memoria
-        public FacturaBuffetBE ModificarCantidad(FacturaBuffetBE factura, int codigoProducto, int cantidad)
+        public FacturaBuffetBE ModificarCantidad(FacturaBuffetBE factura, ProductoBE producto, int cantidad)
         {
             Editable(factura);
-            if (cantidad <= 0) throw new Exception("Cantidad inválida.");
-            DetalleFacturaBE detalle = factura.Detalles.FirstOrDefault(x => x.CodigoProducto == codigoProducto);
+            if (producto == null) throw new Exception("Producto inválido.");
+            DetalleFacturaBE detalle = factura.Detalles.FirstOrDefault(x => x.CodigoProducto == producto.CodigoProducto);
             if (detalle == null) throw new Exception("Producto no incluido.");
-            _productoBLL.SeleccionarProducto(codigoProducto, cantidad);
+            ValidarProductoEnMemoria(producto, cantidad);
             detalle.Cantidad = cantidad;
             CalcularTotal(factura);
             return factura;
+        }
+
+        // Valida el catálogo ya cargado, sin consultar SQL por cada selección.
+        // Antes de cobrar se vuelve a verificar el stock real en la base.
+        private static void ValidarProductoEnMemoria(ProductoBE producto, int cantidad)
+        {
+            if (producto.CodigoProducto <= 0) throw new Exception("Código de producto inválido.");
+            if (cantidad <= 0) throw new Exception("Cantidad inválida.");
+            if (!producto.Activo) throw new Exception("Producto no disponible.");
+            if (producto.PrecioUnitario <= 0) throw new Exception("Precio inválido.");
+            if (producto.StockDisponible < cantidad) throw new Exception("Stock insuficiente.");
         }
 
         //quita un producto de la factura en memoria
