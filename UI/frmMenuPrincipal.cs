@@ -23,6 +23,7 @@ namespace UI
             ActualizarIdioma();
             // El menu se muestra detras del Login, pero no se puede usar sin autenticar.
             menuPrincipal.Enabled = false;
+            OcultarMenus();
         }
 
         protected override void OnShown(EventArgs e)
@@ -31,9 +32,17 @@ namespace UI
             SolicitarInicioSesion();
         }
 
+        // Durante el Login no debe quedar visible ninguna opcion de la sesion anterior.
+        private void OcultarMenus()
+        {
+            foreach (ToolStripItem item in menuPrincipal.Items)
+                item.Visible = false;
+        }
+
         private void SolicitarInicioSesion()
         {
             menuPrincipal.Enabled = false;
+            OcultarMenus();
             using (frmLogin login = new frmLogin())
             {
                 if (login.ShowDialog(this) != DialogResult.OK)
@@ -55,7 +64,10 @@ namespace UI
             // Suscripcion al Observer de idioma.
             SM.Instancia.Suscribir(this);
             CargarDatosSesion();
-            AplicarPermisos();
+            if (SM.Instancia.HaySesionActiva())
+                AplicarPermisos();
+            else
+                OcultarMenus();
         }
 
    
