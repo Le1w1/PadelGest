@@ -1,3 +1,4 @@
+using System.Globalization;
 using BE;
 using BLL;
 using Servicios;
@@ -100,11 +101,11 @@ namespace UI
             lblTurnoValor.Text =_factura.FechaReserva.ToString("d") + " " + _factura.Horario.ToString(@"hh\:mm");
 
             lblCanchaValor.Text = _cancha.Nombre;
-            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_factura.ImporteTarifa:C}";
+            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_factura.ImporteTarifa.ToString("C", CultureInfo.GetCultureInfo("es-AR"))}";
 
-            lblEquipamientoValor.Text = $"Paletas: {_factura.CantidadPaletas} | " + $"Pelotas: {_factura.CantidadPelotas} | " + $"{_factura.ImporteEquipamiento:C}";
+            lblEquipamientoValor.Text = $"Paletas: {_factura.CantidadPaletas} | " + $"Pelotas: {_factura.CantidadPelotas} | " + $"{_factura.ImporteEquipamiento.ToString("C", CultureInfo.GetCultureInfo("es-AR"))}";
 
-            lblTotalValor.Text = _factura.ImporteTotal.ToString("C");
+            lblTotalValor.Text = _factura.ImporteTotal.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
         }
 
 
