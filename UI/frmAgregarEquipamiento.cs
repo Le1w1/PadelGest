@@ -1,3 +1,4 @@
+using System.Globalization;
 using BE;
 using BLL;
 using Servicios;
@@ -107,7 +108,7 @@ namespace UI
 
             lblStockPaletasValor.Text = stock.ToString();
             // Muestra el importe unitario de la paleta o un guion si no hay paletas disponibles
-            lblImportePaletasValor.Text = _paleta == null ? "-" : _paleta.Importe.ToString("C");
+            lblImportePaletasValor.Text = _paleta == null ? "-" : _paleta.Importe.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
             nudPaletas.Enabled = _paleta != null && stock > 0;
         }
 
@@ -124,7 +125,7 @@ namespace UI
 
             lblStockPelotasValor.Text = stock.ToString();
             // Muestra el importe unitario de la pelota o un guion si no hay pelotas disponibles
-            lblImportePelotasValor.Text = _pelota == null ? "-" : _pelota.Importe.ToString("C");
+            lblImportePelotasValor.Text = _pelota == null ? "-" : _pelota.Importe.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
             nudPelotas.Enabled = _pelota != null && stock > 0;
         }
 
@@ -153,7 +154,7 @@ namespace UI
                 total += nudPelotas.Value * _pelota.Importe;
             }
 
-            lblTotalValor.Text = total.ToString("C");
+            lblTotalValor.Text = total.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
         }
 
 
