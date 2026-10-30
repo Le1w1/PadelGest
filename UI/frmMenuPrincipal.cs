@@ -21,6 +21,31 @@ namespace UI
             InitializeComponent();
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
+            // El menu se muestra detras del Login, pero no se puede usar sin autenticar.
+            menuPrincipal.Enabled = false;
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            SolicitarInicioSesion();
+        }
+
+        private void SolicitarInicioSesion()
+        {
+            menuPrincipal.Enabled = false;
+            using (frmLogin login = new frmLogin())
+            {
+                if (login.ShowDialog(this) != DialogResult.OK)
+                {
+                    Close();
+                    return;
+                }
+            }
+
+            CargarDatosSesion();
+            AplicarPermisos();
+            menuPrincipal.Enabled = true;
         }
 
 
@@ -35,52 +60,44 @@ namespace UI
 
    
         
-        /// Recorre los items del menu y los habilita/deshabilita segun los permisos del usuario logueado. 
-        /// Excepcion: "Cerrar Sesion" SIEMPRE habilitado por seguridad operativa, sin importar los permisos del rol.
+        /// Muestra exclusivamente las opciones para las que el usuario tiene permiso.
+        /// Los menus padre se ocultan cuando no hay opciones visibles.
         private void AplicarPermisos()
         {
             var sm = SM.Instancia;
 
-            // --- Menu Usuario (sesion) ---
-            reLoginToolStripMenuItem.Enabled = sm.TienePermiso("SES_RELOGIN");
-            cambiarClaveToolStripMenuItem.Enabled = sm.TienePermiso("SES_CAMBIAR_CLAVE");
-            cambiarIdiomaToolStripMenuItem.Enabled = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
-            cerrarSesionToolStripMenuItem.Enabled = true; // siempre habilitado
+            reLoginToolStripMenuItem.Visible = sm.TienePermiso("SES_RELOGIN");
+            cambiarClaveToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_CLAVE");
+            cambiarIdiomaToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
+            cerrarSesionToolStripMenuItem.Visible = true;
+            mnuSesion.Visible = true;
 
-            // Vendedor de Buffet
-            vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("BUF_CONSULTAR_STOCK");
-            generarCarritoToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER");
-            gestionarProductosToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER");
+            generarCarritoToolStripMenuItem.Visible = sm.TienePermiso("BUF_VENDER");
+            gestionarProductosToolStripMenuItem.Visible = sm.TienePermiso("BUF_VENDER");
+            vendedorBuffetToolStripMenuItem.Visible =
+                generarCarritoToolStripMenuItem.Visible || gestionarProductosToolStripMenuItem.Visible;
 
-            // Recepcionista
-            generarReservaToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
+            generarReservaToolStripMenuItem.Visible = sm.TienePermiso("RES_CREAR");
+            RecepcionistaToolStripMenuItem.Visible = generarReservaToolStripMenuItem.Visible;
 
-            // Menu Recepcionista: habilitado si tiene permisos de recepcionista o de cliente (para consultar sus reservas)
-            RecepcionistaToolStripMenuItem.Enabled = generarReservaToolStripMenuItem.Enabled ||
-                sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
-                sm.TienePermiso("RES_REPROGRAMAR") || sm.TienePermiso("RES_CANCELAR") || sm.TienePermiso("CLI_CONSULTAR") ||
-                sm.TienePermiso("CLI_REGISTRAR") || sm.TienePermiso("CLI_MODIFICAR");
+            // Aun no tienen acciones implementadas en el menu; no mostrar accesos vacios.
+            encargadoDeCanchasToolStripMenuItem.Visible = false;
+            dueñoToolStripMenuItem.Visible = false;
 
-            // Encargado de Canchas
-            encargadoDeCanchasToolStripMenuItem.Enabled = sm.TienePermiso("CAN_CONSULTAR_AGENDA");
+            usuariosToolStripMenuItem.Visible = sm.TienePermiso("USR_LISTAR") ||
+                sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
+            bitacoraEventosToolStripMenuItem.Visible = sm.TienePermiso("BIT_AUDITAR");
+            gestionarPerfilToolStripMenuItem.Visible = sm.TienePermiso("ROL_GESTIONAR") ||
+                sm.TienePermiso("FAM_GESTIONAR");
+            gestionDeRespaldoToolStripMenuItem.Visible = sm.TienePermiso("BAK_GESTIONAR");
 
-            // Dueño Hecho Privisorio
-            dueñoToolStripMenuItem.Enabled =sm.TienePermiso("RES_CREAR") &&sm.TienePermiso("BUF_VENDER") && sm.TienePermiso("CAN_CONSULTAR_AGENDA");
-            // --- Menu Administrador ---
-            usuariosToolStripMenuItem.Enabled = sm.TienePermiso("USR_LISTAR") || sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
-
-            bitacoraEventosToolStripMenuItem.Enabled = sm.TienePermiso("BIT_AUDITAR");
-
-            gestionarPerfilToolStripMenuItem.Enabled = sm.TienePermiso("ROL_GESTIONAR") || sm.TienePermiso("FAM_GESTIONAR");
-
-            gestionDeRespaldoToolStripMenuItem.Enabled = sm.TienePermiso("BAK_GESTIONAR");
-
-            // Menus padre: deshabilitados si TODOS sus hijos estan deshabilitados 
-            mnuAdministrador.Enabled = usuariosToolStripMenuItem.Enabled || bitacoraEventosToolStripMenuItem.Enabled || gestionarPerfilToolStripMenuItem.Enabled || gestionDeRespaldoToolStripMenuItem.Enabled;
-
+            mnuAdministrador.Visible = usuariosToolStripMenuItem.Visible ||
+                bitacoraEventosToolStripMenuItem.Visible ||
+                gestionarPerfilToolStripMenuItem.Visible ||
+                gestionDeRespaldoToolStripMenuItem.Visible;
         }
 
-     
+
         private void frmMenuPrincipal_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
@@ -156,7 +173,8 @@ namespace UI
                 try
                 {
                     _usuarioBLL.Logout();
-                    this.Close();
+                    CargarDatosSesion();
+                    SolicitarInicioSesion();
                 }
                 catch (Exception ex)
                 {
