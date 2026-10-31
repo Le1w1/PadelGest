@@ -165,6 +165,19 @@ namespace BLL
                 string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) ||pago.Ultimos4Tarjeta.Length != 4 ||pago.Importe <= 0 || pago.Importe != factura.ImporteTotal)
                 throw new Exception("Pago aprobado inválido.");
             
+            // La DAL controla la transacción SQL, pero no debe depender directamente de las BLL.
+            // Por eso le pasamos una función (delegado Action) como último parámetro.
+            // La función NO se ejecuta aquí: la DAL la llamará después de guardar factura,
+            // detalles y stock, y ANTES de confirmar la transacción con Commit().
+            //
+            // Parámetros que la DAL entrega cuando invoque el delegado:
+            //   evento   -> datos del evento de bitácora de esta venta.
+            //   conexion -> conexión SQL que ya está abierta en FacturaBuffetDAL.
+            //   tx       -> transacción activa que incluye toda la venta.
+            //
+            // Al ejecutarse, esta función invoca las BLL de DV y bitácora usando
+            // la misma conexión y transacción. Si alguna falla, lanza una excepción;
+            // la DAL hará Rollback(), evitando dejar la venta registrada a medias.
             FacturaBuffetBE resultado = _facturaDAL.RegistrarFactura(factura, SM.Instancia.UsuarioActual.NombreUsuario, pago,
                 (evento, conexion, tx) =>
                 {
