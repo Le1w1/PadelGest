@@ -49,11 +49,8 @@ namespace BLL
         /// Registra un nuevo Cliente luego de validar todos los datos ingresados.
         public ClienteBE RegistrarCliente(string dni,string nombre,string apellido,string telefono,string correoElectronico)
         {
-            // El vendedor puede registrar al cliente durante una venta
-            // sin necesitar el permiso de modificacion de clientes.
-            if (!SM.Instancia.TienePermiso("CLI_REGISTRAR") &&
-                !SM.Instancia.TienePermiso("BUF_VENDER"))
-                SM.Instancia.RequierePermiso("CLI_REGISTRAR");
+            // El alta de clientes corresponde exclusivamente a la gestión de maestros.
+            SM.Instancia.RequierePermiso("CLI_REGISTRAR");
 
             Usuario usuarioActual = SM.Instancia.UsuarioActual;
             if (usuarioActual == null)
@@ -120,6 +117,43 @@ namespace BLL
             _bitacoraEventoBLL.Registrar(usuarioActual.IdUsuario,usuarioActual.NombreUsuario,"Cliente","Registrar cliente","Media","Exitoso",$"Se registró el cliente DNI {clienteRegistrado.DNI}.");
 
             return clienteRegistrado;
+        }
+
+        public List<ClienteBE> ListarTodos()
+        {
+            SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            return _clienteDAL.ListarTodos();
+        }
+
+        public void ModificarCliente(string dni, string nombre, string apellido, string telefono, string correo)
+        {
+            SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            dni = (dni ?? "").Trim();
+            nombre = (nombre ?? "").Trim();
+            apellido = (apellido ?? "").Trim();
+            telefono = (telefono ?? "").Trim();
+            correo = (correo ?? "").Trim();
+            if (!EsDNIValido(dni) || !EsNombreOApellidoValido(nombre) ||
+                !EsNombreOApellidoValido(apellido) || !EsTelefonoValido(telefono) || !EsCorreoValido(correo))
+                throw new Exception("Datos de cliente invalidos.");
+            if (!_clienteDAL.Modificar(new ClienteBE { DNI = dni, Nombre = nombre, Apellido = apellido,
+                Telefono = telefono, CorreoElectronico = correo }))
+                throw new Exception("Cliente no encontrado.");
+            _digitoVerificadorBLL.RecalcularDV("Cliente");
+            var u = SM.Instancia.UsuarioActual;
+            _bitacoraEventoBLL.Registrar(u.IdUsuario, u.NombreUsuario, "Cliente", "Modificar cliente", "Media", "Exitoso", "Se modifico cliente DNI " + dni);
+        }
+
+        public void EliminarCliente(string dni)
+        {
+            SM.Instancia.RequierePermiso("CLI_ELIMINAR");
+            dni = (dni ?? "").Trim();
+            if (!EsDNIValido(dni)) throw new Exception("DNI invalido.");
+            if (!_clienteDAL.EliminarSinOperaciones(dni))
+                throw new Exception("No se puede eliminar: el cliente no existe o tiene reservas o facturas asociadas.");
+            _digitoVerificadorBLL.RecalcularDV("Cliente");
+            var u = SM.Instancia.UsuarioActual;
+            _bitacoraEventoBLL.Registrar(u.IdUsuario, u.NombreUsuario, "Cliente", "Eliminar cliente", "Alta", "Exitoso", "Se elimino cliente DNI " + dni);
         }
 
         #region Validaciones

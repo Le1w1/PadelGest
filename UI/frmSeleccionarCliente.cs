@@ -95,9 +95,8 @@ namespace UI
                 {
                     lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgNoRegistrado");
 
-                    btnRegistrarCliente.Visible = true;
-                    btnRegistrarCliente.Enabled = SM.Instancia.TienePermiso("CLI_REGISTRAR") ||
-                                                   SM.Instancia.TienePermiso("BUF_VENDER");
+                    btnRegistrarCliente.Visible = false;
+                    btnRegistrarCliente.Enabled = false;
                     return;
                 }
 
@@ -141,21 +140,7 @@ namespace UI
         // permite abrir el formulario de registro de cliente y registrar un nuevo cliente
         private void btnRegistrarCliente_Click(object sender, EventArgs e)
         {
-            string dni = txtDNI.Text.Trim();
-
-            using frmRegistrarCliente formRegistrar = new frmRegistrarCliente(dni);
-
-            if (formRegistrar.ShowDialog(this) == DialogResult.OK && formRegistrar.ClienteRegistrado != null)
-            {
-                _clienteEncontrado = formRegistrar.ClienteRegistrado;
-
-                MostrarCliente(_clienteEncontrado);
-                btnRegistrarCliente.Visible = false;
-                btnRegistrarCliente.Enabled = false;
-                btnConfirmar.Enabled = true;
-
-                lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgRegistradoIdentificado");
-            }
+            // El alta se realiza desde Gestion de Clientes (Maestro), no durante una venta.
         }
 
 

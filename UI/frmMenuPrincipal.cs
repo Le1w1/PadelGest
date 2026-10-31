@@ -15,10 +15,14 @@ namespace UI
     public partial class frmMenuPrincipal : Form, IObservadorIdioma
     {
         private readonly UsuarioBLL _usuarioBLL = new UsuarioBLL();
+        private ToolStripMenuItem? gestionarClientesToolStripMenuItem;
 
         public frmMenuPrincipal()
         {
             InitializeComponent();
+            gestionarClientesToolStripMenuItem = new ToolStripMenuItem("Gestionar Clientes");
+            gestionarClientesToolStripMenuItem.Click += (_, _) => { using var f = new frmGestionClientes(); f.ShowDialog(this); };
+            vendedorBuffetToolStripMenuItem.DropDownItems.Add(gestionarClientesToolStripMenuItem);
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
             // El menu se muestra detras del Login, pero no se puede usar sin autenticar.
@@ -81,6 +85,8 @@ namespace UI
             // Calcular permisos antes de asignar Visible: la visibilidad efectiva
             // de un item hijo depende tambien de la visibilidad de su menu padre.
             bool buffet = sm.TienePermiso("BUF_VENDER");
+            bool maestroProductos = sm.TienePermiso("PRO_GESTIONAR");
+            bool maestroClientes = sm.TienePermiso("CLI_MODIFICAR");
             bool reservas = sm.TienePermiso("RES_CREAR");
             bool usuarios = sm.TienePermiso("USR_LISTAR") ||
                 sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
@@ -95,9 +101,10 @@ namespace UI
             cambiarIdiomaToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
             cerrarSesionToolStripMenuItem.Visible = true;
 
-            vendedorBuffetToolStripMenuItem.Visible = buffet;
+            vendedorBuffetToolStripMenuItem.Visible = buffet || maestroProductos || maestroClientes;
             generarCarritoToolStripMenuItem.Visible = buffet;
-            gestionarProductosToolStripMenuItem.Visible = buffet;
+            gestionarProductosToolStripMenuItem.Visible = maestroProductos;
+            if (gestionarClientesToolStripMenuItem != null) gestionarClientesToolStripMenuItem.Visible = maestroClientes;
 
             RecepcionistaToolStripMenuItem.Visible = reservas;
             generarReservaToolStripMenuItem.Visible = reservas;
