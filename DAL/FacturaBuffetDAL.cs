@@ -121,9 +121,7 @@ namespace DAL
                     detalle.IdFactura = idFactura;
                 }
 
-                foreach (string tabla in new[] { "Producto", "FacturaBuffet", "DetalleFactura" })_dv.RecalcularDVEnTransaccion(tabla, conexion, tx);
-
-                _bitacora.Registrar(new BitacoraEvento
+                registrarServicios(new BitacoraEvento
                 {
                     IdUsuario = factura.IdVendedor,
                     Usuario = usuario,
