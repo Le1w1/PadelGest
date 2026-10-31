@@ -133,12 +133,12 @@ namespace UI
             dtpVencimiento.Size = new Size(155, 28);
             dtpVencimiento.CalendarForeColor = Color.Black;
             lblSeguridad.Name = "lblSeguridad";
-            lblSeguridad.Location = new Point(393, 127);
-            lblSeguridad.Size = new Size(145, 26);
+            lblSeguridad.Location = new Point(385, 127);
+            lblSeguridad.Size = new Size(180, 26);
             lblSeguridad.Text = "Código seguridad:";
             txtCodigoSeguridad.Name = "txtCodigoSeguridad";
-            txtCodigoSeguridad.Location = new Point(550, 126);
-            txtCodigoSeguridad.Size = new Size(88, 28);
+            txtCodigoSeguridad.Location = new Point(575, 126);
+            txtCodigoSeguridad.Size = new Size(63, 28);
             txtCodigoSeguridad.MaxLength = 4;
             txtCodigoSeguridad.PasswordChar = '*';
             txtCodigoSeguridad.BackColor = Color.White;
