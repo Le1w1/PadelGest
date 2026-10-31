@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using BE;
+using DAL.Servicios;
 using Microsoft.Data.SqlClient;
 using Servicios;
 
