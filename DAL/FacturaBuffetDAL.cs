@@ -130,9 +130,7 @@ namespace DAL
                     Accion = "Registrar factura",
                     Criticidad = "Alta",
                     Resultado = "Exitoso",
-                    Descripcion = $"Factura {numero} pagada. DNI {factura.DNI}. " +
-                                  $"Productos {detalles.Count}. Total {total:N2}. " +
-                                  $"Autorización {pago.CodigoAutorizacion}."
+                    Descripcion = $"Factura {numero} pagada. DNI {factura.DNI}. " +$"Productos {detalles.Count}. Total {total:N2}. " +$"Autorización {pago.CodigoAutorizacion}."
                 }, conexion, tx);
 
                 tx.Commit();
