@@ -4,7 +4,7 @@ using Servicios;
 
 namespace UI
 {
-    // Gestion de Productos del buffet: Vendedor y Dueno con permiso BUF_VENDER.
+    // Gestion de Productos: acceso exclusivo con permiso PRO_GESTIONAR.
     // Los codigos de SQL se mantienen en BE, pero NO se exponen en la grilla.
     public partial class frmGestionProductos : Form, IObservadorIdioma
     {
@@ -27,6 +27,7 @@ namespace UI
             SM.Instancia.Suscribir(this);
             try
             {
+                SM.Instancia.RequierePermiso("PRO_GESTIONAR");
                 CargarProductos();
                 NuevoProducto();
             }
@@ -143,7 +144,7 @@ namespace UI
 
         private void ActualizarBotones()
         {
-            bool gestion = SM.Instancia.TienePermiso("BUF_VENDER");
+            bool gestion = SM.Instancia.TienePermiso("PRO_GESTIONAR");
             bool elegido = _seleccionado != null;
             btnCrear.Enabled = gestion && !elegido;
             btnModificar.Enabled = gestion && elegido;
