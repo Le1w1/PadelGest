@@ -26,13 +26,11 @@ namespace BLL
             return _productoDAL.ObtenerProductosActivos();
         }
 
-        // Gestion de Productos PN2: Dueño y Vendedor de Buffet comparten BUF_VENDER.
+        // El mantenimiento de productos requiere un permiso independiente de la venta.
         // La consulta tambien puede utilizar BUF_CONSULTAR_STOCK.
         public List<ProductoBE> ObtenerTodos()
         {
-            if (!SM.Instancia.TienePermiso("BUF_VENDER") &&
-                !SM.Instancia.TienePermiso("BUF_CONSULTAR_STOCK"))
-                SM.Instancia.RequierePermiso("BUF_VENDER");
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
 
             return _productoDAL.ObtenerTodos();
         }
@@ -40,7 +38,7 @@ namespace BLL
         public void CrearProducto(string nombre, string categoria,
             decimal precio, int stockInicial, int stockMinimo)
         {
-            SM.Instancia.RequierePermiso("BUF_VENDER");
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
             ValidarDatos(nombre, categoria, precio, stockMinimo);
 
             if (stockInicial < 0)
@@ -55,7 +53,7 @@ namespace BLL
         public void ModificarProducto(int codigo, string nombre, string categoria,
             decimal precio, int stockMinimo)
         {
-            SM.Instancia.RequierePermiso("BUF_VENDER");
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
             if (codigo <= 0)
                 throw new Exception(T("Errores.Buffet.CodigoProductoInvalido"));
 
@@ -68,7 +66,7 @@ namespace BLL
 
         public void CambiarEstado(int codigo, bool activar)
         {
-            SM.Instancia.RequierePermiso("BUF_VENDER");
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
             if (codigo <= 0)
                 throw new Exception(T("Errores.Buffet.CodigoProductoInvalido"));
 
@@ -79,7 +77,7 @@ namespace BLL
 
         public void ReponerStock(int codigo, int cantidad)
         {
-            SM.Instancia.RequierePermiso("BUF_VENDER");
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
             if (codigo <= 0)
                 throw new Exception(T("Errores.Buffet.CodigoProductoInvalido"));
             if (cantidad <= 0)
