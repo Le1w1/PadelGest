@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using BE;
-using DAL.Servicios;
 using Microsoft.Data.SqlClient;
 using Servicios;
 
@@ -13,13 +12,13 @@ namespace DAL
     public class FacturaBuffetDAL
     {
         private readonly DAO_AccesoDatos _acceso = new DAO_AccesoDatos();
-        private readonly DigitoVerificadorDAL _dv = new DigitoVerificadorDAL();
-        private readonly BitacoraEventoDAL _bitacora = new BitacoraEventoDAL();
 
 
         /// Registra una factura de buffet con sus detalles y actualiza el stock de productos.
-        public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, string usuario, PagoBE pago)
+        public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, string usuario, PagoBE pago,
+            Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
         {
+            if (registrarServicios == null) throw new ArgumentNullException(nameof(registrarServicios));
             if (factura == null || pago == null || factura.Detalles == null ||factura.Detalles.Count == 0 || string.IsNullOrWhiteSpace(factura.DNI) ||factura.IdVendedor <= 0 || factura.ImporteTotal <= 0 || pago.Estado != "Aprobado" ||
                 pago.Importe != factura.ImporteTotal || string.IsNullOrWhiteSpace(pago.Banco) ||string.IsNullOrWhiteSpace(pago.CodigoAutorizacion) ||string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) || pago.Ultimos4Tarjeta.Length != 4)
                 throw new Exception("Factura o pago aprobado inválidos.");
@@ -124,7 +123,6 @@ namespace DAL
 
                 foreach (string tabla in new[] { "Producto", "FacturaBuffet", "DetalleFactura" })_dv.RecalcularDVEnTransaccion(tabla, conexion, tx);
 
-                // Registrar evento en la bitácora
                 _bitacora.Registrar(new BitacoraEvento
                 {
                     IdUsuario = factura.IdVendedor,

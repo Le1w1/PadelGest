@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using BE;
 using DAL;
+using BLL.Servicios;
+using Microsoft.Data.SqlClient;
 using Servicios;
 
 namespace BLL
@@ -12,6 +14,8 @@ namespace BLL
         private readonly ProductoBLL _productoBLL = new ProductoBLL();
         private readonly ClienteBLL _clienteBLL = new ClienteBLL();
         private readonly FacturaBuffetDAL _facturaDAL = new FacturaBuffetDAL();
+        private readonly DigitoVerificadorBLL _dvBLL = new DigitoVerificadorBLL();
+        private readonly BitacoraEventoBLL _bitacoraBLL = new BitacoraEventoBLL();
 
         //vendedor actual de la sesión activa; lanza excepción si no hay sesión activa o no tiene permiso de venta
         private static int Vendedor()
@@ -138,15 +142,12 @@ namespace BLL
             if (factura.IdFactura != 0 || factura.Estado != "Listo" ||
                 string.IsNullOrEmpty(factura.DNI) || factura.Detalles.Count == 0 || factura.ImporteTotal <= 0)
                 throw new Exception("Factura no lista para cobrar.");
-            if (_clienteBLL.BuscarPorDNI(factura.DNI) == null)
-                throw new Exception("El cliente no existe.");
             decimal total = 0;
 
             foreach (DetalleFacturaBE d in factura.Detalles)
             {
-                if (d.Cantidad <= 0 || d.PrecioUnitario <= 0)
+                if (d.CodigoProducto <= 0 || d.Cantidad <= 0 || d.PrecioUnitario <= 0)
                     throw new Exception("Detalle inválido.");
-                _productoBLL.SeleccionarProducto(d.CodigoProducto, d.Cantidad);
                 total = checked(total + d.Subtotal);
             }
 
@@ -164,7 +165,12 @@ namespace BLL
                 string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) ||pago.Ultimos4Tarjeta.Length != 4 ||pago.Importe <= 0 || pago.Importe != factura.ImporteTotal)
                 throw new Exception("Pago aprobado inválido.");
             
-            FacturaBuffetBE resultado = _facturaDAL.RegistrarFactura(factura, SM.Instancia.UsuarioActual.NombreUsuario, pago);
+            FacturaBuffetBE resultado = _facturaDAL.RegistrarFactura(factura, SM.Instancia.UsuarioActual.NombreUsuario, pago,
+                (evento, conexion, tx) =>
+                {
+                    _dvBLL.RecalcularDVEnTransaccion(new[] { "Producto", "FacturaBuffet", "DetalleFactura" }, conexion, tx);
+                    _bitacoraBLL.RegistrarEventoEnTransaccion(evento, conexion, tx);
+                });
             factura.IdFactura = resultado.IdFactura;
             factura.NumeroFactura = resultado.NumeroFactura;
             factura.FechaHoraEmision = resultado.FechaHoraEmision;
