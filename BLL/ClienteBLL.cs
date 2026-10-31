@@ -49,8 +49,10 @@ namespace BLL
         /// Registra un nuevo Cliente luego de validar todos los datos ingresados.
         public ClienteBE RegistrarCliente(string dni,string nombre,string apellido,string telefono,string correoElectronico)
         {
-            // El alta de clientes corresponde exclusivamente a la gestión de maestros.
-            SM.Instancia.RequierePermiso("CLI_REGISTRAR");
+            // Maestro registra por CLI_REGISTRAR; Vendedor puede dar de alta durante la facturacion.
+            if (!SM.Instancia.TienePermiso("CLI_REGISTRAR") &&
+                !SM.Instancia.TienePermiso("BUF_VENDER"))
+                SM.Instancia.RequierePermiso("CLI_REGISTRAR");
 
             Usuario usuarioActual = SM.Instancia.UsuarioActual;
             if (usuarioActual == null)
