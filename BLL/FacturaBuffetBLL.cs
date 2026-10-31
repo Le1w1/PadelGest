@@ -165,9 +165,8 @@ namespace BLL
                 string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) ||pago.Ultimos4Tarjeta.Length != 4 ||pago.Importe <= 0 || pago.Importe != factura.ImporteTotal)
                 throw new Exception("Pago aprobado inválido.");
             
-            FacturaBuffetBE resultado = _facturaDAL.RegistrarFactura(factura, SM.Instancia.UsuarioActual.NombreUsuario, pago,
-                (evento, conexion, tx) =>
-                {
+            FacturaBuffetBE resultado = _facturaDAL.RegistrarFactura(factura, SM.Instancia.UsuarioActual.NombreUsuario, pago,(evento, conexion, tx) 
+                =>{
                     _dvBLL.RecalcularDVEnTransaccion(new[] { "Producto", "FacturaBuffet", "DetalleFactura" }, conexion, tx);
                     _bitacoraBLL.RegistrarEventoEnTransaccion(evento, conexion, tx);
                 });

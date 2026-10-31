@@ -16,8 +16,7 @@ namespace DAL
 
 
         /// Registra una factura de buffet con sus detalles y actualiza el stock de productos.
-        public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, string usuario, PagoBE pago,
-            Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
+        public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, string usuario, PagoBE pago,Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
         {
             if (registrarServicios == null) throw new ArgumentNullException(nameof(registrarServicios));
             if (factura == null || pago == null || factura.Detalles == null ||factura.Detalles.Count == 0 || string.IsNullOrWhiteSpace(factura.DNI) ||factura.IdVendedor <= 0 || factura.ImporteTotal <= 0 || pago.Estado != "Aprobado" ||
