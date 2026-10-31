@@ -43,7 +43,8 @@ namespace DAL
 
             using SqlConnection conexion = _acceso.ObtenerConexion();
             conexion.Open();
-            
+
+            // Transacción serializable para evitar problemas de concurrencia y garantizar consistencia.
             using SqlTransaction tx = conexion.BeginTransaction(IsolationLevel.Serializable);
             
             try
@@ -66,6 +67,7 @@ namespace DAL
                         throw new Exception("El cliente no existe.");
                 }
 
+                // Descontar stock de productos; si no hay suficiente, se revierte la transacción.
                 const string descontar = @"UPDATE dbo.Producto
                     SET StockDisponible = StockDisponible - @Cantidad
                     WHERE CodigoProducto = @CodigoProducto AND Activo = 1
@@ -79,6 +81,7 @@ namespace DAL
                         throw new Exception("Stock insuficiente. La transacción se revirtió.");
                 }
 
+                // Insertar factura
                 DateTime fecha = DateTime.Now;
                 string numero = "FB-" + fecha.ToString("yyyyMMdd") + "-" + Guid.NewGuid().ToString("N")[..10].ToUpperInvariant();
                 int idFactura;
@@ -102,6 +105,7 @@ namespace DAL
                     idFactura = Convert.ToInt32(cmd.ExecuteScalar());
                 }
 
+                // Insertar detalles de la factura
                 const string altaDetalle = @"INSERT INTO dbo.DetalleFactura
                     (IdFactura,CodigoProducto,Cantidad,PrecioUnitario)
                     OUTPUT INSERTED.IdDetalleFactura
@@ -120,6 +124,7 @@ namespace DAL
 
                 foreach (string tabla in new[] { "Producto", "FacturaBuffet", "DetalleFactura" })_dv.RecalcularDVEnTransaccion(tabla, conexion, tx);
 
+                // Registrar evento en la bitácora
                 _bitacora.Registrar(new BitacoraEvento
                 {
                     IdUsuario = factura.IdVendedor,
