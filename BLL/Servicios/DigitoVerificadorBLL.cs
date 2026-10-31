@@ -1,4 +1,5 @@
 using DAL.Servicios;
+using Microsoft.Data.SqlClient;
 using Servicios.DigitoVerificador;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,17 @@ namespace BLL.Servicios
         {
             _dvDAL = new DigitoVerificadorDAL();
             _digitoVerificador = new DigitoVerificador();
+        }
+
+        // Recalcula DVH/DVV dentro de la transacción de la venta.
+        public void RecalcularDVEnTransaccion(IEnumerable<string> tablas, SqlConnection conexion, SqlTransaction tx)
+        {
+            if (tablas == null) throw new ArgumentNullException(nameof(tablas));
+            foreach (string tabla in tablas)
+            {
+                ObtenerTabla(tabla);
+                _dvDAL.RecalcularDVEnTransaccion(tabla, conexion, tx);
+            }
         }
 
         // MODO GENERACION
