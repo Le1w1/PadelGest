@@ -103,7 +103,7 @@ namespace UI
                 if (cboRespuestaBanco.SelectedIndex < 0)
                     throw new Exception(T("Errores.Cobro.RespuestaBancoObligatoria"));
 
-                ResultadoCobroVentaBE resultado = _cobroBLL.CobrarFactura(_factura,txtBanco.Text, txtNumeroTarjeta.Text,dtpVencimiento.Value, txtCodigoSeguridad.Text,cboRespuestaBanco.SelectedIndex == 0);
+                ResultadoCobroFacturaBE resultado = _cobroBLL.CobrarFactura(_factura,txtBanco.Text, txtNumeroTarjeta.Text,dtpVencimiento.Value, txtCodigoSeguridad.Text,cboRespuestaBanco.SelectedIndex == 0);
 
                 // Limpiar datos sensibles tan pronto como el banco responde.
                 txtNumeroTarjeta.Clear();

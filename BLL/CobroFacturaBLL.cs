@@ -18,7 +18,7 @@ namespace BLL
         private static string T(string clave) => Traductor.Instancia.Traducir(clave);
 
         // PN2 actualizado: autorización simulada de una factura preparada en memoria.
-        public ResultadoCobroVentaBE CobrarFactura(FacturaBuffetBE factura, string banco, string numeroTarjeta,DateTime vencimiento, string codigoSeguridad, bool respuestaSimuladaAprobada)
+        public ResultadoCobroFacturaBE CobrarFactura(FacturaBuffetBE factura, string banco, string numeroTarjeta,DateTime vencimiento, string codigoSeguridad, bool respuestaSimuladaAprobada)
         {
             SM.Instancia.RequierePermiso("BUF_VENDER");
 
@@ -54,9 +54,9 @@ namespace BLL
             ResultadoAutorizacionBanco autorizacion = _bancoServicio.AutorizarPago(factura.DNI, numeroTarjeta, factura.ImporteTotal, respuestaSimuladaAprobada, "FB");
 
             if (!autorizacion.Aprobado)
-                return new ResultadoCobroVentaBE { Aprobado = false };
+                return new ResultadoCobroFacturaBE { Aprobado = false };
 
-            return new ResultadoCobroVentaBE
+            return new ResultadoCobroFacturaBE
             {
                 Aprobado = true,
                 Pago = new PagoBE
