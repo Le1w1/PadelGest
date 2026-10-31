@@ -15,7 +15,11 @@ namespace DAL
         private readonly DAO_AccesoDatos _acceso = new DAO_AccesoDatos();
 
 
-        /// Registra una factura de buffet con sus detalles y actualiza el stock de productos.
+       
+        /// Registra la factura, sus detalles y el descuento de stock en una única transacción SQL.
+        /// La DAL también mantiene el control de Commit() y Rollback().
+        /// Delegado "Action" recibido desde FacturaBuffetBLL. Es una función void que recibe (BitacoraEvento evento, SqlConnection conexion, SqlTransaction tx).
+        /// La DAL la invoca antes del Commit para que la BLL coordine el recálculo de DV y la bitácora sin crear otra conexión ni otra transacción.
         public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, string usuario, PagoBE pago,Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
         {
             if (registrarServicios == null) throw new ArgumentNullException(nameof(registrarServicios));
@@ -121,6 +125,10 @@ namespace DAL
                     detalle.IdFactura = idFactura;
                 }
 
+                // Ejecutamos el delegado recibido de FacturaBuffetBLL dentro de la transacción.
+                // Esta llamada activa primero DigitoVerificadorBLL y luego BitacoraEventoBLL.
+                // No es un Commit ni devuelve datos: si una BLL falla, la excepción llega
+                // al catch de este método y se revierte toda la transacción.
                 registrarServicios(new BitacoraEvento
                 {
                     IdUsuario = factura.IdVendedor,
@@ -133,6 +141,7 @@ namespace DAL
                     Descripcion = $"Factura {numero} pagada. DNI {factura.DNI}. " +$"Productos {detalles.Count}. Total {total:N2}. " +$"Autorización {pago.CodigoAutorizacion}."
                 }, conexion, tx);
 
+                // Confirmamos recién cuando factura, stock, DV y bitácora finalizaron bien.
                 tx.Commit();
                 return new FacturaBuffetBE
                 {
