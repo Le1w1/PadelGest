@@ -81,6 +81,8 @@ namespace UI
             // Calcular permisos antes de asignar Visible: la visibilidad efectiva
             // de un item hijo depende tambien de la visibilidad de su menu padre.
             bool buffet = sm.TienePermiso("BUF_VENDER");
+            bool maestroProductos = sm.TienePermiso("PRO_GESTIONAR");
+            bool maestroClientes = sm.TienePermiso("CLI_MODIFICAR");
             bool reservas = sm.TienePermiso("RES_CREAR");
             bool usuarios = sm.TienePermiso("USR_LISTAR") ||
                 sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
@@ -95,9 +97,9 @@ namespace UI
             cambiarIdiomaToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
             cerrarSesionToolStripMenuItem.Visible = true;
 
-            vendedorBuffetToolStripMenuItem.Visible = buffet;
+            vendedorBuffetToolStripMenuItem.Visible = buffet || maestroProductos || maestroClientes;
             generarCarritoToolStripMenuItem.Visible = buffet;
-            gestionarProductosToolStripMenuItem.Visible = buffet;
+            gestionarProductosToolStripMenuItem.Visible = maestroProductos;
 
             RecepcionistaToolStripMenuItem.Visible = reservas;
             generarReservaToolStripMenuItem.Visible = reservas;
