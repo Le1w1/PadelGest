@@ -117,7 +117,7 @@ namespace DAL
         {
             using SqlConnection conexion = _conexionDAL.ObtenerConexion();
             using SqlCommand comando = new SqlCommand(
-                "UPDATE Cliente SET Nombre=@Nombre, Apellido=@Apellido, Telefono=@Telefono, CorreoElectronico=@Correo WHERE DNI=@DNI", conexion);
+                "UPDATE Cliente SET Nombre=@Nombre, Apellido=@Apellido, Telefono=@Telefono, CorreoElectronico=@CorreoElectronico WHERE DNI=@DNI", conexion);
             AgregarParametrosCliente(comando, cliente);
             conexion.Open();
             return comando.ExecuteNonQuery() == 1;
