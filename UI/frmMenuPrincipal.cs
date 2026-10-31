@@ -15,10 +15,14 @@ namespace UI
     public partial class frmMenuPrincipal : Form, IObservadorIdioma
     {
         private readonly UsuarioBLL _usuarioBLL = new UsuarioBLL();
+        private ToolStripMenuItem? gestionarClientesToolStripMenuItem;
 
         public frmMenuPrincipal()
         {
             InitializeComponent();
+            gestionarClientesToolStripMenuItem = new ToolStripMenuItem("Gestionar Clientes");
+            gestionarClientesToolStripMenuItem.Click += (_, _) => { using var f = new frmGestionClientes(); f.ShowDialog(this); };
+            vendedorBuffetToolStripMenuItem.DropDownItems.Add(gestionarClientesToolStripMenuItem);
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
             // El menu se muestra detras del Login, pero no se puede usar sin autenticar.
@@ -100,6 +104,7 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Visible = buffet || maestroProductos || maestroClientes;
             generarCarritoToolStripMenuItem.Visible = buffet;
             gestionarProductosToolStripMenuItem.Visible = maestroProductos;
+            if (gestionarClientesToolStripMenuItem != null) gestionarClientesToolStripMenuItem.Visible = maestroClientes;
 
             RecepcionistaToolStripMenuItem.Visible = reservas;
             generarReservaToolStripMenuItem.Visible = reservas;
