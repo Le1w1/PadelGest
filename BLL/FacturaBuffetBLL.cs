@@ -55,6 +55,7 @@ namespace BLL
         {
             Editable(factura);
             if (producto == null) throw new Exception("Producto inválido.");
+            // busca el detalle del producto en la factura; si no existe, lo crea; si existe, suma la cantidad
             DetalleFacturaBE detalle = factura.Detalles.FirstOrDefault(x => x.CodigoProducto == producto.CodigoProducto);
             int total = checked(cantidad + (detalle == null ? 0 : detalle.Cantidad));
             ValidarProductoEnMemoria(producto, total);
