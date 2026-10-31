@@ -119,6 +119,43 @@ namespace BLL
             return clienteRegistrado;
         }
 
+        public List<ClienteBE> ListarTodos()
+        {
+            SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            return _clienteDAL.ListarTodos();
+        }
+
+        public void ModificarCliente(string dni, string nombre, string apellido, string telefono, string correo)
+        {
+            SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            dni = (dni ?? "").Trim();
+            nombre = (nombre ?? "").Trim();
+            apellido = (apellido ?? "").Trim();
+            telefono = (telefono ?? "").Trim();
+            correo = (correo ?? "").Trim();
+            if (!EsDNIValido(dni) || !EsNombreOApellidoValido(nombre) ||
+                !EsNombreOApellidoValido(apellido) || !EsTelefonoValido(telefono) || !EsCorreoValido(correo))
+                throw new Exception("Datos de cliente invalidos.");
+            if (!_clienteDAL.Modificar(new ClienteBE { DNI = dni, Nombre = nombre, Apellido = apellido,
+                Telefono = telefono, CorreoElectronico = correo }))
+                throw new Exception("Cliente no encontrado.");
+            _digitoVerificadorBLL.RecalcularDV("Cliente");
+            var u = SM.Instancia.UsuarioActual;
+            _bitacoraEventoBLL.Registrar(u.IdUsuario, u.NombreUsuario, "Cliente", "Modificar cliente", "Media", "Exitoso", "Se modifico cliente DNI " + dni);
+        }
+
+        public void EliminarCliente(string dni)
+        {
+            SM.Instancia.RequierePermiso("CLI_ELIMINAR");
+            dni = (dni ?? "").Trim();
+            if (!EsDNIValido(dni)) throw new Exception("DNI invalido.");
+            if (!_clienteDAL.EliminarSinOperaciones(dni))
+                throw new Exception("No se puede eliminar: el cliente no existe o tiene reservas o facturas asociadas.");
+            _digitoVerificadorBLL.RecalcularDV("Cliente");
+            var u = SM.Instancia.UsuarioActual;
+            _bitacoraEventoBLL.Registrar(u.IdUsuario, u.NombreUsuario, "Cliente", "Eliminar cliente", "Alta", "Exitoso", "Se elimino cliente DNI " + dni);
+        }
+
         #region Validaciones
         private bool EsDNIValido(string dni)
         {
