@@ -30,10 +30,7 @@ namespace DAL.Servicios
 
         // Variante transaccional: permite que la bitácora forme parte de la
         // misma unidad atómica que la operación de negocio.
-        public void Registrar(
-            global::Servicios.BitacoraEvento evento,
-            SqlConnection conexion,
-            SqlTransaction? transaccion)
+        public void Registrar(global::Servicios.BitacoraEvento evento,SqlConnection conexion,SqlTransaction? transaccion)
         {
             const string query = @"
                 INSERT INTO BitacoraEvento
