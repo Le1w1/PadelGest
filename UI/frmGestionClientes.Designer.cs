@@ -4,6 +4,9 @@ namespace UI
     {
         private System.ComponentModel.IContainer? components = null;
         private DataGridView grilla = null!;
+        private Label lblTitulo = null!, lblListado = null!;
+        private GroupBox gbDatos = null!;
+        private DataGridViewTextBoxColumn colDNI = null!, colNombre = null!, colApellido = null!, colTelefono = null!, colCorreoElectronico = null!;
         private TextBox dni = null!, nombre = null!, apellido = null!, telefono = null!, correo = null!;
         private Label lbldni = null!, lblnombre = null!, lblapellido = null!, lbltelefono = null!, lblcorreo = null!;
         private Button btnNuevo = null!, btnRegistrar = null!, btnModificar = null!, btnEliminar = null!, btnActualizar = null!, btnVolver = null!;
@@ -25,6 +28,10 @@ namespace UI
             btnEliminar = new Button(); btnActualizar = new Button(); btnVolver = new Button();
             lbldni = new Label(); lblnombre = new Label(); lblapellido = new Label();
             lbltelefono = new Label(); lblcorreo = new Label();
+            lblTitulo = new Label(); lblListado = new Label(); gbDatos = new GroupBox();
+            colDNI = new DataGridViewTextBoxColumn(); colNombre = new DataGridViewTextBoxColumn();
+            colApellido = new DataGridViewTextBoxColumn(); colTelefono = new DataGridViewTextBoxColumn();
+            colCorreoElectronico = new DataGridViewTextBoxColumn();
             SuspendLayout();
             Text = "Gestión de Clientes";
             ClientSize = new Size(1165, 665);
@@ -34,15 +41,18 @@ namespace UI
             BackColor = fondo;
             ForeColor = Color.White;
             Font = new Font("Segoe UI", 10F);
-            Controls.Add(new Label {
-                Text = "GESTIÓN DE CLIENTES", ForeColor = lima,
-                Font = new Font("Segoe UI", 19F, FontStyle.Bold),
-                Location = new Point(25, 14), Size = new Size(800, 45)
-            });
-            var gbDatos = new GroupBox {
-                Text = "Datos del cliente", Location = new Point(25, 65), Size = new Size(1115, 135),
-                BackColor = panel, ForeColor = Color.White, Font = new Font("Segoe UI", 10F, FontStyle.Bold)
-            };
+            lblTitulo.Text = "GESTIÓN DE CLIENTES";
+            lblTitulo.ForeColor = lima;
+            lblTitulo.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
+            lblTitulo.Location = new Point(25, 14);
+            lblTitulo.Size = new Size(800, 45);
+            Controls.Add(lblTitulo);
+            gbDatos.Text = "Datos del cliente";
+            gbDatos.Location = new Point(25, 65);
+            gbDatos.Size = new Size(1115, 135);
+            gbDatos.BackColor = panel;
+            gbDatos.ForeColor = Color.White;
+            gbDatos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             Controls.Add(gbDatos);
             lbldni.Text = "DNI";
             lbldni.Location = new Point(20, 27);
@@ -100,11 +110,12 @@ namespace UI
             correo.BackColor = Color.White;
             gbDatos.Controls.Add(correo);
 
-            Controls.Add(new Label {
-                Text = "CLIENTES REGISTRADOS", Location = new Point(25, 214),
-                Size = new Size(500, 28), ForeColor = lima,
-                Font = new Font("Segoe UI", 11F, FontStyle.Bold)
-            });
+            lblListado.Text = "CLIENTES REGISTRADOS";
+            lblListado.Location = new Point(25, 214);
+            lblListado.Size = new Size(500, 28);
+            lblListado.ForeColor = lima;
+            lblListado.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            Controls.Add(lblListado);
             grilla.Location = new Point(25, 246);
             grilla.Size = new Size(1115, 310);
             grilla.Name = "dgvClientes";
@@ -129,31 +140,32 @@ namespace UI
             grilla.DefaultCellStyle.SelectionForeColor = Color.Black;
             grilla.RowsDefaultCellStyle.ForeColor = Color.Black;
             grilla.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
-            grilla.Columns.Add(new DataGridViewTextBoxColumn {
-                Name = "colDNI", DataPropertyName = "DNI",
-                HeaderText = "DNI",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-            grilla.Columns.Add(new DataGridViewTextBoxColumn {
-                Name = "colNombre", DataPropertyName = "Nombre",
-                HeaderText = "Nombre",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-            grilla.Columns.Add(new DataGridViewTextBoxColumn {
-                Name = "colApellido", DataPropertyName = "Apellido",
-                HeaderText = "Apellido",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-            grilla.Columns.Add(new DataGridViewTextBoxColumn {
-                Name = "colTelefono", DataPropertyName = "Telefono",
-                HeaderText = "Teléfono",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-            grilla.Columns.Add(new DataGridViewTextBoxColumn {
-                Name = "colCorreoElectronico", DataPropertyName = "CorreoElectronico",
-                HeaderText = "Correo electrónico",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
+            colDNI.Name = "colDNI";
+            colDNI.DataPropertyName = "DNI";
+            colDNI.HeaderText = "DNI";
+            colDNI.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colDNI.FillWeight = 110;
+            colNombre.Name = "colNombre";
+            colNombre.DataPropertyName = "Nombre";
+            colNombre.HeaderText = "Nombre";
+            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colNombre.FillWeight = 185;
+            colApellido.Name = "colApellido";
+            colApellido.DataPropertyName = "Apellido";
+            colApellido.HeaderText = "Apellido";
+            colApellido.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colApellido.FillWeight = 185;
+            colTelefono.Name = "colTelefono";
+            colTelefono.DataPropertyName = "Telefono";
+            colTelefono.HeaderText = "Teléfono";
+            colTelefono.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colTelefono.FillWeight = 170;
+            colCorreoElectronico.Name = "colCorreoElectronico";
+            colCorreoElectronico.DataPropertyName = "CorreoElectronico";
+            colCorreoElectronico.HeaderText = "Correo electrónico";
+            colCorreoElectronico.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colCorreoElectronico.FillWeight = 360;
+            grilla.Columns.AddRange(new DataGridViewColumn[] { colDNI, colNombre, colApellido, colTelefono, colCorreoElectronico });
             Controls.Add(grilla);
 
             btnNuevo.Text = "Nuevo";
@@ -217,6 +229,7 @@ namespace UI
             btnVolver.FlatAppearance.BorderSize = 0;
             Controls.Add(btnVolver);
             ResumeLayout(false);
+            PerformLayout();
         }
 
     }
