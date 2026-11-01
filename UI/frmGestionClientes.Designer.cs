@@ -5,6 +5,7 @@ namespace UI
         private System.ComponentModel.IContainer? components = null;
         private DataGridView grilla = null!;
         private TextBox dni = null!, nombre = null!, apellido = null!, telefono = null!, correo = null!;
+        private Label lbldni = null!, lblnombre = null!, lblapellido = null!, lbltelefono = null!, lblcorreo = null!;
         private Button btnNuevo = null!, btnRegistrar = null!, btnModificar = null!, btnEliminar = null!, btnActualizar = null!, btnVolver = null!;
         protected override void Dispose(bool disposing)
         {
@@ -22,6 +23,8 @@ namespace UI
             telefono = new TextBox(); correo = new TextBox();
             btnNuevo = new Button(); btnRegistrar = new Button(); btnModificar = new Button();
             btnEliminar = new Button(); btnActualizar = new Button(); btnVolver = new Button();
+            lbldni = new Label(); lblnombre = new Label(); lblapellido = new Label();
+            lbltelefono = new Label(); lblcorreo = new Label();
             SuspendLayout();
             Text = "Gestión de Clientes";
             ClientSize = new Size(1165, 665);
@@ -41,11 +44,61 @@ namespace UI
                 BackColor = panel, ForeColor = Color.White, Font = new Font("Segoe UI", 10F, FontStyle.Bold)
             };
             Controls.Add(gbDatos);
-            AgregarCampo(gbDatos, "DNI", dni, 20, 105, 8);
-            AgregarCampo(gbDatos, "Nombre", nombre, 140, 180, 50);
-            AgregarCampo(gbDatos, "Apellido", apellido, 340, 180, 50);
-            AgregarCampo(gbDatos, "Teléfono", telefono, 540, 165, 15);
-            AgregarCampo(gbDatos, "Correo electrónico", correo, 725, 350, 150);
+            lbldni.Text = "DNI";
+            lbldni.Location = new Point(20, 27);
+            lbldni.Size = new Size(105, 24);
+            lbldni.ForeColor = Color.White;
+            gbDatos.Controls.Add(lbldni);
+            dni.Location = new Point(20, 58);
+            dni.Size = new Size(105, 28);
+            dni.MaxLength = 8;
+            dni.ForeColor = Color.Black;
+            dni.BackColor = Color.White;
+            gbDatos.Controls.Add(dni);
+            lblnombre.Text = "Nombre";
+            lblnombre.Location = new Point(140, 27);
+            lblnombre.Size = new Size(180, 24);
+            lblnombre.ForeColor = Color.White;
+            gbDatos.Controls.Add(lblnombre);
+            nombre.Location = new Point(140, 58);
+            nombre.Size = new Size(180, 28);
+            nombre.MaxLength = 50;
+            nombre.ForeColor = Color.Black;
+            nombre.BackColor = Color.White;
+            gbDatos.Controls.Add(nombre);
+            lblapellido.Text = "Apellido";
+            lblapellido.Location = new Point(340, 27);
+            lblapellido.Size = new Size(180, 24);
+            lblapellido.ForeColor = Color.White;
+            gbDatos.Controls.Add(lblapellido);
+            apellido.Location = new Point(340, 58);
+            apellido.Size = new Size(180, 28);
+            apellido.MaxLength = 50;
+            apellido.ForeColor = Color.Black;
+            apellido.BackColor = Color.White;
+            gbDatos.Controls.Add(apellido);
+            lbltelefono.Text = "Teléfono";
+            lbltelefono.Location = new Point(540, 27);
+            lbltelefono.Size = new Size(165, 24);
+            lbltelefono.ForeColor = Color.White;
+            gbDatos.Controls.Add(lbltelefono);
+            telefono.Location = new Point(540, 58);
+            telefono.Size = new Size(165, 28);
+            telefono.MaxLength = 15;
+            telefono.ForeColor = Color.Black;
+            telefono.BackColor = Color.White;
+            gbDatos.Controls.Add(telefono);
+            lblcorreo.Text = "Correo electrónico";
+            lblcorreo.Location = new Point(725, 27);
+            lblcorreo.Size = new Size(350, 24);
+            lblcorreo.ForeColor = Color.White;
+            gbDatos.Controls.Add(lblcorreo);
+            correo.Location = new Point(725, 58);
+            correo.Size = new Size(350, 28);
+            correo.MaxLength = 150;
+            correo.ForeColor = Color.Black;
+            correo.BackColor = Color.White;
+            gbDatos.Controls.Add(correo);
 
             Controls.Add(new Label {
                 Text = "CLIENTES REGISTRADOS", Location = new Point(25, 214),
@@ -101,55 +154,70 @@ namespace UI
                 HeaderText = "Correo electrónico",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
-            grilla.SelectionChanged += (_, _) => Seleccionar();
             Controls.Add(grilla);
 
-            ConfigurarBoton(btnNuevo, "Nuevo", 25, panel, Color.White);
-            ConfigurarBoton(btnRegistrar, "Registrar", 210, lima, Color.Black);
-            ConfigurarBoton(btnModificar, "Modificar", 395, panel, Color.White);
-            ConfigurarBoton(btnEliminar, "Eliminar", 580, panel, Color.White);
-            ConfigurarBoton(btnActualizar, "Actualizar", 765, panel, Color.White);
-            ConfigurarBoton(btnVolver, "Volver", 950, lima, Color.Black);
-            btnNuevo.Click += (_, _) => Limpiar();
-            btnRegistrar.Click += (_, _) => Ejecutar(() =>
-                _clientes.RegistrarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
-            btnModificar.Click += (_, _) => Ejecutar(() =>
-                _clientes.ModificarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
-            btnEliminar.Click += (_, _) => {
-                if (MessageBox.Show("¿Eliminar al cliente seleccionado?", "Confirmación",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    Ejecutar(() => _clientes.EliminarCliente(dni.Text));
-            };
-            btnActualizar.Click += (_, _) => Cargar();
-            btnVolver.Click += (_, _) => Close();
+            btnNuevo.Text = "Nuevo";
+            btnNuevo.Name = "btnNuevo";
+            btnNuevo.Location = new Point(25, 580);
+            btnNuevo.Size = new Size(165, 45);
+            btnNuevo.BackColor = panel;
+            btnNuevo.ForeColor = Color.White;
+            btnNuevo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnNuevo.FlatStyle = FlatStyle.Flat;
+            btnNuevo.FlatAppearance.BorderSize = 0;
+            Controls.Add(btnNuevo);
+            btnRegistrar.Text = "Registrar";
+            btnRegistrar.Name = "btnRegistrar";
+            btnRegistrar.Location = new Point(210, 580);
+            btnRegistrar.Size = new Size(165, 45);
+            btnRegistrar.BackColor = lima;
+            btnRegistrar.ForeColor = Color.Black;
+            btnRegistrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnRegistrar.FlatStyle = FlatStyle.Flat;
+            btnRegistrar.FlatAppearance.BorderSize = 0;
+            Controls.Add(btnRegistrar);
+            btnModificar.Text = "Modificar";
+            btnModificar.Name = "btnModificar";
+            btnModificar.Location = new Point(395, 580);
+            btnModificar.Size = new Size(165, 45);
+            btnModificar.BackColor = panel;
+            btnModificar.ForeColor = Color.White;
+            btnModificar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnModificar.FlatStyle = FlatStyle.Flat;
+            btnModificar.FlatAppearance.BorderSize = 0;
+            Controls.Add(btnModificar);
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Location = new Point(580, 580);
+            btnEliminar.Size = new Size(165, 45);
+            btnEliminar.BackColor = panel;
+            btnEliminar.ForeColor = Color.White;
+            btnEliminar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnEliminar.FlatStyle = FlatStyle.Flat;
+            btnEliminar.FlatAppearance.BorderSize = 0;
+            Controls.Add(btnEliminar);
+            btnActualizar.Text = "Actualizar";
+            btnActualizar.Name = "btnActualizar";
+            btnActualizar.Location = new Point(765, 580);
+            btnActualizar.Size = new Size(165, 45);
+            btnActualizar.BackColor = panel;
+            btnActualizar.ForeColor = Color.White;
+            btnActualizar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnActualizar.FlatStyle = FlatStyle.Flat;
+            btnActualizar.FlatAppearance.BorderSize = 0;
+            Controls.Add(btnActualizar);
+            btnVolver.Text = "Volver";
+            btnVolver.Name = "btnVolver";
+            btnVolver.Location = new Point(950, 580);
+            btnVolver.Size = new Size(165, 45);
+            btnVolver.BackColor = lima;
+            btnVolver.ForeColor = Color.Black;
+            btnVolver.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.FlatAppearance.BorderSize = 0;
+            Controls.Add(btnVolver);
             ResumeLayout(false);
         }
 
-        private static void AgregarCampo(GroupBox contenedor, string titulo, TextBox campo, int x, int ancho, int maximo)
-        {
-            contenedor.Controls.Add(new Label { Text = titulo,
-                Location = new Point(x, 27), Size = new Size(ancho, 24), ForeColor = Color.White });
-            campo.Location = new Point(x, 58);
-            campo.Size = new Size(ancho, 28);
-            campo.MaxLength = maximo;
-            campo.ForeColor = Color.Black;
-            campo.BackColor = Color.White;
-            campo.Font = new Font("Segoe UI", 10F);
-            contenedor.Controls.Add(campo);
-        }
-
-        private void ConfigurarBoton(Button boton, string titulo, int x, Color fondo, Color texto)
-        {
-            boton.Text = titulo;
-            boton.Name = "btn" + titulo;
-            boton.Location = new Point(x, 580);
-            boton.Size = new Size(165, 45);
-            boton.BackColor = fondo;
-            boton.ForeColor = texto;
-            boton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            boton.FlatStyle = FlatStyle.Flat;
-            boton.FlatAppearance.BorderSize = 0;
-            Controls.Add(boton);
-        }
     }
 }
