@@ -13,6 +13,16 @@ namespace UI
         public frmGestionClientes()
         {
             InitializeComponent();
+            grilla.SelectionChanged += (_, _) => Seleccionar();
+            btnNuevo.Click += (_, _) => Limpiar();
+            btnRegistrar.Click += (_, _) => Ejecutar(() => _clientes.RegistrarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
+            btnModificar.Click += (_, _) => Ejecutar(() => _clientes.ModificarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
+            btnEliminar.Click += (_, _) => {
+                if (MessageBox.Show("¿Eliminar al cliente seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    Ejecutar(() => _clientes.EliminarCliente(dni.Text));
+            };
+            btnActualizar.Click += (_, _) => Cargar();
+            btnVolver.Click += (_, _) => Close();
             Load += (_, _) =>
             {
                 try { SM.Instancia.RequierePermiso("CLI_MODIFICAR"); Cargar(); }
