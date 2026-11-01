@@ -76,13 +76,31 @@ namespace UI
             grilla.DefaultCellStyle.SelectionForeColor = Color.Black;
             grilla.RowsDefaultCellStyle.ForeColor = Color.Black;
             grilla.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
-            foreach (string campo in new[] { "DNI", "Nombre", "Apellido", "Telefono", "CorreoElectronico" })
-                grilla.Columns.Add(new DataGridViewTextBoxColumn {
-                    Name = "col" + campo, DataPropertyName = campo,
-                    HeaderText = campo == "CorreoElectronico" ? "Correo electrónico" :
-                        campo == "Telefono" ? "Teléfono" : campo,
-                    AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                });
+            grilla.Columns.Add(new DataGridViewTextBoxColumn {
+                Name = "colDNI", DataPropertyName = "DNI",
+                HeaderText = "DNI",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+            grilla.Columns.Add(new DataGridViewTextBoxColumn {
+                Name = "colNombre", DataPropertyName = "Nombre",
+                HeaderText = "Nombre",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+            grilla.Columns.Add(new DataGridViewTextBoxColumn {
+                Name = "colApellido", DataPropertyName = "Apellido",
+                HeaderText = "Apellido",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+            grilla.Columns.Add(new DataGridViewTextBoxColumn {
+                Name = "colTelefono", DataPropertyName = "Telefono",
+                HeaderText = "Teléfono",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+            grilla.Columns.Add(new DataGridViewTextBoxColumn {
+                Name = "colCorreoElectronico", DataPropertyName = "CorreoElectronico",
+                HeaderText = "Correo electrónico",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
             grilla.SelectionChanged += (_, _) => Seleccionar();
             Controls.Add(grilla);
 
