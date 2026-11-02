@@ -23,10 +23,12 @@ namespace DAL
         public FacturaBuffetBE RegistrarFactura(FacturaBuffetBE factura, string usuario, PagoBE pago,Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
         {
             if (registrarServicios == null) throw new ArgumentNullException(nameof(registrarServicios));
-            if (factura == null || pago == null || factura.Detalles == null ||factura.Detalles.Count == 0 || string.IsNullOrWhiteSpace(factura.DNI) ||factura.IdVendedor <= 0 || factura.ImporteTotal <= 0 || pago.Estado != "Aprobado" ||
-                pago.Importe != factura.ImporteTotal || string.IsNullOrWhiteSpace(pago.Banco) ||string.IsNullOrWhiteSpace(pago.CodigoAutorizacion) ||string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) || pago.Ultimos4Tarjeta.Length != 4)
+            if (factura == null || pago == null || factura.Detalles == null ||factura.Detalles.Count == 0 || string.IsNullOrWhiteSpace(factura.DNI) ||factura.IdVendedor <= 0 
+                || factura.ImporteTotal <= 0 || pago.Estado != "Aprobado" ||pago.Importe != factura.ImporteTotal || string.IsNullOrWhiteSpace(pago.Banco) 
+                ||string.IsNullOrWhiteSpace(pago.CodigoAutorizacion) ||string.IsNullOrWhiteSpace(pago.Ultimos4Tarjeta) || pago.Ultimos4Tarjeta.Length != 4)
                 throw new Exception("Factura o pago aprobado inválidos.");
 
+            //crea una copia de los detalles para validar y ordenar, sin modificar la lista original de la factura
             List<DetalleFacturaBE> detalles = factura.Detalles.Select(d => new DetalleFacturaBE
             {
                 CodigoProducto = d.CodigoProducto,
@@ -35,7 +37,8 @@ namespace DAL
                 PrecioUnitario = d.PrecioUnitario
             }).OrderBy(d => d.CodigoProducto).ToList();
 
-            if (detalles.Any(d => d.CodigoProducto <= 0 || d.Cantidad <= 0 ||d.PrecioUnitario <= 0 || d.PrecioUnitario > 9999999999.99m || decimal.Round(d.PrecioUnitario, 2) != d.PrecioUnitario) ||detalles.GroupBy(d => d.CodigoProducto).Any(g => g.Count() > 1))
+            if (detalles.Any(d => d.CodigoProducto <= 0 || d.Cantidad <= 0 ||d.PrecioUnitario <= 0 || d.PrecioUnitario > 9999999999.99m 
+            || decimal.Round(d.PrecioUnitario, 2) != d.PrecioUnitario) ||detalles.GroupBy(d => d.CodigoProducto).Any(g => g.Count() > 1))
                 throw new Exception("Detalles inválidos o productos duplicados.");
 
             decimal total = 0m;
@@ -62,7 +65,7 @@ namespace DAL
                     tx.Commit();
                     return existente;
                 }
-
+                
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM dbo.Cliente WITH (HOLDLOCK) WHERE DNI = @DNI", conexion, tx))
                 {
                     cmd.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = factura.DNI;
@@ -70,11 +73,14 @@ namespace DAL
                         throw new Exception("El cliente no existe.");
                 }
 
-                // Descontar stock de productos; si no hay suficiente, se revierte la transacción.
-                const string descontar = @"UPDATE dbo.Producto
+                //Actualiza el stock de cada producto; si no hay suficiente, lanza excepción y revierte la transacción.
+                const string descontar = @"
+`                   UPDATE dbo.Producto
                     SET StockDisponible = StockDisponible - @Cantidad
                     WHERE CodigoProducto = @CodigoProducto AND Activo = 1
                     AND StockDisponible >= @Cantidad";
+
+                // Ejecuta la actualización de stock para cada detalle de la factura.
                 foreach (DetalleFacturaBE detalle in detalles)
                 {
                     using SqlCommand cmd = new SqlCommand(descontar, conexion, tx);
@@ -89,11 +95,11 @@ namespace DAL
                 string numero = "FB-" + fecha.ToString("yyyyMMdd") + "-" + Guid.NewGuid().ToString("N")[..10].ToUpperInvariant();
                 int idFactura;
                 const string alta = @"INSERT INTO dbo.FacturaBuffet
-                    (NumeroFactura,DNI,IdVendedor,FechaHoraEmision,ImporteTotal,
-                     Estado,Banco,Ultimos4Tarjeta,FechaHoraPago,CodigoAutorizacion)
+                    (NumeroFactura,DNI,IdVendedor,FechaHoraEmision,ImporteTotal,Estado,Banco,Ultimos4Tarjeta,FechaHoraPago,CodigoAutorizacion)
                     OUTPUT INSERTED.IdFactura
-                    VALUES (@Numero,@DNI,@IdVendedor,@Fecha,@Total,
-                            N'Pagada',@Banco,@Ultimos4,@FechaPago,@Codigo)";
+                    VALUES (@Numero,@DNI,@IdVendedor,@Fecha,@Total,N'Pagada',@Banco,@Ultimos4,@FechaPago,@Codigo)";
+
+                // Ejecuta la inserción de la factura y obtiene el IdFactura generado.
                 using (SqlCommand cmd = new SqlCommand(alta, conexion, tx))
                 {
                     cmd.Parameters.Add("@Numero", SqlDbType.NVarChar, 30).Value = numero;
@@ -113,7 +119,9 @@ namespace DAL
                     (IdFactura,CodigoProducto,Cantidad,PrecioUnitario)
                     OUTPUT INSERTED.IdDetalleFactura
                     VALUES (@Factura,@Producto,@Cantidad,@Precio)";
-                
+
+
+                // Ejecuta la inserción de cada detalle de la factura y obtiene el IdDetalleFactura generado.
                 foreach (DetalleFacturaBE detalle in detalles)
                 {
                     using SqlCommand cmd = new SqlCommand(altaDetalle, conexion, tx);
@@ -127,8 +135,7 @@ namespace DAL
 
                 // Ejecutamos el delegado recibido de FacturaBuffetBLL dentro de la transacción.
                 // Esta llamada activa primero DigitoVerificadorBLL y luego BitacoraEventoBLL.
-                // No es un Commit ni devuelve datos: si una BLL falla, la excepción llega
-                // al catch de este método y se revierte toda la transacción.
+                // Si alguna de esas BLL lanza excepción, la DAL hace Rollback() y no se registra la venta.
                 registrarServicios(new BitacoraEvento
                 {
                     IdUsuario = factura.IdVendedor,
@@ -161,6 +168,7 @@ namespace DAL
             }
             catch
             {
+                // Si algo falla, revertimos la transacción y lanzamos la excepción hacia arriba.
                 try { tx.Rollback(); } catch { }
                 throw;
             }

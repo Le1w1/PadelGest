@@ -316,6 +316,7 @@ namespace UI
         private void btnSeleccionarCliente_Click(object sender, EventArgs e)
         {
             if (_factura == null || _factura.Detalles.Count == 0) return;
+       
             // Reutiliza PN1: CUN09 Registrar Cliente se ejecuta solo si es necesario.
             using frmSeleccionarCliente formCliente = new frmSeleccionarCliente();
             if (formCliente.ShowDialog(this) != DialogResult.OK ||formCliente.ClienteSeleccionado == null) return;
@@ -345,8 +346,12 @@ namespace UI
             try
             {
                 _facturaBLL.ValidarAntesDeCobrar(_factura);
+
+                //abre el formulario de cobro y espera la respuesta del banco
                 using frmCobrarFactura formCobro = new frmCobrarFactura(_factura);
                 DialogResult respuesta = formCobro.ShowDialog(this);
+
+                // Si el cobro fue rechazado, no se persiste la factura ni se descuenta stock.
                 if (respuesta == DialogResult.No && formCobro.PagoRechazado)
                 {
                     // No hubo factura persistida ni unidades descontadas.
@@ -356,6 +361,7 @@ namespace UI
                     Close();
                     return;
                 }
+                // Si el cobro fue aprobado, se persiste la factura y se descuenta stock.
                 if (respuesta == DialogResult.OK && formCobro.PagoAprobado != null)
                 {
                     _pagoAprobado = formCobro.PagoAprobado;
@@ -393,6 +399,7 @@ namespace UI
             ActualizarResumen();
             try
             {
+                // Muestra el comprobante de venta en PDF y permite imprimirlo.
                 using frmFacturaRegistrada formFactura =new frmFacturaRegistrada(_facturaRegistrada, _clienteSeleccionado);
                 formFactura.ShowDialog(this);
             }

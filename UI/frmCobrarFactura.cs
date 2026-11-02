@@ -5,8 +5,7 @@ using Servicios;
 namespace UI
 {
     // CUN12: formulario de cobro simulado, basado en PN1.
-    // La venta se registra automaticamente desde frmGenerarCarrito
-    // cuando este formulario devuelve un Pago aprobado.
+    // La venta se registra automaticamente desde frmGenerarCarrito cuando este formulario devuelve un Pago aprobado.
     public partial class frmCobrarFactura : Form, IObservadorIdioma
     {
         private readonly CobroFacturaBLL _cobroBLL;

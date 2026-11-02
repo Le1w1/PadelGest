@@ -169,12 +169,12 @@ namespace BLL
             // Por eso le pasamos una función (delegado Action) como último parámetro.
             // La función NO se ejecuta aquí: la DAL la llamará después de guardar factura,
             // detalles y stock, y ANTES de confirmar la transacción con Commit().
-            //
+            
             // Parámetros que la DAL entrega cuando invoque el delegado:
             //   evento   -> datos del evento de bitácora de esta venta.
             //   conexion -> conexión SQL que ya está abierta en FacturaBuffetDAL.
             //   tx       -> transacción activa que incluye toda la venta.
-            //
+            
             // Al ejecutarse, esta función invoca las BLL de DV y bitácora usando
             // la misma conexión y transacción. Si alguna falla, lanza una excepción;
             // la DAL hará Rollback(), evitando dejar la venta registrada a medias.
@@ -184,6 +184,8 @@ namespace BLL
                     _dvBLL.RecalcularDVEnTransaccion(new[] { "Producto", "FacturaBuffet", "DetalleFactura" }, conexion, tx);
                     _bitacoraBLL.RegistrarEventoEnTransaccion(evento, conexion, tx);
                 });
+
+            // Actualiza la factura en memoria con los datos que la DAL devolvió.
             factura.IdFactura = resultado.IdFactura;
             factura.NumeroFactura = resultado.NumeroFactura;
             factura.FechaHoraEmision = resultado.FechaHoraEmision;
