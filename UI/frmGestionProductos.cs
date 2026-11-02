@@ -56,6 +56,7 @@ namespace UI
             lblMinimo.Text = T("frmGestionProductos.Minimo");
             lblStockInicial.Text = T("frmGestionProductos.StockInicial");
             lblReposicion.Text = T("frmGestionProductos.Reposicion");
+            btnActualizar.Text = T("frmGestionProductos.ActualizarCatalogo");
             btnNuevo.Text = T("frmGestionProductos.Nuevo");
             btnCrear.Text = T("frmGestionProductos.Crear");
             btnModificar.Text = T("frmGestionProductos.Modificar");
