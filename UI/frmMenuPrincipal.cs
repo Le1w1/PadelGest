@@ -15,19 +15,10 @@ namespace UI
     public partial class frmMenuPrincipal : Form, IObservadorIdioma
     {
         private readonly UsuarioBLL _usuarioBLL = new UsuarioBLL();
-        private ToolStripMenuItem? gestionarClientesToolStripMenuItem;
-        private ToolStripMenuItem? mnuMaestros;
 
         public frmMenuPrincipal()
         {
             InitializeComponent();
-            gestionarClientesToolStripMenuItem = new ToolStripMenuItem("Gestionar Clientes");
-            gestionarClientesToolStripMenuItem.Click += (_, _) => { using var f = new frmGestionClientes(); f.ShowDialog(this); };
-            mnuMaestros = new ToolStripMenuItem("Maestros");
-            menuPrincipal.Items.Add(mnuMaestros);
-            vendedorBuffetToolStripMenuItem.DropDownItems.Remove(gestionarProductosToolStripMenuItem);
-            mnuMaestros.DropDownItems.Add(gestionarProductosToolStripMenuItem);
-            mnuMaestros.DropDownItems.Add(gestionarClientesToolStripMenuItem);
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
             // El menu se muestra detras del Login, pero no se puede usar sin autenticar.
@@ -107,10 +98,10 @@ namespace UI
             cerrarSesionToolStripMenuItem.Visible = true;
 
             vendedorBuffetToolStripMenuItem.Visible = buffet;
-            if (mnuMaestros != null) mnuMaestros.Visible = maestroProductos || maestroClientes;
+            mnuMaestros.Visible = maestroProductos || maestroClientes;
             generarCarritoToolStripMenuItem.Visible = buffet;
             gestionarProductosToolStripMenuItem.Visible = maestroProductos;
-            if (gestionarClientesToolStripMenuItem != null) gestionarClientesToolStripMenuItem.Visible = maestroClientes;
+            gestionarClientesToolStripMenuItem.Visible = maestroClientes;
 
             RecepcionistaToolStripMenuItem.Visible = reservas;
             generarReservaToolStripMenuItem.Visible = reservas;
@@ -150,7 +141,7 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
             generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
             gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
-            if (mnuMaestros != null) mnuMaestros.Text = "Maestros";
+            mnuMaestros.Text = "Maestros";
 
             // Menu Administrador
             mnuAdministrador.Text = t.Traducir("frmMenuPrincipal.MenuAdministrador");
@@ -232,6 +223,12 @@ namespace UI
         {
             using frmGenerarFactura formCarrito = new frmGenerarFactura();
             formCarrito.ShowDialog(this);
+        }
+
+        private void gestionarClientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmGestionClientes gestion = new frmGestionClientes();
+            gestion.ShowDialog(this);
         }
 
         private void gestionarProductosToolStripMenuItem_Click(object sender, EventArgs e)
