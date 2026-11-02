@@ -390,8 +390,7 @@ namespace UI
                 return;
             }
 
-            // El cobro ya fue aprobado y la factura registrada. Un error visual
-            // o de PDF no debe confundirse con un error de persistencia.
+            // El cobro ya fue aprobado y la factura registrada. Un error visual o de PDF no debe confundirse con un error de persistencia.
             ActualizarResumen();
             try
             {
