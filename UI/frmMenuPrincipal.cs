@@ -141,7 +141,8 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
             generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
             gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
-            mnuMaestros.Text = "Maestros";
+            gestionarClientesToolStripMenuItem.Text = t.Traducir("frmGestionClientes.Menu");
+            mnuMaestros.Text = t.Traducir("frmMenuPrincipal.MenuMaestros");
 
             // Menu Administrador
             mnuAdministrador.Text = t.Traducir("frmMenuPrincipal.MenuAdministrador");
