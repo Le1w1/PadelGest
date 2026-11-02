@@ -189,8 +189,7 @@ namespace UI
         {
             AsegurarColumnasGrillas();
             List<ProductoBE> productos = _productoBLL.ObtenerProductos();
-            // El Designer define las cuatro columnas visibles. El enlace de datos
-            // nunca debe generar otras propiedades, como CodigoProducto o Activo.
+            // El Designer define las cuatro columnas visibles. El enlace de datos nunca debe generar otras propiedades, como CodigoProducto o Activo.
             dgvProductos.AutoGenerateColumns = false;
             dgvProductos.DataSource = null;
             dgvProductos.DataSource = productos;
