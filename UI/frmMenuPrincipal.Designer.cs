@@ -84,8 +84,8 @@ namespace UI
             // 
             // reLoginToolStripMenuItem
             // 
-            reLoginToolStripMenuItem.BackColor = Color.White;
-            reLoginToolStripMenuItem.ForeColor = Color.Black;
+            reLoginToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            reLoginToolStripMenuItem.ForeColor = Color.White;
             reLoginToolStripMenuItem.Name = "reLoginToolStripMenuItem";
             reLoginToolStripMenuItem.Size = new Size(180, 22);
             reLoginToolStripMenuItem.Text = "Re-Login";
@@ -104,8 +104,8 @@ namespace UI
             // 
             // cambiarIdiomaToolStripMenuItem
             // 
-            cambiarIdiomaToolStripMenuItem.BackColor = Color.White;
-            cambiarIdiomaToolStripMenuItem.ForeColor = Color.Black;
+            cambiarIdiomaToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            cambiarIdiomaToolStripMenuItem.ForeColor = Color.White;
             cambiarIdiomaToolStripMenuItem.Name = "cambiarIdiomaToolStripMenuItem";
             cambiarIdiomaToolStripMenuItem.Size = new Size(180, 22);
             cambiarIdiomaToolStripMenuItem.Text = "Cambiar Idioma";
@@ -135,8 +135,8 @@ namespace UI
             // 
             // generarReservaToolStripMenuItem
             // 
-            generarReservaToolStripMenuItem.BackColor = Color.White;
-            generarReservaToolStripMenuItem.ForeColor = Color.Black;
+            generarReservaToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            generarReservaToolStripMenuItem.ForeColor = Color.White;
             generarReservaToolStripMenuItem.Name = "generarReservaToolStripMenuItem";
             generarReservaToolStripMenuItem.Size = new Size(180, 22);
             generarReservaToolStripMenuItem.Text = "Reservar Cancha";
@@ -158,8 +158,8 @@ namespace UI
             generarCarritoToolStripMenuItem.Text = "Generar Factura";
             generarCarritoToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             generarCarritoToolStripMenuItem.Size = new Size(180, 22);
-            generarCarritoToolStripMenuItem.BackColor = Color.White;
-            generarCarritoToolStripMenuItem.ForeColor = Color.Black;
+            generarCarritoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            generarCarritoToolStripMenuItem.ForeColor = Color.White;
             generarCarritoToolStripMenuItem.Click += generarCarritoToolStripMenuItem_Click;
             // Maestros: menu independiente del rol Maestro, visible segun permisos
             mnuMaestros.BackColor = Color.FromArgb(214, 246, 36);
@@ -175,8 +175,8 @@ namespace UI
             gestionarProductosToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             gestionarProductosToolStripMenuItem.Size = new Size(200, 22);
             gestionarProductosToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gestionarProductosToolStripMenuItem.BackColor = Color.White;
-            gestionarProductosToolStripMenuItem.ForeColor = Color.Black;
+            gestionarProductosToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            gestionarProductosToolStripMenuItem.ForeColor = Color.White;
             gestionarProductosToolStripMenuItem.Click += gestionarProductosToolStripMenuItem_Click;
             // Gestion de clientes
             gestionarClientesToolStripMenuItem.Name = "gestionarClientesToolStripMenuItem";
@@ -184,7 +184,7 @@ namespace UI
             gestionarClientesToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             gestionarClientesToolStripMenuItem.Size = new Size(200, 22);
             gestionarClientesToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gestionarClientesToolStripMenuItem.BackColor = Color.White;
+            gestionarClientesToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
             gestionarClientesToolStripMenuItem.ForeColor = Color.Black;
             gestionarClientesToolStripMenuItem.Click += gestionarClientesToolStripMenuItem_Click;
             //
@@ -200,8 +200,8 @@ namespace UI
             // 
             // usuariosToolStripMenuItem
             // 
-            usuariosToolStripMenuItem.BackColor = Color.White;
-            usuariosToolStripMenuItem.ForeColor = Color.Black;
+            usuariosToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            usuariosToolStripMenuItem.ForeColor = Color.White;
             usuariosToolStripMenuItem.Name = "usuariosToolStripMenuItem";
             usuariosToolStripMenuItem.Size = new Size(228, 22);
             usuariosToolStripMenuItem.Text = "Gestionar Usuarios";
@@ -220,8 +220,8 @@ namespace UI
             // 
             // gestionarPerfilToolStripMenuItem
             // 
-            gestionarPerfilToolStripMenuItem.BackColor = Color.White;
-            gestionarPerfilToolStripMenuItem.ForeColor = Color.Black;
+            gestionarPerfilToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            gestionarPerfilToolStripMenuItem.ForeColor = Color.White;
             gestionarPerfilToolStripMenuItem.Name = "gestionarPerfilToolStripMenuItem";
             gestionarPerfilToolStripMenuItem.Size = new Size(228, 22);
             gestionarPerfilToolStripMenuItem.Text = "Gestion de Roles y Familias";
