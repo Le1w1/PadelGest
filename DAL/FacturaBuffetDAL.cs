@@ -75,7 +75,7 @@ namespace DAL
 
                 //Actualiza el stock de cada producto; si no hay suficiente, lanza excepción y revierte la transacción.
                 const string descontar = @"
-`                   UPDATE dbo.Producto
+                    UPDATE dbo.Producto
                     SET StockDisponible = StockDisponible - @Cantidad
                     WHERE CodigoProducto = @CodigoProducto AND Activo = 1
                     AND StockDisponible >= @Cantidad";
