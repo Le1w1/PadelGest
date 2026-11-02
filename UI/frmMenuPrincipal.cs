@@ -151,8 +151,7 @@ namespace UI
             gestionarPerfilToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGestionPerfiles");
             gestionDeRespaldoToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGestionRespaldo");
             // Panel central
-            lblTituloInicio.Text = t.Traducir("frmMenuPrincipal.Titulo");
-            lblDescripcionInicio.Text = t.Traducir("frmMenuPrincipal.Descripcion");
+           
 
             // Status bar (depende de la sesion)
             CargarDatosSesion();

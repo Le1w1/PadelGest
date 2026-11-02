@@ -28,6 +28,7 @@ namespace UI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenuPrincipal));
             menuPrincipal = new MenuStrip();
             mnuSesion = new ToolStripMenuItem();
             reLoginToolStripMenuItem = new ToolStripMenuItem();
@@ -50,13 +51,10 @@ namespace UI
             lblUsuarioSesion = new ToolStripStatusLabel();
             lblEstadoSesion = new ToolStripStatusLabel();
             pnlInicio = new Panel();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            lblDescripcionInicio = new Label();
-            lblTituloInicio = new Label();
+            panel1 = new Panel();
             menuPrincipal.SuspendLayout();
             statusStrip1.SuspendLayout();
             pnlInicio.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // menuPrincipal
@@ -278,55 +276,23 @@ namespace UI
             // pnlInicio
             // 
             pnlInicio.BackColor = Color.FromArgb(24, 70, 138);
-            pnlInicio.Controls.Add(tableLayoutPanel1);
+            pnlInicio.Controls.Add(panel1);
             pnlInicio.Dock = DockStyle.Fill;
             pnlInicio.Location = new Point(0, 24);
             pnlInicio.Name = "pnlInicio";
             pnlInicio.Size = new Size(800, 404);
             pnlInicio.TabIndex = 2;
             // 
-            // tableLayoutPanel1
+            // panel1
             // 
-            tableLayoutPanel1.BackColor = Color.FromArgb(24, 70, 138);
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(lblDescripcionInicio, 0, 2);
-            tableLayoutPanel1.Controls.Add(lblTituloInicio, 0, 1);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 5;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 12F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
-            tableLayoutPanel1.Size = new Size(800, 404);
-            tableLayoutPanel1.TabIndex = 2;
-            // 
-            // lblDescripcionInicio
-            // 
-            lblDescripcionInicio.Dock = DockStyle.Fill;
-            lblDescripcionInicio.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblDescripcionInicio.ForeColor = Color.FromArgb(214, 246, 36);
-            lblDescripcionInicio.Location = new Point(3, 181);
-            lblDescripcionInicio.Name = "lblDescripcionInicio";
-            lblDescripcionInicio.Size = new Size(794, 32);
-            lblDescripcionInicio.TabIndex = 1;
-            lblDescripcionInicio.Text = "Seleccione un módulo desde el menú superior para comenzar.";
-            lblDescripcionInicio.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblTituloInicio
-            // 
-            lblTituloInicio.Dock = DockStyle.Fill;
-            lblTituloInicio.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTituloInicio.ForeColor = Color.FromArgb(214, 246, 36);
-            lblTituloInicio.Location = new Point(3, 121);
-            lblTituloInicio.Name = "lblTituloInicio";
-            lblTituloInicio.Size = new Size(794, 60);
-            lblTituloInicio.TabIndex = 0;
-            lblTituloInicio.Text = "Bienvenido a Padelgest";
-            lblTituloInicio.TextAlign = ContentAlignment.MiddleCenter;
+            panel1.BackColor = Color.FromArgb(14, 43, 92);
+            panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
+            panel1.BackgroundImageLayout = ImageLayout.Stretch;
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(800, 404);
+            panel1.TabIndex = 0;
             // 
             // frmMenuPrincipal
             // 
@@ -353,7 +319,6 @@ namespace UI
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             pnlInicio.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -414,9 +379,6 @@ namespace UI
         private ToolStripStatusLabel lblUsuarioSesion;
         private ToolStripStatusLabel lblEstadoSesion;
         private Panel pnlInicio;
-        private Label lblDescripcionInicio;
-        private Label lblTituloInicio;
-        private TableLayoutPanel tableLayoutPanel1;
         private ToolStripMenuItem reLoginToolStripMenuItem;
         private ToolStripMenuItem cambiarClaveToolStripMenuItem;
         private ToolStripMenuItem cambiarIdiomaToolStripMenuItem;
@@ -430,5 +392,6 @@ namespace UI
         private ToolStripMenuItem gestionarProductosToolStripMenuItem;
         private ToolStripMenuItem gestionarClientesToolStripMenuItem;
         private ToolStripMenuItem mnuMaestros;
+        private Panel panel1;
     }
 }
