@@ -39,6 +39,8 @@ namespace UI
             vendedorBuffetToolStripMenuItem = new ToolStripMenuItem();
             generarCarritoToolStripMenuItem = new ToolStripMenuItem();
             gestionarProductosToolStripMenuItem = new ToolStripMenuItem();
+            mnuMaestros = new ToolStripMenuItem();
+            gestionarClientesToolStripMenuItem = new ToolStripMenuItem();
             mnuAdministrador = new ToolStripMenuItem();
             usuariosToolStripMenuItem = new ToolStripMenuItem();
             bitacoraEventosToolStripMenuItem = new ToolStripMenuItem();
@@ -60,9 +62,10 @@ namespace UI
             // menuPrincipal
             // 
             menuPrincipal.BackColor = Color.FromArgb(214, 246, 36);
-            menuPrincipal.ForeColor = Color.White;
+            menuPrincipal.ForeColor = Color.Black;
+            menuPrincipal.Renderer = new AirPadelMenuRenderer();
             menuPrincipal.ImageScalingSize = new Size(20, 20);
-            menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, RecepcionistaToolStripMenuItem, vendedorBuffetToolStripMenuItem, mnuAdministrador });
+            menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuSesion, RecepcionistaToolStripMenuItem, vendedorBuffetToolStripMenuItem, mnuMaestros, mnuAdministrador });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
             menuPrincipal.Size = new Size(800, 24);
@@ -137,7 +140,7 @@ namespace UI
             // vendedorBuffetToolStripMenuItem
             // 
             vendedorBuffetToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
-            vendedorBuffetToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarCarritoToolStripMenuItem, gestionarProductosToolStripMenuItem });
+            vendedorBuffetToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarCarritoToolStripMenuItem });
             vendedorBuffetToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             vendedorBuffetToolStripMenuItem.ForeColor = Color.Black;
             vendedorBuffetToolStripMenuItem.Name = "vendedorBuffetToolStripMenuItem";
@@ -150,18 +153,31 @@ namespace UI
             generarCarritoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             generarCarritoToolStripMenuItem.ForeColor = Color.White;
             generarCarritoToolStripMenuItem.Click += generarCarritoToolStripMenuItem_Click;
-            // Gestion de productos - PN2
+            // Maestros: menu independiente del rol Maestro, visible segun permisos
+            mnuMaestros.BackColor = Color.FromArgb(214, 246, 36);
+            mnuMaestros.ForeColor = Color.Black;
+            mnuMaestros.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            mnuMaestros.Name = "mnuMaestros";
+            mnuMaestros.Size = new Size(75, 20);
+            mnuMaestros.Text = "Maestros";
+            mnuMaestros.DropDownItems.AddRange(new ToolStripItem[] { gestionarProductosToolStripMenuItem, gestionarClientesToolStripMenuItem });
+            // Gestion de productos
             gestionarProductosToolStripMenuItem.Name = "gestionarProductosToolStripMenuItem";
             gestionarProductosToolStripMenuItem.Text = "Gestionar Productos";
             gestionarProductosToolStripMenuItem.Size = new Size(200, 22);
-            gestionarProductosToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
-            gestionarProductosToolStripMenuItem.ForeColor = Color.White;
+            gestionarProductosToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            gestionarProductosToolStripMenuItem.BackColor = Color.White;
+            gestionarProductosToolStripMenuItem.ForeColor = Color.Black;
             gestionarProductosToolStripMenuItem.Click += gestionarProductosToolStripMenuItem_Click;
-            // 
-            // 
-            // 
-            // 
-            // 
+            // Gestion de clientes
+            gestionarClientesToolStripMenuItem.Name = "gestionarClientesToolStripMenuItem";
+            gestionarClientesToolStripMenuItem.Text = "Gestionar Clientes";
+            gestionarClientesToolStripMenuItem.Size = new Size(200, 22);
+            gestionarClientesToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            gestionarClientesToolStripMenuItem.BackColor = Color.White;
+            gestionarClientesToolStripMenuItem.ForeColor = Color.Black;
+            gestionarClientesToolStripMenuItem.Click += gestionarClientesToolStripMenuItem_Click;
+            //
             // mnuAdministrador
             // 
             mnuAdministrador.BackColor = Color.FromArgb(214, 246, 36);
@@ -335,10 +351,7 @@ namespace UI
             protected override void OnRenderItemText(
                 ToolStripItemTextRenderEventArgs e)
             {
-                e.TextColor =
-                    e.Item.Selected || e.Item.Pressed
-                        ? Color.FromArgb(18, 18, 18)
-                        : Color.White;
+                e.TextColor = Color.Black;
 
                 base.OnRenderItemText(e);
             }
@@ -414,5 +427,7 @@ namespace UI
         private ToolStripMenuItem vendedorBuffetToolStripMenuItem;
         private ToolStripMenuItem generarCarritoToolStripMenuItem;
         private ToolStripMenuItem gestionarProductosToolStripMenuItem;
+        private ToolStripMenuItem gestionarClientesToolStripMenuItem;
+        private ToolStripMenuItem mnuMaestros;
     }
 }
