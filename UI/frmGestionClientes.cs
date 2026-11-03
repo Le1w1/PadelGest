@@ -12,9 +12,35 @@ namespace UI
         private readonly ClienteBLL _clientes = new ClienteBLL();
         private readonly ClienteXmlBLL _xml = new ClienteXmlBLL();
         private bool _mostrandoXml;
+
+        // Carpeta propia del usuario: funciona independientemente del equipo
+        // o de la unidad donde se haya instalado PadelGest.
+        private static string CarpetaXml => Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "PadelGest", "XML");
+
+        private static string ArchivoXmlPredeterminado =>
+            Path.Combine(CarpetaXml, "Clientes.xml");
+
+        private void ConfigurarRutasPredeterminadas()
+        {
+            txtRutaExportar.Text = ArchivoXmlPredeterminado;
+            txtRutaImportar.Text = ArchivoXmlPredeterminado;
+        }
+
+        private static string DirectorioInicialXml(string ruta)
+        {
+            string? carpeta = Path.GetDirectoryName(ruta);
+            return !string.IsNullOrWhiteSpace(carpeta) && Directory.Exists(carpeta)
+                ? carpeta
+                : Directory.Exists(CarpetaXml)
+                    ? CarpetaXml
+                    : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        }
         public frmGestionClientes()
         {
             InitializeComponent();
+            ConfigurarRutasPredeterminadas();
             ActualizarIdioma();
             grilla.SelectionChanged += (_, _) => Seleccionar();
             btnNuevo.Click += (_, _) =>
@@ -131,7 +157,10 @@ namespace UI
                 DefaultExt = "xml",
                 AddExtension = true,
                 OverwritePrompt = true,
-                FileName = "Clientes.xml"
+                InitialDirectory = DirectorioInicialXml(txtRutaExportar.Text),
+                FileName = string.IsNullOrWhiteSpace(txtRutaExportar.Text)
+                    ? "Clientes.xml"
+                    : Path.GetFileName(txtRutaExportar.Text)
             };
             if (dialogo.ShowDialog(this) == DialogResult.OK)
                 txtRutaExportar.Text = dialogo.FileName;
@@ -144,7 +173,11 @@ namespace UI
                 Title = T("frmGestionClientes.XmlElegirOrigen"),
                 Filter = "XML (*.xml)|*.xml",
                 CheckFileExists = true,
-                Multiselect = false
+                Multiselect = false,
+                InitialDirectory = DirectorioInicialXml(txtRutaImportar.Text),
+                FileName = File.Exists(txtRutaImportar.Text)
+                    ? Path.GetFileName(txtRutaImportar.Text)
+                    : string.Empty
             };
             if (dialogo.ShowDialog(this) == DialogResult.OK)
                 txtRutaImportar.Text = dialogo.FileName;
@@ -164,7 +197,20 @@ namespace UI
                     if (fila.Visible && fila.DataBoundItem is ClienteBE cliente)
                         clientes.Add(cliente);
                 }
-                _xml.Serializar(clientes, txtRutaExportar.Text);
+                string ruta = txtRutaExportar.Text;
+                if (File.Exists(ruta) &&
+                    MessageBox.Show(T("frmGestionClientes.XmlConfirmarSobrescritura"),
+                        Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
+                        MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                    return;
+
+                // La carpeta predeterminada se crea al guardar, no al abrir el formulario.
+                // Otros destinos se eligen mediante SaveFileDialog.
+                if (string.Equals(ruta, ArchivoXmlPredeterminado,
+                    StringComparison.OrdinalIgnoreCase))
+                    Directory.CreateDirectory(CarpetaXml);
+
+                _xml.Serializar(clientes, ruta);
                 MessageBox.Show(string.Format(
                     T("frmGestionClientes.XmlExportado"), clientes.Count), Text,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
