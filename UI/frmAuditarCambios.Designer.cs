@@ -35,7 +35,6 @@ namespace UI
             colVigente = new DataGridViewTextBoxColumn();
             btnVolver = new Button();
             btnRestaurar = new Button();
-            lblAviso = new Label();
 
             ((System.ComponentModel.ISupportInitialize)nudCodigo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCambios).BeginInit();
@@ -212,12 +211,6 @@ namespace UI
             colVigente.HeaderText = "Activo";
             colVigente.Width = 115;
 
-            lblAviso.Location = new Point(25, 620);
-            lblAviso.Size = new Size(750, 45);
-            lblAviso.Name = "lblAviso";
-            lblAviso.ForeColor = Color.White;
-            lblAviso.Text = "Historial de solo lectura. Los cambios se registran automáticamente al modificar productos.";
-
             btnRestaurar.Location = new Point(790, 630);
             btnRestaurar.Size = new Size(205, 42);
             btnRestaurar.Name = "btnRestaurar";
@@ -269,7 +262,7 @@ namespace UI
             {
                 lblTitulo, lblCodigo, nudCodigo, lblNombre, txtNombre,
                 lblDesde, dtpDesde, lblHasta, dtpHasta,
-                btnBuscar, btnLimpiar, lblCantidad, dgvCambios, lblAviso, btnRestaurar, btnVolver
+                btnBuscar, btnLimpiar, lblCantidad, dgvCambios, btnRestaurar, btnVolver
             });
             Load += frmAuditarCambios_Load;
             FormClosed += frmAuditarCambios_FormClosed;
@@ -300,7 +293,6 @@ namespace UI
         private DataGridViewTextBoxColumn colPrecio;
         private DataGridViewTextBoxColumn colStock;
         private DataGridViewTextBoxColumn colVigente;
-        private Label lblAviso;
         private Button btnRestaurar;
         private Button btnVolver;
     }
