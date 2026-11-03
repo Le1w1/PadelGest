@@ -1,6 +1,7 @@
 using BE;
 using DAL.Servicios;
 using Microsoft.Data.SqlClient;
+using Servicios;
 using System.Data;
 
 namespace DAL
@@ -127,7 +128,7 @@ namespace DAL
 
                 dvDAL.RecalcularDVEnTransaccion("Producto", conexion, tx);
 
-                eventosDAL.Registrar(new Servicios.BitacoraEvento
+                eventosDAL.Registrar(new BitacoraEvento
                 {
                     IdUsuario = idUsuario,
                     Usuario = usuario,
