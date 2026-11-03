@@ -1,4 +1,5 @@
 using BE;
+using BLL.Servicios;
 using Servicios;
 using System.Text;
 using System.Xml;
@@ -6,12 +7,28 @@ using System.Xml.Serialization;
 
 namespace BLL
 {
-    // Servicio XML del Maestro de Clientes. No utiliza DAL ni SQL Server.
-    // La lista se entrega desde el DataGridView de la interfaz.
+    // Servicio XML del Maestro de Clientes.
+    // Los datos se leen de la grilla y del archivo XML, no de la tabla Cliente.
+    // Solo persiste en SQL Server la auditoria de la accion.
     public class ClienteXmlBLL
     {
         private static readonly XmlSerializer Serializador =
             new XmlSerializer(typeof(List<ClienteBE>));
+
+        private readonly BitacoraEventoBLL _bitacora = new BitacoraEventoBLL();
+
+        private void RegistrarOperacion(string accion, int cantidad)
+        {
+            var usuario = SM.Instancia.UsuarioActual;
+            if (usuario == null)
+                throw new InvalidOperationException("No hay una sesion activa para registrar la operacion XML.");
+
+            // No guardar DNI, correo, telefono ni la ruta completa del archivo.
+            _bitacora.Registrar(usuario.IdUsuario, usuario.NombreUsuario,
+                "Cliente", accion, "Media", "Exitoso",
+                $"Se procesaron {cantidad} clientes mediante la operacion XML. " +
+                "No se modificaron registros de la tabla Cliente.");
+        }
 
         public void Serializar(List<ClienteBE> clientes, string ruta)
         {
@@ -22,14 +39,20 @@ namespace BLL
                 throw new ArgumentException("Seleccione un archivo XML de destino.");
 
             // Se guarda exactamente la lista suministrada por la pantalla.
-            using FileStream archivo = new FileStream(ruta, FileMode.Create, FileAccess.Write);
-            using XmlWriter escritor = XmlWriter.Create(archivo, new XmlWriterSettings
+            // Los using terminan antes del evento: solo se registra si la
+            // escritura y el cierre del archivo fueron correctos.
+            using (FileStream archivo = new FileStream(ruta, FileMode.Create, FileAccess.Write))
+            using (XmlWriter escritor = XmlWriter.Create(archivo, new XmlWriterSettings
             {
                 Encoding = new UTF8Encoding(false),
                 Indent = true,
                 CloseOutput = false
-            });
-            Serializador.Serialize(escritor, clientes);
+            }))
+            {
+                Serializador.Serialize(escritor, clientes);
+            }
+
+            RegistrarOperacion("Serializar clientes", clientes.Count);
         }
 
         public List<ClienteBE> Deserializar(string ruta)
@@ -64,6 +87,7 @@ namespace BLL
                     throw new InvalidOperationException("El archivo XML contiene clientes incompletos.");
             }
 
+            RegistrarOperacion("Deserializar clientes", clientes.Count);
             return clientes;
         }
     }
