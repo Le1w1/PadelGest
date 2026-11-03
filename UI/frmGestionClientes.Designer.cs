@@ -11,9 +11,9 @@ namespace UI
         private Label lbldni = null!, lblnombre = null!, lblapellido = null!, lbltelefono = null!, lblcorreo = null!;
         private Button btnNuevo = null!, btnRegistrar = null!, btnModificar = null!, btnEliminar = null!, btnActualizar = null!, btnVolver = null!;
         private GroupBox gbXml = null!;
-        private Label lblRutaExportar = null!, lblRutaImportar = null!, lblEstadoXml = null!;
+        private Label lblRutaExportar = null!, lblRutaImportar = null!;
         private TextBox txtRutaExportar = null!, txtRutaImportar = null!;
-        private Button btnElegirExportar = null!, btnElegirImportar = null!, btnSerializar = null!, btnDeserializar = null!;
+        private Button btnElegirExportar = null!, btnElegirImportar = null!, btnSerializar = null!, btnDeserializar = null!, btnLimpiarRutas = null!;
         private ToolTip ayudaBotones = null!;
         protected override void Dispose(bool disposing)
         {
@@ -27,13 +27,13 @@ namespace UI
             gbXml = new GroupBox();
             lblRutaExportar = new Label();
             lblRutaImportar = new Label();
-            lblEstadoXml = new Label();
             txtRutaExportar = new TextBox();
             txtRutaImportar = new TextBox();
             btnElegirExportar = new Button();
             btnElegirImportar = new Button();
             btnSerializar = new Button();
             btnDeserializar = new Button();
+            btnLimpiarRutas = new Button();
 
             Color fondo = Color.FromArgb(14, 43, 92);
             Color panel = Color.FromArgb(24, 70, 138);
@@ -324,13 +324,16 @@ namespace UI
             btnDeserializar.FlatAppearance.BorderSize = 0;
             gbXml.Controls.Add(btnDeserializar);
 
-            lblEstadoXml.Name = "lblEstadoXml";
-            lblEstadoXml.Text = "Los archivos XML son independientes de la base de datos.";
-            lblEstadoXml.Location = new Point(16, 144);
-            lblEstadoXml.Size = new Size(1080, 32);
-            lblEstadoXml.ForeColor = Color.White;
-            lblEstadoXml.Font = new Font("Segoe UI", 9F);
-            gbXml.Controls.Add(lblEstadoXml);
+            btnLimpiarRutas.Name = "btnLimpiarRutas";
+            btnLimpiarRutas.Text = "Limpiar rutas";
+            btnLimpiarRutas.Location = new Point(860, 137);
+            btnLimpiarRutas.Size = new Size(240, 37);
+            btnLimpiarRutas.BackColor = panel;
+            btnLimpiarRutas.ForeColor = Color.White;
+            btnLimpiarRutas.FlatStyle = FlatStyle.Flat;
+            btnLimpiarRutas.FlatAppearance.BorderSize = 0;
+            btnLimpiarRutas.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            gbXml.Controls.Add(btnLimpiarRutas);
             Controls.Add(gbXml);
 
             ResumeLayout(false);
