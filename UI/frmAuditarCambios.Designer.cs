@@ -45,14 +45,10 @@ namespace UI
             ((System.ComponentModel.ISupportInitialize)dgvCambios).BeginInit();
             SuspendLayout();
 
-            Color fondo = Color.FromArgb(14, 43, 92);
-            Color panel = Color.FromArgb(24, 70, 138);
-            Color amarillo = Color.FromArgb(214, 246, 36);
-
             lblTitulo.Location = new Point(25, 12);
             lblTitulo.Size = new Size(1120, 45);
             lblTitulo.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
-            lblTitulo.ForeColor = amarillo;
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Text = "BITACORA DE CAMBIOS - PRODUCTOS";
 
@@ -134,7 +130,7 @@ namespace UI
             lblCantidad.Location = new Point(785, 153);
             lblCantidad.Size = new Size(390, 25);
             lblCantidad.Name = "lblCantidad";
-            lblCantidad.ForeColor = amarillo;
+            lblCantidad.ForeColor = Color.FromArgb(214, 246, 36);
             lblCantidad.TextAlign = ContentAlignment.MiddleRight;
             lblCantidad.Text = "Registros: 0";
 
@@ -153,12 +149,12 @@ namespace UI
             dgvCambios.RowHeadersVisible = false;
             dgvCambios.EnableHeadersVisualStyles = false;
             dgvCambios.ColumnHeadersHeight = 32;
-            dgvCambios.ColumnHeadersDefaultCellStyle.BackColor = panel;
+            dgvCambios.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 70, 138);
             dgvCambios.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgvCambios.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             dgvCambios.DefaultCellStyle.BackColor = Color.White;
             dgvCambios.DefaultCellStyle.ForeColor = Color.Black;
-            dgvCambios.DefaultCellStyle.SelectionBackColor = amarillo;
+            dgvCambios.DefaultCellStyle.SelectionBackColor = Color.FromArgb(214, 246, 36);
             dgvCambios.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgvCambios.RowsDefaultCellStyle.ForeColor = Color.Black;
             dgvCambios.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
@@ -244,20 +240,27 @@ namespace UI
             btnVolver.Text = "Volver";
             btnVolver.Click += btnVolver_Click;
 
-            foreach (Button boton in new[] { btnBuscar, btnLimpiar, btnVolver })
-            {
-                boton.BackColor = amarillo;
-                boton.ForeColor = Color.Black;
-                boton.FlatStyle = FlatStyle.Flat;
-                boton.FlatAppearance.BorderSize = 0;
-                boton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            }
-            btnVolver.BackColor = panel;
+            btnBuscar.BackColor = Color.FromArgb(214, 246, 36);
+            btnBuscar.ForeColor = Color.Black;
+            btnBuscar.FlatStyle = FlatStyle.Flat;
+            btnBuscar.FlatAppearance.BorderSize = 0;
+            btnBuscar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnLimpiar.BackColor = Color.FromArgb(214, 246, 36);
+            btnLimpiar.ForeColor = Color.Black;
+            btnLimpiar.FlatStyle = FlatStyle.Flat;
+            btnLimpiar.FlatAppearance.BorderSize = 0;
+            btnLimpiar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnVolver.BackColor = Color.FromArgb(214, 246, 36);
+            btnVolver.ForeColor = Color.Black;
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.FlatAppearance.BorderSize = 0;
+            btnVolver.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
             btnVolver.ForeColor = Color.White;
 
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1200, 690);
-            BackColor = fondo;
+            BackColor = Color.FromArgb(14, 43, 92);
             ForeColor = Color.White;
             Font = new Font("Segoe UI", 9.5F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
