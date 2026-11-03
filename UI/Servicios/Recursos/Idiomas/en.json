@@ -655,5 +655,6 @@
   "frmGestionClientes.XmlSinDestino": "Choose a destination for the XML file first.",
   "frmGestionClientes.XmlSinOrigen": "Select an XML file first.",
   "frmGestionClientes.XmlExportado": "Serialized {0} customers from the grid into the XML file.",
-  "frmGestionClientes.XmlImportado": "Loaded {0} customers from XML into the grid. The database was not changed."
+  "frmGestionClientes.XmlImportado": "Loaded {0} customers from XML into the grid. The database was not changed.",
+  "frmGestionClientes.XmlLimpiarRutas": "Clear paths"
 }
