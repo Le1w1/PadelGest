@@ -4,8 +4,8 @@ using Servicios;
 
 namespace UI
 {
-    // Auditoria historica de productos. Es una consulta de solo lectura:
-    // los registros de Producto_C se crean desde el trigger SQL Server.
+    // Auditoria historica de productos. La consulta es de solo lectura,
+    // salvo la restauracion confirmada de una version anterior mediante triggers SQL.
     public partial class frmAuditarCambios : Form, IObservadorIdioma
     {
         private readonly ProductoCambioBLL _cambiosBLL = new ProductoCambioBLL();
@@ -52,6 +52,7 @@ namespace UI
             chkSoloVigentes.Text = T("frmAuditarCambios.SoloVigentes");
             btnBuscar.Text = T("frmAuditarCambios.Buscar");
             btnLimpiar.Text = T("frmAuditarCambios.Limpiar");
+            btnRestaurar.Text = T("frmAuditarCambios.Restaurar");
             btnVolver.Text = T("frmAuditarCambios.Volver");
             lblAviso.Text = T("frmAuditarCambios.Aviso");
 
@@ -92,6 +93,7 @@ namespace UI
                 dgvCambios.DataSource = null;
                 dgvCambios.DataSource = cambios;
                 dgvCambios.ClearSelection();
+                btnRestaurar.Enabled = false;
                 ActualizarCantidad(cambios.Count);
             }
             catch (Exception ex)
@@ -121,6 +123,42 @@ namespace UI
         }
 
         private void btnVolver_Click(object sender, EventArgs e) => Close();
+
+        private void dgvCambios_SelectionChanged(object sender, EventArgs e)
+        {
+            btnRestaurar.Enabled =
+                dgvCambios.CurrentRow?.Selected == true &&
+                dgvCambios.CurrentRow.DataBoundItem is ProductoCambioBE cambio &&
+                !cambio.Act && SM.Instancia.TienePermiso("PRO_GESTIONAR");
+        }
+
+        private void btnRestaurar_Click(object sender, EventArgs e)
+        {
+            if (dgvCambios.CurrentRow?.Selected != true ||
+                dgvCambios.CurrentRow.DataBoundItem is not ProductoCambioBE cambio || cambio.Act)
+                return;
+
+            string mensaje = string.Format(T("frmAuditarCambios.ConfirmarRestauracion"),
+                cambio.Nombre, cambio.FechaHora, cambio.PrecioUnitario,
+                cambio.StockDisponible, cambio.ActivoProducto
+                    ? T("frmAuditarCambios.Activo") : T("frmAuditarCambios.Inactivo"));
+
+            if (MessageBox.Show(mensaje, Text, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                return;
+
+            try
+            {
+                _cambiosBLL.RestaurarVersion(cambio.IdCambio);
+                Consultar();
+                MessageBox.Show(T("frmAuditarCambios.RestauracionCorrecta"), Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void dgvCambios_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
