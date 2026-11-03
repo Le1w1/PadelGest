@@ -655,5 +655,8 @@
   "frmGestionClientes.XmlExportado": "Se serializaron {0} clientes de la grilla al archivo XML.",
   "frmGestionClientes.XmlImportado": "Se cargaron {0} clientes del XML en la grilla. No se modificó la base de datos.",
   "frmGestionClientes.XmlLimpiarRutas": "Limpiar rutas",
-  "frmGestionClientes.XmlConfirmarSobrescritura": "Ya existe un archivo XML en la ubicación indicada. ¿Querés reemplazarlo?"
+  "frmGestionClientes.XmlConfirmarSobrescritura": "Ya existe un archivo XML en la ubicación indicada. ¿Querés reemplazarlo?",
+  "frmAuditarEventos.Filtro.Modulo.Cliente": "Cliente",
+  "frmAuditarEventos.Filtro.Accion.Serializar clientes": "Serializar clientes",
+  "frmAuditarEventos.Filtro.Accion.Deserializar clientes": "Deserializar clientes"
 }
