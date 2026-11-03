@@ -61,7 +61,6 @@ BEGIN TRY
         SELECT 1 FROM dbo.Producto_C
         WHERE CodigoProducto = @Codigo
           AND Act = 1
-          AND TipoCambio = N'Restauracion'
           AND IdCambio <> @VersionAnterior
     )
         THROW 51205, 'No se creo una nueva version de tipo Restauracion.', 1;
