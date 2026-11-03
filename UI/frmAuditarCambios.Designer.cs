@@ -139,7 +139,12 @@ namespace UI
             dgvCambios.Size = new Size(1150, 420);
             dgvCambios.Name = "dgvCambios";
             dgvCambios.BackgroundColor = Color.White;
-            dgvCambios.BorderStyle = BorderStyle.None;
+            dgvCambios.BorderStyle = BorderStyle.FixedSingle;
+            dgvCambios.GridColor = Color.FromArgb(120, 120, 120);
+            dgvCambios.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            dgvCambios.ColumnHeadersVisible = true;
+            dgvCambios.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dgvCambios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCambios.AutoGenerateColumns = false;
             dgvCambios.AllowUserToAddRows = false;
             dgvCambios.AllowUserToDeleteRows = false;
@@ -149,10 +154,13 @@ namespace UI
             dgvCambios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCambios.RowHeadersVisible = false;
             dgvCambios.EnableHeadersVisualStyles = false;
-            dgvCambios.ColumnHeadersHeight = 32;
+            dgvCambios.ColumnHeadersHeight = 34;
             dgvCambios.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 70, 138);
             dgvCambios.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvCambios.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(24, 70, 138);
+            dgvCambios.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
             dgvCambios.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dgvCambios.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dgvCambios.DefaultCellStyle.BackColor = Color.White;
             dgvCambios.DefaultCellStyle.ForeColor = Color.Black;
             dgvCambios.DefaultCellStyle.SelectionBackColor = Color.FromArgb(214, 246, 36);
@@ -163,6 +171,12 @@ namespace UI
             dgvCambios.AlternatingRowsDefaultCellStyle.ForeColor = Color.Black;
             dgvCambios.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.Black;
             dgvCambios.DefaultCellStyle.Font = new Font("Segoe UI", 9F);
+            dgvCambios.DefaultCellStyle.Padding = new Padding(4, 0, 4, 0);
+            dgvCambios.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvCambios.RowsDefaultCellStyle.ForeColor = Color.Black;
+            dgvCambios.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(214, 246, 36);
+            dgvCambios.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvCambios.RowTemplate.Height = 27;
             dgvCambios.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dgvCambios.Columns.AddRange(new DataGridViewColumn[]
             {
