@@ -192,9 +192,9 @@ namespace UI
             //
             // gestionarClientesToolStripMenuItem
             // 
-            gestionarClientesToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            gestionarClientesToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
             gestionarClientesToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gestionarClientesToolStripMenuItem.ForeColor = Color.Black;
+            gestionarClientesToolStripMenuItem.ForeColor = Color.White;
             gestionarClientesToolStripMenuItem.Name = "gestionarClientesToolStripMenuItem";
             gestionarClientesToolStripMenuItem.Size = new Size(187, 22);
             gestionarClientesToolStripMenuItem.Text = "Gestionar Clientes";
