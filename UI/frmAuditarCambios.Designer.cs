@@ -22,22 +22,16 @@ namespace UI
             dtpDesde = new DateTimePicker();
             lblHasta = new Label();
             dtpHasta = new DateTimePicker();
-            chkSoloVigentes = new CheckBox();
             btnBuscar = new Button();
             btnLimpiar = new Button();
             lblCantidad = new Label();
             dgvCambios = new DataGridView();
-            colIdCambio = new DataGridViewTextBoxColumn();
             colCodigo = new DataGridViewTextBoxColumn();
             colFecha = new DataGridViewTextBoxColumn();
+            colHora = new DataGridViewTextBoxColumn();
             colNombre = new DataGridViewTextBoxColumn();
-            colCategoria = new DataGridViewTextBoxColumn();
-            colPrecio = new DataGridViewTextBoxColumn();
             colStock = new DataGridViewTextBoxColumn();
-            colMinimo = new DataGridViewTextBoxColumn();
-            colActivo = new DataGridViewTextBoxColumn();
             colVigente = new DataGridViewTextBoxColumn();
-            colTipo = new DataGridViewTextBoxColumn();
             btnVolver = new Button();
             btnRestaurar = new Button();
             lblAviso = new Label();
@@ -110,16 +104,10 @@ namespace UI
             dtpHasta.CalendarForeColor = Color.Black;
             dtpHasta.Name = "dtpHasta";
 
-            chkSoloVigentes.Location = new Point(638, 75);
-            chkSoloVigentes.Size = new Size(232, 27);
-            chkSoloVigentes.ForeColor = Color.White;
-            chkSoloVigentes.Text = "Solo versiones vigentes";
-            chkSoloVigentes.Name = "chkSoloVigentes";
-
             btnBuscar.Location = new Point(910, 70);
             btnBuscar.Size = new Size(115, 37);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Text = "Buscar";
+            btnBuscar.Text = "Aplicar";
             btnBuscar.Click += btnBuscar_Click;
 
             btnLimpiar.Location = new Point(1040, 70);
@@ -180,69 +168,41 @@ namespace UI
             dgvCambios.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dgvCambios.Columns.AddRange(new DataGridViewColumn[]
             {
-                colIdCambio, colCodigo, colFecha, colNombre, colCategoria,
-                colPrecio, colStock, colMinimo, colActivo, colVigente, colTipo
+                colCodigo, colFecha, colHora, colNombre, colStock, colVigente
             });
             dgvCambios.CellFormatting += dgvCambios_CellFormatting;
             dgvCambios.SelectionChanged += dgvCambios_SelectionChanged;
 
-            colIdCambio.Name = "colIdCambio";
-            colIdCambio.DataPropertyName = "IdCambio";
-            colIdCambio.HeaderText = "Cambio";
-            colIdCambio.Width = 74;
-
             colCodigo.Name = "colCodigo";
             colCodigo.DataPropertyName = "CodigoProducto";
-            colCodigo.HeaderText = "Código";
-            colCodigo.Width = 82;
+            colCodigo.HeaderText = "Código de producto";
+            colCodigo.Width = 175;
 
             colFecha.Name = "colFecha";
-            colFecha.DataPropertyName = "FechaHora";
-            colFecha.HeaderText = "Fecha y hora";
-            colFecha.Width = 146;
-            colFecha.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss";
+            colFecha.DataPropertyName = "Fecha";
+            colFecha.HeaderText = "Fecha";
+            colFecha.Width = 140;
+
+            colHora.Name = "colHora";
+            colHora.DataPropertyName = "Hora";
+            colHora.HeaderText = "Hora";
+            colHora.Width = 130;
 
             colNombre.Name = "colNombre";
             colNombre.DataPropertyName = "Nombre";
-            colNombre.HeaderText = "Producto";
+            colNombre.HeaderText = "Nombre";
             colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colNombre.MinimumWidth = 165;
-
-            colCategoria.Name = "colCategoria";
-            colCategoria.DataPropertyName = "Categoria";
-            colCategoria.HeaderText = "Categoría";
-            colCategoria.Width = 118;
-
-            colPrecio.Name = "colPrecio";
-            colPrecio.DataPropertyName = "PrecioUnitario";
-            colPrecio.HeaderText = "Precio";
-            colPrecio.Width = 105;
-            colPrecio.DefaultCellStyle.Format = "C2";
+            colNombre.MinimumWidth = 260;
 
             colStock.Name = "colStock";
             colStock.DataPropertyName = "StockDisponible";
-            colStock.HeaderText = "Stock";
-            colStock.Width = 65;
-
-            colMinimo.Name = "colMinimo";
-            colMinimo.DataPropertyName = "StockMinimo";
-            colMinimo.HeaderText = "Mínimo";
-            colMinimo.Width = 75;
-
-            colActivo.Name = "colActivo";
-            colActivo.DataPropertyName = "ActivoProducto";
-            colActivo.HeaderText = "Estado";
-            colActivo.Width = 87;
+            colStock.HeaderText = "Existencia";
+            colStock.Width = 155;
 
             colVigente.Name = "colVigente";
             colVigente.DataPropertyName = "Act";
-            colVigente.HeaderText = "Versión";
-            colVigente.Width = 90;
-
-            colTipo.Name = "colTipo";
-            colTipo.DataPropertyName = "TipoCambio";
-            colTipo.HeaderText = "Operación";
-            colTipo.Width = 116;
+            colVigente.HeaderText = "Activo";
+            colVigente.Width = 115;
 
             lblAviso.Location = new Point(25, 620);
             lblAviso.Size = new Size(750, 45);
@@ -253,7 +213,7 @@ namespace UI
             btnRestaurar.Location = new Point(790, 630);
             btnRestaurar.Size = new Size(205, 42);
             btnRestaurar.Name = "btnRestaurar";
-            btnRestaurar.Text = "Restaurar versión";
+            btnRestaurar.Text = "Activar";
             btnRestaurar.Enabled = false;
             btnRestaurar.BackColor = Color.FromArgb(214, 246, 36);
             btnRestaurar.ForeColor = Color.Black;
@@ -300,7 +260,7 @@ namespace UI
             Controls.AddRange(new Control[]
             {
                 lblTitulo, lblCodigo, nudCodigo, lblNombre, txtNombre,
-                lblDesde, dtpDesde, lblHasta, dtpHasta, chkSoloVigentes,
+                lblDesde, dtpDesde, lblHasta, dtpHasta,
                 btnBuscar, btnLimpiar, lblCantidad, dgvCambios, lblAviso, btnRestaurar, btnVolver
             });
             Load += frmAuditarCambios_Load;
@@ -321,22 +281,16 @@ namespace UI
         private DateTimePicker dtpDesde;
         private Label lblHasta;
         private DateTimePicker dtpHasta;
-        private CheckBox chkSoloVigentes;
         private Button btnBuscar;
         private Button btnLimpiar;
         private Label lblCantidad;
         private DataGridView dgvCambios;
-        private DataGridViewTextBoxColumn colIdCambio;
         private DataGridViewTextBoxColumn colCodigo;
         private DataGridViewTextBoxColumn colFecha;
+        private DataGridViewTextBoxColumn colHora;
         private DataGridViewTextBoxColumn colNombre;
-        private DataGridViewTextBoxColumn colCategoria;
-        private DataGridViewTextBoxColumn colPrecio;
         private DataGridViewTextBoxColumn colStock;
-        private DataGridViewTextBoxColumn colMinimo;
-        private DataGridViewTextBoxColumn colActivo;
         private DataGridViewTextBoxColumn colVigente;
-        private DataGridViewTextBoxColumn colTipo;
         private Label lblAviso;
         private Button btnRestaurar;
         private Button btnVolver;
