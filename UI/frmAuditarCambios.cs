@@ -59,6 +59,7 @@ namespace UI
             CambiarTitulo("colFecha", "frmAuditarCambios.ColFecha");
             CambiarTitulo("colHora", "frmAuditarCambios.ColHora");
             CambiarTitulo("colNombre", "frmAuditarCambios.ColNombre");
+            CambiarTitulo("colPrecio", "frmAuditarCambios.ColPrecio");
             CambiarTitulo("colStock", "frmAuditarCambios.ColStock");
             CambiarTitulo("colVigente", "frmAuditarCambios.ColVigente");
 
