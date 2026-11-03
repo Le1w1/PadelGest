@@ -101,6 +101,7 @@ namespace UI
             mnuMaestros.Visible = maestroProductos || maestroClientes;
             generarCarritoToolStripMenuItem.Visible = buffet;
             gestionarProductosToolStripMenuItem.Visible = maestroProductos;
+            auditarCambiosToolStripMenuItem.Visible = maestroProductos;
             gestionarClientesToolStripMenuItem.Visible = maestroClientes;
 
             RecepcionistaToolStripMenuItem.Visible = reservas;
@@ -141,6 +142,7 @@ namespace UI
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
             generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
             gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
+            auditarCambiosToolStripMenuItem.Text = t.Traducir("frmAuditarCambios.Menu");
             gestionarClientesToolStripMenuItem.Text = t.Traducir("frmGestionClientes.Menu");
             mnuMaestros.Text = t.Traducir("frmMenuPrincipal.MenuMaestros");
 
@@ -235,6 +237,12 @@ namespace UI
         {
             using frmGestionProductos gestion = new frmGestionProductos();
             gestion.ShowDialog(this);
+        }
+
+        private void auditarCambiosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmAuditarCambios auditoria = new frmAuditarCambios();
+            auditoria.ShowDialog(this);
         }
 
         private void generarReservaToolStripMenuItem_Click(object sender, EventArgs e)
