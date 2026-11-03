@@ -53,7 +53,6 @@ namespace UI
             btnLimpiar.Text = T("frmAuditarCambios.Limpiar");
             btnRestaurar.Text = T("frmAuditarCambios.Restaurar");
             btnVolver.Text = T("frmAuditarCambios.Volver");
-            lblAviso.Text = T("frmAuditarCambios.Aviso");
 
             CambiarTitulo("colCodigo", "frmAuditarCambios.ColCodigo");
             CambiarTitulo("colFecha", "frmAuditarCambios.ColFecha");
