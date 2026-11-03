@@ -60,13 +60,8 @@ BEGIN
     INNER JOIN @Restauradas AS r ON r.CodigoProducto = p.CodigoProducto
     INNER JOIN dbo.Producto_C AS h ON h.IdCambio = r.IdCambio;
 
-    -- El nuevo registro creado en Producto_C representa la restauracion.
-    -- No altera su campo Act ni vuelve a sincronizar Producto.
-    UPDATE h
-       SET h.TipoCambio = N'Restauracion'
-    FROM dbo.Producto_C AS h
-    INNER JOIN @Restauradas AS r ON r.CodigoProducto = h.CodigoProducto
-    WHERE h.Act = 1 AND h.IdCambio <> r.IdCambio;
+    -- Producto_C se mantiene historica: solamente insertamos nuevos registros
+    -- o modificamos Act. No se reescriben nombres, stock ni tipos anteriores.
 END;
 GO
 
