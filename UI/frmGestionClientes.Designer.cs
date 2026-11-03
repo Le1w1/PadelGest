@@ -10,6 +10,11 @@ namespace UI
         private TextBox dni = null!, nombre = null!, apellido = null!, telefono = null!, correo = null!;
         private Label lbldni = null!, lblnombre = null!, lblapellido = null!, lbltelefono = null!, lblcorreo = null!;
         private Button btnNuevo = null!, btnRegistrar = null!, btnModificar = null!, btnEliminar = null!, btnActualizar = null!, btnVolver = null!;
+        private GroupBox gbXml = null!;
+        private Label lblRutaExportar = null!, lblRutaImportar = null!, lblEstadoXml = null!;
+        private TextBox txtRutaExportar = null!, txtRutaImportar = null!;
+        private Button btnElegirExportar = null!, btnElegirImportar = null!, btnSerializar = null!, btnDeserializar = null!;
+        private ToolTip ayudaBotones = null!;
         protected override void Dispose(bool disposing)
         {
             if (disposing && components != null) components.Dispose();
@@ -18,6 +23,18 @@ namespace UI
 
         private void InitializeComponent()
         {
+            ayudaBotones = new ToolTip();
+            gbXml = new GroupBox();
+            lblRutaExportar = new Label();
+            lblRutaImportar = new Label();
+            lblEstadoXml = new Label();
+            txtRutaExportar = new TextBox();
+            txtRutaImportar = new TextBox();
+            btnElegirExportar = new Button();
+            btnElegirImportar = new Button();
+            btnSerializar = new Button();
+            btnDeserializar = new Button();
+
             Color fondo = Color.FromArgb(14, 43, 92);
             Color panel = Color.FromArgb(24, 70, 138);
             Color lima = Color.FromArgb(214, 246, 36);
@@ -34,7 +51,7 @@ namespace UI
             colCorreoElectronico = new DataGridViewTextBoxColumn();
             SuspendLayout();
             Text = "Gestión de Clientes";
-            ClientSize = new Size(1165, 665);
+            ClientSize = new Size(1165, 880);
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -228,6 +245,94 @@ namespace UI
             btnVolver.FlatStyle = FlatStyle.Flat;
             btnVolver.FlatAppearance.BorderSize = 0;
             Controls.Add(btnVolver);
+            // Serializacion XML (no utiliza SQL Server).
+            gbXml.Name = "gbXml";
+            gbXml.Text = "Serialización XML de clientes";
+            gbXml.Location = new Point(25, 640);
+            gbXml.Size = new Size(1115, 194);
+            gbXml.BackColor = panel;
+            gbXml.ForeColor = Color.White;
+            gbXml.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+
+            lblRutaExportar.Name = "lblRutaExportar";
+            lblRutaExportar.Text = "Archivo XML de salida:";
+            lblRutaExportar.Location = new Point(16, 35);
+            lblRutaExportar.Size = new Size(195, 23);
+            lblRutaExportar.ForeColor = Color.White;
+            gbXml.Controls.Add(lblRutaExportar);
+
+            txtRutaExportar.Name = "txtRutaExportar";
+            txtRutaExportar.Location = new Point(215, 32);
+            txtRutaExportar.Size = new Size(635, 27);
+            txtRutaExportar.ReadOnly = true;
+            txtRutaExportar.BackColor = Color.White;
+            txtRutaExportar.ForeColor = Color.Black;
+            gbXml.Controls.Add(txtRutaExportar);
+
+            btnElegirExportar.Name = "btnElegirExportar";
+            btnElegirExportar.Text = "Examinar...";
+            btnElegirExportar.Location = new Point(860, 30);
+            btnElegirExportar.Size = new Size(115, 32);
+            btnElegirExportar.BackColor = lima;
+            btnElegirExportar.ForeColor = Color.Black;
+            btnElegirExportar.FlatStyle = FlatStyle.Flat;
+            btnElegirExportar.FlatAppearance.BorderSize = 0;
+            gbXml.Controls.Add(btnElegirExportar);
+
+            btnSerializar.Name = "btnSerializar";
+            btnSerializar.Text = "Serializar";
+            btnSerializar.Location = new Point(980, 30);
+            btnSerializar.Size = new Size(120, 32);
+            btnSerializar.BackColor = lima;
+            btnSerializar.ForeColor = Color.Black;
+            btnSerializar.FlatStyle = FlatStyle.Flat;
+            btnSerializar.FlatAppearance.BorderSize = 0;
+            gbXml.Controls.Add(btnSerializar);
+
+            lblRutaImportar.Name = "lblRutaImportar";
+            lblRutaImportar.Text = "Archivo XML de entrada:";
+            lblRutaImportar.Location = new Point(16, 89);
+            lblRutaImportar.Size = new Size(195, 23);
+            lblRutaImportar.ForeColor = Color.White;
+            gbXml.Controls.Add(lblRutaImportar);
+
+            txtRutaImportar.Name = "txtRutaImportar";
+            txtRutaImportar.Location = new Point(215, 86);
+            txtRutaImportar.Size = new Size(635, 27);
+            txtRutaImportar.ReadOnly = true;
+            txtRutaImportar.BackColor = Color.White;
+            txtRutaImportar.ForeColor = Color.Black;
+            gbXml.Controls.Add(txtRutaImportar);
+
+            btnElegirImportar.Name = "btnElegirImportar";
+            btnElegirImportar.Text = "Examinar...";
+            btnElegirImportar.Location = new Point(860, 84);
+            btnElegirImportar.Size = new Size(115, 32);
+            btnElegirImportar.BackColor = lima;
+            btnElegirImportar.ForeColor = Color.Black;
+            btnElegirImportar.FlatStyle = FlatStyle.Flat;
+            btnElegirImportar.FlatAppearance.BorderSize = 0;
+            gbXml.Controls.Add(btnElegirImportar);
+
+            btnDeserializar.Name = "btnDeserializar";
+            btnDeserializar.Text = "Deserializar";
+            btnDeserializar.Location = new Point(980, 84);
+            btnDeserializar.Size = new Size(120, 32);
+            btnDeserializar.BackColor = lima;
+            btnDeserializar.ForeColor = Color.Black;
+            btnDeserializar.FlatStyle = FlatStyle.Flat;
+            btnDeserializar.FlatAppearance.BorderSize = 0;
+            gbXml.Controls.Add(btnDeserializar);
+
+            lblEstadoXml.Name = "lblEstadoXml";
+            lblEstadoXml.Text = "Los archivos XML son independientes de la base de datos.";
+            lblEstadoXml.Location = new Point(16, 144);
+            lblEstadoXml.Size = new Size(1080, 32);
+            lblEstadoXml.ForeColor = Color.White;
+            lblEstadoXml.Font = new Font("Segoe UI", 9F);
+            gbXml.Controls.Add(lblEstadoXml);
+            Controls.Add(gbXml);
+
             ResumeLayout(false);
             PerformLayout();
         }
