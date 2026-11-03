@@ -624,7 +624,7 @@
   "frmAuditarCambios.ColFecha": "Date",
   "frmAuditarCambios.ColNombre": "Name",
   "frmAuditarCambios.ColCategoria": "Category",
-  "frmAuditarCambios.ColPrecio": "Price",
+  "frmAuditarCambios.ColPrecio": "Unit price",
   "frmAuditarCambios.ColStock": "Inventory",
   "frmAuditarCambios.ColMinimo": "Minimum",
   "frmAuditarCambios.ColActivo": "Status",
