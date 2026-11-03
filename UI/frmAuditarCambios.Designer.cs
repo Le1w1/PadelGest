@@ -39,6 +39,7 @@ namespace UI
             colVigente = new DataGridViewTextBoxColumn();
             colTipo = new DataGridViewTextBoxColumn();
             btnVolver = new Button();
+            btnRestaurar = new Button();
             lblAviso = new Label();
 
             ((System.ComponentModel.ISupportInitialize)nudCodigo).BeginInit();
@@ -169,6 +170,7 @@ namespace UI
                 colPrecio, colStock, colMinimo, colActivo, colVigente, colTipo
             });
             dgvCambios.CellFormatting += dgvCambios_CellFormatting;
+            dgvCambios.SelectionChanged += dgvCambios_SelectionChanged;
 
             colIdCambio.Name = "colIdCambio";
             colIdCambio.DataPropertyName = "IdCambio";
@@ -229,10 +231,22 @@ namespace UI
             colTipo.Width = 116;
 
             lblAviso.Location = new Point(25, 620);
-            lblAviso.Size = new Size(935, 45);
+            lblAviso.Size = new Size(750, 45);
             lblAviso.Name = "lblAviso";
             lblAviso.ForeColor = Color.White;
             lblAviso.Text = "Historial de solo lectura. Los cambios se registran automáticamente al modificar productos.";
+
+            btnRestaurar.Location = new Point(790, 630);
+            btnRestaurar.Size = new Size(205, 42);
+            btnRestaurar.Name = "btnRestaurar";
+            btnRestaurar.Text = "Restaurar versión";
+            btnRestaurar.Enabled = false;
+            btnRestaurar.BackColor = Color.FromArgb(214, 246, 36);
+            btnRestaurar.ForeColor = Color.Black;
+            btnRestaurar.FlatStyle = FlatStyle.Flat;
+            btnRestaurar.FlatAppearance.BorderSize = 0;
+            btnRestaurar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnRestaurar.Click += btnRestaurar_Click;
 
             btnVolver.Location = new Point(1015, 630);
             btnVolver.Size = new Size(160, 42);
@@ -273,7 +287,7 @@ namespace UI
             {
                 lblTitulo, lblCodigo, nudCodigo, lblNombre, txtNombre,
                 lblDesde, dtpDesde, lblHasta, dtpHasta, chkSoloVigentes,
-                btnBuscar, btnLimpiar, lblCantidad, dgvCambios, lblAviso, btnVolver
+                btnBuscar, btnLimpiar, lblCantidad, dgvCambios, lblAviso, btnRestaurar, btnVolver
             });
             Load += frmAuditarCambios_Load;
             FormClosed += frmAuditarCambios_FormClosed;
@@ -310,6 +324,7 @@ namespace UI
         private DataGridViewTextBoxColumn colVigente;
         private DataGridViewTextBoxColumn colTipo;
         private Label lblAviso;
+        private Button btnRestaurar;
         private Button btnVolver;
     }
 }
