@@ -30,6 +30,7 @@ namespace UI
             colFecha = new DataGridViewTextBoxColumn();
             colHora = new DataGridViewTextBoxColumn();
             colNombre = new DataGridViewTextBoxColumn();
+            colPrecio = new DataGridViewTextBoxColumn();
             colStock = new DataGridViewTextBoxColumn();
             colVigente = new DataGridViewTextBoxColumn();
             btnVolver = new Button();
@@ -168,7 +169,7 @@ namespace UI
             dgvCambios.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dgvCambios.Columns.AddRange(new DataGridViewColumn[]
             {
-                colCodigo, colFecha, colHora, colNombre, colStock, colVigente
+                colCodigo, colFecha, colHora, colNombre, colPrecio, colStock, colVigente
             });
             dgvCambios.CellFormatting += dgvCambios_CellFormatting;
             dgvCambios.SelectionChanged += dgvCambios_SelectionChanged;
@@ -192,7 +193,14 @@ namespace UI
             colNombre.DataPropertyName = "Nombre";
             colNombre.HeaderText = "Nombre";
             colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colNombre.MinimumWidth = 260;
+            colNombre.MinimumWidth = 200;
+
+            colPrecio.Name = "colPrecio";
+            colPrecio.DataPropertyName = "PrecioUnitario";
+            colPrecio.HeaderText = "Precio unitario";
+            colPrecio.Width = 155;
+            colPrecio.DefaultCellStyle.Format = "C2";
+            colPrecio.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             colStock.Name = "colStock";
             colStock.DataPropertyName = "StockDisponible";
@@ -289,6 +297,7 @@ namespace UI
         private DataGridViewTextBoxColumn colFecha;
         private DataGridViewTextBoxColumn colHora;
         private DataGridViewTextBoxColumn colNombre;
+        private DataGridViewTextBoxColumn colPrecio;
         private DataGridViewTextBoxColumn colStock;
         private DataGridViewTextBoxColumn colVigente;
         private Label lblAviso;
