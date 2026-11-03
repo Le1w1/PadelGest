@@ -657,5 +657,8 @@
   "frmGestionClientes.XmlExportado": "Serialized {0} customers from the grid into the XML file.",
   "frmGestionClientes.XmlImportado": "Loaded {0} customers from XML into the grid. The database was not changed.",
   "frmGestionClientes.XmlLimpiarRutas": "Clear paths",
-  "frmGestionClientes.XmlConfirmarSobrescritura": "An XML file already exists at the selected location. Do you want to overwrite it?"
+  "frmGestionClientes.XmlConfirmarSobrescritura": "An XML file already exists at the selected location. Do you want to overwrite it?",
+  "frmAuditarEventos.Filtro.Modulo.Cliente": "Customer",
+  "frmAuditarEventos.Filtro.Accion.Serializar clientes": "Serialize customers",
+  "frmAuditarEventos.Filtro.Accion.Deserializar clientes": "Deserialize customers"
 }
