@@ -33,6 +33,11 @@ namespace UI
             btnElegirImportar.Click += (_, _) => SeleccionarOrigenXml();
             btnSerializar.Click += (_, _) => SerializarClientes();
             btnDeserializar.Click += (_, _) => DeserializarClientes();
+            btnLimpiarRutas.Click += (_, _) =>
+            {
+                txtRutaExportar.Clear();
+                txtRutaImportar.Clear();
+            };
             btnVolver.Click += (_, _) => Close();
             Load += (_, _) =>
             {
@@ -73,11 +78,10 @@ namespace UI
             btnElegirImportar.Text = T("frmGestionClientes.XmlExaminar");
             btnSerializar.Text = T("frmGestionClientes.XmlSerializar");
             btnDeserializar.Text = T("frmGestionClientes.XmlDeserializar");
+            btnLimpiarRutas.Text = T("frmGestionClientes.XmlLimpiarRutas");
             ayudaBotones.SetToolTip(btnNuevo, T("frmGestionClientes.XmlAyudaNuevo"));
             ayudaBotones.SetToolTip(btnActualizar, T("frmGestionClientes.XmlAyudaActualizar"));
-            lblEstadoXml.Text = T(_mostrandoXml
-                ? "frmGestionClientes.XmlSoloGrilla"
-                : "frmGestionClientes.XmlAdvertencia");
+
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -115,7 +119,6 @@ namespace UI
             btnRegistrar.Enabled = true;
             btnModificar.Enabled = true;
             btnEliminar.Enabled = true;
-            lblEstadoXml.Text = T("frmGestionClientes.XmlAdvertencia");
             Limpiar();
         }
 
@@ -162,9 +165,8 @@ namespace UI
                         clientes.Add(cliente);
                 }
                 _xml.Serializar(clientes, txtRutaExportar.Text);
-                lblEstadoXml.Text = string.Format(
-                    T("frmGestionClientes.XmlExportado"), clientes.Count);
-                MessageBox.Show(lblEstadoXml.Text, Text,
+                MessageBox.Show(string.Format(
+                    T("frmGestionClientes.XmlExportado"), clientes.Count), Text,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -191,9 +193,8 @@ namespace UI
                 btnModificar.Enabled = false;
                 btnEliminar.Enabled = false;
                 Limpiar();
-                lblEstadoXml.Text = string.Format(
-                    T("frmGestionClientes.XmlImportado"), clientes.Count);
-                MessageBox.Show(lblEstadoXml.Text, Text,
+                MessageBox.Show(string.Format(
+                    T("frmGestionClientes.XmlImportado"), clientes.Count), Text,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
