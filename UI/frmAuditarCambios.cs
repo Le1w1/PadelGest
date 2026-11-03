@@ -49,24 +49,18 @@ namespace UI
             lblNombre.Text = T("frmAuditarCambios.Nombre");
             lblDesde.Text = T("frmAuditarCambios.Desde");
             lblHasta.Text = T("frmAuditarCambios.Hasta");
-            chkSoloVigentes.Text = T("frmAuditarCambios.SoloVigentes");
             btnBuscar.Text = T("frmAuditarCambios.Buscar");
             btnLimpiar.Text = T("frmAuditarCambios.Limpiar");
             btnRestaurar.Text = T("frmAuditarCambios.Restaurar");
             btnVolver.Text = T("frmAuditarCambios.Volver");
             lblAviso.Text = T("frmAuditarCambios.Aviso");
 
-            CambiarTitulo("colIdCambio", "frmAuditarCambios.ColIdCambio");
             CambiarTitulo("colCodigo", "frmAuditarCambios.ColCodigo");
             CambiarTitulo("colFecha", "frmAuditarCambios.ColFecha");
+            CambiarTitulo("colHora", "frmAuditarCambios.ColHora");
             CambiarTitulo("colNombre", "frmAuditarCambios.ColNombre");
-            CambiarTitulo("colCategoria", "frmAuditarCambios.ColCategoria");
-            CambiarTitulo("colPrecio", "frmAuditarCambios.ColPrecio");
             CambiarTitulo("colStock", "frmAuditarCambios.ColStock");
-            CambiarTitulo("colMinimo", "frmAuditarCambios.ColMinimo");
-            CambiarTitulo("colActivo", "frmAuditarCambios.ColActivo");
             CambiarTitulo("colVigente", "frmAuditarCambios.ColVigente");
-            CambiarTitulo("colTipo", "frmAuditarCambios.ColTipo");
 
             if (dgvCambios.DataSource is List<ProductoCambioBE> datos)
                 ActualizarCantidad(datos.Count);
@@ -88,7 +82,7 @@ namespace UI
                 DateTime? hasta = dtpHasta.Checked ? dtpHasta.Value.Date : null;
 
                 List<ProductoCambioBE> cambios = _cambiosBLL.ConsultarCambios(
-                    codigo, txtNombre.Text, desde, hasta, chkSoloVigentes.Checked);
+                    codigo, txtNombre.Text, desde, hasta, false);
 
                 dgvCambios.DataSource = null;
                 dgvCambios.DataSource = cambios;
@@ -132,7 +126,6 @@ namespace UI
             txtNombre.Clear();
             dtpDesde.Checked = false;
             dtpHasta.Checked = false;
-            chkSoloVigentes.Checked = false;
             Consultar();
         }
 
@@ -174,22 +167,15 @@ namespace UI
             }
         }
 
+        // Act de Producto_C se muestra literalmente (1 = vigente, 0 = historico).
         private void dgvCambios_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0 || e.Value is not bool valor)
                 return;
 
-            string nombre = dgvCambios.Columns[e.ColumnIndex].Name;
-            if (nombre == "colActivo")
+            if (dgvCambios.Columns[e.ColumnIndex].Name == "colVigente")
             {
-                e.Value = valor ? T("frmAuditarCambios.Activo")
-                                : T("frmAuditarCambios.Inactivo");
-                e.FormattingApplied = true;
-            }
-            else if (nombre == "colVigente")
-            {
-                e.Value = valor ? T("frmAuditarCambios.Vigente")
-                                : T("frmAuditarCambios.Anterior");
+                e.Value = valor ? "1" : "0";
                 e.FormattingApplied = true;
             }
         }
