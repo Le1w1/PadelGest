@@ -637,5 +637,21 @@
   "frmAuditarCambios.Restaurar": "Activar",
   "frmAuditarCambios.ConfirmarRestauracion": "¿Activar el registro histórico de «{0}» del {1:dd/MM/yyyy HH:mm:ss}?\n\nPrecio guardado: {2:C2}\nExistencia guardada: {3}\nEstado comercial: {4}\n\nADVERTENCIA: al activar se reemplazarán los datos y el stock actuales por los de este registro. Se conservará el historial.",
   "frmAuditarCambios.RestauracionCorrecta": "Registro histórico activado correctamente. El sistema generó una nueva versión vigente.",
-  "frmAuditarCambios.ColHora": "Hora"
+  "frmAuditarCambios.ColHora": "Hora",
+  "frmGestionClientes.XmlTitulo": "SERIALIZACIÓN / DESERIALIZACIÓN XML",
+  "frmGestionClientes.XmlRutaSalida": "Archivo XML de salida:",
+  "frmGestionClientes.XmlRutaEntrada": "Archivo XML de entrada:",
+  "frmGestionClientes.XmlExaminar": "Examinar...",
+  "frmGestionClientes.XmlSerializar": "Serializar",
+  "frmGestionClientes.XmlDeserializar": "Deserializar",
+  "frmGestionClientes.XmlAyudaNuevo": "Limpia los datos ingresados. Si se cargó un XML, vuelve al maestro de clientes.",
+  "frmGestionClientes.XmlAyudaActualizar": "Actualiza la grilla consultando nuevamente los clientes registrados en SQL Server.",
+  "frmGestionClientes.XmlAdvertencia": "Los XML contienen datos personales en texto legible. Guardalos en una ubicación segura.",
+  "frmGestionClientes.XmlSoloGrilla": "Vista temporal de XML: no se insertaron clientes en SQL Server. Presioná Actualizar para volver.",
+  "frmGestionClientes.XmlElegirDestino": "Seleccionar ubicación y nombre del archivo XML",
+  "frmGestionClientes.XmlElegirOrigen": "Seleccionar archivo XML de clientes",
+  "frmGestionClientes.XmlSinDestino": "Primero elegí una ubicación para guardar el archivo XML.",
+  "frmGestionClientes.XmlSinOrigen": "Primero seleccioná un archivo XML para abrir.",
+  "frmGestionClientes.XmlExportado": "Se serializaron {0} clientes de la grilla al archivo XML.",
+  "frmGestionClientes.XmlImportado": "Se cargaron {0} clientes del XML en la grilla. No se modificó la base de datos."
 }
