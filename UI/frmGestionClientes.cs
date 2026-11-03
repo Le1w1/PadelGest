@@ -10,12 +10,18 @@ namespace UI
     public partial class frmGestionClientes : Form, IObservadorIdioma
     {
         private readonly ClienteBLL _clientes = new ClienteBLL();
+        private readonly ClienteXmlBLL _xml = new ClienteXmlBLL();
+        private bool _mostrandoXml;
         public frmGestionClientes()
         {
             InitializeComponent();
             ActualizarIdioma();
             grilla.SelectionChanged += (_, _) => Seleccionar();
-            btnNuevo.Click += (_, _) => Limpiar();
+            btnNuevo.Click += (_, _) =>
+            {
+                if (_mostrandoXml) Cargar();
+                else Limpiar();
+            };
             btnRegistrar.Click += (_, _) => Ejecutar(() => _clientes.RegistrarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
             btnModificar.Click += (_, _) => Ejecutar(() => _clientes.ModificarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
             btnEliminar.Click += (_, _) => {
@@ -23,6 +29,10 @@ namespace UI
                     Ejecutar(() => _clientes.EliminarCliente(dni.Text));
             };
             btnActualizar.Click += (_, _) => Cargar();
+            btnElegirExportar.Click += (_, _) => SeleccionarDestinoXml();
+            btnElegirImportar.Click += (_, _) => SeleccionarOrigenXml();
+            btnSerializar.Click += (_, _) => SerializarClientes();
+            btnDeserializar.Click += (_, _) => DeserializarClientes();
             btnVolver.Click += (_, _) => Close();
             Load += (_, _) =>
             {
@@ -56,6 +66,18 @@ namespace UI
             btnEliminar.Text = T("frmGestionClientes.Eliminar");
             btnActualizar.Text = T("frmGestionClientes.Actualizar");
             btnVolver.Text = T("frmGestionClientes.Volver");
+            gbXml.Text = T("frmGestionClientes.XmlTitulo");
+            lblRutaExportar.Text = T("frmGestionClientes.XmlRutaSalida");
+            lblRutaImportar.Text = T("frmGestionClientes.XmlRutaEntrada");
+            btnElegirExportar.Text = T("frmGestionClientes.XmlExaminar");
+            btnElegirImportar.Text = T("frmGestionClientes.XmlExaminar");
+            btnSerializar.Text = T("frmGestionClientes.XmlSerializar");
+            btnDeserializar.Text = T("frmGestionClientes.XmlDeserializar");
+            ayudaBotones.SetToolTip(btnNuevo, T("frmGestionClientes.XmlAyudaNuevo"));
+            ayudaBotones.SetToolTip(btnActualizar, T("frmGestionClientes.XmlAyudaActualizar"));
+            lblEstadoXml.Text = T(_mostrandoXml
+                ? "frmGestionClientes.XmlSoloGrilla"
+                : "frmGestionClientes.XmlAdvertencia");
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -86,9 +108,99 @@ namespace UI
 
         private void Cargar()
         {
+            List<ClienteBE> clientes = _clientes.ListarTodos();
+            _mostrandoXml = false;
             grilla.DataSource = null;
-            grilla.DataSource = _clientes.ListarTodos();
+            grilla.DataSource = clientes;
+            btnRegistrar.Enabled = true;
+            btnModificar.Enabled = true;
+            btnEliminar.Enabled = true;
+            lblEstadoXml.Text = T("frmGestionClientes.XmlAdvertencia");
             Limpiar();
+        }
+
+        private void SeleccionarDestinoXml()
+        {
+            using SaveFileDialog dialogo = new SaveFileDialog
+            {
+                Title = T("frmGestionClientes.XmlElegirDestino"),
+                Filter = "XML (*.xml)|*.xml",
+                DefaultExt = "xml",
+                AddExtension = true,
+                OverwritePrompt = true,
+                FileName = "Clientes.xml"
+            };
+            if (dialogo.ShowDialog(this) == DialogResult.OK)
+                txtRutaExportar.Text = dialogo.FileName;
+        }
+
+        private void SeleccionarOrigenXml()
+        {
+            using OpenFileDialog dialogo = new OpenFileDialog
+            {
+                Title = T("frmGestionClientes.XmlElegirOrigen"),
+                Filter = "XML (*.xml)|*.xml",
+                CheckFileExists = true,
+                Multiselect = false
+            };
+            if (dialogo.ShowDialog(this) == DialogResult.OK)
+                txtRutaImportar.Text = dialogo.FileName;
+        }
+
+        private void SerializarClientes()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtRutaExportar.Text))
+                    throw new InvalidOperationException(T("frmGestionClientes.XmlSinDestino"));
+
+                // Solo lee los registros visibles de la grilla, nunca la BD.
+                List<ClienteBE> clientes = new List<ClienteBE>();
+                foreach (DataGridViewRow fila in grilla.Rows)
+                {
+                    if (fila.Visible && fila.DataBoundItem is ClienteBE cliente)
+                        clientes.Add(cliente);
+                }
+                _xml.Serializar(clientes, txtRutaExportar.Text);
+                lblEstadoXml.Text = string.Format(
+                    T("frmGestionClientes.XmlExportado"), clientes.Count);
+                MessageBox.Show(lblEstadoXml.Text, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void DeserializarClientes()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtRutaImportar.Text))
+                    throw new InvalidOperationException(T("frmGestionClientes.XmlSinOrigen"));
+
+                // No se hace INSERT ni UPDATE: solo se reemplazan las filas
+                // visualizadas. Actualizar vuelve a consultar SQL Server.
+                List<ClienteBE> clientes = _xml.Deserializar(txtRutaImportar.Text);
+                grilla.DataSource = null;
+                _mostrandoXml = true;
+                grilla.DataSource = clientes;
+                btnRegistrar.Enabled = false;
+                btnModificar.Enabled = false;
+                btnEliminar.Enabled = false;
+                Limpiar();
+                lblEstadoXml.Text = string.Format(
+                    T("frmGestionClientes.XmlImportado"), clientes.Count);
+                MessageBox.Show(lblEstadoXml.Text, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void Ejecutar(Action accion)
