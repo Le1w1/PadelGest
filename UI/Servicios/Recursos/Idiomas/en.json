@@ -656,5 +656,6 @@
   "frmGestionClientes.XmlSinOrigen": "Select an XML file first.",
   "frmGestionClientes.XmlExportado": "Serialized {0} customers from the grid into the XML file.",
   "frmGestionClientes.XmlImportado": "Loaded {0} customers from XML into the grid. The database was not changed.",
-  "frmGestionClientes.XmlLimpiarRutas": "Clear paths"
+  "frmGestionClientes.XmlLimpiarRutas": "Clear paths",
+  "frmGestionClientes.XmlConfirmarSobrescritura": "An XML file already exists at the selected location. Do you want to overwrite it?"
 }
