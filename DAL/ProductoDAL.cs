@@ -85,8 +85,8 @@ namespace DAL
                 const string sql = @"
                     INSERT INTO dbo.Producto
                         (Nombre, Categoria, PrecioUnitario, StockDisponible, StockMinimo, Activo)
-                    OUTPUT INSERTED.CodigoProducto
-                    VALUES (@Nombre, @Categoria, @Precio, @Stock, @Minimo, 1)";
+                    VALUES (@Nombre, @Categoria, @Precio, @Stock, @Minimo, 1);
+                    SELECT CONVERT(int, SCOPE_IDENTITY());";
 
                 int codigo;
                 using (SqlCommand cmd = new SqlCommand(sql, conexion, tx))
