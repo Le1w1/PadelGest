@@ -653,5 +653,6 @@
   "frmGestionClientes.XmlSinDestino": "Primero elegí una ubicación para guardar el archivo XML.",
   "frmGestionClientes.XmlSinOrigen": "Primero seleccioná un archivo XML para abrir.",
   "frmGestionClientes.XmlExportado": "Se serializaron {0} clientes de la grilla al archivo XML.",
-  "frmGestionClientes.XmlImportado": "Se cargaron {0} clientes del XML en la grilla. No se modificó la base de datos."
+  "frmGestionClientes.XmlImportado": "Se cargaron {0} clientes del XML en la grilla. No se modificó la base de datos.",
+  "frmGestionClientes.XmlLimpiarRutas": "Limpiar rutas"
 }
