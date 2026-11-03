@@ -9,6 +9,22 @@ namespace BLL
     {
         private readonly ProductoCambioDAL _productoCambioDAL = new ProductoCambioDAL();
 
+        // La restauracion afecta tambien el stock historico.
+        // El formulario debe pedir confirmacion antes de invocar este metodo.
+        public void RestaurarVersion(long idCambio)
+        {
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            if (idCambio <= 0)
+                throw new ArgumentException("Debe seleccionar una version valida.");
+
+            var usuario = SM.Instancia.UsuarioActual;
+            if (usuario == null || usuario.IdUsuario <= 0)
+                throw new InvalidOperationException("No hay una sesion activa.");
+
+            _productoCambioDAL.RestaurarVersion(
+                idCambio, usuario.IdUsuario, usuario.NombreUsuario);
+        }
+
         public List<ProductoCambioBE> ConsultarCambios(
             int? codigoProducto = null, string nombre = "",
             DateTime? fechaDesde = null, DateTime? fechaHasta = null,
