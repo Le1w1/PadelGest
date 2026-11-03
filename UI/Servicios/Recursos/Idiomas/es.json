@@ -622,7 +622,7 @@
   "frmAuditarCambios.ColFecha": "Fecha",
   "frmAuditarCambios.ColNombre": "Nombre",
   "frmAuditarCambios.ColCategoria": "Categoría",
-  "frmAuditarCambios.ColPrecio": "Precio",
+  "frmAuditarCambios.ColPrecio": "Precio unitario",
   "frmAuditarCambios.ColStock": "Existencia",
   "frmAuditarCambios.ColMinimo": "Mínimo",
   "frmAuditarCambios.ColActivo": "Estado",
