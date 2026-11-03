@@ -8,6 +8,9 @@ namespace BE
         public long IdCambio { get; set; }
         public int CodigoProducto { get; set; }
         public DateTime FechaHora { get; set; }
+        // Propiedades de solo lectura para mostrar fecha y hora en columnas separadas.
+        public string Fecha => FechaHora.ToString("dd/MM/yyyy");
+        public string Hora => FechaHora.ToString("HH:mm:ss");
         public string Nombre { get; set; } = string.Empty;
         public string Categoria { get; set; } = string.Empty;
         public decimal PrecioUnitario { get; set; }
