@@ -41,6 +41,7 @@ namespace UI
             generarCarritoToolStripMenuItem = new ToolStripMenuItem();
             mnuMaestros = new ToolStripMenuItem();
             gestionarProductosToolStripMenuItem = new ToolStripMenuItem();
+            auditarCambiosToolStripMenuItem = new ToolStripMenuItem();
             gestionarClientesToolStripMenuItem = new ToolStripMenuItem();
             mnuAdministrador = new ToolStripMenuItem();
             usuariosToolStripMenuItem = new ToolStripMenuItem();
@@ -162,7 +163,7 @@ namespace UI
             // mnuMaestros
             // 
             mnuMaestros.BackColor = Color.FromArgb(214, 246, 36);
-            mnuMaestros.DropDownItems.AddRange(new ToolStripItem[] { gestionarProductosToolStripMenuItem, gestionarClientesToolStripMenuItem });
+            mnuMaestros.DropDownItems.AddRange(new ToolStripItem[] { gestionarProductosToolStripMenuItem, auditarCambiosToolStripMenuItem, gestionarClientesToolStripMenuItem });
             mnuMaestros.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             mnuMaestros.ForeColor = Color.Black;
             mnuMaestros.Name = "mnuMaestros";
@@ -179,6 +180,16 @@ namespace UI
             gestionarProductosToolStripMenuItem.Text = "Gestionar Productos";
             gestionarProductosToolStripMenuItem.Click += gestionarProductosToolStripMenuItem_Click;
             // 
+            // auditarCambiosToolStripMenuItem
+            //
+            auditarCambiosToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
+            auditarCambiosToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            auditarCambiosToolStripMenuItem.ForeColor = Color.Black;
+            auditarCambiosToolStripMenuItem.Name = "auditarCambiosToolStripMenuItem";
+            auditarCambiosToolStripMenuItem.Size = new Size(224, 22);
+            auditarCambiosToolStripMenuItem.Text = "Bitácora de Cambios";
+            auditarCambiosToolStripMenuItem.Click += auditarCambiosToolStripMenuItem_Click;
+            //
             // gestionarClientesToolStripMenuItem
             // 
             gestionarClientesToolStripMenuItem.BackColor = Color.FromArgb(214, 246, 36);
@@ -390,6 +401,7 @@ namespace UI
         private ToolStripMenuItem vendedorBuffetToolStripMenuItem;
         private ToolStripMenuItem generarCarritoToolStripMenuItem;
         private ToolStripMenuItem gestionarProductosToolStripMenuItem;
+        private ToolStripMenuItem auditarCambiosToolStripMenuItem;
         private ToolStripMenuItem gestionarClientesToolStripMenuItem;
         private ToolStripMenuItem mnuMaestros;
         private Panel panel1;
