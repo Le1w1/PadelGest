@@ -639,5 +639,21 @@
   "frmAuditarCambios.Restaurar": "Activate",
   "frmAuditarCambios.ConfirmarRestauracion": "Activate the historical record for “{0}” dated {1:dd/MM/yyyy HH:mm:ss}?\n\nSaved price: {2:C2}\nSaved stock: {3}\nProduct status: {4}\n\nWARNING: activating replaces current product information and stock with historical values. History will be preserved.",
   "frmAuditarCambios.RestauracionCorrecta": "Historical record activated. A new current history entry has been created.",
-  "frmAuditarCambios.ColHora": "Time"
+  "frmAuditarCambios.ColHora": "Time",
+  "frmGestionClientes.XmlTitulo": "XML SERIALIZATION / DESERIALIZATION",
+  "frmGestionClientes.XmlRutaSalida": "Output XML file:",
+  "frmGestionClientes.XmlRutaEntrada": "Input XML file:",
+  "frmGestionClientes.XmlExaminar": "Browse...",
+  "frmGestionClientes.XmlSerializar": "Serialize",
+  "frmGestionClientes.XmlDeserializar": "Deserialize",
+  "frmGestionClientes.XmlAyudaNuevo": "Clear the entered values. If an XML was loaded, return to the customer master list.",
+  "frmGestionClientes.XmlAyudaActualizar": "Refresh the grid by reading customers again from SQL Server.",
+  "frmGestionClientes.XmlAdvertencia": "XML files contain personal data in plain text. Store them in a secure location.",
+  "frmGestionClientes.XmlSoloGrilla": "Temporary XML preview: no customer was saved to SQL Server. Click Refresh to return.",
+  "frmGestionClientes.XmlElegirDestino": "Choose XML destination and filename",
+  "frmGestionClientes.XmlElegirOrigen": "Choose customer XML file",
+  "frmGestionClientes.XmlSinDestino": "Choose a destination for the XML file first.",
+  "frmGestionClientes.XmlSinOrigen": "Select an XML file first.",
+  "frmGestionClientes.XmlExportado": "Serialized {0} customers from the grid into the XML file.",
+  "frmGestionClientes.XmlImportado": "Loaded {0} customers from XML into the grid. The database was not changed."
 }
