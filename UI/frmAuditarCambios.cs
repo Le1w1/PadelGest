@@ -92,6 +92,20 @@ namespace UI
 
                 dgvCambios.DataSource = null;
                 dgvCambios.DataSource = cambios;
+
+                // Reafirmar la configuracion visual despues de enlazar los datos.
+                // Evita que una configuracion heredada deje columnas o encabezados ocultos.
+                dgvCambios.ColumnHeadersVisible = true;
+                dgvCambios.RowHeadersVisible = false;
+                foreach (DataGridViewColumn columna in dgvCambios.Columns)
+                {
+                    columna.Visible = true;
+                    columna.HeaderCell.Style.ForeColor = Color.White;
+                    columna.DefaultCellStyle.ForeColor = Color.Black;
+                    columna.DefaultCellStyle.SelectionForeColor = Color.Black;
+                }
+
+                dgvCambios.Refresh();
                 dgvCambios.ClearSelection();
                 btnRestaurar.Enabled = false;
                 ActualizarCantidad(cambios.Count);
