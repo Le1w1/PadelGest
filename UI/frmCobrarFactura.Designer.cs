@@ -38,15 +38,15 @@ namespace UI
             gbTarjeta.SuspendLayout();
             SuspendLayout();
 
-            Color azul = Color.FromArgb(14, 43, 92);
-            Color panel = Color.FromArgb(24, 70, 138);
-            Color acento = Color.FromArgb(214, 246, 36);
+
+
+
 
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Location = new Point(24, 14);
             lblTitulo.Size = new Size(680, 44);
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitulo.ForeColor = acento;
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
             lblTitulo.Text = "COBRAR FACTURA";
 
             gbResumen.Name = "gbResumen";
@@ -54,7 +54,7 @@ namespace UI
             gbResumen.Size = new Size(680, 142);
             gbResumen.Text = "Resumen de la factura";
             gbResumen.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            gbResumen.BackColor = panel;
+            gbResumen.BackColor = Color.FromArgb(24, 70, 138);
             gbResumen.ForeColor = Color.White;
             gbResumen.Controls.AddRange(new Control[] {
                 lblClienteTitulo, lblClienteValor,
@@ -85,7 +85,7 @@ namespace UI
             lblTotalValor.Size = new Size(470, 42);
             lblTotalValor.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
             lblTotalValor.Text = "$ 0,00";
-            lblTotalValor.ForeColor = acento;
+            lblTotalValor.ForeColor = Color.FromArgb(214, 246, 36);
             lblTotalValor.TextAlign = ContentAlignment.MiddleRight;
 
             gbTarjeta.Name = "gbTarjeta";
@@ -93,7 +93,7 @@ namespace UI
             gbTarjeta.Size = new Size(680, 272);
             gbTarjeta.Text = "Pago con tarjeta (simulado)";
             gbTarjeta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            gbTarjeta.BackColor = panel;
+            gbTarjeta.BackColor = Color.FromArgb(24, 70, 138);
             gbTarjeta.ForeColor = Color.White;
             gbTarjeta.Controls.AddRange(new Control[] {
                 lblBanco, txtBanco, lblTarjeta, txtNumeroTarjeta,
@@ -160,7 +160,7 @@ namespace UI
             lblMensaje.Location = new Point(24, 510);
             lblMensaje.Size = new Size(680, 42);
             lblMensaje.Text = "";
-            lblMensaje.ForeColor = acento;
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
 
             btnVolver.Name = "btnVolver";
             btnVolver.Location = new Point(24, 565);
@@ -168,7 +168,7 @@ namespace UI
             btnVolver.Text = "Volver";
             btnVolver.FlatStyle = FlatStyle.Flat;
             btnVolver.FlatAppearance.BorderColor = Color.FromArgb(101, 141, 199);
-            btnVolver.BackColor = panel;
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
             btnVolver.ForeColor = Color.White;
             btnVolver.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnVolver.Click += btnVolver_Click;
@@ -179,12 +179,12 @@ namespace UI
             btnConfirmar.Text = "Confirmar cobro";
             btnConfirmar.FlatStyle = FlatStyle.Flat;
             btnConfirmar.FlatAppearance.BorderSize = 0;
-            btnConfirmar.BackColor = acento;
+            btnConfirmar.BackColor = Color.FromArgb(214, 246, 36);
             btnConfirmar.ForeColor = Color.Black;
             btnConfirmar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnConfirmar.Click += btnConfirmar_Click;
 
-            BackColor = azul;
+            BackColor = Color.FromArgb(14, 43, 92);
             ForeColor = Color.White;
             Font = new Font("Segoe UI", 9.5F);
             ClientSize = new Size(730, 625);
