@@ -17,8 +17,11 @@ namespace BLL
             _clienteDAL = new ClienteDAL();
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
             _bitacoraEventoBLL = new BitacoraEventoBLL();
+        }
 
-            // Convierte los telefonos anteriores si existen y actualiza los digitos verificadores.
+        // Migra telefonos anteriores cuando una operacion autorizada trabaja con clientes.
+        private void MigrarTelefonosSiEsNecesario()
+        {
             int cantidadMigrada = _clienteDAL.MigrarTelefonosExistentes();
             if (cantidadMigrada > 0)
                 _digitoVerificadorBLL.RecalcularDV("Cliente");
@@ -35,6 +38,7 @@ namespace BLL
                 !SM.Instancia.TienePermiso("BUF_VENDER"))
                 SM.Instancia.RequierePermiso("CLI_CONSULTAR");
 
+            MigrarTelefonosSiEsNecesario();
             dni = (dni ?? string.Empty).Trim();
 
             if (string.IsNullOrWhiteSpace(dni))
@@ -59,6 +63,7 @@ namespace BLL
                 !SM.Instancia.TienePermiso("BUF_VENDER"))
                 SM.Instancia.RequierePermiso("CLI_REGISTRAR");
 
+            MigrarTelefonosSiEsNecesario();
             Usuario usuarioActual = SM.Instancia.UsuarioActual;
             if (usuarioActual == null)
             {
@@ -129,12 +134,14 @@ namespace BLL
         public List<ClienteBE> ListarTodos()
         {
             SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            MigrarTelefonosSiEsNecesario();
             return _clienteDAL.ListarTodos();
         }
 
         public void ModificarCliente(string dni, string nombre, string apellido, string telefono, string correo)
         {
             SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            MigrarTelefonosSiEsNecesario();
             dni = (dni ?? "").Trim();
             nombre = (nombre ?? "").Trim();
             apellido = (apellido ?? "").Trim();
