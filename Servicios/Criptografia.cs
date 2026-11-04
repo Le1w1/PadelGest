@@ -6,6 +6,7 @@ namespace Servicios
     // Encriptacion reversible sencilla para el telefono de los clientes.
     public static class Criptografia
     {
+        // No modificar esta clave mientras existan telefonos encriptados en la base.
         private const string CLAVE = "PadelGest-AES-Telefono-2026-Entrega";
         private const string PREFIJO = "ENC1:";
         private const int TAMANO_NONCE = 12;
