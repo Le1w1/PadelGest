@@ -35,9 +35,9 @@ namespace UI
             btnDeserializar = new Button();
             btnLimpiarRutas = new Button();
 
-            Color fondo = Color.FromArgb(14, 43, 92);
-            Color panel = Color.FromArgb(24, 70, 138);
-            Color lima = Color.FromArgb(214, 246, 36);
+
+
+
             grilla = new DataGridView();
             dni = new TextBox(); nombre = new TextBox(); apellido = new TextBox();
             telefono = new TextBox(); correo = new TextBox();
@@ -55,11 +55,11 @@ namespace UI
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            BackColor = fondo;
+            BackColor = Color.FromArgb(14, 43, 92);
             ForeColor = Color.White;
             Font = new Font("Segoe UI", 10F);
             lblTitulo.Text = "GESTIÓN DE CLIENTES";
-            lblTitulo.ForeColor = lima;
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
             lblTitulo.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
             lblTitulo.Location = new Point(25, 14);
             lblTitulo.Size = new Size(800, 45);
@@ -67,7 +67,7 @@ namespace UI
             gbDatos.Text = "Datos del cliente";
             gbDatos.Location = new Point(25, 65);
             gbDatos.Size = new Size(1115, 135);
-            gbDatos.BackColor = panel;
+            gbDatos.BackColor = Color.FromArgb(24, 70, 138);
             gbDatos.ForeColor = Color.White;
             gbDatos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             Controls.Add(gbDatos);
@@ -130,7 +130,7 @@ namespace UI
             lblListado.Text = "CLIENTES REGISTRADOS";
             lblListado.Location = new Point(25, 214);
             lblListado.Size = new Size(500, 28);
-            lblListado.ForeColor = lima;
+            lblListado.ForeColor = Color.FromArgb(214, 246, 36);
             lblListado.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             Controls.Add(lblListado);
             grilla.Location = new Point(25, 246);
@@ -148,12 +148,12 @@ namespace UI
             grilla.BackgroundColor = Color.White;
             grilla.EnableHeadersVisualStyles = false;
             grilla.ColumnHeadersHeight = 34;
-            grilla.ColumnHeadersDefaultCellStyle.BackColor = panel;
+            grilla.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 70, 138);
             grilla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             grilla.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             grilla.DefaultCellStyle.BackColor = Color.White;
             grilla.DefaultCellStyle.ForeColor = Color.Black;
-            grilla.DefaultCellStyle.SelectionBackColor = lima;
+            grilla.DefaultCellStyle.SelectionBackColor = Color.FromArgb(214, 246, 36);
             grilla.DefaultCellStyle.SelectionForeColor = Color.Black;
             grilla.RowsDefaultCellStyle.ForeColor = Color.Black;
             grilla.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
@@ -189,7 +189,7 @@ namespace UI
             btnNuevo.Name = "btnNuevo";
             btnNuevo.Location = new Point(25, 580);
             btnNuevo.Size = new Size(165, 45);
-            btnNuevo.BackColor = panel;
+            btnNuevo.BackColor = Color.FromArgb(24, 70, 138);
             btnNuevo.ForeColor = Color.White;
             btnNuevo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnNuevo.FlatStyle = FlatStyle.Flat;
@@ -199,7 +199,7 @@ namespace UI
             btnRegistrar.Name = "btnRegistrar";
             btnRegistrar.Location = new Point(210, 580);
             btnRegistrar.Size = new Size(165, 45);
-            btnRegistrar.BackColor = lima;
+            btnRegistrar.BackColor = Color.FromArgb(214, 246, 36);
             btnRegistrar.ForeColor = Color.Black;
             btnRegistrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnRegistrar.FlatStyle = FlatStyle.Flat;
@@ -209,7 +209,7 @@ namespace UI
             btnModificar.Name = "btnModificar";
             btnModificar.Location = new Point(395, 580);
             btnModificar.Size = new Size(165, 45);
-            btnModificar.BackColor = panel;
+            btnModificar.BackColor = Color.FromArgb(24, 70, 138);
             btnModificar.ForeColor = Color.White;
             btnModificar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificar.FlatStyle = FlatStyle.Flat;
@@ -219,7 +219,7 @@ namespace UI
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Location = new Point(580, 580);
             btnEliminar.Size = new Size(165, 45);
-            btnEliminar.BackColor = panel;
+            btnEliminar.BackColor = Color.FromArgb(24, 70, 138);
             btnEliminar.ForeColor = Color.White;
             btnEliminar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnEliminar.FlatStyle = FlatStyle.Flat;
@@ -229,7 +229,7 @@ namespace UI
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Location = new Point(765, 580);
             btnActualizar.Size = new Size(165, 45);
-            btnActualizar.BackColor = panel;
+            btnActualizar.BackColor = Color.FromArgb(24, 70, 138);
             btnActualizar.ForeColor = Color.White;
             btnActualizar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnActualizar.FlatStyle = FlatStyle.Flat;
@@ -239,7 +239,7 @@ namespace UI
             btnVolver.Name = "btnVolver";
             btnVolver.Location = new Point(950, 580);
             btnVolver.Size = new Size(165, 45);
-            btnVolver.BackColor = lima;
+            btnVolver.BackColor = Color.FromArgb(214, 246, 36);
             btnVolver.ForeColor = Color.Black;
             btnVolver.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnVolver.FlatStyle = FlatStyle.Flat;
@@ -250,7 +250,7 @@ namespace UI
             gbXml.Text = "Serialización XML de clientes";
             gbXml.Location = new Point(25, 640);
             gbXml.Size = new Size(1115, 194);
-            gbXml.BackColor = panel;
+            gbXml.BackColor = Color.FromArgb(24, 70, 138);
             gbXml.ForeColor = Color.White;
             gbXml.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 
@@ -273,7 +273,7 @@ namespace UI
             btnElegirExportar.Text = "Examinar...";
             btnElegirExportar.Location = new Point(860, 30);
             btnElegirExportar.Size = new Size(115, 32);
-            btnElegirExportar.BackColor = lima;
+            btnElegirExportar.BackColor = Color.FromArgb(214, 246, 36);
             btnElegirExportar.ForeColor = Color.Black;
             btnElegirExportar.FlatStyle = FlatStyle.Flat;
             btnElegirExportar.FlatAppearance.BorderSize = 0;
@@ -283,7 +283,7 @@ namespace UI
             btnSerializar.Text = "Serializar";
             btnSerializar.Location = new Point(980, 30);
             btnSerializar.Size = new Size(120, 32);
-            btnSerializar.BackColor = lima;
+            btnSerializar.BackColor = Color.FromArgb(214, 246, 36);
             btnSerializar.ForeColor = Color.Black;
             btnSerializar.FlatStyle = FlatStyle.Flat;
             btnSerializar.FlatAppearance.BorderSize = 0;
@@ -308,7 +308,7 @@ namespace UI
             btnElegirImportar.Text = "Examinar...";
             btnElegirImportar.Location = new Point(860, 84);
             btnElegirImportar.Size = new Size(115, 32);
-            btnElegirImportar.BackColor = lima;
+            btnElegirImportar.BackColor = Color.FromArgb(214, 246, 36);
             btnElegirImportar.ForeColor = Color.Black;
             btnElegirImportar.FlatStyle = FlatStyle.Flat;
             btnElegirImportar.FlatAppearance.BorderSize = 0;
@@ -318,7 +318,7 @@ namespace UI
             btnDeserializar.Text = "Deserializar";
             btnDeserializar.Location = new Point(980, 84);
             btnDeserializar.Size = new Size(120, 32);
-            btnDeserializar.BackColor = lima;
+            btnDeserializar.BackColor = Color.FromArgb(214, 246, 36);
             btnDeserializar.ForeColor = Color.Black;
             btnDeserializar.FlatStyle = FlatStyle.Flat;
             btnDeserializar.FlatAppearance.BorderSize = 0;
@@ -328,7 +328,7 @@ namespace UI
             btnLimpiarRutas.Text = "Limpiar rutas";
             btnLimpiarRutas.Location = new Point(860, 137);
             btnLimpiarRutas.Size = new Size(240, 37);
-            btnLimpiarRutas.BackColor = panel;
+            btnLimpiarRutas.BackColor = Color.FromArgb(24, 70, 138);
             btnLimpiarRutas.ForeColor = Color.White;
             btnLimpiarRutas.FlatStyle = FlatStyle.Flat;
             btnLimpiarRutas.FlatAppearance.BorderSize = 0;
