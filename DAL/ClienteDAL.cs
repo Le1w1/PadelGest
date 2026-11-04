@@ -178,7 +178,7 @@ namespace DAL
             comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = cliente.DNI;
             comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50).Value = cliente.Nombre;
             comando.Parameters.Add("@Apellido", SqlDbType.NVarChar, 50).Value = cliente.Apellido;
-            comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 30).Value = cliente.Telefono;
+            comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value = Criptografia.Encriptar(cliente.Telefono);
             comando.Parameters.Add("@CorreoElectronico", SqlDbType.NVarChar, 150).Value = cliente.CorreoElectronico;
         }
     }
