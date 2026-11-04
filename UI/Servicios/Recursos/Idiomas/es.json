@@ -605,7 +605,7 @@
   "frmFacturaRegistrada.Subtotal": "Subtotal",
   "frmGenerarCarrito.ErrorMostrarComprobante": "La factura está registrada y pagada, pero no se pudo abrir el comprobante final: {0}",
   "Pdf.ErrorAbrirArchivo": "No se pudo abrir el PDF. El archivo ya fue guardado correctamente.",
-  "frmAuditarCambios.Menu": "Bitácora de Cambios",
+  "frmAuditarCambios.Menu": "Productos - C",
   "frmAuditarCambios.Title": "PadelGest - Bitácora de Cambios",
   "frmAuditarCambios.Titulo": "BITÁCORA DE CAMBIOS - PRODUCTOS",
   "frmAuditarCambios.Codigo": "Código:",
