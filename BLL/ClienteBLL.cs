@@ -11,12 +11,23 @@ namespace BLL
         private readonly ClienteDAL _clienteDAL;
         private readonly DigitoVerificadorBLL _digitoVerificadorBLL;
         private readonly BitacoraEventoBLL _bitacoraEventoBLL;
+        private static bool _telefonosMigrados;
 
         public ClienteBLL()
         {
             _clienteDAL = new ClienteDAL();
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
             _bitacoraEventoBLL = new BitacoraEventoBLL();
+
+            // La primera vez convierte los telefonos existentes y actualiza sus digitos verificadores.
+            if (!_telefonosMigrados)
+            {
+                int cantidadMigrada = _clienteDAL.MigrarTelefonosExistentes();
+                if (cantidadMigrada > 0)
+                    _digitoVerificadorBLL.RecalcularDV("Cliente");
+
+                _telefonosMigrados = true;
+            }
         }
 
         private static string T (string clave) => Traductor.Instancia.Traducir(clave);
