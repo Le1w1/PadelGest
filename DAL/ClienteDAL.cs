@@ -25,7 +25,7 @@ namespace DAL
                 DNI = reader["DNI"].ToString() ?? string.Empty,
                 Nombre = reader["Nombre"].ToString() ?? string.Empty,
                 Apellido = reader["Apellido"].ToString() ?? string.Empty,
-                Telefono = Criptografia.Desencriptar(reader["Telefono"].ToString() ?? string.Empty),
+                Telefono = CriptografiaReversible.Desencriptar(reader["Telefono"].ToString() ?? string.Empty),
                 CorreoElectronico = reader["CorreoElectronico"].ToString() ?? string.Empty
             };
         }
@@ -46,7 +46,7 @@ namespace DAL
                     while (reader.Read())
                     {
                         string telefono = reader["Telefono"].ToString() ?? string.Empty;
-                        if (!Criptografia.EstaEncriptado(telefono))
+                        if (!CriptografiaReversible.EstaEncriptado(telefono))
                             telefonos.Add((reader["DNI"].ToString() ?? string.Empty, telefono));
                     }
                 }
@@ -56,7 +56,7 @@ namespace DAL
                     using SqlCommand comando = new SqlCommand(
                         "UPDATE Cliente SET Telefono = @Telefono WHERE DNI = @DNI", conexion);
                     comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value =
-                        Criptografia.Encriptar(item.Telefono);
+                        CriptografiaReversible.Encriptar(item.Telefono);
                     comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = item.DNI;
                     comando.ExecuteNonQuery();
                 }
@@ -103,7 +103,7 @@ namespace DAL
                     comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = cliente.DNI;
                     comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50).Value = cliente.Nombre;
                     comando.Parameters.Add("@Apellido", SqlDbType.NVarChar, 50).Value = cliente.Apellido;
-                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value = Criptografia.Encriptar(cliente.Telefono);
+                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value = CriptografiaReversible.Encriptar(cliente.Telefono);
                     comando.Parameters.Add("@CorreoElectronico", SqlDbType.NVarChar, 150).Value = cliente.CorreoElectronico;
 
                     conexion.Open();
@@ -178,7 +178,7 @@ namespace DAL
             comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = cliente.DNI;
             comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50).Value = cliente.Nombre;
             comando.Parameters.Add("@Apellido", SqlDbType.NVarChar, 50).Value = cliente.Apellido;
-            comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value = Criptografia.Encriptar(cliente.Telefono);
+            comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value = CriptografiaReversible.Encriptar(cliente.Telefono);
             comando.Parameters.Add("@CorreoElectronico", SqlDbType.NVarChar, 150).Value = cliente.CorreoElectronico;
         }
     }

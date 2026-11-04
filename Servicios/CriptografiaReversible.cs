@@ -3,8 +3,8 @@ using System.Text;
 
 namespace Servicios
 {
-    // Encriptacion reversible sencilla para el telefono de los clientes.
-    public static class Criptografia
+    // Encriptacion RESEVERSIBLE sencilla para el telefono de los clientes.
+    public static class CriptografiaReversible
     {
         // No modificar esta clave mientras existan telefonos encriptados en la base.
         private const string CLAVE = "PadelGest-AES-Telefono-2026-Entrega";
