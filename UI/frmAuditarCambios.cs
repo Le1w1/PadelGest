@@ -60,6 +60,7 @@ namespace UI
             CambiarTitulo("colNombre", "frmAuditarCambios.ColNombre");
             CambiarTitulo("colPrecio", "frmAuditarCambios.ColPrecio");
             CambiarTitulo("colStock", "frmAuditarCambios.ColStock");
+            CambiarTitulo("colEstado", "frmAuditarCambios.ColEstadoProducto");
             CambiarTitulo("colVigente", "frmAuditarCambios.ColVigente");
 
             if (dgvCambios.DataSource is List<ProductoCambioBE> datos)
@@ -173,9 +174,17 @@ namespace UI
             if (e.RowIndex < 0 || e.Value is not bool valor)
                 return;
 
-            if (dgvCambios.Columns[e.ColumnIndex].Name == "colVigente")
+            string columna = dgvCambios.Columns[e.ColumnIndex].Name;
+            if (columna == "colVigente")
             {
                 e.Value = valor ? "1" : "0";
+                e.FormattingApplied = true;
+            }
+            else if (columna == "colEstado")
+            {
+                e.Value = T(valor
+                    ? "frmAuditarCambios.Disponible"
+                    : "frmAuditarCambios.Deshabilitado");
                 e.FormattingApplied = true;
             }
         }
