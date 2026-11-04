@@ -660,5 +660,8 @@
   "frmGestionClientes.XmlConfirmarSobrescritura": "An XML file already exists at the selected location. Do you want to overwrite it?",
   "frmAuditarEventos.Filtro.Modulo.Cliente": "Customer",
   "frmAuditarEventos.Filtro.Accion.Serializar clientes": "Serialize customers",
-  "frmAuditarEventos.Filtro.Accion.Deserializar clientes": "Deserialize customers"
+  "frmAuditarEventos.Filtro.Accion.Deserializar clientes": "Deserialize customers",
+  "frmAuditarCambios.ColEstadoProducto": "Product status",
+  "frmAuditarCambios.Disponible": "Available",
+  "frmAuditarCambios.Deshabilitado": "Disabled"
 }
