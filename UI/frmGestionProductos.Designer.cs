@@ -53,14 +53,14 @@ namespace UI
             gbDatos.SuspendLayout();
             SuspendLayout();
 
-            Color fondo = Color.FromArgb(14, 43, 92);
-            Color panel = Color.FromArgb(24, 70, 138);
-            Color amarillo = Color.FromArgb(214, 246, 36);
+
+
+
 
             lblTitulo.Location = new Point(25, 14);
             lblTitulo.Size = new Size(960, 45);
             lblTitulo.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
-            lblTitulo.ForeColor = amarillo;
+            lblTitulo.ForeColor = Color.FromArgb(214, 246, 36);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Text = "GESTION DE PRODUCTOS - BUFFET";
 
@@ -88,7 +88,7 @@ namespace UI
             btnActualizar.Size = new Size(190, 36);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Text = "Actualizar catálogo";
-            btnActualizar.BackColor = panel;
+            btnActualizar.BackColor = Color.FromArgb(24, 70, 138);
             btnActualizar.ForeColor = Color.White;
             btnActualizar.FlatStyle = FlatStyle.Flat;
             btnActualizar.Click += btnActualizar_Click;
@@ -96,7 +96,7 @@ namespace UI
             lblCantidad.Location = new Point(985, 77);
             lblCantidad.Size = new Size(155, 27);
             lblCantidad.Name = "lblCantidad";
-            lblCantidad.ForeColor = amarillo;
+            lblCantidad.ForeColor = Color.FromArgb(214, 246, 36);
             lblCantidad.TextAlign = ContentAlignment.MiddleRight;
 
             dgvProductos.Location = new Point(25, 117);
@@ -114,12 +114,12 @@ namespace UI
             dgvProductos.RowHeadersVisible = false;
             dgvProductos.EnableHeadersVisualStyles = false;
             dgvProductos.ColumnHeadersHeight = 32;
-            dgvProductos.ColumnHeadersDefaultCellStyle.BackColor = panel;
+            dgvProductos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 70, 138);
             dgvProductos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgvProductos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             dgvProductos.DefaultCellStyle.BackColor = Color.White;
             dgvProductos.DefaultCellStyle.ForeColor = Color.Black;
-            dgvProductos.DefaultCellStyle.SelectionBackColor = amarillo;
+            dgvProductos.DefaultCellStyle.SelectionBackColor = Color.FromArgb(214, 246, 36);
             dgvProductos.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgvProductos.RowsDefaultCellStyle.ForeColor = Color.Black;
             dgvProductos.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
@@ -161,7 +161,7 @@ namespace UI
             gbDatos.Name = "gbDatos";
             gbDatos.Text = "Datos del producto";
             gbDatos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            gbDatos.BackColor = panel;
+            gbDatos.BackColor = Color.FromArgb(24, 70, 138);
             gbDatos.ForeColor = Color.White;
             gbDatos.Controls.AddRange(new Control[]
             {
@@ -276,25 +276,47 @@ namespace UI
             btnVolver.Text = "Volver";
             btnVolver.Click += btnVolver_Click;
 
-            foreach (Button boton in new[] { btnNuevo, btnCrear, btnModificar, btnEstado, btnReponer, btnVolver })
-            {
-                boton.BackColor = amarillo;
-                boton.ForeColor = Color.Black;
-                boton.FlatStyle = FlatStyle.Flat;
-                boton.FlatAppearance.BorderSize = 0;
-                boton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            }
-            btnVolver.BackColor = panel;
+            btnNuevo.BackColor = Color.FromArgb(214, 246, 36);
+            btnNuevo.ForeColor = Color.Black;
+            btnNuevo.FlatStyle = FlatStyle.Flat;
+            btnNuevo.FlatAppearance.BorderSize = 0;
+            btnNuevo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCrear.BackColor = Color.FromArgb(214, 246, 36);
+            btnCrear.ForeColor = Color.Black;
+            btnCrear.FlatStyle = FlatStyle.Flat;
+            btnCrear.FlatAppearance.BorderSize = 0;
+            btnCrear.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnModificar.BackColor = Color.FromArgb(214, 246, 36);
+            btnModificar.ForeColor = Color.Black;
+            btnModificar.FlatStyle = FlatStyle.Flat;
+            btnModificar.FlatAppearance.BorderSize = 0;
+            btnModificar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnEstado.BackColor = Color.FromArgb(214, 246, 36);
+            btnEstado.ForeColor = Color.Black;
+            btnEstado.FlatStyle = FlatStyle.Flat;
+            btnEstado.FlatAppearance.BorderSize = 0;
+            btnEstado.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnReponer.BackColor = Color.FromArgb(214, 246, 36);
+            btnReponer.ForeColor = Color.Black;
+            btnReponer.FlatStyle = FlatStyle.Flat;
+            btnReponer.FlatAppearance.BorderSize = 0;
+            btnReponer.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnVolver.BackColor = Color.FromArgb(214, 246, 36);
+            btnVolver.ForeColor = Color.Black;
+            btnVolver.FlatStyle = FlatStyle.Flat;
+            btnVolver.FlatAppearance.BorderSize = 0;
+            btnVolver.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnVolver.BackColor = Color.FromArgb(24, 70, 138);
             btnVolver.ForeColor = Color.White;
 
             lblMensaje.Location = new Point(25, 666);
             lblMensaje.Size = new Size(1115, 40);
             lblMensaje.Name = "lblMensaje";
-            lblMensaje.ForeColor = amarillo;
+            lblMensaje.ForeColor = Color.FromArgb(214, 246, 36);
 
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1165, 711);
-            BackColor = fondo;
+            BackColor = Color.FromArgb(14, 43, 92);
             ForeColor = Color.White;
             Font = new Font("Segoe UI", 9.5F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
