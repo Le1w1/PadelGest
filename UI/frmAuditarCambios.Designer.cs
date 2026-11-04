@@ -32,6 +32,7 @@ namespace UI
             colNombre = new DataGridViewTextBoxColumn();
             colPrecio = new DataGridViewTextBoxColumn();
             colStock = new DataGridViewTextBoxColumn();
+            colEstado = new DataGridViewTextBoxColumn();
             colVigente = new DataGridViewTextBoxColumn();
             btnVolver = new Button();
             btnRestaurar = new Button();
@@ -168,7 +169,7 @@ namespace UI
             dgvCambios.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dgvCambios.Columns.AddRange(new DataGridViewColumn[]
             {
-                colCodigo, colFecha, colHora, colNombre, colPrecio, colStock, colVigente
+                colCodigo, colFecha, colHora, colNombre, colPrecio, colStock, colEstado, colVigente
             });
             dgvCambios.CellFormatting += dgvCambios_CellFormatting;
             dgvCambios.SelectionChanged += dgvCambios_SelectionChanged;
@@ -176,17 +177,17 @@ namespace UI
             colCodigo.Name = "colCodigo";
             colCodigo.DataPropertyName = "CodigoProducto";
             colCodigo.HeaderText = "Código de producto";
-            colCodigo.Width = 175;
+            colCodigo.Width = 150;
 
             colFecha.Name = "colFecha";
             colFecha.DataPropertyName = "Fecha";
             colFecha.HeaderText = "Fecha";
-            colFecha.Width = 140;
+            colFecha.Width = 115;
 
             colHora.Name = "colHora";
             colHora.DataPropertyName = "Hora";
             colHora.HeaderText = "Hora";
-            colHora.Width = 130;
+            colHora.Width = 100;
 
             colNombre.Name = "colNombre";
             colNombre.DataPropertyName = "Nombre";
@@ -197,19 +198,24 @@ namespace UI
             colPrecio.Name = "colPrecio";
             colPrecio.DataPropertyName = "PrecioUnitario";
             colPrecio.HeaderText = "Precio unitario";
-            colPrecio.Width = 155;
+            colPrecio.Width = 145;
             colPrecio.DefaultCellStyle.Format = "C2";
             colPrecio.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             colStock.Name = "colStock";
             colStock.DataPropertyName = "StockDisponible";
             colStock.HeaderText = "Existencia";
-            colStock.Width = 155;
+            colStock.Width = 115;
+
+            colEstado.Name = "colEstado";
+            colEstado.DataPropertyName = "ActivoProducto";
+            colEstado.HeaderText = "Estado del producto";
+            colEstado.Width = 155;
 
             colVigente.Name = "colVigente";
             colVigente.DataPropertyName = "Act";
             colVigente.HeaderText = "Activo";
-            colVigente.Width = 115;
+            colVigente.Width = 95;
 
             btnRestaurar.Location = new Point(790, 630);
             btnRestaurar.Size = new Size(205, 42);
@@ -292,6 +298,7 @@ namespace UI
         private DataGridViewTextBoxColumn colNombre;
         private DataGridViewTextBoxColumn colPrecio;
         private DataGridViewTextBoxColumn colStock;
+        private DataGridViewTextBoxColumn colEstado;
         private DataGridViewTextBoxColumn colVigente;
         private Button btnRestaurar;
         private Button btnVolver;
