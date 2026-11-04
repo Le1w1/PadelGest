@@ -187,7 +187,7 @@ namespace UI
             auditarCambiosToolStripMenuItem.ForeColor = Color.Black;
             auditarCambiosToolStripMenuItem.Name = "auditarCambiosToolStripMenuItem";
             auditarCambiosToolStripMenuItem.Size = new Size(224, 22);
-            auditarCambiosToolStripMenuItem.Text = "Bitácora de Cambios";
+            auditarCambiosToolStripMenuItem.Text = "Productos - C";
             auditarCambiosToolStripMenuItem.Click += auditarCambiosToolStripMenuItem_Click;
             //
             // gestionarClientesToolStripMenuItem
