@@ -445,10 +445,10 @@ INSERT [dbo].[Cancha] ([IdCancha], [Nombre], [Estado], [DVH]) VALUES (2, N'Canch
 INSERT [dbo].[Cancha] ([IdCancha], [Nombre], [Estado], [DVH]) VALUES (3, N'Cancha 3', N'Disponible', N'e76a1e12447a651bd0aa24debb03ca1a4df00165df4fa548c51fa6f4fcd9d128')
 SET IDENTITY_INSERT [dbo].[Cancha] OFF
 GO
-INSERT [dbo].[Cliente] ([DNI], [Nombre], [Apellido], [Telefono], [CorreoElectronico], [DVH]) VALUES (N'12345678', N'Leonel', N'Rodriguez', N'ENC1:7wngXssaibedDfK7wW3HvCKIBtt+DJf1S06gggGQvxaFIvWsgrs=', N'leo@gmail.com', N'cda563bf1d2f247fc5008c43194a4dc9a9d7413f1815d2a5989864388e71f439')
+INSERT [dbo].[Cliente] ([DNI], [Nombre], [Apellido], [Telefono], [CorreoElectronico], [DVH]) VALUES (N'12345678', N'Leonel', N'Rodriguez', N'1121756012', N'leo@gmail.com', N'dbf60aae88dca8d85546d266e65fbd12f4f2ede946a58fcd958a80d34b849cb8')
 GO
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cancha', N'91129657cbb5230efd409301669fd05b677f7331542c2192547bd4da1b7bd1bd')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cliente', N'9084b7e60504bf9b1f2987dfdd02ce3e35573690048a11c8641e2bfcfdf755c4')
+INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cliente', N'ab0a4d42abb56c131dd419a11648c339ac8a92e5ee7d505b5a683084c2cec29c')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'DetalleFactura', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Equipamiento', N'1fb47453d7dee2f1e004895302f0abd6dcaa3a456f677af737b2669d1fe365f5')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Factura', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
