@@ -2,6 +2,7 @@ using BE;
 using DAL.Servicios;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Servicios;
 
 namespace DAL
 {
@@ -24,11 +25,45 @@ namespace DAL
                 DNI = reader["DNI"].ToString() ?? string.Empty,
                 Nombre = reader["Nombre"].ToString() ?? string.Empty,
                 Apellido = reader["Apellido"].ToString() ?? string.Empty,
-                Telefono = reader["Telefono"].ToString() ?? string.Empty,
+                Telefono = Criptografia.Desencriptar(reader["Telefono"].ToString() ?? string.Empty),
                 CorreoElectronico = reader["CorreoElectronico"].ToString() ?? string.Empty
             };
         }
 
+
+        // Encripta los telefonos que ya estaban guardados antes de incorporar esta funcionalidad.
+        public int MigrarTelefonosExistentes()
+        {
+            var telefonos = new List<(string DNI, string Telefono)>();
+
+            using (SqlConnection conexion = _conexionDAL.ObtenerConexion())
+            {
+                conexion.Open();
+
+                using (SqlCommand comando = new SqlCommand("SELECT DNI, Telefono FROM Cliente", conexion))
+                using (SqlDataReader reader = comando.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string telefono = reader["Telefono"].ToString() ?? string.Empty;
+                        if (!Criptografia.EstaEncriptado(telefono))
+                            telefonos.Add((reader["DNI"].ToString() ?? string.Empty, telefono));
+                    }
+                }
+
+                foreach (var item in telefonos)
+                {
+                    using SqlCommand comando = new SqlCommand(
+                        "UPDATE Cliente SET Telefono = @Telefono WHERE DNI = @DNI", conexion);
+                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value =
+                        Criptografia.Encriptar(item.Telefono);
+                    comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = item.DNI;
+                    comando.ExecuteNonQuery();
+                }
+            }
+
+            return telefonos.Count;
+        }
 
         /// Verifica si un Cliente existe por su DNI
         public bool ExistePorDNI(string dni)
@@ -68,7 +103,7 @@ namespace DAL
                     comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = cliente.DNI;
                     comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50).Value = cliente.Nombre;
                     comando.Parameters.Add("@Apellido", SqlDbType.NVarChar, 50).Value = cliente.Apellido;
-                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 30).Value = cliente.Telefono;
+                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value = Criptografia.Encriptar(cliente.Telefono);
                     comando.Parameters.Add("@CorreoElectronico", SqlDbType.NVarChar, 150).Value = cliente.CorreoElectronico;
 
                     conexion.Open();
