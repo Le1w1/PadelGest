@@ -658,5 +658,8 @@
   "frmGestionClientes.XmlConfirmarSobrescritura": "Ya existe un archivo XML en la ubicación indicada. ¿Querés reemplazarlo?",
   "frmAuditarEventos.Filtro.Modulo.Cliente": "Cliente",
   "frmAuditarEventos.Filtro.Accion.Serializar clientes": "Serializar clientes",
-  "frmAuditarEventos.Filtro.Accion.Deserializar clientes": "Deserializar clientes"
+  "frmAuditarEventos.Filtro.Accion.Deserializar clientes": "Deserializar clientes",
+  "frmAuditarCambios.ColEstadoProducto": "Estado del producto",
+  "frmAuditarCambios.Disponible": "Disponible",
+  "frmAuditarCambios.Deshabilitado": "Deshabilitado"
 }
