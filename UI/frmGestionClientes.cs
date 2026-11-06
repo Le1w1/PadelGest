@@ -100,6 +100,8 @@ namespace UI
             nombre.Text = c.Nombre;
             apellido.Text = c.Apellido;
             telefono.Text = c.Telefono;
+            // Los demas roles pueden consultar el telefono cifrado, pero no editarlo.
+            telefono.ReadOnly = !SM.Instancia.PuedeDesencriptarTelefono();
             correo.Text = c.CorreoElectronico;
         }
 
@@ -107,6 +109,7 @@ namespace UI
         {
             grilla.ClearSelection();
             dni.ReadOnly = false;
+            telefono.ReadOnly = false; // Se permite ingresar un telefono al registrar un cliente nuevo.
             foreach (TextBox t in new[] { dni, nombre, apellido, telefono, correo }) t.Clear();
             dni.Focus();
         }
