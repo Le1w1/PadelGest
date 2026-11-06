@@ -13,6 +13,7 @@ namespace UI
         public frmAuditarCambios()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             dgvCambios.AutoGenerateColumns = false;
             ActualizarIdioma();
         }
