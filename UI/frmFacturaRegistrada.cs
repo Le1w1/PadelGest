@@ -14,6 +14,7 @@ namespace UI
         public frmFacturaRegistrada(FacturaBuffetBE factura, ClienteBE? cliente)
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
 
             if (factura == null || factura.IdFactura <= 0 || factura.Estado != "Pagada")
                 throw new ArgumentException("La factura debe estar registrada y pagada.", nameof(factura));
