@@ -19,6 +19,7 @@ namespace UI
         public frmMenuPrincipal()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
             // El menu se muestra detras del Login, pero no se puede usar sin autenticar.
