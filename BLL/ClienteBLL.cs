@@ -128,7 +128,8 @@ namespace BLL
 
             _bitacoraEventoBLL.Registrar(usuarioActual.IdUsuario,usuarioActual.NombreUsuario,"Cliente","Registrar cliente","Media","Exitoso",$"Se registró el cliente DNI {clienteRegistrado.DNI}.");
 
-            return clienteRegistrado;
+            // Devolver los datos con la visibilidad del rol de la sesion.
+            return _clienteDAL.BuscarPorDNI(clienteRegistrado.DNI) ?? clienteRegistrado;
         }
 
         public List<ClienteBE> ListarTodos()
@@ -147,9 +148,23 @@ namespace BLL
             apellido = (apellido ?? "").Trim();
             telefono = (telefono ?? "").Trim();
             correo = (correo ?? "").Trim();
+            bool esAdministrador = SM.Instancia.PuedeDesencriptarTelefono();
             if (!EsDNIValido(dni) || !EsNombreOApellidoValido(nombre) ||
-                !EsNombreOApellidoValido(apellido) || !EsTelefonoValido(telefono) || !EsCorreoValido(correo))
+                !EsNombreOApellidoValido(apellido) || (esAdministrador && !EsTelefonoValido(telefono)) ||
+                !EsCorreoValido(correo))
                 throw new Exception("Datos de cliente invalidos.");
+
+            // Un rol no administrador no puede reemplazar el telefono por texto legible
+            // ni alterar el valor cifrado que recibio del sistema.
+            if (!esAdministrador)
+            {
+                ClienteBE? clienteActual = _clienteDAL.BuscarPorDNI(dni);
+                if (clienteActual == null)
+                    throw new Exception("Cliente no encontrado.");
+                if (telefono != clienteActual.Telefono)
+                    throw new UnauthorizedAccessException("Solo el Administrador puede modificar el telefono.");
+            }
+
             if (!_clienteDAL.Modificar(new ClienteBE { DNI = dni, Nombre = nombre, Apellido = apellido,
                 Telefono = telefono, CorreoElectronico = correo }))
                 throw new Exception("Cliente no encontrado.");
