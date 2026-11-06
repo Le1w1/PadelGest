@@ -64,7 +64,7 @@ namespace BLL.Servicios
 
 
         /// Despues de un restore exitoso se reinicia la aplicacion
-        public void EjecutarRestore(string rutaArchivo, string descripcion)
+        public void EjecutarRestore(string rutaArchivo, string descripcion, bool esReparacionIntegridad = false)
         {
             ValidarPermiso();
             ValidarArchivo(rutaArchivo);
@@ -91,6 +91,16 @@ namespace BLL.Servicios
 
                 throw new Exception("No se pudo completar el restore: " + ex.Message, ex);
             }
+
+            // El restore reemplaza la bitacora anterior: registrar en la base ya restaurada.
+            // Usar IdUsuario NULL: el ID anterior puede no existir en la copia restaurada.
+            _bitacoraEventoBLL.Registrar(0, usuarioActual.NombreUsuario,
+                esReparacionIntegridad ? "Integridad" : MODULO,
+                esReparacionIntegridad ? "Reparar integridad mediante backup" : "Restaurar Backup",
+                "Alta", RESULTADO_EXITOSO,
+                esReparacionIntegridad
+                    ? "Se reparo la integridad restaurando un respaldo de la base de datos."
+                    : "Se restauro correctamente la base de datos desde un respaldo.");
         }
 
        
