@@ -29,6 +29,7 @@ namespace UI
         public frmGenerarReserva()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _canchaBLL = new CanchaBLL();
             _tarifaBLL = new TarifaBLL();
             _equipamientoBLL = new EquipamientoBLL();
