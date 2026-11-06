@@ -127,11 +127,10 @@ namespace Servicios
             _rolesUsuario = roles ?? new List<Rol>();
         }
 
-        // Solo el rol Administrador (IdRol=1) puede ver telefonos desencriptados.
+        // El acceso al telefono legible se administra con el permiso simple RBAC.
         public bool PuedeDesencriptarTelefono()
         {
-            return _usuarioActual != null && _rolesUsuario != null &&
-                   _rolesUsuario.Any(rol => rol != null && rol.IdRol == 1);
+            return _usuarioActual != null && TienePermiso("CLI_DESENCRIPTAR_TELEFONO");
         }
 
         /// Pregunta a cada Rol asignado si contiene el codigo solicitado.
