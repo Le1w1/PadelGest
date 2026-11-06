@@ -39,6 +39,7 @@ namespace UI
         public frmGestionarRolesYFamilias()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _familiaBLL = new FamiliaBLL();
             _rolBLL = new RolBLL();
             _permisoSimpleBLL = new PermisoSimpleBLL();
