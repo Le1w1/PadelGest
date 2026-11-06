@@ -15,6 +15,7 @@ namespace UI
         public frmGestionProductos()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             dgvProductos.AutoGenerateColumns = false;
             _productoBLL = new ProductoBLL();
             ActualizarIdioma();
