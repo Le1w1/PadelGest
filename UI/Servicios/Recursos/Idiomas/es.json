@@ -64,7 +64,7 @@
   "frmLogin.TitleSalir": "Salir",
   "frmLogin.TitleCambioClave": "Cambio de contraseña recomendado",
   "frmLogin.MsgCambioClaveRecomendado": "Está utilizando una contraseña inicial. Se recomienda cambiarla por seguridad.\n\n¿Desea cambiarla ahora?",
-  "frmLogin.MsgIntegridadSinPermiso": "El sistema tiene algunas fallas por el momento. Contacte a un administrador para poder repararlas si aun no se ha hecho.",
+  "frmLogin.MsgIntegridadSinPermiso": "En estos momentos el sistema no se encuentra disponible. Por favor, contacte con un administrador.",
   "frmSesion.Title": "PadelGest - Sesión",
   "frmSesion.LblTitulo": "Sesión",
   "frmSesion.LblOpciones": "Opciones de la sesión Actual",
