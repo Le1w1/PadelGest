@@ -24,6 +24,7 @@ namespace UI
         public frmCobrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fechaReserva,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,decimal importeEquipamiento)
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _cobroBLL = new CobroReservaBLL();
             _cliente = cliente;
             _cancha = cancha;
