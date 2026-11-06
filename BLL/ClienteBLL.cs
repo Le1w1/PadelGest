@@ -32,9 +32,10 @@ namespace BLL
         /// Busca un Cliente por DNI luego de validar el dato ingresado.
         public ClienteBE? BuscarPorDNI(string dni)
         {
-            // PN1 consulta con CLI_CONSULTAR; PN2 tambien necesita buscar clientes
-            // durante una venta. No concede permisos de edicion de clientes.
+            // El Maestro usa CLI_CONSULTAR; PN1 y PN2 tambien consultan clientes
+            // durante sus operaciones, sin dar acceso al Maestro de Clientes.
             if (!SM.Instancia.TienePermiso("CLI_CONSULTAR") &&
+                !SM.Instancia.TienePermiso("RES_CREAR") &&
                 !SM.Instancia.TienePermiso("BUF_VENDER"))
                 SM.Instancia.RequierePermiso("CLI_CONSULTAR");
 
@@ -58,8 +59,10 @@ namespace BLL
         /// Registra un nuevo Cliente luego de validar todos los datos ingresados.
         public ClienteBE RegistrarCliente(string dni,string nombre,string apellido,string telefono,string correoElectronico)
         {
-            // Maestro registra por CLI_REGISTRAR; Vendedor puede dar de alta durante la facturacion.
+            // El Maestro usa CLI_REGISTRAR; PN1 y PN2 pueden registrar
+            // clientes nuevos durante una reserva o una venta, respectivamente.
             if (!SM.Instancia.TienePermiso("CLI_REGISTRAR") &&
+                !SM.Instancia.TienePermiso("RES_CREAR") &&
                 !SM.Instancia.TienePermiso("BUF_VENDER"))
                 SM.Instancia.RequierePermiso("CLI_REGISTRAR");
 
