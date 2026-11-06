@@ -23,6 +23,7 @@ namespace UI
         public frmAuditarEventos()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _bitacoraEventoBLL = new BitacoraEventoBLL();
             cmbModulo.SelectedIndexChanged += cmbModulo_SelectedIndexChanged;
 
