@@ -65,6 +65,11 @@ namespace UI
             errorProvider.SetError(txtDNI, string.Empty);
             lblMensaje.Text = string.Empty;
             LimpiarClienteEncontrado();
+
+            // PN1 y PN2: buscar automaticamente al completar los ocho digitos.
+            // El boton Buscar sigue disponible para DNI de siete digitos.
+            if (txtDNI.Text.Length == 8 && txtDNI.Text.All(char.IsDigit))
+                btnBuscar_Click(sender, e);
         }
 
 
@@ -98,6 +103,11 @@ namespace UI
                     btnRegistrarCliente.Visible = SM.Instancia.TienePermiso("CLI_REGISTRAR") ||
                                                 SM.Instancia.TienePermiso("BUF_VENDER");
                     btnRegistrarCliente.Enabled = btnRegistrarCliente.Visible;
+
+                    // Si el cliente no existe, abrir inmediatamente el registro,
+                    // respetando los permisos del usuario que esta operando.
+                    if (btnRegistrarCliente.Enabled)
+                        btnRegistrarCliente_Click(sender, e);
                     return;
                 }
 
@@ -145,7 +155,9 @@ namespace UI
             using frmRegistrarCliente formRegistrar = new frmRegistrarCliente(dni);
             if (formRegistrar.ShowDialog(this) == DialogResult.OK && formRegistrar.ClienteRegistrado != null)
             {
-                _clienteEncontrado = formRegistrar.ClienteRegistrado;
+                // Volver a consultar para aplicar la visibilidad del telefono segun el rol.
+                _clienteEncontrado = _clienteBLL.BuscarPorDNI(formRegistrar.ClienteRegistrado.DNI);
+                if (_clienteEncontrado == null) return;
                 MostrarCliente(_clienteEncontrado);
                 btnRegistrarCliente.Visible = false;
                 btnRegistrarCliente.Enabled = false;
