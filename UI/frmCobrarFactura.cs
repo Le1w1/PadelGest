@@ -16,6 +16,7 @@ namespace UI
         public frmCobrarFactura(FacturaBuffetBE factura)
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _factura = factura;
             _cobroBLL = new CobroFacturaBLL();
             ActualizarIdioma();
