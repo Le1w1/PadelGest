@@ -127,6 +127,13 @@ namespace Servicios
             _rolesUsuario = roles ?? new List<Rol>();
         }
 
+        // Solo el rol Administrador (IdRol=1) puede ver telefonos desencriptados.
+        public bool PuedeDesencriptarTelefono()
+        {
+            return _usuarioActual != null && _rolesUsuario != null &&
+                   _rolesUsuario.Any(rol => rol != null && rol.IdRol == 1);
+        }
+
         /// Pregunta a cada Rol asignado si contiene el codigo solicitado.
         /// El recorrido recursivo lo hace cada Componente por si mismo(TienePermiso esta declarado abstract en Componente).
         public bool TienePermiso(string codigo)
