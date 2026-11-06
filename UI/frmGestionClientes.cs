@@ -145,9 +145,7 @@ namespace UI
                 AddExtension = true,
                 OverwritePrompt = true,
                 InitialDirectory = @"C:\",
-                FileName = string.IsNullOrWhiteSpace(txtRutaExportar.Text)
-                    ? GenerarNombreXml()
-                    : Path.GetFileName(txtRutaExportar.Text)
+                FileName = GenerarNombreXml()
             };
             if (dialogo.ShowDialog(this) == DialogResult.OK)
                 txtRutaExportar.Text = dialogo.FileName;
