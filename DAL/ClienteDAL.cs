@@ -25,11 +25,22 @@ namespace DAL
                 DNI = reader["DNI"].ToString() ?? string.Empty,
                 Nombre = reader["Nombre"].ToString() ?? string.Empty,
                 Apellido = reader["Apellido"].ToString() ?? string.Empty,
-                Telefono = CriptografiaReversible.Desencriptar(reader["Telefono"].ToString() ?? string.Empty),
+                Telefono = TelefonoVisible(reader["Telefono"].ToString() ?? string.Empty),
                 CorreoElectronico = reader["CorreoElectronico"].ToString() ?? string.Empty
             };
         }
 
+
+        // El DAL nunca entrega un telefono legible a roles distintos del Administrador.
+        private static string TelefonoVisible(string telefonoGuardado)
+        {
+            if (SM.Instancia.PuedeDesencriptarTelefono())
+                return CriptografiaReversible.Desencriptar(telefonoGuardado);
+
+            return CriptografiaReversible.EstaEncriptado(telefonoGuardado)
+                ? telefonoGuardado
+                : CriptografiaReversible.Encriptar(telefonoGuardado);
+        }
 
         // Encripta los telefonos que ya estaban guardados antes de incorporar esta funcionalidad.
         public int MigrarTelefonosExistentes()
