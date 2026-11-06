@@ -123,6 +123,15 @@ namespace UI
             Limpiar();
         }
 
+        // Incluye el usuario que serializa y la fecha/hora de la operacion.
+        private static string GenerarNombreXml()
+        {
+            string usuario = SM.Instancia.UsuarioActual?.NombreUsuario ?? "Usuario";
+            string nombreSeguro = new string(usuario.Select(caracter =>
+                char.IsLetterOrDigit(caracter) || caracter == '_' || caracter == '-' ? caracter : '_').ToArray());
+            return $"Clientes_{nombreSeguro}_{DateTime.Now:yyyyMMdd_HHmmss}.xml";
+        }
+
         private void SeleccionarDestinoXml()
         {
             using SaveFileDialog dialogo = new SaveFileDialog
@@ -134,7 +143,7 @@ namespace UI
                 OverwritePrompt = true,
                 InitialDirectory = @"C:\",
                 FileName = string.IsNullOrWhiteSpace(txtRutaExportar.Text)
-                    ? "Clientes.xml"
+                    ? GenerarNombreXml()
                     : Path.GetFileName(txtRutaExportar.Text)
             };
             if (dialogo.ShowDialog(this) == DialogResult.OK)
@@ -165,14 +174,17 @@ namespace UI
                 if (string.IsNullOrWhiteSpace(txtRutaExportar.Text))
                     throw new InvalidOperationException(T("frmGestionClientes.XmlSinDestino"));
 
-                // Solo lee los registros visibles de la grilla, nunca la BD.
+                // Serializa todos los registros cargados en la grilla, no solo los visibles.
                 List<ClienteBE> clientes = new List<ClienteBE>();
                 foreach (DataGridViewRow fila in grilla.Rows)
                 {
-                    if (fila.Visible && fila.DataBoundItem is ClienteBE cliente)
+                    if (fila.DataBoundItem is ClienteBE cliente)
                         clientes.Add(cliente);
                 }
-                string ruta = txtRutaExportar.Text;
+                // La ruta seleccionada define la carpeta; el nombre siempre contiene usuario y fecha reales.
+                string carpeta = Path.GetDirectoryName(Path.GetFullPath(txtRutaExportar.Text))!;
+                string ruta = Path.Combine(carpeta, GenerarNombreXml());
+                txtRutaExportar.Text = ruta;
                 if (File.Exists(ruta) &&
                     MessageBox.Show(T("frmGestionClientes.XmlConfirmarSobrescritura"),
                         Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
