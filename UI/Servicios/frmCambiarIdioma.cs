@@ -19,6 +19,7 @@ namespace UI
         public frmCambiarIdioma()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _idiomaBLL = new IdiomaBLL();
 
             // Traducir antes de que el form se cargue.
