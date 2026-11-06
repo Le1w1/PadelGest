@@ -171,7 +171,7 @@ namespace UI
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                _respaldoBLL.EjecutarRestore(txtArchivoBak.Text,txtDescripcionRestore.Text);
+                _respaldoBLL.EjecutarRestore(txtArchivoBak.Text,txtDescripcionRestore.Text, _soloRestore);
 
                 Cursor.Current = Cursors.Default;
 
