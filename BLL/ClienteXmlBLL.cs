@@ -41,6 +41,9 @@ namespace BLL
             // Se guarda exactamente la lista suministrada por la pantalla.
             // Los using terminan antes del evento: solo se registra si la
             // escritura y el cierre del archivo fueron correctos.
+            // Nunca exportar un telefono en claro si el usuario no es Administrador.
+            List<ClienteBE> clientesExportar = clientes.Select(cliente => CopiarConTelefonoVisible(cliente)).ToList();
+
             using (FileStream archivo = new FileStream(ruta, FileMode.Create, FileAccess.Write))
             using (XmlWriter escritor = XmlWriter.Create(archivo, new XmlWriterSettings
             {
@@ -49,7 +52,7 @@ namespace BLL
                 CloseOutput = false
             }))
             {
-                Serializador.Serialize(escritor, clientes);
+                Serializador.Serialize(escritor, clientesExportar);
             }
 
             RegistrarOperacion("Serializar clientes", clientes.Count);
@@ -87,8 +90,29 @@ namespace BLL
                     throw new InvalidOperationException("El archivo XML contiene clientes incompletos.");
             }
 
+            // El XML tambien se presenta segun el rol que inicio sesion.
+            List<ClienteBE> clientesVisibles = clientes.Select(cliente => CopiarConTelefonoVisible(cliente)).ToList();
+
             RegistrarOperacion("Deserializar clientes", clientes.Count);
-            return clientes;
+            return clientesVisibles;
+        }
+
+        private static ClienteBE CopiarConTelefonoVisible(ClienteBE cliente)
+        {
+            string telefono = cliente.Telefono;
+            if (SM.Instancia.PuedeDesencriptarTelefono())
+                telefono = CriptografiaReversible.Desencriptar(telefono);
+            else if (!CriptografiaReversible.EstaEncriptado(telefono))
+                telefono = CriptografiaReversible.Encriptar(telefono);
+
+            return new ClienteBE
+            {
+                DNI = cliente.DNI,
+                Nombre = cliente.Nombre,
+                Apellido = cliente.Apellido,
+                Telefono = telefono,
+                CorreoElectronico = cliente.CorreoElectronico
+            };
         }
     }
 }
