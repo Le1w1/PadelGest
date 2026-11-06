@@ -19,6 +19,7 @@ namespace UI
         public frmCambiarClave()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _usuarioBLL = new UsuarioBLL();
 
             // Traducir antes de que el form se cargue.
