@@ -218,7 +218,7 @@ namespace UI
                     if (!esAdmin)
                     {
                         // El sistema queda inaccesible hasta que entre alguien con permisos.
-                        MessageBox.Show(t.Traducir("frmLogin.MsgIntegridadSinPermiso"), t.Traducir("frmLogin.LblSubtitulo"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(t.Traducir("frmLogin.MsgIntegridadSinPermiso"), t.Traducir("frmLogin.LblSubtitulo"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         txtContrasenia.Clear();
                         txtEmail.Focus();
                         return;
