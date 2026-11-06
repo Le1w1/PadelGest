@@ -21,6 +21,7 @@ namespace UI
         public frmGestionDeUsuario()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             dgvUsuarios.ClearSelection();
             txtNombre.Focus();
             _usuarioBLL = new UsuarioBLL();
