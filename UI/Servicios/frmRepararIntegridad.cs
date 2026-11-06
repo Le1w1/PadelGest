@@ -25,6 +25,7 @@ namespace UI
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
 
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             ActualizarIdioma();
             CargarInconsistenciasEnGrilla();
 
