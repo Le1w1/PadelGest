@@ -19,6 +19,7 @@ namespace UI
         public frmGenerarFactura()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             AsegurarColumnasGrillas();
             _facturaBLL = new FacturaBuffetBLL();
             _productoBLL = new ProductoBLL();
