@@ -19,6 +19,7 @@ namespace UI
         public frmRegistrarReserva(ReservaBE reserva,ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,FacturaBE facturaPagada)
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
 
             _reserva = reserva;
             _cliente = cliente;
