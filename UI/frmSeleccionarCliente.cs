@@ -101,6 +101,7 @@ namespace UI
                     lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgNoRegistrado");
 
                     btnRegistrarCliente.Visible = SM.Instancia.TienePermiso("CLI_REGISTRAR") ||
+                                                SM.Instancia.TienePermiso("RES_CREAR") ||
                                                 SM.Instancia.TienePermiso("BUF_VENDER");
                     btnRegistrarCliente.Enabled = btnRegistrarCliente.Visible;
 
