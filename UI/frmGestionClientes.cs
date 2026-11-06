@@ -16,6 +16,7 @@ namespace UI
         public frmGestionClientes()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             ActualizarIdioma();
             grilla.SelectionChanged += (_, _) => Seleccionar();
             btnNuevo.Click += (_, _) =>
@@ -80,8 +81,6 @@ namespace UI
             btnSerializar.Text = T("frmGestionClientes.XmlSerializar");
             btnDeserializar.Text = T("frmGestionClientes.XmlDeserializar");
             btnLimpiarRutas.Text = T("frmGestionClientes.XmlLimpiarRutas");
-            ayudaBotones.SetToolTip(btnNuevo, T("frmGestionClientes.XmlAyudaNuevo"));
-            ayudaBotones.SetToolTip(btnActualizar, T("frmGestionClientes.XmlAyudaActualizar"));
 
         }
 
