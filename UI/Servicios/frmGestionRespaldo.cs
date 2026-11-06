@@ -34,6 +34,7 @@ namespace UI
             _soloRestore = soloRestore;
 
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _respaldoBLL = new RespaldoBLL();
 
             AplicarPermisos();
