@@ -140,7 +140,7 @@ namespace UI
             lblNota.Font = new Font("Segoe UI", 9F);
             // tabs
             tabs.Location = new Point(24, 189);
-            tabs.Size = new Size(1152, 527);
+            tabs.Size = new Size(1152, 567);
             tabs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabs.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             tabs.Controls.Add(tabPanorama);
@@ -480,7 +480,6 @@ namespace UI
             Controls.Add(kpiAlertas);
             Controls.Add(kpiReponer);
             Controls.Add(tabs);
-            Controls.Add(lblNota);
             Controls.Add(btnActualizar);
             Controls.Add(btnVolver);
             ((System.ComponentModel.ISupportInitialize)dgvReporte).EndInit();
