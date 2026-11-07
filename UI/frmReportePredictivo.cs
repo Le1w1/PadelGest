@@ -4,6 +4,7 @@ using Servicios;
 using UI.Servicios;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Globalization;
@@ -18,6 +19,7 @@ namespace UI
         private static string T(string clave) => Traductor.Instancia.Traducir(clave);
         // Los cuatro controles KPI se instancian individualmente en el Designer.
         private Label[] kpis = null!;
+        private readonly Dictionary<DataGridView, (int columna, bool ascendente)> _ordenGrillas = new();
 
         private class ResumenCategoria
         {
@@ -55,6 +57,17 @@ namespace UI
             FormClosed += frmReportePredictivo_FormClosed;
             dgvReporte.CellFormatting += PintarPrioridad;
             dgvReposicion.CellFormatting += PintarPrioridad;
+
+            // Las grillas usan List<T>, que no se ordena automaticamente por el encabezado.
+            ConfigurarOrdenamiento(dgvReporte);
+            ConfigurarOrdenamiento(dgvReposicion);
+            ConfigurarOrdenamiento(dgvCategorias);
+            dgvReporte.ColumnHeaderMouseClick += (sender, e) =>
+                OrdenarGrilla<ReportePredictivoBE>(dgvReporte, e.ColumnIndex);
+            dgvReposicion.ColumnHeaderMouseClick += (sender, e) =>
+                OrdenarGrilla<ReportePredictivoBE>(dgvReposicion, e.ColumnIndex);
+            dgvCategorias.ColumnHeaderMouseClick += (sender, e) =>
+                OrdenarGrilla<ResumenCategoria>(dgvCategorias, e.ColumnIndex);
         }
 
         private void frmReportePredictivo_Load(object? sender, EventArgs e)
@@ -136,6 +149,59 @@ namespace UI
                 _ => Color.Black
             };
             e.CellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        }
+
+        // Cada encabezado alterna ascendente / descendente y muestra una flecha.
+        private static void ConfigurarOrdenamiento(DataGridView grilla)
+        {
+            foreach (DataGridViewColumn columna in grilla.Columns)
+                columna.SortMode = DataGridViewColumnSortMode.Programmatic;
+        }
+
+        private void OrdenarGrilla<T>(DataGridView grilla, int indiceColumna)
+        {
+            if (indiceColumna < 0 || grilla.DataSource is not List<T> datos)
+                return;
+
+            DataGridViewColumn columna = grilla.Columns[indiceColumna];
+            PropertyDescriptor? propiedad =
+                TypeDescriptor.GetProperties(typeof(T))[columna.DataPropertyName];
+
+            if (propiedad == null) return;
+
+            bool ascendente = !_ordenGrillas.TryGetValue(grilla, out var anterior)
+                || anterior.columna != indiceColumna || !anterior.ascendente;
+
+            // Ordenar con los valores originales, no el texto formateado de la celda:
+            // los importes, cantidades y promedios se comparan numericamente.
+            object Clave(T fila)
+            {
+                object valor = propiedad.GetValue(fila) ?? string.Empty;
+                if (columna.DataPropertyName == "Prioridad" && valor is string prioridad)
+                    return prioridad switch
+                    {
+                        "Critica" => 0,
+                        "Alta" => 1,
+                        "Normal" => 2,
+                        _ => 3
+                    };
+                return valor;
+            }
+
+            List<T> ordenados = ascendente
+                ? datos.OrderBy(Clave, Comparer<object>.Default).ToList()
+                : datos.OrderByDescending(Clave, Comparer<object>.Default).ToList();
+
+            grilla.DataSource = null;
+            grilla.DataSource = ordenados;
+            grilla.ClearSelection();
+
+            foreach (DataGridViewColumn otra in grilla.Columns)
+                otra.HeaderCell.SortGlyphDirection = SortOrder.None;
+            columna.HeaderCell.SortGlyphDirection = ascendente
+                ? SortOrder.Ascending : SortOrder.Descending;
+
+            _ordenGrillas[grilla] = (indiceColumna, ascendente);
         }
 
         private void CargarReporte()
