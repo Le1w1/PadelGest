@@ -3,6 +3,7 @@ using BLL;
 using Servicios;
 using System.Drawing;
 using System.Windows.Forms;
+using UI.Servicios;
 
 namespace UI
 {

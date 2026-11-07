@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace UI
+namespace UI.Servicios
 {
     // Ayudas contextuales para los formularios: no altera los Designer ni la logica de negocio.
     internal static class AyudaContextual
@@ -95,18 +95,18 @@ namespace UI
             { "frmSeleccionarCliente.btnVolver", new[] { "Regresa sin seleccionar un cliente.", "Return without selecting a customer." } },
             // Ayudas de los cinco menus principales de la barra superior.
             { "frmMenuPrincipal.mnuSesion", new[] { "Gestiona tu sesión, contraseña e idioma.", "Manage your session, password and language." } },
-            { "frmMenuPrincipal.RecepcionistaToolStripMenuItem", new[] { "Accede a las funciones para reservar canchas de pádel.", "Access padel court booking functions." } },
-            { "frmMenuPrincipal.vendedorBuffetToolStripMenuItem", new[] { "Accede a las ventas y facturación de productos del buffet.", "Access buffet product sales and invoicing." } },
-            { "frmMenuPrincipal.mnuMaestros", new[] { "Consulta y administra los maestros de clientes y productos.", "View and manage customer and product master records." } },
-            { "frmMenuPrincipal.mnuAdministrador", new[] { "Accede a usuarios, roles, bitácoras y respaldos según tus permisos.", "Access users, roles, audit logs and backups according to your permissions." } },
+            { "frmMenuPrincipal.RecepcionistaToolStripMenuItem", new[] { "Accede a la funcion para reservar canchas de pádel.", "Access padel court booking function." } },
+            { "frmMenuPrincipal.vendedorBuffetToolStripMenuItem", new[] { "Accede a la seccion de facturación de productos del buffet.", "Access buffet product sales." } },
+            { "frmMenuPrincipal.mnuMaestros", new[] { "Administra los maestros de clientes, productos y la bitacora de cambios de productos.", "View and manage customer and product master records." } },
+            { "frmMenuPrincipal.mnuAdministrador", new[] { "Accede a la gestion de usuarios, roles, bitácoras de eventos y respaldos según tus permisos.", "Access users, roles, audit logs and backups according to your permissions." } },
             { "frmMenuPrincipal.reLoginToolStripMenuItem", new[] { "Permite iniciar sesión con otro usuario.", "Sign in as another user." } },
             { "frmMenuPrincipal.cambiarClaveToolStripMenuItem", new[] { "Cambia tu contraseña de acceso.", "Change your login password." } },
             { "frmMenuPrincipal.cambiarIdiomaToolStripMenuItem", new[] { "Selecciona el idioma de la aplicación.", "Change the application's language." } },
             { "frmMenuPrincipal.cerrarSesionToolStripMenuItem", new[] { "Cierra la sesión activa.", "Sign out of the current session." } },
             { "frmMenuPrincipal.generarReservaToolStripMenuItem", new[] { "Inicia una reserva de cancha de pádel.", "Start a padel court booking." } },
-            { "frmMenuPrincipal.generarCarritoToolStripMenuItem", new[] { "Inicia una venta de productos del buffet.", "Start a buffet product sale." } },
+            { "frmMenuPrincipal.generarCarritoToolStripMenuItem", new[] { "Inicia una facturacion de productos del buffet.", "Start a buffet product sale." } },
             { "frmMenuPrincipal.gestionarProductosToolStripMenuItem", new[] { "Abre el maestro de productos.", "Open the product master." } },
-            { "frmMenuPrincipal.auditarCambiosToolStripMenuItem", new[] { "Consulta los cambios registrados en productos.", "Review recorded product changes." } },
+            { "frmMenuPrincipal.auditarCambiosToolStripMenuItem", new[] { "Consulta la bitacora de cambios de los productos registrados.", "Review recorded product changes." } },
             { "frmMenuPrincipal.gestionarClientesToolStripMenuItem", new[] { "Abre el maestro de clientes.", "Open the customer master." } },
             { "frmMenuPrincipal.usuariosToolStripMenuItem", new[] { "Administra los usuarios y sus roles.", "Manage users and their roles." } },
             { "frmMenuPrincipal.bitacoraEventosToolStripMenuItem", new[] { "Consulta y exporta la bitácora de eventos.", "Review and export the event log." } },
@@ -129,8 +129,7 @@ namespace UI
             {
                 foreach (Control control in Recorrer(formulario))
                 {
-                    if (control is Button boton &&
-                        Descripciones.TryGetValue(formulario.GetType().Name + "." + boton.Name, out string[] textos))
+                    if (control is Button boton && Descripciones.TryGetValue(formulario.GetType().Name + "." + boton.Name, out string[] textos))
                     {
                         ayuda.SetToolTip(boton, Traducir(textos));
                         boton.MouseEnter += (_, _) => ayuda.SetToolTip(boton, Traducir(textos));
@@ -162,6 +161,8 @@ namespace UI
             }
         }
 
+        // Recorrido recursivo de todos los controles hijos de un control padre.
+        //yield return permite devolver un elemento a la vez, y el foreach que lo llama lo recibe uno por uno.
         private static IEnumerable<Control> Recorrer(Control padre)
         {
             foreach (Control control in padre.Controls)
@@ -174,8 +175,7 @@ namespace UI
 
         private static string Traducir(string[] textos)
         {
-            bool ingles = string.Equals(Traductor.Instancia.CodigoIdiomaActual,
-                "EN", StringComparison.OrdinalIgnoreCase);
+            bool ingles = string.Equals(Traductor.Instancia.CodigoIdiomaActual,"EN", StringComparison.OrdinalIgnoreCase);
             return textos[ingles ? 1 : 0];
         }
     }
