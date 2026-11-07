@@ -93,6 +93,12 @@ namespace UI
             { "frmSeleccionarCliente.btnConfirmar", new[] { "Confirma el cliente seleccionado para continuar.", "Confirm the selected customer to proceed." } },
             { "frmSeleccionarCliente.btnRegistrarCliente", new[] { "Abre el registro de un cliente que no existe.", "Open registration for a customer not found." } },
             { "frmSeleccionarCliente.btnVolver", new[] { "Regresa sin seleccionar un cliente.", "Return without selecting a customer." } },
+            // Ayudas de los cinco menus principales de la barra superior.
+            { "frmMenuPrincipal.mnuSesion", new[] { "Gestiona tu sesión, contraseña e idioma.", "Manage your session, password and language." } },
+            { "frmMenuPrincipal.RecepcionistaToolStripMenuItem", new[] { "Accede a las funciones para reservar canchas de pádel.", "Access padel court booking functions." } },
+            { "frmMenuPrincipal.vendedorBuffetToolStripMenuItem", new[] { "Accede a las ventas y facturación de productos del buffet.", "Access buffet product sales and invoicing." } },
+            { "frmMenuPrincipal.mnuMaestros", new[] { "Consulta y administra los maestros de clientes y productos.", "View and manage customer and product master records." } },
+            { "frmMenuPrincipal.mnuAdministrador", new[] { "Accede a usuarios, roles, bitácoras y respaldos según tus permisos.", "Access users, roles, audit logs and backups according to your permissions." } },
             { "frmMenuPrincipal.reLoginToolStripMenuItem", new[] { "Permite iniciar sesión con otro usuario.", "Sign in as another user." } },
             { "frmMenuPrincipal.cambiarClaveToolStripMenuItem", new[] { "Cambia tu contraseña de acceso.", "Change your login password." } },
             { "frmMenuPrincipal.cambiarIdiomaToolStripMenuItem", new[] { "Selecciona el idioma de la aplicación.", "Change the application's language." } },
