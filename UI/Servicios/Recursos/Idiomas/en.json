@@ -681,5 +681,6 @@
   "frmReportePredictivo.ColReposicion": "Reorder",
   "frmReportePredictivo.Resumen": "Active products: {0} | Suggested replenishment: {1} | Estimated units: {2}",
   "frmReportePredictivo.Grafico": "Estimated demand over the next 7 days (top 8 products)",
-  "frmReportePredictivo.SinDatos": "No active products to display."
+  "frmReportePredictivo.SinDatos": "No active products to display.",
+  "frmMenuPrincipal.MenuReportes": "Reports"
 }
