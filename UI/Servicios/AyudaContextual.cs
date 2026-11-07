@@ -99,6 +99,7 @@ namespace UI.Servicios
             { "frmMenuPrincipal.vendedorBuffetToolStripMenuItem", new[] { "Accede a la seccion de facturación de productos del buffet.", "Access buffet product sales." } },
             { "frmMenuPrincipal.mnuMaestros", new[] { "Administra los maestros de clientes, productos y la bitacora de cambios de productos.", "View and manage customer and product master records." } },
             { "frmMenuPrincipal.mnuAdministrador", new[] { "Accede a la gestion de usuarios, roles, bitácoras de eventos y respaldos según tus permisos.", "Access users, roles, audit logs and backups according to your permissions." } },
+            { "frmMenuPrincipal.mnuReportes", new[] { "Consulta reportes e indicadores para apoyar decisiones del club.", "View reports and indicators to support club decisions." } },
             { "frmMenuPrincipal.reportePredictivoToolStripMenuItem", new[] { "Consulta la demanda estimada del buffet y la reposición sugerida.", "View forecast buffet demand and suggested replenishment." } },
             { "frmReportePredictivo.btnActualizar", new[] { "Vuelve a calcular el pronóstico con las ventas registradas.", "Recalculate the forecast using recorded sales." } },
             { "frmReportePredictivo.btnVolver", new[] { "Regresa al menú principal.", "Return to the main menu." } },
