@@ -679,5 +679,6 @@
   "frmReportePredictivo.ColReposicion": "Reponer",
   "frmReportePredictivo.Resumen": "Productos activos: {0} | Con reposición sugerida: {1} | Unidades estimadas: {2}",
   "frmReportePredictivo.Grafico": "Demanda estimada para los próximos 7 días (8 productos principales)",
-  "frmReportePredictivo.SinDatos": "No hay productos activos para mostrar."
+  "frmReportePredictivo.SinDatos": "No hay productos activos para mostrar.",
+  "frmMenuPrincipal.MenuReportes": "Reportes"
 }
