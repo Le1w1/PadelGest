@@ -112,7 +112,7 @@ BEGIN TRY
         HASHBYTES('SHA2_256', CONVERT(varchar(max), CONCAT(
             d.IdDetalleFactura, '|', d.IdFactura, '|', d.CodigoProducto, '|',
             d.Cantidad, '|', FORMAT(d.PrecioUnitario,'0.00','en-US'), '|',
-            FORMAT(d.Subtotal,'0.00','en-US'))), 2))
+            FORMAT(d.Subtotal,'0.00','en-US')))), 2))
     FROM dbo.DetalleFactura d
     INNER JOIN dbo.FacturaBuffet f ON f.IdFactura = d.IdFactura
     WHERE f.NumeroFactura LIKE N'DEMOPRED-EX-%';
