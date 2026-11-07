@@ -16,14 +16,23 @@ namespace UI
     public partial class frmMenuPrincipal : Form, IObservadorIdioma
     {
         private readonly UsuarioBLL _usuarioBLL = new UsuarioBLL();
+        private readonly ToolStripMenuItem mnuReportes = new ToolStripMenuItem();
         private readonly ToolStripMenuItem reportePredictivoToolStripMenuItem = new ToolStripMenuItem();
 
         public frmMenuPrincipal()
         {
             InitializeComponent();
+            mnuReportes.Name = "mnuReportes";
+            mnuReportes.BackColor = Color.FromArgb(214, 246, 36);
+            mnuReportes.ForeColor = Color.Black;
+            mnuReportes.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             reportePredictivoToolStripMenuItem.Name = "reportePredictivoToolStripMenuItem";
+            reportePredictivoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            reportePredictivoToolStripMenuItem.ForeColor = Color.White;
+            reportePredictivoToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             reportePredictivoToolStripMenuItem.Click += reportePredictivoToolStripMenuItem_Click;
-            vendedorBuffetToolStripMenuItem.DropDownItems.Add(reportePredictivoToolStripMenuItem);
+            mnuReportes.DropDownItems.Add(reportePredictivoToolStripMenuItem);
+            menuPrincipal.Items.Add(mnuReportes);
             AyudaContextual.Configurar(this);
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
@@ -104,7 +113,8 @@ namespace UI
             cambiarIdiomaToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
             cerrarSesionToolStripMenuItem.Visible = true;
 
-            vendedorBuffetToolStripMenuItem.Visible = buffet || reportePredictivo;
+            vendedorBuffetToolStripMenuItem.Visible = buffet;
+            mnuReportes.Visible = reportePredictivo;
             mnuMaestros.Visible = maestroProductos || maestroClientes;
             generarCarritoToolStripMenuItem.Visible = buffet;
             reportePredictivoToolStripMenuItem.Visible = reportePredictivo;
@@ -149,6 +159,7 @@ namespace UI
             generarReservaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGenerarReserva");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
             generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
+            mnuReportes.Text = t.Traducir("frmMenuPrincipal.MenuReportes");
             reportePredictivoToolStripMenuItem.Text = t.Traducir("frmReportePredictivo.Menu");
             gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
             auditarCambiosToolStripMenuItem.Text = t.Traducir("frmAuditarCambios.Menu");
