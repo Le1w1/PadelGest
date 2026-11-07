@@ -236,6 +236,12 @@ namespace UI
                 dgvCategorias.DataSource = categorias;
                 dgvCategorias.ClearSelection();
 
+                // Al actualizar datos se restablece el orden y las flechas.
+                _ordenGrillas.Clear();
+                foreach (DataGridView grilla in new[] { dgvReporte, dgvReposicion, dgvCategorias })
+                    foreach (DataGridViewColumn columna in grilla.Columns)
+                        columna.HeaderCell.SortGlyphDirection = SortOrder.None;
+
                 MostrarIndicadores();
                 pnlGrafico.Invalidate();
             }
