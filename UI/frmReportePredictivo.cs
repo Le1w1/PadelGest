@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace UI
@@ -32,6 +33,22 @@ namespace UI
         {
             InitializeComponent();
             kpis = new[] { kpiVentas, kpiEstimacion, kpiAlertas, kpiReponer };
+
+            // El reporte se utiliza exclusivamente maximizado.
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            WindowState = FormWindowState.Maximized;
+
+            // Los importes siempre son pesos argentinos, sin depender del idioma de Windows.
+            CultureInfo moneda = CultureInfo.GetCultureInfo("es-AR");
+            dgvReporte.Columns["colIngreso"]!.DefaultCellStyle.Format = "C2";
+            dgvReporte.Columns["colIngreso"]!.DefaultCellStyle.FormatProvider = moneda;
+            dgvCategorias.Columns["catValor"]!.DefaultCellStyle.Format = "C2";
+            dgvCategorias.Columns["catValor"]!.DefaultCellStyle.FormatProvider = moneda;
+
+            Resize += frmReportePredictivo_Resize;
+            AjustarIndicadores();
             AyudaContextual.Configurar(this);
             ActualizarIdioma();
             Load += frmReportePredictivo_Load;
@@ -196,6 +213,27 @@ namespace UI
         }
 
         private void pnlGrafico_Resize(object? sender, EventArgs e) => pnlGrafico.Invalidate();
+
+        // Mantiene las cuatro tarjetas distribuidas uniformemente cuando cambia
+        // la resolucion del monitor. No depende de Anchor de cada etiqueta.
+        private void frmReportePredictivo_Resize(object? sender, EventArgs e) => AjustarIndicadores();
+
+        private void AjustarIndicadores()
+        {
+            if (kpis == null) return;
+            const int margen = 24;
+            const int separacion = 12;
+            int ancho = Math.Max(120, (ClientSize.Width - 2 * margen - 3 * separacion) / 4);
+            for (int i = 0; i < kpis.Length; i++)
+            {
+                kpis[i].Location = new Point(margen + i * (ancho + separacion), 97);
+                kpis[i].Size = new Size(ancho, 76);
+            }
+            // Reservar espacio para que la lectura de resultados no quede cortada
+            // en monitores con menor altura, manteniendo el grafico legible.
+            if (tabPanorama != null && pnlGrafico != null)
+                pnlGrafico.Height = Math.Max(185, Math.Min(272, tabPanorama.ClientSize.Height - 190));
+        }
 
         private void btnActualizar_Click(object? sender, EventArgs e) => CargarReporte();
         private void btnVolver_Click(object? sender, EventArgs e) => Close();
