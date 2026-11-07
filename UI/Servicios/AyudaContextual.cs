@@ -120,6 +120,7 @@ namespace UI.Servicios
 
         public static void Configurar(Form formulario)
         {
+            AyudaPantalla.Configurar(formulario);
             ToolTip ayuda = new ToolTip
             {
                 AutomaticDelay = 350,
