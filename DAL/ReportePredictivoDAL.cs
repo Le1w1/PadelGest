@@ -18,17 +18,18 @@ namespace DAL
             const string sql = @"
                 SELECT p.CodigoProducto, p.Nombre, p.Categoria,
                        p.StockDisponible, p.StockMinimo,
-                       COALESCE(SUM(CASE WHEN f.IdFactura IS NOT NULL
-                           THEN CONVERT(bigint, d.Cantidad) ELSE 0 END), 0) AS Unidades
+                       COALESCE(v.Unidades, 0) AS Unidades
                 FROM dbo.Producto p
-                LEFT JOIN dbo.DetalleFactura d ON d.CodigoProducto = p.CodigoProducto
-                LEFT JOIN dbo.FacturaBuffet f ON f.IdFactura = d.IdFactura
-                    AND f.Estado = N'Pagada'
-                    AND f.FechaHoraEmision >= @Desde
-                    AND f.FechaHoraEmision < @Hasta
+                LEFT JOIN (
+                    SELECT d.CodigoProducto, SUM(CONVERT(bigint, d.Cantidad)) AS Unidades
+                    FROM dbo.DetalleFactura d
+                    INNER JOIN dbo.FacturaBuffet f ON f.IdFactura = d.IdFactura
+                    WHERE f.Estado = N'Pagada'
+                      AND f.FechaHoraEmision >= @Desde
+                      AND f.FechaHoraEmision < @Hasta
+                    GROUP BY d.CodigoProducto
+                ) v ON v.CodigoProducto = p.CodigoProducto
                 WHERE p.Activo = 1
-                GROUP BY p.CodigoProducto, p.Nombre, p.Categoria,
-                         p.StockDisponible, p.StockMinimo
                 ORDER BY p.Nombre, p.CodigoProducto;";
 
             List<ReportePredictivoBE> resultado = new List<ReportePredictivoBE>();
