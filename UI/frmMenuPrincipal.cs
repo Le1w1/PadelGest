@@ -16,10 +16,14 @@ namespace UI
     public partial class frmMenuPrincipal : Form, IObservadorIdioma
     {
         private readonly UsuarioBLL _usuarioBLL = new UsuarioBLL();
+        private readonly ToolStripMenuItem reportePredictivoToolStripMenuItem = new ToolStripMenuItem();
 
         public frmMenuPrincipal()
         {
             InitializeComponent();
+            reportePredictivoToolStripMenuItem.Name = "reportePredictivoToolStripMenuItem";
+            reportePredictivoToolStripMenuItem.Click += reportePredictivoToolStripMenuItem_Click;
+            vendedorBuffetToolStripMenuItem.DropDownItems.Add(reportePredictivoToolStripMenuItem);
             AyudaContextual.Configurar(this);
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
@@ -83,6 +87,7 @@ namespace UI
             // Calcular permisos antes de asignar Visible: la visibilidad efectiva
             // de un item hijo depende tambien de la visibilidad de su menu padre.
             bool buffet = sm.TienePermiso("BUF_VENDER");
+            bool reportePredictivo = sm.TienePermiso("REP_PREDICTIVO");
             bool maestroProductos = sm.TienePermiso("PRO_GESTIONAR");
             bool maestroClientes = sm.TienePermiso("CLI_MODIFICAR");
             bool reservas = sm.TienePermiso("RES_CREAR");
@@ -99,9 +104,10 @@ namespace UI
             cambiarIdiomaToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
             cerrarSesionToolStripMenuItem.Visible = true;
 
-            vendedorBuffetToolStripMenuItem.Visible = buffet;
+            vendedorBuffetToolStripMenuItem.Visible = buffet || reportePredictivo;
             mnuMaestros.Visible = maestroProductos || maestroClientes;
             generarCarritoToolStripMenuItem.Visible = buffet;
+            reportePredictivoToolStripMenuItem.Visible = reportePredictivo;
             gestionarProductosToolStripMenuItem.Visible = maestroProductos;
             auditarCambiosToolStripMenuItem.Visible = maestroProductos;
             gestionarClientesToolStripMenuItem.Visible = maestroClientes;
@@ -143,6 +149,7 @@ namespace UI
             generarReservaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGenerarReserva");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
             generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
+            reportePredictivoToolStripMenuItem.Text = t.Traducir("frmReportePredictivo.Menu");
             gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
             auditarCambiosToolStripMenuItem.Text = t.Traducir("frmAuditarCambios.Menu");
             gestionarClientesToolStripMenuItem.Text = t.Traducir("frmGestionClientes.Menu");
@@ -227,6 +234,12 @@ namespace UI
         {
             using frmGenerarFactura formCarrito = new frmGenerarFactura();
             formCarrito.ShowDialog(this);
+        }
+
+        private void reportePredictivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmReportePredictivo reporte = new frmReportePredictivo();
+            reporte.ShowDialog(this);
         }
 
         private void gestionarClientesToolStripMenuItem_Click(object sender, EventArgs e)
