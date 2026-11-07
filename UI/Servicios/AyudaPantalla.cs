@@ -53,8 +53,10 @@ namespace UI.Servicios
                     BackColor = Color.FromArgb(214, 246, 36),
                     FlatStyle = FlatStyle.Flat,
                     Size = new Size(30, 30),
-                    Location = new Point(Math.Max(4, formulario.ClientSize.Width - 42),
-                        formulario is frmMenuPrincipal ? 31 : 9),
+                    Location = formulario is frmLogin
+                        ? new Point(12, 10)
+                        : new Point(Math.Max(4, formulario.ClientSize.Width - 42),
+                            formulario is frmMenuPrincipal ? 31 : 9),
                     Anchor = AnchorStyles.Top | AnchorStyles.Right,
                     TabStop = true,
                     AccessibleName = "Ayuda de esta pantalla"
