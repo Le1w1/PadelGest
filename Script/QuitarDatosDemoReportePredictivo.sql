@@ -1,6 +1,7 @@
 /*
  ELIMINAR SOLAMENTE LOS DATOS DE PRUEBA DEMOPRED DEL REPORTE.
- Ejecutar solo si primero se ejecuto DatosDemoReportePredictivo.sql.
+ Incluye tanto las 56 facturas iniciales como las 100 adicionales DEMOPRED-EX.
+ Ejecutar si se uso alguno de los scripts de datos demo.
  No borra facturas reales ni modifica el stock. Se recomienda respaldo previo.
 */
 USE [PadelGestDB];
