@@ -12,5 +12,9 @@ namespace BE
         public int StockDisponible { get; set; }
         public int StockMinimo { get; set; }
         public int ReposicionSugerida { get; set; }
+        public decimal CoberturaDias { get; set; }
+        public decimal PrecioActual { get; set; }
+        public decimal IngresoPotencial7Dias { get; set; }
+        public string Prioridad { get; set; } = string.Empty;
     }
 }
