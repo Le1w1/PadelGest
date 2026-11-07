@@ -33,6 +33,19 @@ namespace BLL
                     producto.StockMinimo - producto.StockDisponible;
                 producto.ReposicionSugerida = faltante <= 0 ? 0 :
                     faltante > int.MaxValue ? int.MaxValue : (int)faltante;
+
+                // Cobertura en dias con el ritmo historico; sin ventas se deja en cero.
+                producto.CoberturaDias = producto.Vendidas28Dias > 0
+                    ? Math.Round(producto.StockDisponible * 28m / producto.Vendidas28Dias, 1)
+                    : 0m;
+
+                // Ingreso potencial a precios vigentes, no ingreso historico facturado.
+                producto.IngresoPotencial7Dias = producto.Estimadas7Dias * producto.PrecioActual;
+
+                producto.Prioridad = producto.StockDisponible <= producto.StockMinimo
+                    ? "Critica"
+                    : producto.ReposicionSugerida > 0 ? "Alta"
+                    : producto.Estimadas7Dias > 0 ? "Normal" : "Sin historial";
             }
             return productos;
         }
