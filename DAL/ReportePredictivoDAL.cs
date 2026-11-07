@@ -17,7 +17,7 @@ namespace DAL
         {
             const string sql = @"
                 SELECT p.CodigoProducto, p.Nombre, p.Categoria,
-                       p.StockDisponible, p.StockMinimo,
+                       p.StockDisponible, p.StockMinimo, p.PrecioUnitario,
                        COALESCE(v.Unidades, 0) AS Unidades
                 FROM dbo.Producto p
                 LEFT JOIN (
@@ -49,7 +49,8 @@ namespace DAL
                     Categoria = Convert.ToString(lector["Categoria"]) ?? string.Empty,
                     Vendidas28Dias = unidades > int.MaxValue ? int.MaxValue : (int)unidades,
                     StockDisponible = Convert.ToInt32(lector["StockDisponible"]),
-                    StockMinimo = Convert.ToInt32(lector["StockMinimo"])
+                    StockMinimo = Convert.ToInt32(lector["StockMinimo"]),
+                    PrecioActual = Convert.ToDecimal(lector["PrecioUnitario"])
                 });
             }
             return resultado;
