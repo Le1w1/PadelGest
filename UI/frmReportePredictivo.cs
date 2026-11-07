@@ -15,6 +15,8 @@ namespace UI
         private readonly ReportePredictivoBLL _reporteBLL = new ReportePredictivoBLL();
         private List<ReportePredictivoBE> _datos = new List<ReportePredictivoBE>();
         private static string T(string clave) => Traductor.Instancia.Traducir(clave);
+        // Los cuatro controles KPI se instancian individualmente en el Designer.
+        private Label[] kpis = null!;
 
         private class ResumenCategoria
         {
@@ -29,6 +31,7 @@ namespace UI
         public frmReportePredictivo()
         {
             InitializeComponent();
+            kpis = new[] { kpiVentas, kpiEstimacion, kpiAlertas, kpiReponer };
             AyudaContextual.Configurar(this);
             ActualizarIdioma();
             Load += frmReportePredictivo_Load;
@@ -191,6 +194,8 @@ namespace UI
             lblAnalisis.Text = string.Format(T("frmReportePredictivo.Analisis"),
                 productoMayor, urgencia, ingresoEstimado, sinVentas);
         }
+
+        private void pnlGrafico_Resize(object? sender, EventArgs e) => pnlGrafico.Invalidate();
 
         private void btnActualizar_Click(object? sender, EventArgs e) => CargarReporte();
         private void btnVolver_Click(object? sender, EventArgs e) => Close();
