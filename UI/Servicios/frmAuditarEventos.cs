@@ -19,6 +19,29 @@ namespace UI
         private readonly BitacoraEventoBLL _bitacoraEventoBLL;
         private bool _detalleReservaVisible;
         private bool _configurandoFiltros;
+        private bool _filtrosAutomaticosActivos;
+        private readonly System.Windows.Forms.Timer _temporizadorFiltros = new System.Windows.Forms.Timer
+        {
+            Interval = 300
+        };
+
+        private void ProgramarBusquedaAutomatica()
+        {
+            if (!_filtrosAutomaticosActivos || _configurandoFiltros || IsDisposed ||
+                !SM.Instancia.TienePermiso("BIT_AUDITAR"))
+                return;
+
+            _temporizadorFiltros.Stop();
+            _temporizadorFiltros.Start();
+        }
+
+        private void BuscarAutomaticamente()
+        {
+            _temporizadorFiltros.Stop();
+            if (_filtrosAutomaticosActivos && !_configurandoFiltros &&
+                SM.Instancia.TienePermiso("BIT_AUDITAR"))
+                BuscarEventos();
+        }
         private const int DesplazamientoDetalleReserva = 92;
 
         public frmAuditarEventos()
@@ -27,6 +50,15 @@ namespace UI
             AyudaContextual.Configurar(this);
             _bitacoraEventoBLL = new BitacoraEventoBLL();
             cmbModulo.SelectedIndexChanged += cmbModulo_SelectedIndexChanged;
+
+            _temporizadorFiltros.Tick += (sender, e) => BuscarAutomaticamente();
+            txtUsuario.TextChanged += (sender, e) => ProgramarBusquedaAutomatica();
+            txtDescripcion.TextChanged += (sender, e) => ProgramarBusquedaAutomatica();
+            DtpFechaDesde.ValueChanged += (sender, e) => ProgramarBusquedaAutomatica();
+            dtpFechaHasta.ValueChanged += (sender, e) => ProgramarBusquedaAutomatica();
+            cmbAccion.SelectedIndexChanged += (sender, e) => ProgramarBusquedaAutomatica();
+            cmbCriticidad.SelectedIndexChanged += (sender, e) => ProgramarBusquedaAutomatica();
+            cmbResultado.SelectedIndexChanged += (sender, e) => ProgramarBusquedaAutomatica();
 
             // Traducir  los labels/botones, antes de que el form se cargue.
             // Las cabeceras de la grilla se traducen mas abajo, despues del BuscarEventos.
@@ -58,6 +90,7 @@ namespace UI
             // Suscribirse al Observer despues de tener la grilla cargada.
             SM.Instancia.Suscribir(this);
             ActualizarCabecerasGrilla();
+            _filtrosAutomaticosActivos = true;
         }
 
       
@@ -77,6 +110,9 @@ namespace UI
         // Este método maneja el evento de cierre del formulario, desuscribiéndose del observador de idioma.
         private void frmAuditarEventos_FormClosed(object sender, FormClosedEventArgs e)
         {
+            _filtrosAutomaticosActivos = false;
+            _temporizadorFiltros.Stop();
+            _temporizadorFiltros.Dispose();
             SM.Instancia.Desuscribir(this);
         }
 
@@ -145,6 +181,7 @@ namespace UI
         // Este método maneja el evento de clic del botón "Buscar", llamando al método BuscarEventos.
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+            _temporizadorFiltros.Stop();
             try
             {
                 ActualizarOpcionesFiltros();
@@ -161,6 +198,8 @@ namespace UI
         // Este método maneja el evento de clic del botón "Limpiar", restableciendo los filtros y buscando eventos nuevamente.
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
+            _filtrosAutomaticosActivos = false;
+            _temporizadorFiltros.Stop();
             txtUsuario.Clear();
             txtNombre.Clear();
             txtApellido.Clear();
@@ -176,6 +215,7 @@ namespace UI
 
             lblMensaje.Text = string.Empty;
 
+            _filtrosAutomaticosActivos = true;
             BuscarEventos();
         }
 
@@ -325,7 +365,10 @@ namespace UI
         private void cmbModulo_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (!_configurandoFiltros)
+            {
                 CargarAcciones();
+                ProgramarBusquedaAutomatica();
+            }
         }
 
         // Cuando se elige Buffet solo aparecen las acciones de Buffet,
