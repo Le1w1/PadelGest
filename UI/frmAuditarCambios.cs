@@ -11,11 +11,38 @@ namespace UI
     {
         private readonly ProductoCambioBLL _cambiosBLL = new ProductoCambioBLL();
 
+        // Evita ejecutar una consulta SQL por cada tecla mientras se escribe.
+        private readonly System.Windows.Forms.Timer _temporizadorFiltros = new System.Windows.Forms.Timer
+        {
+            Interval = 300
+        };
+        private bool _filtrosInicializados;
+
+        private void ProgramarConsulta()
+        {
+            if (!_filtrosInicializados || IsDisposed)
+                return;
+            _temporizadorFiltros.Stop();
+            _temporizadorFiltros.Start();
+        }
+
         public frmAuditarCambios()
         {
             InitializeComponent();
             AyudaContextual.Configurar(this);
             dgvCambios.AutoGenerateColumns = false;
+
+            _temporizadorFiltros.Tick += (sender, e) =>
+            {
+                _temporizadorFiltros.Stop();
+                Consultar();
+            };
+            txtNombre.TextChanged += (sender, e) => ProgramarConsulta();
+            nudCodigo.ValueChanged += (sender, e) => ProgramarConsulta();
+            dtpDesde.ValueChanged += (sender, e) => ProgramarConsulta();
+            dtpHasta.ValueChanged += (sender, e) => ProgramarConsulta();
+            FormClosed += (sender, e) => _temporizadorFiltros.Dispose();
+
             ActualizarIdioma();
         }
 
@@ -35,6 +62,7 @@ namespace UI
                 return;
             }
 
+            _filtrosInicializados = true;
             Consultar();
         }
 
@@ -121,14 +149,21 @@ namespace UI
                 lblCantidad.Text += " " + T("frmAuditarCambios.Limite");
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e) => Consultar();
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            _temporizadorFiltros.Stop();
+            Consultar();
+        }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
+            _filtrosInicializados = false;
+            _temporizadorFiltros.Stop();
             nudCodigo.Value = 0;
             txtNombre.Clear();
             dtpDesde.Checked = false;
             dtpHasta.Checked = false;
+            _filtrosInicializados = true;
             Consultar();
         }
 
