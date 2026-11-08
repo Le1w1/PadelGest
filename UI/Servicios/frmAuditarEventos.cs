@@ -174,7 +174,10 @@ namespace UI
         // Este método maneja el evento de cambio de selección en el DataGridView, cargando el nombre y apellido del evento seleccionado.
         private void dgvEventos_SelectionChanged(object sender, EventArgs e)
         {
-            CargarNombreApellidoDesdeEventoSeleccionado();
+            // DataBinding puede cambiar CurrentRow sin una seleccion del usuario.
+            // Solo mostrar el detalle si hay una fila efectivamente seleccionada.
+            if (dgvEventos.CurrentRow?.Selected == true)
+                CargarNombreApellidoDesdeEventoSeleccionado();
         }
 
 
@@ -415,21 +418,14 @@ namespace UI
                 ConfigurarColumnasGrilla();
                 ActualizarCabecerasGrilla();
 
-                if (eventos.Count > 0)
-                {
-                    dgvEventos.ClearSelection();
-                    dgvEventos.Rows[0].Selected = true;
-                    dgvEventos.CurrentCell = dgvEventos.Rows[0].Cells["Usuario"];
-
-                    CargarNombreApellidoDesdeEventoSeleccionado();
-                }
-                else
-                {
-                    txtNombre.Clear();
-                    txtApellido.Clear();
-                    txtDescripcionReserva.Clear();
-                    AjustarDetalleReserva(false);
-                }
+                // La busqueda solo cambia las filas visibles; no selecciona
+                // automaticamente la primera ni muestra detalles sin un clic del usuario.
+                dgvEventos.CurrentCell = null;
+                dgvEventos.ClearSelection();
+                txtNombre.Clear();
+                txtApellido.Clear();
+                txtDescripcionReserva.Clear();
+                AjustarDetalleReserva(false);
 
                 lblMensaje.Text = eventos.Count == 0 ? t.Traducir("frmAuditarEventos.MsgSinEventos"): t.Traducir("frmAuditarEventos.MsgEventosEncontrados") + " " + eventos.Count;
             }
@@ -447,7 +443,7 @@ namespace UI
             txtApellido.Clear();
             txtDescripcionReserva.Clear();
 
-            if (dgvEventos.CurrentRow == null)
+            if (dgvEventos.CurrentRow?.Selected != true)
             {
                 AjustarDetalleReserva(false);
                 return;
