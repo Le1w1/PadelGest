@@ -130,8 +130,11 @@ namespace UI
                     columna.DefaultCellStyle.SelectionForeColor = Color.Black;
                 }
 
-                dgvCambios.Refresh();
+                // El enlace de datos activa por defecto la primera fila.
+                // Filtrar no debe seleccionar ninguna version: solo el usuario puede hacerlo.
+                dgvCambios.CurrentCell = null;
                 dgvCambios.ClearSelection();
+                dgvCambios.Refresh();
                 btnRestaurar.Enabled = false;
                 ActualizarCantidad(cambios.Count);
             }
