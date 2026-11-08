@@ -1188,11 +1188,29 @@ BEGIN
     -- o modificamos Act. No se reescriben nombres, stock ni tipos anteriores.
 END;
 GO
+-- Historial inicial del catalogo del buffet.
+-- Los productos fueron insertados antes de crear el trigger, por eso se registra
+-- explicitamente su primera version. Producto_C no participa en DVH/DVV.
+-- Una vez modificado un producto, el trigger desactiva esta version (Act = 0)
+-- y registra la nueva (Act = 1), permitiendo restaurar la original.
+INSERT INTO dbo.Producto_C
+    (CodigoProducto, FechaHora, Nombre, Categoria, PrecioUnitario,
+     StockDisponible, StockMinimo, ActivoProducto, Act, TipoCambio)
+SELECT p.CodigoProducto, SYSDATETIME(), p.Nombre, p.Categoria,
+       p.PrecioUnitario, p.StockDisponible, p.StockMinimo, p.Activo,
+       CONVERT(bit, 1), N'Alta'
+FROM dbo.Producto AS p
+WHERE NOT EXISTS (
+    SELECT 1 FROM dbo.Producto_C AS h
+    WHERE h.CodigoProducto = p.CodigoProducto
+);
+GO
 -- Conteos iniciales
 SELECT 'Rol' AS Tabla, COUNT(*) AS Registros FROM dbo.Rol
 UNION ALL SELECT 'PermisoSimple', COUNT(*) FROM dbo.PermisoSimple
 UNION ALL SELECT 'Usuario', COUNT(*) FROM dbo.Usuario
 UNION ALL SELECT 'Producto', COUNT(*) FROM dbo.Producto
+UNION ALL SELECT 'Producto_C', COUNT(*) FROM dbo.Producto_C
 UNION ALL SELECT 'Cliente', COUNT(*) FROM dbo.Cliente
 UNION ALL SELECT 'Reserva', COUNT(*) FROM dbo.Reserva;
 GO
