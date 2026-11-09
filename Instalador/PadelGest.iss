@@ -128,6 +128,54 @@ begin
       PaginaServidor.SelectedValueIndex := 1;
 end;
 
+// Antes de comenzar, informar si es instalacion nueva o reinstalacion.
+// Esta consulta solo lee SQL Server; la decision no modifica registros.
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  EstadoBase: Integer;
+begin
+  Result := True;
+  if CurPageID <> wpReady then
+    Exit;
+
+  ExtractTemporaryFile('OperacionesSQL.ps1');
+  EstadoBase := EjecutarHelper('Consultar', ServidorSeleccionado, '');
+
+  if EstadoBase = 10 then
+  begin
+    Result := MsgBox(
+      'Se detecto una base de datos PadelGestDB existente en la instancia ' +
+      ServidorSeleccionado + '.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
+      'REINSTALACION DE PADELGEST' + Chr(13) + Chr(10) +
+      'Se actualizaran los archivos del programa.' + Chr(13) + Chr(10) +
+      'Se conservaran clientes, usuarios, reservas, ventas, productos, ' +
+      'historiales y demas datos de la base.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
+      '¿Deseas continuar con la reinstalacion?',
+      mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
+  end
+  else if EstadoBase = 11 then
+  begin
+    Result := MsgBox(
+      'No se encontro PadelGestDB en la instancia ' +
+      ServidorSeleccionado + '.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
+      'INSTALACION INICIAL' + Chr(13) + Chr(10) +
+      'Se instalaran los archivos del programa y se creara una ' +
+      'base de datos nueva con la configuracion inicial.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
+      '¿Deseas continuar?',
+      mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
+  end
+  else
+  begin
+    MsgBox(
+      'No se pudo verificar si PadelGestDB existe.' + Chr(13) + Chr(10) +
+      'Comprueba la instancia seleccionada, SQL Server, sqlcmd y los permisos.' +
+      Chr(13) + Chr(10) +
+      'La instalacion no continuara hasta resolver la conexion.',
+      mbError, MB_OK);
+    Result := False;
+  end;
+end;
+
 function PrepareToInstall(var NeedsRestart: Boolean): String;
 begin
   Result := '';
