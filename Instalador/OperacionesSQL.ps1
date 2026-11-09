@@ -73,6 +73,7 @@ try {
     exit 0
 }
 catch {
+    Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.MessageBox]::Show(
         $_.Exception.Message + [Environment]::NewLine + [Environment]::NewLine +
         'Si solicito un respaldo, NO se borro la base cuando el respaldo fallo.',
