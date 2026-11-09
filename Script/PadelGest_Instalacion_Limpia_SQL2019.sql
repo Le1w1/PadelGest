@@ -8,7 +8,39 @@ GO
 IF DB_ID(N'PadelGestDB') IS NOT NULL
     THROW 51000, 'La base PadelGestDB ya existe; no la sobrescriba.', 1;
 GO
-CREATE DATABASE [PadelGestDB];
+-- La instancia puede tener otra base asociada a archivos llamados
+-- PadelGestDB.mdf / PadelGestDB_log.ldf (por ejemplo, una base de pruebas).
+-- Se crean archivos fisicos NUEVOS con nombres unicos, sin tocar esos archivos.
+-- El nombre LOGICO de la base permanece PadelGestDB.
+DECLARE @RutaDatos nvarchar(4000) =
+    CONVERT(nvarchar(4000), SERVERPROPERTY('InstanceDefaultDataPath'));
+DECLARE @RutaLog nvarchar(4000) =
+    CONVERT(nvarchar(4000), SERVERPROPERTY('InstanceDefaultLogPath'));
+DECLARE @Sufijo varchar(32) = REPLACE(CONVERT(varchar(36), NEWID()), '-', '');
+DECLARE @ArchivoDatos nvarchar(4000);
+DECLARE @ArchivoLog nvarchar(4000);
+DECLARE @Comando nvarchar(max);
+
+IF @RutaDatos IS NULL OR @RutaLog IS NULL
+    THROW 51001, 'SQL Server no informa las carpetas predeterminadas de datos y logs.', 1;
+
+IF RIGHT(@RutaDatos, 1) NOT IN (N'\', N'/')
+    SET @RutaDatos = @RutaDatos + N'\';
+IF RIGHT(@RutaLog, 1) NOT IN (N'\', N'/')
+    SET @RutaLog = @RutaLog + N'\';
+
+SET @ArchivoDatos = @RutaDatos + N'PadelGestDB_' + @Sufijo + N'.mdf';
+SET @ArchivoLog = @RutaLog + N'PadelGestDB_' + @Sufijo + N'_log.ldf';
+
+SET @Comando =
+    N'CREATE DATABASE [PadelGestDB] ON PRIMARY (' +
+    N'NAME = N''PadelGestDB_Data'', FILENAME = N''' +
+    REPLACE(@ArchivoDatos, N'''', N'''''') +
+    N''') LOG ON (' +
+    N'NAME = N''PadelGestDB_Log'', FILENAME = N''' +
+    REPLACE(@ArchivoLog, N'''', N'''''') + N''')';
+
+EXEC sys.sp_executesql @Comando;
 GO
 USE [PadelGestDB];
 GO
