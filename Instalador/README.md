@@ -29,7 +29,7 @@ Importante: no subir ni ejecutar una carpeta `publish` de CineGest. Publicar la 
 
 **Instalacion desde cero:** verifica SQL Server a traves de `sqlcmd`; si `PadelGestDB` no existe, ejecuta el script limpio de `Script/`, que incluye el catalogo y las versiones iniciales de `Producto_C`.
 
-**Reinstalacion:** si `PadelGestDB` ya existe en la instancia seleccionada, no toca sus tablas ni sus registros; actualiza archivos publicados y accesos directos.
+**Reinstalacion:** antes de iniciar, el asistente consulta si `PadelGestDB` existe y muestra una confirmacion explicita indicando que se actualizaran los archivos del programa y se conservaran los datos. Si el usuario elige No, no comienza la instalacion. Si confirma, no toca las tablas ni los registros existentes; actualiza archivos publicados y accesos directos.
 
 **Desinstalacion:** muestra tres opciones:
 1. Solo el programa (conserva `PadelGestDB`).
