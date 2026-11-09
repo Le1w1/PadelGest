@@ -225,7 +225,7 @@ begin
     Texto.WordWrap := True;
     Texto.Caption :=
       '¿Que deseas eliminar?' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
-      'Conservar datos: desinstala solo PadelGest.' + Chr(13) + Chr(10) +
+      'Solo el programa: desinstala PadelGest y conserva la base de datos.' + Chr(13) + Chr(10) +
       'Eliminar todo: tambien borra clientes, reservas, ventas y usuarios.' + Chr(13) + Chr(10) +
       'Backup y eliminar: guarda y verifica un archivo .bak antes de borrar.';
     AgregarBoton('Solo el programa', 12, 150, mrOk);
