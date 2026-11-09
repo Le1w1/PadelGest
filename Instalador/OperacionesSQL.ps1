@@ -10,7 +10,9 @@ $ErrorActionPreference = 'Stop'
 $base = 'PadelGestDB'
 
 function Ejecutar-Sql([string]$Consulta, [string]$Archivo = '') {
-    $argumentos = @('-S', $Servidor, '-E', '-b', '-l', '10', '-h', '-1', '-W')
+    # SQL Server local usa certificado autofirmado. -C omite la validacion
+    # del certificado, como TrustServerCertificate=True de PadelGest.
+    $argumentos = @('-S', $Servidor, '-E', '-C', '-b', '-l', '10', '-h', '-1', '-W')
     if ($Archivo) { $argumentos += @('-i', $Archivo) }
     else { $argumentos += @('-Q', $Consulta) }
     $salida = & sqlcmd.exe @argumentos 2>&1 | Out-String
