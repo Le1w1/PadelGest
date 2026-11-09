@@ -32,7 +32,17 @@ try {
         if (-not (Test-Path -LiteralPath $ScriptSQL -PathType Leaf)) {
             throw 'No se encontro el script de instalacion limpia.'
         }
-        Ejecutar-Sql '' $ScriptSQL | Out-Null
+        # sqlcmd puede interpretar un archivo UTF-8 sin BOM como ANSI.
+        # La copia temporal UTF-16 LE con BOM preserva nombres y acentos.
+        $scriptTemporal = Join-Path $env:TEMP ('PadelGest_SQL_' + [guid]::NewGuid().ToString('N') + '.sql')
+        try {
+            $textoSql = [System.IO.File]::ReadAllText($ScriptSQL, [System.Text.Encoding]::UTF8)
+            [System.IO.File]::WriteAllText($scriptTemporal, $textoSql, [System.Text.Encoding]::Unicode)
+            Ejecutar-Sql '' $scriptTemporal | Out-Null
+        }
+        finally {
+            if (Test-Path -LiteralPath $scriptTemporal) { Remove-Item -LiteralPath $scriptTemporal -Force }
+        }
         if ((Ejecutar-Sql "SET NOCOUNT ON; SELECT CASE WHEN DB_ID(N'$base') IS NULL THEN 0 ELSE 1 END;").Trim() -ne '1') {
             throw 'No se pudo comprobar la creacion de la base de datos.'
         }
