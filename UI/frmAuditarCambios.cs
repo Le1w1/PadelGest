@@ -38,7 +38,13 @@ namespace UI
                 Consultar();
             };
             txtNombre.TextChanged += (sender, e) => ProgramarConsulta();
-            nudCodigo.ValueChanged += (sender, e) => ProgramarConsulta();
+            txtCodigo.TextChanged += (sender, e) => ProgramarConsulta();
+            txtCodigo.KeyPress += (sender, e) =>
+            {
+                // Se admiten solo digitos, retroceso y teclas de control.
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                    e.Handled = true;
+            };
             dtpDesde.ValueChanged += (sender, e) => ProgramarConsulta();
             dtpHasta.ValueChanged += (sender, e) => ProgramarConsulta();
             FormClosed += (sender, e) => _temporizadorFiltros.Dispose();
@@ -108,7 +114,22 @@ namespace UI
         {
             try
             {
-                int? codigo = nudCodigo.Value == 0 ? null : (int)nudCodigo.Value;
+                // Se lee el texto directamente: no hay que presionar Enter para confirmar.
+                string textoCodigo = txtCodigo.Text.Trim();
+                int? codigo = null;
+                if (textoCodigo.Length > 0)
+                {
+                    if (!int.TryParse(textoCodigo, out int numero) || numero <= 0)
+                    {
+                        dgvCambios.DataSource = null;
+                        dgvCambios.CurrentCell = null;
+                        dgvCambios.ClearSelection();
+                        btnRestaurar.Enabled = false;
+                        ActualizarCantidad(0);
+                        return;
+                    }
+                    codigo = numero;
+                }
                 DateTime? desde = dtpDesde.Checked ? dtpDesde.Value.Date : null;
                 DateTime? hasta = dtpHasta.Checked ? dtpHasta.Value.Date : null;
 
@@ -162,7 +183,7 @@ namespace UI
         {
             _filtrosInicializados = false;
             _temporizadorFiltros.Stop();
-            nudCodigo.Value = 0;
+            txtCodigo.Clear();
             txtNombre.Clear();
             dtpDesde.Checked = false;
             dtpHasta.Checked = false;
