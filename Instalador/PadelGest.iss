@@ -194,9 +194,9 @@ begin
     Texto.AutoSize := False;
     Texto.WordWrap := True;
     Texto.Caption :=
-      '¿Que deseas eliminar?' + #13#10 + #13#10 +
-      'Conservar datos: desinstala solo PadelGest.' + #13#10 +
-      'Eliminar todo: tambien borra clientes, reservas, ventas y usuarios.' + #13#10 +
+      '¿Que deseas eliminar?' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
+      'Conservar datos: desinstala solo PadelGest.' + Chr(13) + Chr(10) +
+      'Eliminar todo: tambien borra clientes, reservas, ventas y usuarios.' + Chr(13) + Chr(10) +
       'Backup y eliminar: guarda y verifica un archivo .bak antes de borrar.';
     AgregarBoton('Solo el programa', 12, 150, @BotonConservarClick);
     AgregarBoton('Eliminar todo', 174, 143, @BotonEliminarClick);
@@ -206,7 +206,7 @@ begin
     else if EleccionEliminar > 0 then
       Result := MsgBox(
         '¿Estas seguro de que deseas eliminar tambien la base de datos PadelGestDB?' +
-        #13#10 + 'Esta accion no se puede deshacer sin un respaldo.',
+        Chr(13) + Chr(10) + 'Esta accion no se puede deshacer sin un respaldo.',
         mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
   finally
     VentanaEleccion.Free();
