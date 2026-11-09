@@ -19,6 +19,7 @@ namespace UI
         private readonly BitacoraEventoBLL _bitacoraEventoBLL;
         private bool _detalleReservaVisible;
         private bool _configurandoFiltros;
+        private bool _actualizandoGrilla;
         private bool _filtrosAutomaticosActivos;
         private readonly System.Windows.Forms.Timer _temporizadorFiltros = new System.Windows.Forms.Timer
         {
@@ -176,8 +177,18 @@ namespace UI
         {
             // DataBinding puede cambiar CurrentRow sin una seleccion del usuario.
             // Solo mostrar el detalle si hay una fila efectivamente seleccionada.
+            if (_actualizandoGrilla)
+                return;
+
             if (dgvEventos.CurrentRow?.Selected == true)
                 CargarNombreApellidoDesdeEventoSeleccionado();
+            else
+            {
+                txtNombre.Clear();
+                txtApellido.Clear();
+                txtDescripcionReserva.Clear();
+                AjustarDetalleReserva(false);
+            }
         }
 
 
@@ -412,16 +423,23 @@ namespace UI
 
                 List<BitacoraEvento> eventos = _bitacoraEventoBLL.ObtenerEventos(fechaDesde, fechaHasta, usuario, modulo, accion, criticidad, resultado, descripcion);
 
-                dgvEventos.DataSource = null;
-                dgvEventos.DataSource = eventos;
+                // Durante el rebinding WinForms dispara SelectionChanged con una fila
+                // temporalmente activa. No debe abrir/cerrar el detalle ni mover el GroupBox.
+                _actualizandoGrilla = true;
+                try
+                {
+                    dgvEventos.DataSource = null;
+                    dgvEventos.DataSource = eventos;
+                    ConfigurarColumnasGrilla();
+                    ActualizarCabecerasGrilla();
+                    dgvEventos.CurrentCell = null;
+                    dgvEventos.ClearSelection();
+                }
+                finally
+                {
+                    _actualizandoGrilla = false;
+                }
 
-                ConfigurarColumnasGrilla();
-                ActualizarCabecerasGrilla();
-
-                // La busqueda solo cambia las filas visibles; no selecciona
-                // automaticamente la primera ni muestra detalles sin un clic del usuario.
-                dgvEventos.CurrentCell = null;
-                dgvEventos.ClearSelection();
                 txtNombre.Clear();
                 txtApellido.Clear();
                 txtDescripcionReserva.Clear();
