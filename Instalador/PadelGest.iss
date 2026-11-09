@@ -164,11 +164,9 @@ var
 begin
   Result := True;
   EleccionEliminar := -1;
-  VentanaEleccion := CreateCustomForm();
+  VentanaEleccion := CreateCustomForm(ScaleX(560), ScaleY(165), False, False);
   try
     VentanaEleccion.Caption := 'Desinstalar PadelGest';
-    VentanaEleccion.ClientWidth := ScaleX(560);
-    VentanaEleccion.ClientHeight := ScaleY(165);
     Texto := TNewStaticText.Create(VentanaEleccion);
     Texto.Parent := VentanaEleccion;
     Texto.Left := ScaleX(16);
