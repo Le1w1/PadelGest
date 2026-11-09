@@ -15,7 +15,7 @@ namespace UI
         {
             lblTitulo = new Label();
             lblCodigo = new Label();
-            nudCodigo = new NumericUpDown();
+            txtCodigo = new TextBox();
             lblNombre = new Label();
             txtNombre = new TextBox();
             lblDesde = new Label();
@@ -37,8 +37,7 @@ namespace UI
             btnVolver = new Button();
             btnRestaurar = new Button();
 
-            ((System.ComponentModel.ISupportInitialize)nudCodigo).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvCambios).BeginInit();
+                        ((System.ComponentModel.ISupportInitialize)dgvCambios).BeginInit();
             SuspendLayout();
 
             lblTitulo.Location = new Point(25, 12);
@@ -54,13 +53,12 @@ namespace UI
             lblCodigo.Text = "Código:";
             lblCodigo.Name = "lblCodigo";
 
-            nudCodigo.Location = new Point(105, 72);
-            nudCodigo.Size = new Size(120, 28);
-            nudCodigo.Minimum = 0;
-            nudCodigo.Maximum = int.MaxValue;
-            nudCodigo.BackColor = Color.White;
-            nudCodigo.ForeColor = Color.Black;
-            nudCodigo.Name = "nudCodigo";
+            txtCodigo.Location = new Point(105, 72);
+            txtCodigo.Size = new Size(120, 28);
+            txtCodigo.MaxLength = 10;
+            txtCodigo.BackColor = Color.White;
+            txtCodigo.ForeColor = Color.Black;
+            txtCodigo.Name = "txtCodigo";
 
             lblNombre.Location = new Point(248, 75);
             lblNombre.Size = new Size(72, 27);
@@ -266,22 +264,21 @@ namespace UI
             Text = "PadelGest - Bitácora de Cambios";
             Controls.AddRange(new Control[]
             {
-                lblTitulo, lblCodigo, nudCodigo, lblNombre, txtNombre,
+                lblTitulo, lblCodigo, txtCodigo, lblNombre, txtNombre,
                 lblDesde, dtpDesde, lblHasta, dtpHasta,
                 btnBuscar, btnLimpiar, lblCantidad, dgvCambios, btnRestaurar, btnVolver
             });
             Load += frmAuditarCambios_Load;
             FormClosed += frmAuditarCambios_FormClosed;
 
-            ((System.ComponentModel.ISupportInitialize)nudCodigo).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvCambios).EndInit();
+                        ((System.ComponentModel.ISupportInitialize)dgvCambios).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         private Label lblTitulo;
         private Label lblCodigo;
-        private NumericUpDown nudCodigo;
+        private TextBox txtCodigo;
         private Label lblNombre;
         private TextBox txtNombre;
         private Label lblDesde;
