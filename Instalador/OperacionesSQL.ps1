@@ -2,7 +2,7 @@
 # Se utiliza autenticacion integrada de Windows; no guarda contrasenas.
 # SQL Server y sqlcmd deben existir previamente. Exclusivamente PadelGestDB.
 param(
-    [Parameter(Mandatory=$true)][ValidateSet('Instalar','Eliminar','BackupEliminar')][string]$Accion,
+    [Parameter(Mandatory=$true)][ValidateSet('Consultar','Instalar','Eliminar','BackupEliminar')][string]$Accion,
     [Parameter(Mandatory=$true)][ValidateSet('.','localhost\SQLEXPRESS')][string]$Servidor,
     [string]$ScriptSQL = ''
 )
@@ -23,6 +23,14 @@ try {
         throw 'No se encontro sqlcmd. Instale las utilidades de linea de comandos de SQL Server y vuelva a intentar.'
     }
     $existe = (Ejecutar-Sql "SET NOCOUNT ON; SELECT CASE WHEN DB_ID(N'$base') IS NULL THEN 0 ELSE 1 END;").Trim() -eq '1'
+
+    # Codigos usados por el asistente antes de instalar:
+    # 10 = existe la base, 11 = instalacion nueva; 1 = fallo de conexion.
+    # Consultar es exclusivamente lectura: nunca modifica ni crea la base.
+    if ($Accion -eq 'Consultar') {
+        if ($existe) { exit 10 }
+        exit 11
+    }
 
     if ($Accion -eq 'Instalar') {
         if ($existe) {
