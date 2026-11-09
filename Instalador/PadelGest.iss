@@ -142,25 +142,9 @@ begin
   end;
 end;
 
-procedure BotonConservarClick(Sender: TObject);
-begin
-  EleccionEliminar := 0;
-  VentanaEleccion.ModalResult := mrOk;
-end;
-
-procedure BotonEliminarClick(Sender: TObject);
-begin
-  EleccionEliminar := 1;
-  VentanaEleccion.ModalResult := mrOk;
-end;
-
-procedure BotonBackupClick(Sender: TObject);
-begin
-  EleccionEliminar := 2;
-  VentanaEleccion.ModalResult := mrOk;
-end;
-
-procedure AgregarBoton(Caption: String; X, Ancho: Integer; Click: TNotifyEvent);
+// ModalResult pertenece a TNewButton, no a TSetupForm.
+// ShowModal devuelve el ModalResult del boton elegido.
+procedure AgregarBoton(Caption: String; X, Ancho, ResultadoModal: Integer);
 var
   Boton: TNewButton;
 begin
@@ -171,7 +155,7 @@ begin
   Boton.Top := ScaleY(116);
   Boton.Width := ScaleX(Ancho);
   Boton.Height := ScaleY(29);
-  Boton.OnClick := Click;
+  Boton.ModalResult := ResultadoModal;
 end;
 
 function InitializeUninstall(): Boolean;
@@ -198,12 +182,17 @@ begin
       'Conservar datos: desinstala solo PadelGest.' + Chr(13) + Chr(10) +
       'Eliminar todo: tambien borra clientes, reservas, ventas y usuarios.' + Chr(13) + Chr(10) +
       'Backup y eliminar: guarda y verifica un archivo .bak antes de borrar.';
-    AgregarBoton('Solo el programa', 12, 150, @BotonConservarClick);
-    AgregarBoton('Eliminar todo', 174, 143, @BotonEliminarClick);
-    AgregarBoton('Backup y eliminar todo', 329, 219, @BotonBackupClick);
-    if VentanaEleccion.ShowModal() <> mrOk then
-      Result := False
-    else if EleccionEliminar > 0 then
+    AgregarBoton('Solo el programa', 12, 150, mrOk);
+    AgregarBoton('Eliminar todo', 174, 143, mrYes);
+    AgregarBoton('Backup y eliminar todo', 329, 219, mrNo);
+    case VentanaEleccion.ShowModal() of
+      mrOk: EleccionEliminar := 0;
+      mrYes: EleccionEliminar := 1;
+      mrNo: EleccionEliminar := 2;
+    else
+      Result := False;
+    end;
+    if Result and (EleccionEliminar > 0) then
       Result := MsgBox(
         '¿Estas seguro de que deseas eliminar tambien la base de datos PadelGestDB?' +
         Chr(13) + Chr(10) + 'Esta accion no se puede deshacer sin un respaldo.',
