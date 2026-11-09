@@ -36,7 +36,7 @@ Importante: no subir ni ejecutar una carpeta `publish` de CineGest. Publicar la 
 2. Eliminar todo.
 3. Backup y eliminar todo: pide una carpeta, ejecuta `BACKUP DATABASE`, comprueba `RESTORE VERIFYONLY` y solo despues elimina la base.
 
-La instancia debe ser **local**. SQL Server (cuenta de servicio) necesita permisos de escritura en la carpeta elegida para el `.bak`. Si la copia falla o se cancela, **la base se conserva**, aunque la desinstalacion de archivos del programa puede continuar.
+La instancia debe ser **local**. SQL Server (cuenta de servicio) necesita permisos de escritura en la carpeta elegida para el `.bak`. Si la copia falla o se cancela, **no comienza la desinstalacion**: se conservan el programa y la base, y se vuelve al menu para elegir una alternativa. Evitar seleccionar `C:\` y otras ubicaciones protegidas.
 
 El script auxiliar solo apunta a una base de nombre fijo: `PadelGestDB`.
 
@@ -49,7 +49,7 @@ El script auxiliar solo apunta a una base de nombre fijo: `PadelGestDB`.
 5. Reinstalar: confirmar que cliente, modificacion e historial se conservan.
 6. Desinstalar **solo programa** y volver a instalar: datos intactos.
 7. Desinstalar con **backup y eliminar**: verificar `.bak`, confirmar ausencia de base y luego restaurarla.
-8. Simular carpeta sin permisos para SQL Server: debe fallar backup y **NO** eliminar la base.
+8. Simular carpeta sin permisos para SQL Server: debe fallar backup, conservar **la base y el programa**, y regresar a las opciones para intentar de nuevo o elegir solo el programa.
 9. Probar **eliminar todo sin backup** solamente en una instancia de prueba.
 10. Verificar que app iniciada desde Setup use la instancia SQL que se selecciono.
 
