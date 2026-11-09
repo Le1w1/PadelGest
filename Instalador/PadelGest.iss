@@ -206,12 +206,45 @@ begin
   Boton.ModalResult := ResultadoModal;
 end;
 
+
+function ObtenerServidorDesinstalacion(var Servidor: String): Boolean;
+var
+  Entorno: String;
+begin
+  Result := False;
+  if not RegQueryStringValue(HKLM,
+    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
+    'PADELGEST_ENTORNO', Entorno) then
+  begin
+    MsgBox('No se encontro la configuracion de SQL Server. ' +
+      'No se eliminara la base de datos.', mbError, MB_OK);
+    Exit;
+  end;
+
+  if Entorno = 'LEO' then
+    Servidor := 'localhost\SQLEXPRESS'
+  else if Entorno = 'UAI' then
+    Servidor := '.'
+  else
+  begin
+    MsgBox('Instancia SQL desconocida. No se eliminara la base de datos.',
+      mbError, MB_OK);
+    Exit;
+  end;
+
+  Result := True;
+end;
+
+// Todas las operaciones SQL se ejecutan ANTES de iniciar la desinstalacion.
+// Si el backup falla, ni el programa ni la base se eliminan.
+// El usuario puede regresar al menu y elegir otra opcion.
 function InitializeUninstall(): Boolean;
 var
   Texto: TNewStaticText;
+  Servidor, Accion: String;
+  Codigo, Respuesta: Integer;
 begin
-  Result := True;
-  EleccionEliminar := -1;
+  Result := False;
   VentanaEleccion := CreateCustomForm(ScaleX(560), ScaleY(165), False, False);
   try
     VentanaEleccion.Caption := 'Desinstalar PadelGest';
@@ -228,69 +261,73 @@ begin
       'Solo el programa: desinstala PadelGest y conserva la base de datos.' + Chr(13) + Chr(10) +
       'Eliminar todo: tambien borra clientes, reservas, ventas y usuarios.' + Chr(13) + Chr(10) +
       'Backup y eliminar: guarda y verifica un archivo .bak antes de borrar.';
+
     AgregarBoton('Solo el programa', 12, 150, mrOk);
     AgregarBoton('Eliminar todo', 174, 143, mrYes);
     AgregarBoton('Backup y eliminar todo', 329, 219, mrNo);
-    case VentanaEleccion.ShowModal() of
-      mrOk: EleccionEliminar := 0;
-      mrYes: EleccionEliminar := 1;
-      mrNo: EleccionEliminar := 2;
-    else
-      Result := False;
-    end;
-    if Result and (EleccionEliminar > 0) then
-      Result := MsgBox(
+
+    // Ante cualquier error se permanece en el menu, nunca en la pantalla
+    // de progreso de desinstalacion.
+    while True do
+    begin
+      case VentanaEleccion.ShowModal() of
+        mrOk:
+          begin
+            // Desinstalar solo archivos del programa; no tocar SQL Server.
+            Result := True;
+            Exit;
+          end;
+        mrYes: Accion := 'Eliminar';
+        mrNo: Accion := 'BackupEliminar';
+      else
+        // La X de la ventana cancela toda la desinstalacion.
+        Exit;
+      end;
+
+      Respuesta := MsgBox(
         '¿Estas seguro de que deseas eliminar tambien la base de datos PadelGestDB?' +
-        Chr(13) + Chr(10) + 'Esta accion no se puede deshacer sin un respaldo.',
-        mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
+        Chr(13) + Chr(10) +
+        'Esta accion no se puede deshacer sin un respaldo.',
+        mbConfirmation, MB_YESNO or MB_DEFBUTTON2);
+      if Respuesta <> IDYES then
+        Continue;
+
+      if not ObtenerServidorDesinstalacion(Servidor) then
+        Continue;
+
+      if Accion = 'BackupEliminar' then
+        MsgBox(
+          'Selecciona una carpeta para guardar el respaldo .bak.' +
+          Chr(13) + Chr(10) +
+          'SQL Server debe tener permiso de escritura en esa carpeta.' +
+          Chr(13) + Chr(10) +
+          'Evita ubicaciones protegidas como la raiz de C:\.' +
+          Chr(13) + Chr(10) +
+          'Si la copia falla, no se eliminara el programa ni la base.',
+          mbInformation, MB_OK);
+
+      Codigo := EjecutarHelperDesinstalacion(Accion, Servidor);
+      if Codigo = 0 then
+      begin
+        // Solo se permite desinstalar los archivos cuando la operacion SQL
+        // solicitada termino correctamente.
+        Result := True;
+        Exit;
+      end;
+
+      if Codigo = 2 then
+        MsgBox('Se cancelo la copia de seguridad. No se elimino nada.' +
+          Chr(13) + Chr(10) + 'Podes elegir otra opcion.',
+          mbInformation, MB_OK)
+      else
+        MsgBox('No se pudo completar la operacion solicitada.' +
+          Chr(13) + Chr(10) +
+          'Se conservaron el programa y la base de datos, si la operacion ' +
+          'de SQL Server no llego a eliminarlos.' + Chr(13) + Chr(10) +
+          'Podes elegir otra opcion o cerrar la ventana para cancelar.',
+          mbError, MB_OK);
+    end;
   finally
     VentanaEleccion.Free();
   end;
-end;
-
-procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
-var
-  Entorno, Servidor, Accion: String;
-  Codigo: Integer;
-begin
-  if (CurUninstallStep <> usUninstall) or (EleccionEliminar = 0) then
-    Exit;
-
-  if not RegQueryStringValue(HKLM,
-     'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
-     'PADELGEST_ENTORNO', Entorno) then
-  begin
-    MsgBox('No se encontro la configuracion de SQL Server. ' +
-      'Por seguridad, la base NO sera eliminada. Se desinstalara solo el programa.',
-      mbError, MB_OK);
-    Exit;
-  end;
-
-  if Entorno = 'LEO' then
-    Servidor := 'localhost\SQLEXPRESS'
-  else if Entorno = 'UAI' then
-    Servidor := '.'
-  else
-  begin
-    MsgBox('Instancia SQL desconocida. Se conservara la base de datos.',
-      mbError, MB_OK);
-    Exit;
-  end;
-
-  if EleccionEliminar = 2 then
-  begin
-    MsgBox('Selecciona la carpeta para guardar el respaldo .bak. ' +
-      'SQL Server debe tener permiso de escritura en esa ubicacion. ' +
-      'Si la copia falla, la base NO se eliminara.',
-      mbInformation, MB_OK);
-    Accion := 'BackupEliminar';
-  end
-  else
-    Accion := 'Eliminar';
-
-  Codigo := EjecutarHelperDesinstalacion(Accion, Servidor);
-  if Codigo <> 0 then
-    MsgBox('No se elimino la base de datos. La desinstalacion del programa ' +
-      'continuara; puedes conservar o recuperar los datos en SQL Server.',
-      mbError, MB_OK);
 end;
