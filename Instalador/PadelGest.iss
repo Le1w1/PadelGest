@@ -45,9 +45,12 @@ Name: "{autodesktop}\PadelGest"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: string; ValueName: "PADELGEST_ENTORNO"; ValueData: "{code:EntornoSeleccionado}"; Flags: uninsdeletevalue
 
 [Run]
-Filename: "{app}\{#AppExe}"; Description: "Iniciar PadelGest"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#AppExe}"; Description: "Iniciar PadelGest"; BeforeInstall: ConfigurarEntornoProceso; Flags: nowait postinstall skipifsilent
 
 [Code]
+function SetEnvironmentVariableW(Nombre: String; Valor: String): Boolean;
+  external 'SetEnvironmentVariableW@kernel32.dll stdcall';
+
 var
   PaginaServidor: TInputOptionWizardPage;
   EleccionEliminar: Integer;
@@ -59,6 +62,13 @@ begin
     Result := 'LEO'
   else
     Result := 'UAI';
+end;
+
+procedure ConfigurarEntornoProceso();
+begin
+  // El exe iniciado desde Setup hereda su entorno, que puede no reflejar
+  // todavia el valor recien escrito en el registro.
+  SetEnvironmentVariableW('PADELGEST_ENTORNO', EntornoSeleccionado(''));
 end;
 
 function ServidorSeleccionado: String;
