@@ -130,7 +130,7 @@ namespace UI
             lblDNIValor.Text = cliente.DNI;
             lblNombreValor.Text = cliente.Nombre;
             lblApellidoValor.Text = cliente.Apellido;
-            lblTelefonoValor.Text = cliente.Telefono;
+            lblTelefonoValor.Text = SM.Instancia.PuedeDesencriptarTelefono() ? cliente.Telefono : "****";
             lblCorreoValor.Text = cliente.CorreoElectronico;
         }
 
