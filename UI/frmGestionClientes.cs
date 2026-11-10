@@ -20,13 +20,31 @@ namespace UI
             AyudaContextual.Configurar(this);
             ActualizarIdioma();
             grilla.SelectionChanged += (_, _) => Seleccionar();
+            // Enmascara solo la presentacion. Conserva el cifrado real en ClienteBE.
+            grilla.CellFormatting += (_, e) =>
+            {
+                if (e.ColumnIndex == colTelefono.Index && e.RowIndex >= 0 &&
+                    !SM.Instancia.PuedeDesencriptarTelefono())
+                {
+                    e.Value = "****";
+                    e.FormattingApplied = true;
+                }
+            };
             btnNuevo.Click += (_, _) =>
             {
                 if (_mostrandoXml) Cargar();
                 else Limpiar();
             };
             btnRegistrar.Click += (_, _) => Ejecutar(() => _clientes.RegistrarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
-            btnModificar.Click += (_, _) => Ejecutar(() => _clientes.ModificarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
+            btnModificar.Click += (_, _) =>
+            {
+                // Un usuario sin permiso no puede editar el telefono: reenviar el valor
+                // cifrado original, nunca el texto de mascara mostrado en la pantalla.
+                string telefonoParaGuardar = SM.Instancia.PuedeDesencriptarTelefono()
+                    ? telefono.Text
+                    : (grilla.CurrentRow?.DataBoundItem as ClienteBE)?.Telefono ?? telefono.Text;
+                Ejecutar(() => _clientes.ModificarCliente(dni.Text, nombre.Text, apellido.Text, telefonoParaGuardar, correo.Text));
+            };
             btnEliminar.Click += (_, _) => {
                 if (MessageBox.Show(T("frmGestionClientes.ConfirmarEliminar"), T("frmGestionClientes.Confirmacion"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     Ejecutar(() => _clientes.EliminarCliente(dni.Text));
@@ -99,8 +117,8 @@ namespace UI
             dni.ReadOnly = true; // Identificador primario; no se modifica.
             nombre.Text = c.Nombre;
             apellido.Text = c.Apellido;
-            telefono.Text = c.Telefono;
-            // Los demas roles pueden consultar el telefono cifrado, pero no editarlo.
+            telefono.Text = SM.Instancia.PuedeDesencriptarTelefono() ? c.Telefono : "****";
+            // Sin permiso solo se muestra la mascara; el valor original queda en el modelo.
             telefono.ReadOnly = !SM.Instancia.PuedeDesencriptarTelefono();
             correo.Text = c.CorreoElectronico;
         }
