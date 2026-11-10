@@ -587,6 +587,7 @@ INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 1, N'b6d7168
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 5, N'cebc03007ff90caa5f14b0d24681820822c75b97db9a3658fd2c06b796794c97')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 6, N'13ab4ed36916168913964f52b4b98215893947f7540ef25ad80ed34593f97b1f')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 7, N'a7c9457857e60130f01a26bed4d4d64249afbbf8f2e041ca4d8d74fd6098d0b7')
+INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 8, N'a96c9eb63a01b9fd39e82288d2de9d814102466f8c0684da35cc22919adb435e')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 13, N'8c35684bf37f290ed4e35e4eb8e7fd2a5ec035e188191f443d0c11c6c969c9b8')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (5, 1, N'cac33d2c18b2084313c957a5641e259f69b9f0d5afa2cc4b825b585d6534ccdc')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (5, 13, N'8ec99bdedaf4cc509dabae02553a61d2e49c4969309086f082fcc956568aa859')
@@ -651,7 +652,7 @@ INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto'
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', '700ba87ff88d54c32d59eac310a40e63e20df37bb09a5a3f7191354a747a30d3');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', '361ce5823cb366cb1ed3c99bf0d7cda12ead822c4907ab71db898274438224d1');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', '32b5356d0241e9fa61aec0d6b60e4ce854b7b877378c67761cb47c05d0cae856');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', '175283370c8b36253f4e2bd4a48c2c0fbb94e7b8a62274b88b6ae950883d5314');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', '9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', '043d767ba5095982bf68a31b3335097f338526cee72669584b4f34e035eefa30');
