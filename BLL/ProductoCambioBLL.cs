@@ -21,14 +21,10 @@ namespace BLL
             if (usuario == null || usuario.IdUsuario <= 0)
                 throw new InvalidOperationException("No hay una sesion activa.");
 
-            _productoCambioDAL.RestaurarVersion(
-                idCambio, usuario.IdUsuario, usuario.NombreUsuario);
+            _productoCambioDAL.RestaurarVersion(idCambio, usuario.IdUsuario, usuario.NombreUsuario);
         }
 
-        public List<ProductoCambioBE> ConsultarCambios(
-            int? codigoProducto = null, string nombre = "",
-            DateTime? fechaDesde = null, DateTime? fechaHasta = null,
-            bool soloVigentes = false)
+        public List<ProductoCambioBE> ConsultarCambios(int? codigoProducto = null, string nombre = "",DateTime? fechaDesde = null, DateTime? fechaHasta = null,bool soloVigentes = false)
         {
             SM.Instancia.RequierePermiso("PRO_GESTIONAR");
             if (codigoProducto.HasValue && codigoProducto.Value <= 0)

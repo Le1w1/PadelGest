@@ -82,8 +82,7 @@ namespace DAL
                     cmd.Parameters.Add("@Minimo", SqlDbType.Int).Value = minimo;
                     cmd.Parameters.Add("@Activo", SqlDbType.Bit).Value = activo;
                     if (Convert.ToInt32(cmd.ExecuteScalar()) != 0)
-                        throw new InvalidOperationException(
-                            "Esta version ya coincide con los datos actuales.");
+                        throw new InvalidOperationException("Esta version ya coincide con los datos actuales.");
                 }
 
                 // Primero se desactiva la vigente para respetar el indice unico.
@@ -95,8 +94,7 @@ namespace DAL
                 {
                     cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value = codigo;
                     if (cmd.ExecuteNonQuery() != 1)
-                        throw new InvalidOperationException(
-                            "No se encontro una version vigente del producto.");
+                        throw new InvalidOperationException("No se encontro una version vigente del producto.");
                 }
 
                 // Al marcar Act=1 el trigger de Producto_C actualiza Producto.
@@ -111,8 +109,7 @@ namespace DAL
                     cmd.Parameters.Add("@IdCambio", SqlDbType.BigInt).Value = idCambio;
                     cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value = codigo;
                     if (cmd.ExecuteNonQuery() != 1)
-                        throw new InvalidOperationException(
-                            "No se pudo activar la version seleccionada.");
+                        throw new InvalidOperationException("No se pudo activar la version seleccionada.");
                 }
 
                 const string verificar = @"
@@ -122,8 +119,7 @@ namespace DAL
                 {
                     cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value = codigo;
                     if (Convert.ToInt32(cmd.ExecuteScalar()) != 1)
-                        throw new InvalidOperationException(
-                            "No quedo una unica version vigente del producto.");
+                        throw new InvalidOperationException("No quedo una unica version vigente del producto.");
                 }
 
                 dvDAL.RecalcularDVEnTransaccion("Producto", conexion, tx);
@@ -137,8 +133,7 @@ namespace DAL
                     Accion = "Restaurar version producto",
                     Criticidad = "Media",
                     Resultado = "Exitoso",
-                    Descripcion = $"Producto {codigo}: version historica {idCambio} restaurada. "
-                                + $"Incluye precio, stock y estado comercial."
+                    Descripcion = $"Producto {codigo}: version historica {idCambio} restaurada. "+ $"Incluye precio, stock y estado comercial."
                 }, conexion, tx);
 
                 tx.Commit();
@@ -150,10 +145,7 @@ namespace DAL
             }
         }
 
-        public List<ProductoCambioBE> Consultar(
-            int? codigoProducto, string nombre,
-            DateTime? fechaDesde, DateTime? fechaHasta,
-            bool soloVigentes)
+        public List<ProductoCambioBE> Consultar(int? codigoProducto, string nombre,DateTime? fechaDesde, DateTime? fechaHasta,bool soloVigentes)
         {
             const string sql = @"
                 SELECT TOP (500)
@@ -170,14 +162,10 @@ namespace DAL
 
             using SqlConnection conexion = _accesoDatos.ObtenerConexion();
             using SqlCommand cmd = new SqlCommand(sql, conexion);
-            cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value =
-                codigoProducto.HasValue ? codigoProducto.Value : DBNull.Value;
-            cmd.Parameters.Add("@Nombre", SqlDbType.NVarChar, 120).Value =
-                nombre ?? string.Empty;
-            cmd.Parameters.Add("@Desde", SqlDbType.DateTime2).Value =
-                fechaDesde.HasValue ? fechaDesde.Value.Date : DBNull.Value;
-            cmd.Parameters.Add("@HastaExclusiva", SqlDbType.DateTime2).Value =
-                fechaHasta.HasValue ? fechaHasta.Value.Date.AddDays(1) : DBNull.Value;
+            cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value =codigoProducto.HasValue ? codigoProducto.Value : DBNull.Value;
+            cmd.Parameters.Add("@Nombre", SqlDbType.NVarChar, 120).Value =nombre ?? string.Empty;
+            cmd.Parameters.Add("@Desde", SqlDbType.DateTime2).Value =fechaDesde.HasValue ? fechaDesde.Value.Date : DBNull.Value;
+            cmd.Parameters.Add("@HastaExclusiva", SqlDbType.DateTime2).Value =fechaHasta.HasValue ? fechaHasta.Value.Date.AddDays(1) : DBNull.Value;
             cmd.Parameters.Add("@SoloVigentes", SqlDbType.Bit).Value = soloVigentes;
 
             List<ProductoCambioBE> cambios = new List<ProductoCambioBE>();
