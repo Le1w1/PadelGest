@@ -1,5 +1,4 @@
 using BE;
-using DAL.Servicios;
 using Microsoft.Data.SqlClient;
 using Servicios;
 using System.Data;
@@ -15,10 +14,11 @@ namespace DAL
         // La restauracion activa una version historica; el trigger de SQL Server
         // sincroniza Producto y crea la nueva version del historial.
         // Las DVH/DVV y la bitacora de eventos se guardan en la misma transaccion.
-        public void RestaurarVersion(long idCambio, int idUsuario, string usuario)
+        public void RestaurarVersion(long idCambio, int idUsuario, string usuario,
+            Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
         {
-            var dvDAL = new DigitoVerificadorDAL();
-            var eventosDAL = new BitacoraEventoDAL();
+            if (registrarServicios == null)
+                throw new ArgumentNullException(nameof(registrarServicios));
 
             using SqlConnection conexion = _accesoDatos.ObtenerConexion();
             conexion.Open();
@@ -122,9 +122,9 @@ namespace DAL
                         throw new InvalidOperationException("No quedo una unica version vigente del producto.");
                 }
 
-                dvDAL.RecalcularDVEnTransaccion("Producto", conexion, tx);
-
-                eventosDAL.Registrar(new BitacoraEvento
+                // La DAL invoca al delegado que proporciono ProductoCambioBLL.
+                // El delegado recalcula DV y registra bitacora en ESTA transaccion.
+                registrarServicios(new BitacoraEvento
                 {
                     IdUsuario = idUsuario,
                     Usuario = usuario,
