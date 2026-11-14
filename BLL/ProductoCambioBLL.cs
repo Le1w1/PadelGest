@@ -1,5 +1,7 @@
 using BE;
 using DAL;
+using BLL.Servicios;
+using Microsoft.Data.SqlClient;
 using Servicios;
 
 namespace BLL
@@ -8,6 +10,8 @@ namespace BLL
     public class ProductoCambioBLL
     {
         private readonly ProductoCambioDAL _productoCambioDAL = new ProductoCambioDAL();
+        private readonly DigitoVerificadorBLL _dvBLL = new DigitoVerificadorBLL();
+        private readonly BitacoraEventoBLL _bitacoraBLL = new BitacoraEventoBLL();
 
         // La restauracion afecta tambien el stock historico.
         // El formulario debe pedir confirmacion antes de invocar este metodo.
@@ -21,7 +25,16 @@ namespace BLL
             if (usuario == null || usuario.IdUsuario <= 0)
                 throw new InvalidOperationException("No hay una sesion activa.");
 
-            _productoCambioDAL.RestaurarVersion(idCambio, usuario.IdUsuario, usuario.NombreUsuario);
+            // Igual que en PN2: la DAL controla la transaccion y ejecuta este delegado
+            // despues de restaurar el producto, pero ANTES del Commit().
+            // Las BLL de servicios utilizan la misma conexion y transaccion.
+            // Si falla el DV o el registro del evento, la DAL ejecuta Rollback().
+            _productoCambioDAL.RestaurarVersion(idCambio, usuario.IdUsuario, usuario.NombreUsuario,
+                (evento, conexion, tx) =>
+                {
+                    _dvBLL.RecalcularDVEnTransaccion(new[] { "Producto" }, conexion, tx);
+                    _bitacoraBLL.RegistrarEventoEnTransaccion(evento, conexion, tx);
+                });
         }
 
         public List<ProductoCambioBE> ConsultarCambios(int? codigoProducto = null, string nombre = "",DateTime? fechaDesde = null, DateTime? fechaHasta = null,bool soloVigentes = false)
