@@ -607,7 +607,7 @@
   "frmFacturaRegistrada.Subtotal": "Subtotal",
   "frmGenerarCarrito.ErrorMostrarComprobante": "The invoice is registered and paid, but the final receipt could not be opened: {0}",
   "Pdf.ErrorAbrirArchivo": "Could not open the PDF. The file was saved successfully.",
-  "frmAuditarCambios.Menu": "Products - C",
+  "frmAuditarCambios.Menu": "Change Log",
   "frmAuditarCambios.Title": "PadelGest - Change History",
   "frmAuditarCambios.Titulo": "PRODUCT CHANGE HISTORY",
   "frmAuditarCambios.Codigo": "Code:",
