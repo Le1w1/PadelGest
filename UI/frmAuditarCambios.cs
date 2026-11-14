@@ -203,14 +203,10 @@ namespace UI
 
         private void btnRestaurar_Click(object sender, EventArgs e)
         {
-            if (dgvCambios.CurrentRow?.Selected != true ||
-                dgvCambios.CurrentRow.DataBoundItem is not ProductoCambioBE cambio || cambio.Act)
+            if (dgvCambios.CurrentRow?.Selected != true ||dgvCambios.CurrentRow.DataBoundItem is not ProductoCambioBE cambio || cambio.Act)
                 return;
 
-            string mensaje = string.Format(T("frmAuditarCambios.ConfirmarRestauracion"),
-                cambio.Nombre, cambio.FechaHora, cambio.PrecioUnitario,
-                cambio.StockDisponible, cambio.ActivoProducto
-                    ? T("frmAuditarCambios.Activo") : T("frmAuditarCambios.Inactivo"));
+            string mensaje = string.Format(T("frmAuditarCambios.ConfirmarRestauracion"),cambio.Nombre, cambio.FechaHora, cambio.PrecioUnitario,cambio.StockDisponible, cambio.ActivoProducto? T("frmAuditarCambios.Activo") : T("frmAuditarCambios.Inactivo"));
 
             if (MessageBox.Show(mensaje, Text, MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
