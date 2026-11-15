@@ -38,8 +38,7 @@ namespace DAL
                 return CriptografiaReversible.Desencriptar(telefonoGuardado);
 
             return CriptografiaReversible.EstaEncriptado(telefonoGuardado)
-                ? telefonoGuardado
-                : CriptografiaReversible.Encriptar(telefonoGuardado);
+                ? telefonoGuardado: CriptografiaReversible.Encriptar(telefonoGuardado);
         }
 
         // Encripta los telefonos que ya estaban guardados antes de incorporar esta funcionalidad.
@@ -64,10 +63,8 @@ namespace DAL
 
                 foreach (var item in telefonos)
                 {
-                    using SqlCommand comando = new SqlCommand(
-                        "UPDATE Cliente SET Telefono = @Telefono WHERE DNI = @DNI", conexion);
-                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value =
-                        CriptografiaReversible.Encriptar(item.Telefono);
+                    using SqlCommand comando = new SqlCommand("UPDATE Cliente SET Telefono = @Telefono WHERE DNI = @DNI", conexion);
+                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 100).Value =CriptografiaReversible.Encriptar(item.Telefono);
                     comando.Parameters.Add("@DNI", SqlDbType.NVarChar, 8).Value = item.DNI;
                     comando.ExecuteNonQuery();
                 }

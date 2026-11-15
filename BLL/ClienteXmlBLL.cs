@@ -12,8 +12,7 @@ namespace BLL
     // Solo persiste en SQL Server la auditoria de la accion.
     public class ClienteXmlBLL
     {
-        private static readonly XmlSerializer Serializador =
-            new XmlSerializer(typeof(List<ClienteBE>));
+        private static readonly XmlSerializer Serializador =new XmlSerializer(typeof(List<ClienteBE>));
 
         private readonly BitacoraEventoBLL _bitacora = new BitacoraEventoBLL();
 

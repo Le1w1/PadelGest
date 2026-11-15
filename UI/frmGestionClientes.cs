@@ -23,8 +23,7 @@ namespace UI
             // Enmascara solo la presentacion. Conserva el cifrado real en ClienteBE.
             grilla.CellFormatting += (_, e) =>
             {
-                if (e.ColumnIndex == colTelefono.Index && e.RowIndex >= 0 &&
-                    !SM.Instancia.PuedeDesencriptarTelefono())
+                if (e.ColumnIndex == colTelefono.Index && e.RowIndex >= 0 &&!SM.Instancia.PuedeDesencriptarTelefono())
                 {
                     e.Value = "****";
                     e.FormattingApplied = true;
@@ -40,9 +39,7 @@ namespace UI
             {
                 // Un usuario sin permiso no puede editar el telefono: reenviar el valor
                 // cifrado original, nunca el texto de mascara mostrado en la pantalla.
-                string telefonoParaGuardar = SM.Instancia.PuedeDesencriptarTelefono()
-                    ? telefono.Text
-                    : (grilla.CurrentRow?.DataBoundItem as ClienteBE)?.Telefono ?? telefono.Text;
+                string telefonoParaGuardar = SM.Instancia.PuedeDesencriptarTelefono()? telefono.Text: (grilla.CurrentRow?.DataBoundItem as ClienteBE)?.Telefono ?? telefono.Text;
                 Ejecutar(() => _clientes.ModificarCliente(dni.Text, nombre.Text, apellido.Text, telefonoParaGuardar, correo.Text));
             };
             btnEliminar.Click += (_, _) => {
@@ -148,8 +145,7 @@ namespace UI
         private static string GenerarNombreXml()
         {
             string usuario = SM.Instancia.UsuarioActual?.NombreUsuario ?? "Usuario";
-            string nombreSeguro = new string(usuario.Select(caracter =>
-                char.IsLetterOrDigit(caracter) || caracter == '_' || caracter == '-' ? caracter : '_').ToArray());
+            string nombreSeguro = new string(usuario.Select(caracter =>char.IsLetterOrDigit(caracter) || caracter == '_' || caracter == '-' ? caracter : '_').ToArray());
             return $"Clientes_{nombreSeguro}_{DateTime.Now:yyyyMMdd_HHmmss}.xml";
         }
 
@@ -178,9 +174,7 @@ namespace UI
                 CheckFileExists = true,
                 Multiselect = false,
                 InitialDirectory = @"C:\",
-                FileName = File.Exists(txtRutaImportar.Text)
-                    ? Path.GetFileName(txtRutaImportar.Text)
-                    : string.Empty
+                FileName = File.Exists(txtRutaImportar.Text)? Path.GetFileName(txtRutaImportar.Text): string.Empty
             };
             if (dialogo.ShowDialog(this) == DialogResult.OK)
                 txtRutaImportar.Text = dialogo.FileName;
@@ -204,21 +198,15 @@ namespace UI
                 string carpeta = Path.GetDirectoryName(Path.GetFullPath(txtRutaExportar.Text))!;
                 string ruta = Path.Combine(carpeta, GenerarNombreXml());
                 txtRutaExportar.Text = ruta;
-                if (File.Exists(ruta) &&
-                    MessageBox.Show(T("frmGestionClientes.XmlConfirmarSobrescritura"),
-                        Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
-                        MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                if (File.Exists(ruta) &&MessageBox.Show(T("frmGestionClientes.XmlConfirmarSobrescritura"),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2) != DialogResult.Yes)
                     return;
 
                 _xml.Serializar(clientes, ruta);
-                MessageBox.Show(string.Format(
-                    T("frmGestionClientes.XmlExportado"), clientes.Count), Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(string.Format(T("frmGestionClientes.XmlExportado"), clientes.Count), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, Text,MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -239,9 +227,7 @@ namespace UI
                 btnModificar.Enabled = false;
                 btnEliminar.Enabled = false;
                 Limpiar();
-                MessageBox.Show(string.Format(
-                    T("frmGestionClientes.XmlImportado"), clientes.Count), Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(string.Format(T("frmGestionClientes.XmlImportado"), clientes.Count), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -256,8 +242,7 @@ namespace UI
             {
                 accion();
                 Cargar();
-                MessageBox.Show(T("frmGestionClientes.OperacionCorrecta"), Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(T("frmGestionClientes.OperacionCorrecta"), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

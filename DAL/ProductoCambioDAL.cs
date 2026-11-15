@@ -34,6 +34,8 @@ namespace DAL
                 int minimo;
                 bool activo;
 
+                // Se bloquea la version historica y el producto vigente para evitar que otro usuario
+                // modifique los mismos registros simultaneamente.
                 const string leer = @"
                     SELECT p.CodigoProducto, h.Nombre, h.Categoria,
                            h.PrecioUnitario, h.StockDisponible, h.StockMinimo,
@@ -113,6 +115,7 @@ namespace DAL
                         throw new InvalidOperationException("No se pudo activar la version seleccionada.");
                 }
 
+                // Verificar que el trigger haya creado una NUEVA version historica vigente.
                 const string verificar = @"
                     SELECT COUNT(*) FROM dbo.Producto_C
                     WHERE CodigoProducto = @Codigo AND Act = 1";
@@ -146,8 +149,11 @@ namespace DAL
             }
         }
 
+
+        // Consultas historicas: la escritura se realiza exclusivamente con TR_Producto_RegistrarCambio, no desde el formulario de auditoria.
         public List<ProductoCambioBE> Consultar(int? codigoProducto, string nombre,DateTime? fechaDesde, DateTime? fechaHasta,bool soloVigentes)
         {
+            
             const string sql = @"
                 SELECT TOP (500)
                        IdCambio, CodigoProducto, FechaHora, Nombre, Categoria,
@@ -162,6 +168,7 @@ namespace DAL
                 ORDER BY FechaHora DESC, IdCambio DESC";
 
             using SqlConnection conexion = _accesoDatos.ObtenerConexion();
+           
             using SqlCommand cmd = new SqlCommand(sql, conexion);
             cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value =codigoProducto.HasValue ? codigoProducto.Value : DBNull.Value;
             cmd.Parameters.Add("@Nombre", SqlDbType.NVarChar, 120).Value =nombre ?? string.Empty;
@@ -169,6 +176,7 @@ namespace DAL
             cmd.Parameters.Add("@HastaExclusiva", SqlDbType.DateTime2).Value =fechaHasta.HasValue ? fechaHasta.Value.Date.AddDays(1) : DBNull.Value;
             cmd.Parameters.Add("@SoloVigentes", SqlDbType.Bit).Value = soloVigentes;
 
+            // Se limita a 500 resultados para evitar sobrecarga de memoria y tiempo de respuesta.
             List<ProductoCambioBE> cambios = new List<ProductoCambioBE>();
             conexion.Open();
             using SqlDataReader reader = cmd.ExecuteReader();
