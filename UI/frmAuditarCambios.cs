@@ -133,8 +133,7 @@ namespace UI
                 DateTime? desde = dtpDesde.Checked ? dtpDesde.Value.Date : null;
                 DateTime? hasta = dtpHasta.Checked ? dtpHasta.Value.Date : null;
 
-                List<ProductoCambioBE> cambios = _cambiosBLL.ConsultarCambios(
-                    codigo, txtNombre.Text, desde, hasta, false);
+                List<ProductoCambioBE> cambios = _cambiosBLL.ConsultarCambios(codigo, txtNombre.Text, desde, hasta, false);
 
                 dgvCambios.DataSource = null;
                 dgvCambios.DataSource = cambios;
@@ -195,10 +194,7 @@ namespace UI
 
         private void dgvCambios_SelectionChanged(object sender, EventArgs e)
         {
-            btnRestaurar.Enabled =
-                dgvCambios.CurrentRow?.Selected == true &&
-                dgvCambios.CurrentRow.DataBoundItem is ProductoCambioBE cambio &&
-                !cambio.Act && SM.Instancia.TienePermiso("PRO_GESTIONAR");
+            btnRestaurar.Enabled =dgvCambios.CurrentRow?.Selected == true &&dgvCambios.CurrentRow.DataBoundItem is ProductoCambioBE cambio &&!cambio.Act && SM.Instancia.TienePermiso("PRO_GESTIONAR");
         }
 
         private void btnRestaurar_Click(object sender, EventArgs e)
@@ -208,16 +204,14 @@ namespace UI
 
             string mensaje = string.Format(T("frmAuditarCambios.ConfirmarRestauracion"),cambio.Nombre, cambio.FechaHora, cambio.PrecioUnitario,cambio.StockDisponible, cambio.ActivoProducto? T("frmAuditarCambios.Activo") : T("frmAuditarCambios.Inactivo"));
 
-            if (MessageBox.Show(mensaje, Text, MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+            if (MessageBox.Show(mensaje, Text, MessageBoxButtons.YesNo,MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
                 return;
 
             try
             {
                 _cambiosBLL.RestaurarVersion(cambio.IdCambio);
                 Consultar();
-                MessageBox.Show(T("frmAuditarCambios.RestauracionCorrecta"), Text,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(T("frmAuditarCambios.RestauracionCorrecta"), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -239,9 +233,7 @@ namespace UI
             }
             else if (columna == "colEstado")
             {
-                e.Value = T(valor
-                    ? "frmAuditarCambios.Disponible"
-                    : "frmAuditarCambios.Deshabilitado");
+                e.Value = T(valor? "frmAuditarCambios.Disponible": "frmAuditarCambios.Deshabilitado");
                 e.FormattingApplied = true;
             }
         }
