@@ -20,6 +20,7 @@ namespace UI
         public frmGenerarFactura()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             AsegurarColumnasGrillas();
             _facturaBLL = new FacturaBuffetBLL();
