@@ -598,40 +598,9 @@ INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 
 INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 32, N'e40dbfc826024b8cfad402a6d4b21b1817f6a8ea535fa239d14cb2e1c9556c26')
 INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 33, N'5ac69ddc4dc620d0fa43b9c6ebcc7e34c18b18a99a3d9fed74acd7c609ca1842')
 GO
-SET IDENTITY_INSERT [dbo].[Producto] ON;
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (1, N'Agua mineral sin gas 500 ml', N'Bebidas', CAST(1500.00 AS Decimal(12, 2)), 26, 10, 1, N'663db81774fd1a80e68d8106c6f8252541abbf30f295854b8244f34f87991226')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (2, N'Agua mineral 1.5 L', N'Bebidas', CAST(2800.00 AS Decimal(12, 2)), 10, 4, 1, N'68c33413583bc27c382f84876858548fbee2ea08147d9f6803c6308ad867a0a7')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (3, N'Agua con gas 500 ml', N'Bebidas', CAST(1600.00 AS Decimal(12, 2)), 11, 4, 1, N'13a9b44c3327cbb8a1218c09253c8d09668b6cdc4371f8ef0a431e8e95768bcf')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (4, N'Gaseosa cola 500 ml', N'Bebidas', CAST(2900.00 AS Decimal(12, 2)), 23, 8, 1, N'd900a44183c55b6bf846bedff0abbb93602971184bec52a84ce34990f0925d56')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (5, N'Gaseosa lima limon 500 ml', N'Bebidas', CAST(2900.00 AS Decimal(12, 2)), 17, 6, 1, N'3c43376be8fa09c309c845d52397174cc57bbfebdbeaae8f445ab96ca0b48535')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (6, N'Gaseosa naranja 500 ml', N'Bebidas', CAST(2850.00 AS Decimal(12, 2)), 5, 5, 1, N'5bfa791a4f7f857e884843449e44219f0aecabf5622a2dbbd318d171823ba3e5')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (7, N'Bebida isotonica naranja 500 ml', N'Bebidas', CAST(3600.00 AS Decimal(12, 2)), 15, 5, 1, N'c302ccd16667401d5ca695f63958cb8a6265044990bce3e3285456be2a2f679b')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (8, N'Bebida isotonica limon 500 ml', N'Bebidas', CAST(3600.00 AS Decimal(12, 2)), 2, 5, 1, N'4b1d452d75f894fafe93f97cf0aa89b0f4c3731a45b6e17aa4672148de6d9d02')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (9, N'Jugo de naranja 500 ml', N'Bebidas', CAST(2600.00 AS Decimal(12, 2)), 8, 4, 1, N'6f373f1b12dfbfded54a80a84a1c0d03004ddc0ebcff4ba78873c53faffeba18')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (10, N'Energizante lata 250 ml', N'Bebidas', CAST(5200.00 AS Decimal(12, 2)), 7, 3, 1, N'2052ec9e37bd6b0ba70edf4a0708d1451e25fd28dffd8e389f25f46e1d299790')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (11, N'Cafe expreso', N'Cafeteria', CAST(2500.00 AS Decimal(12, 2)), 39, 10, 1, N'520ab7374a232264b0c128576a4adc100cacc650438e72f0a635019672208941')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (12, N'Cafe con leche', N'Cafeteria', CAST(3200.00 AS Decimal(12, 2)), 16, 5, 1, N'f45d1694bbccb5a206042f011745278fdea28d9e827f25d026376e0f12b8c80e')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (13, N'Te', N'Cafeteria', CAST(2000.00 AS Decimal(12, 2)), 15, 4, 1, N'28cf2c39a323419a12a15c167d41fe3d859a15b6c472078f721a729afbb7eea9')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (14, N'Chocolate caliente', N'Cafeteria', CAST(3400.00 AS Decimal(12, 2)), 8, 3, 1, N'2f4fc1516cca448f3fd88cb223a29bbb726b3b694a62b78b398277fb8b972f3a')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (15, N'Alfajor de chocolate', N'Snacks', CAST(2000.00 AS Decimal(12, 2)), 19, 6, 1, N'18851eab8a60c18f81268e4ed0ab8b956ae39c5696698a631847f72298b7de08')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (16, N'Alfajor de maicena', N'Snacks', CAST(2100.00 AS Decimal(12, 2)), 6, 4, 1, N'04ffa772f37e41b821dc18c3b6990efc795b4f0e486ee1b95fc6d328d031dafa')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (17, N'Barra de cereal', N'Snacks', CAST(1800.00 AS Decimal(12, 2)), 12, 4, 1, N'a07e13fe3202f53958e30038a415bd1b7a255c56dd9f57cfe2bfbe819fba89b5')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (18, N'Galletitas dulces', N'Snacks', CAST(2700.00 AS Decimal(12, 2)), 13, 4, 1, N'23b0394d33e9b387bb18db45497165b0a0089524dd452307f11deb88803cca6f')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (19, N'Galletitas saladas', N'Snacks', CAST(2600.00 AS Decimal(12, 2)), 7, 3, 1, N'68cc3ed3690cb59b66cd5f04a994c7323852932c530af691c0de8d0d1b810f94')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (20, N'Papas fritas paquete', N'Snacks', CAST(3400.00 AS Decimal(12, 2)), 8, 3, 1, N'2cb4375ca8a4ba251722f43ede50f96674e39b5325a0870046be6d2b7f814fe2')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (21, N'Mani salado', N'Snacks', CAST(2600.00 AS Decimal(12, 2)), 5, 5, 1, N'4367642307c6cdf867633cc859dbb132d4d0bbd6075d7f81b87c7962e2b6dafa')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (22, N'Tostado jamon y queso', N'Comidas', CAST(6500.00 AS Decimal(12, 2)), 10, 3, 1, N'e134fe410b867566c8542e459cb0797597f13fb6937e58e56154cdb28a6dc815')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (23, N'Sandwich de pollo', N'Comidas', CAST(7900.00 AS Decimal(12, 2)), 6, 2, 1, N'97ea16d4e577b7f7a2ab32878c6f791b00a5c6dbacef345d3626a01d84a202ee')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (24, N'Sandwich vegetariano', N'Comidas', CAST(7300.00 AS Decimal(12, 2)), 4, 2, 1, N'55b7f5f76e36e3fc6f735d308cd6daba721671970206e30bb2ac72518049b564')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (25, N'Medialuna', N'Comidas', CAST(1700.00 AS Decimal(12, 2)), 15, 5, 1, N'5c6533c5940db77e7b052dbc5315fb69cc5765043e6fae5a13901576405c4006')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (26, N'Porcion de pizza', N'Comidas', CAST(5800.00 AS Decimal(12, 2)), 9, 3, 1, N'79930a3b325c66866b8113a612c0fa71d1a1e189c95f1641eb18ccaa0fd4d8fc')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (27, N'Caramelos unidad', N'Golosinas', CAST(500.00 AS Decimal(12, 2)), 50, 16, 1, N'2e028bb11b37f7b16c894e6ae50892add6c8ead0152ea4fcf3381a98b3b54823')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (28, N'Chicle unidad', N'Golosinas', CAST(900.00 AS Decimal(12, 2)), 18, 5, 1, N'48140df4f71053945a6c854e47e0ee81e4278397d6f87ad8be9015695394e8e8')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (29, N'Galletitas Toddy', N'Snacks', CAST(2400.00 AS Decimal(12, 2)), 6, 5, 1, N'bea57c69f0a31f93e72d70d5ef4f658ea7731d9e7841d721dd204b5bbab586d4')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (30, N'Coca Cola', N'Bebidas', CAST(2100.00 AS Decimal(12, 2)), 10, 5, 1, N'8e6dcacd7008d9dbae7e47d3d0f47aa56e10bc36bb3777e1058650142640ce5d')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (33, N'Gaseosa Pepsi', N'Bebidas', CAST(3100.00 AS Decimal(12, 2)), 9, 5, 1, N'ec267048b8d5c1d1384790cf628dbe2a86b04791f0f4fc87836672a56edd8b51')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (34, N'Prueba', N'Bebidas', CAST(2000.00 AS Decimal(12, 2)), 20, 5, 1, N'8748bb097e7f71aec345fbe793b5cdbbadf0e3d0ef525f82e5ce7ef3eb6e92c9')
-SET IDENTITY_INSERT [dbo].[Producto] OFF;
+-- Instalacion limpia: el catalogo de productos comienza vacio.
+-- Los productos se crean desde PadelGest, y TR_Producto_RegistrarCambio
+-- registra automaticamente su primera version en dbo.Producto_C.
 GO
 SET IDENTITY_INSERT [dbo].[Usuario] ON;
 INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Inicial', N'99999999', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 1, 1, 1, N'a0aaad8687f78ad82c5ab61b29cfc3a029d0af07558072b50ebaee15d2d82d69')
@@ -648,7 +617,7 @@ INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia_F
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Idioma', 'b8206deae9aaca74a25998ec9d26c6b2b41fdf430ccc455979a8aed7a298a234');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple', '2b08d33a277ea163b8e4334c7224848afd8895113a4b0320a33d1cb75068904d');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple_Familia', '6dae4d91f38e8843405b2fc1df655b1e4b8e1a8ad80017e68ee4220c54e7d8f5');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', '185f1a91e4767f12457c1f5df8409e98321ef9c54f8f4cf32e849bfea564c2de');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', '700ba87ff88d54c32d59eac310a40e63e20df37bb09a5a3f7191354a747a30d3');
@@ -1221,23 +1190,8 @@ BEGIN
     -- o modificamos Act. No se reescriben nombres, stock ni tipos anteriores.
 END;
 GO
--- Historial inicial del catalogo del buffet.
--- Los productos fueron insertados antes de crear el trigger, por eso se registra
--- explicitamente su primera version. Producto_C no participa en DVH/DVV.
--- Una vez modificado un producto, el trigger desactiva esta version (Act = 0)
--- y registra la nueva (Act = 1), permitiendo restaurar la original.
-INSERT INTO dbo.Producto_C
-    (CodigoProducto, FechaHora, Nombre, Categoria, PrecioUnitario,
-     StockDisponible, StockMinimo, ActivoProducto, Act, TipoCambio)
-SELECT p.CodigoProducto, SYSDATETIME(), p.Nombre, p.Categoria,
-       p.PrecioUnitario, p.StockDisponible, p.StockMinimo, p.Activo,
-       CONVERT(bit, 1), N'Alta'
-FROM dbo.Producto AS p
-WHERE NOT EXISTS (
-    SELECT 1 FROM dbo.Producto_C AS h
-    WHERE h.CodigoProducto = p.CodigoProducto
-);
-GO
+-- El historial de productos comienza vacio en una instalacion nueva.
+-- El trigger TR_Producto_RegistrarCambio registra las futuras altas y cambios.
 -- Conteos iniciales
 SELECT 'Rol' AS Tabla, COUNT(*) AS Registros FROM dbo.Rol
 UNION ALL SELECT 'PermisoSimple', COUNT(*) FROM dbo.PermisoSimple
