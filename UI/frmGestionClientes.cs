@@ -17,6 +17,7 @@ namespace UI
         public frmGestionClientes()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             ActualizarIdioma();
             grilla.SelectionChanged += (_, _) => Seleccionar();
