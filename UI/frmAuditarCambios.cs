@@ -29,6 +29,7 @@ namespace UI
         public frmAuditarCambios()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             dgvCambios.AutoGenerateColumns = false;
 
