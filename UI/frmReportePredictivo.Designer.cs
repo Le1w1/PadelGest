@@ -119,7 +119,9 @@ namespace UI
             ForeColor = Color.White;
             Font = new Font("Segoe UI", 10F);
             ClientSize = new Size(1200, 820);
-            MinimumSize = new Size(1030, 720);
+            // El formulario se maximiza y utiliza controles anclados; no se exige
+            // una altura minima superior al area util de una notebook.
+            MinimumSize = new Size(900, 560);
             StartPosition = FormStartPosition.CenterParent;
             Text = "Reporte predictivo del buffet";
             // lblTitulo
