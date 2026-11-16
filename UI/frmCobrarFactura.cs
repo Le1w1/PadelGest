@@ -17,6 +17,7 @@ namespace UI
         public frmCobrarFactura(FacturaBuffetBE factura)
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             _factura = factura;
             _cobroBLL = new CobroFacturaBLL();
