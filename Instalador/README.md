@@ -1,6 +1,6 @@
 # Instalador y reinstalador de PadelGest
 
-Basado en la estructura del instalador de CineGest. **En desarrollo: aun no se compilo ni probo en Windows.**
+Instalador Inno Setup para PadelGest. El ejecutable publicado debe recompilarse y probarse en Windows cada vez que se modifique la aplicacion o el script SQL.
 
 ## Requisitos de la PC donde se instala
 
@@ -27,7 +27,7 @@ Importante: no subir ni ejecutar una carpeta `publish` de CineGest. Publicar la 
 
 ## Comportamiento
 
-**Instalacion desde cero:** verifica SQL Server a traves de `sqlcmd`; si `PadelGestDB` no existe, ejecuta el script limpio de `Script/`, que incluye el catalogo y las versiones iniciales de `Producto_C`.
+**Instalacion desde cero:** verifica SQL Server a traves de `sqlcmd`; si `PadelGestDB` no existe, ejecuta el script limpio de `Script/`, que crea `Producto` y `Producto_C` vacias. Los nuevos productos se cargan desde la aplicacion; sus versiones iniciales se registran por trigger.
 
 **Reinstalacion:** antes de iniciar, el asistente consulta si `PadelGestDB` existe y muestra una confirmacion explicita indicando que se actualizaran los archivos del programa y se conservaran los datos. Si el usuario elige No, no comienza la instalacion. Si confirma, no toca las tablas ni los registros existentes; actualiza archivos publicados y accesos directos.
 
@@ -44,8 +44,8 @@ El script auxiliar solo apunta a una base de nombre fijo: `PadelGestDB`.
 
 1. Compilar el .iss en Windows y solucionar errores que informe Inno Setup.
 2. Probar nueva instalacion en una instancia SQL sin `PadelGestDB`.
-3. Confirmar login administrador, integridad DVH/DVV, catalogo de 32 productos y 32 versiones iniciales en `Producto_C`.
-4. Crear un cliente, modificar un producto y guardar datos de ejemplo.
+3. Confirmar login administrador, integridad DVH/DVV, `Producto` = 0 y `Producto_C` = 0, y DVV inicial de `Producto` consistente con una tabla vacia.
+4. Crear un cliente, registrar un producto nuevo y comprobar que se genere su primera version en `Producto_C`; luego modificar ese producto y verificar el historial.
 5. Reinstalar: confirmar que cliente, modificacion e historial se conservan.
 6. Desinstalar **solo programa** y volver a instalar: datos intactos.
 7. Desinstalar con **backup y eliminar**: verificar `.bak`, confirmar ausencia de base y luego restaurarla.
