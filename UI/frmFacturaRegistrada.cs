@@ -14,6 +14,7 @@ namespace UI
         public frmFacturaRegistrada(FacturaBuffetBE factura, ClienteBE? cliente)
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
 
             if (factura == null || factura.IdFactura <= 0 || factura.Estado != "Pagada")
