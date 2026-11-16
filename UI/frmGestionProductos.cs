@@ -16,6 +16,7 @@ namespace UI
         public frmGestionProductos()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             dgvProductos.AutoGenerateColumns = false;
             _productoBLL = new ProductoBLL();
