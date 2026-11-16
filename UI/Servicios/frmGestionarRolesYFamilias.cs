@@ -40,6 +40,7 @@ namespace UI
         public frmGestionarRolesYFamilias()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             _familiaBLL = new FamiliaBLL();
             _rolBLL = new RolBLL();
