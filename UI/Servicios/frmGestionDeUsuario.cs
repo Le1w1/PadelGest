@@ -22,6 +22,7 @@ namespace UI
         public frmGestionDeUsuario()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             dgvUsuarios.ClearSelection();
             txtNombre.Focus();
