@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.Servicios;
 
 namespace UI
 {
@@ -19,6 +20,7 @@ namespace UI
         public frmCambiarClave()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _usuarioBLL = new UsuarioBLL();
 
             // Traducir antes de que el form se cargue.

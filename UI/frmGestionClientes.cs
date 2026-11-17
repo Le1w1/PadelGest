@@ -1,0 +1,254 @@
+using BE;
+using BLL;
+using Servicios;
+using System.Drawing;
+using System.Windows.Forms;
+using UI.Servicios;
+
+namespace UI
+{
+    // ABM de clientes para usuarios con permiso CLI_MODIFICAR. No altera la tabla Cliente.
+    public partial class frmGestionClientes : Form, IObservadorIdioma
+    {
+        private readonly ClienteBLL _clientes = new ClienteBLL();
+        private readonly ClienteXmlBLL _xml = new ClienteXmlBLL();
+        private bool _mostrandoXml;
+
+        public frmGestionClientes()
+        {
+            InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
+            AyudaContextual.Configurar(this);
+            ActualizarIdioma();
+            grilla.SelectionChanged += (_, _) => Seleccionar();
+            // Enmascara solo la presentacion. Conserva el cifrado real en ClienteBE.
+            grilla.CellFormatting += (_, e) =>
+            {
+                if (e.ColumnIndex == colTelefono.Index && e.RowIndex >= 0 &&!SM.Instancia.PuedeDesencriptarTelefono())
+                {
+                    e.Value = "****";
+                    e.FormattingApplied = true;
+                }
+            };
+            btnNuevo.Click += (_, _) =>
+            {
+                if (_mostrandoXml) Cargar();
+                else Limpiar();
+            };
+            btnRegistrar.Click += (_, _) => Ejecutar(() => _clientes.RegistrarCliente(dni.Text, nombre.Text, apellido.Text, telefono.Text, correo.Text));
+            btnModificar.Click += (_, _) =>
+            {
+                // Un usuario sin permiso no puede editar el telefono: reenviar el valor
+                // cifrado original, nunca el texto de mascara mostrado en la pantalla.
+                string telefonoParaGuardar = SM.Instancia.PuedeDesencriptarTelefono()? telefono.Text: (grilla.CurrentRow?.DataBoundItem as ClienteBE)?.Telefono ?? telefono.Text;
+                Ejecutar(() => _clientes.ModificarCliente(dni.Text, nombre.Text, apellido.Text, telefonoParaGuardar, correo.Text));
+            };
+            btnEliminar.Click += (_, _) => {
+                if (MessageBox.Show(T("frmGestionClientes.ConfirmarEliminar"), T("frmGestionClientes.Confirmacion"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    Ejecutar(() => _clientes.EliminarCliente(dni.Text));
+            };
+            btnActualizar.Click += (_, _) => Cargar();
+            btnElegirExportar.Click += (_, _) => SeleccionarDestinoXml();
+            btnElegirImportar.Click += (_, _) => SeleccionarOrigenXml();
+            btnSerializar.Click += (_, _) => SerializarClientes();
+            btnDeserializar.Click += (_, _) => DeserializarClientes();
+            btnLimpiarRutas.Click += (_, _) =>
+            {
+                txtRutaExportar.Clear();
+                txtRutaImportar.Clear();
+            };
+            btnVolver.Click += (_, _) => Close();
+            Load += (_, _) =>
+            {
+                SM.Instancia.Suscribir(this);
+                try { SM.Instancia.RequierePermiso("CLI_MODIFICAR"); Cargar(); }
+                catch (Exception ex) { MessageBox.Show(ex.Message); Close(); }
+            };
+        }
+
+        private static string T(string clave) => Traductor.Instancia.Traducir(clave);
+
+        public void ActualizarIdioma()
+        {
+            Text = T("frmGestionClientes.Title");
+            lblTitulo.Text = T("frmGestionClientes.Titulo");
+            gbDatos.Text = T("frmGestionClientes.Datos");
+            lbldni.Text = T("frmGestionClientes.DNI");
+            lblnombre.Text = T("frmGestionClientes.Nombre");
+            lblapellido.Text = T("frmGestionClientes.Apellido");
+            lbltelefono.Text = T("frmGestionClientes.Telefono");
+            lblcorreo.Text = T("frmGestionClientes.Correo");
+            lblListado.Text = T("frmGestionClientes.Listado");
+            colDNI.HeaderText = T("frmGestionClientes.DNI");
+            colNombre.HeaderText = T("frmGestionClientes.Nombre");
+            colApellido.HeaderText = T("frmGestionClientes.Apellido");
+            colTelefono.HeaderText = T("frmGestionClientes.Telefono");
+            colCorreoElectronico.HeaderText = T("frmGestionClientes.ColCorreo");
+            btnNuevo.Text = T("frmGestionClientes.Nuevo");
+            btnRegistrar.Text = T("frmGestionClientes.Registrar");
+            btnModificar.Text = T("frmGestionClientes.Modificar");
+            btnEliminar.Text = T("frmGestionClientes.Eliminar");
+            btnActualizar.Text = T("frmGestionClientes.Actualizar");
+            btnVolver.Text = T("frmGestionClientes.Volver");
+            gbXml.Text = T("frmGestionClientes.XmlTitulo");
+            lblRutaExportar.Text = T("frmGestionClientes.XmlRutaSalida");
+            lblRutaImportar.Text = T("frmGestionClientes.XmlRutaEntrada");
+            btnElegirExportar.Text = T("frmGestionClientes.XmlExaminar");
+            btnElegirImportar.Text = T("frmGestionClientes.XmlExaminar");
+            btnSerializar.Text = T("frmGestionClientes.XmlSerializar");
+            btnDeserializar.Text = T("frmGestionClientes.XmlDeserializar");
+            btnLimpiarRutas.Text = T("frmGestionClientes.XmlLimpiarRutas");
+
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            SM.Instancia.Desuscribir(this);
+            base.OnFormClosed(e);
+        }
+
+        private void Seleccionar()
+        {
+            if (grilla.CurrentRow?.Selected != true ||
+                grilla.CurrentRow.DataBoundItem is not ClienteBE c) return;
+            dni.Text = c.DNI;
+            dni.ReadOnly = true; // Identificador primario; no se modifica.
+            nombre.Text = c.Nombre;
+            apellido.Text = c.Apellido;
+            telefono.Text = SM.Instancia.PuedeDesencriptarTelefono() ? c.Telefono : "****";
+            // Sin permiso solo se muestra la mascara; el valor original queda en el modelo.
+            telefono.ReadOnly = !SM.Instancia.PuedeDesencriptarTelefono();
+            correo.Text = c.CorreoElectronico;
+        }
+
+        private void Limpiar()
+        {
+            grilla.ClearSelection();
+            dni.ReadOnly = false;
+            telefono.ReadOnly = false; // Se permite ingresar un telefono al registrar un cliente nuevo.
+            foreach (TextBox t in new[] { dni, nombre, apellido, telefono, correo }) t.Clear();
+            dni.Focus();
+        }
+
+        private void Cargar()
+        {
+            List<ClienteBE> clientes = _clientes.ListarTodos();
+            _mostrandoXml = false;
+            grilla.DataSource = null;
+            grilla.DataSource = clientes;
+            btnRegistrar.Enabled = true;
+            btnModificar.Enabled = true;
+            btnEliminar.Enabled = true;
+            Limpiar();
+        }
+
+        // Incluye el usuario que serializa y la fecha/hora de la operacion.
+        private static string GenerarNombreXml()
+        {
+            string usuario = SM.Instancia.UsuarioActual?.NombreUsuario ?? "Usuario";
+            string nombreSeguro = new string(usuario.Select(caracter =>char.IsLetterOrDigit(caracter) || caracter == '_' || caracter == '-' ? caracter : '_').ToArray());
+            return $"Clientes_{nombreSeguro}_{DateTime.Now:yyyyMMdd_HHmmss}.xml";
+        }
+
+        private void SeleccionarDestinoXml()
+        {
+            using SaveFileDialog dialogo = new SaveFileDialog
+            {
+                Title = T("frmGestionClientes.XmlElegirDestino"),
+                Filter = "XML (*.xml)|*.xml",
+                DefaultExt = "xml",
+                AddExtension = true,
+                OverwritePrompt = true,
+                InitialDirectory = @"C:\",
+                FileName = GenerarNombreXml()
+            };
+            if (dialogo.ShowDialog(this) == DialogResult.OK)
+                txtRutaExportar.Text = dialogo.FileName;
+        }
+
+        private void SeleccionarOrigenXml()
+        {
+            using OpenFileDialog dialogo = new OpenFileDialog
+            {
+                Title = T("frmGestionClientes.XmlElegirOrigen"),
+                Filter = "XML (*.xml)|*.xml",
+                CheckFileExists = true,
+                Multiselect = false,
+                InitialDirectory = @"C:\",
+                FileName = File.Exists(txtRutaImportar.Text)? Path.GetFileName(txtRutaImportar.Text): string.Empty
+            };
+            if (dialogo.ShowDialog(this) == DialogResult.OK)
+                txtRutaImportar.Text = dialogo.FileName;
+        }
+
+        private void SerializarClientes()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtRutaExportar.Text))
+                    throw new InvalidOperationException(T("frmGestionClientes.XmlSinDestino"));
+
+                // Serializa todos los registros cargados en la grilla, no solo los visibles.
+                List<ClienteBE> clientes = new List<ClienteBE>();
+                foreach (DataGridViewRow fila in grilla.Rows)
+                {
+                    if (fila.DataBoundItem is ClienteBE cliente)
+                        clientes.Add(cliente);
+                }
+                // La ruta seleccionada define la carpeta; el nombre siempre contiene usuario y fecha reales.
+                string carpeta = Path.GetDirectoryName(Path.GetFullPath(txtRutaExportar.Text))!;
+                string ruta = Path.Combine(carpeta, GenerarNombreXml());
+                txtRutaExportar.Text = ruta;
+                if (File.Exists(ruta) &&MessageBox.Show(T("frmGestionClientes.XmlConfirmarSobrescritura"),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                    return;
+
+                _xml.Serializar(clientes, ruta);
+                MessageBox.Show(string.Format(T("frmGestionClientes.XmlExportado"), clientes.Count), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text,MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void DeserializarClientes()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtRutaImportar.Text))
+                    throw new InvalidOperationException(T("frmGestionClientes.XmlSinOrigen"));
+
+                // No se hace INSERT ni UPDATE: solo se reemplazan las filas
+                // visualizadas. Actualizar vuelve a consultar SQL Server.
+                List<ClienteBE> clientes = _xml.Deserializar(txtRutaImportar.Text);
+                grilla.DataSource = null;
+                _mostrandoXml = true;
+                grilla.DataSource = clientes;
+                btnRegistrar.Enabled = false;
+                btnModificar.Enabled = false;
+                btnEliminar.Enabled = false;
+                Limpiar();
+                MessageBox.Show(string.Format(T("frmGestionClientes.XmlImportado"), clientes.Count), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void Ejecutar(Action accion)
+        {
+            try
+            {
+                accion();
+                Cargar();
+                MessageBox.Show(T("frmGestionClientes.OperacionCorrecta"), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+    }
+}

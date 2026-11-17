@@ -304,7 +304,7 @@ namespace UI
             txtNumeroTarjeta.Size = new Size(250, 24);
             txtNumeroTarjeta.TabIndex = 14;
             txtNumeroTarjeta.TextChanged += Campo_TextChanged;
-            txtNumeroTarjeta.KeyPress += SoloNumeros_KeyPress;
+            txtNumeroTarjeta.KeyPress += NumerosTarjeta_KeyPress;
             // 
             // lblNumeroTarjeta
             // 

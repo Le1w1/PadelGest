@@ -1,6 +1,7 @@
 using BLL.Servicios;
 using Servicios;
 using Servicios.DigitoVerificador;
+using UI.Servicios;
 namespace UI
 {
     public partial class frmLogin : Form, IObservadorIdioma
@@ -13,6 +14,7 @@ namespace UI
         public frmLogin(bool esReLogin = false)
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _usuarioBLL = new UsuarioBLL();
             _esReLogin = esReLogin;
             _rolBLL = new RolBLL();
@@ -159,6 +161,16 @@ namespace UI
                 }
 
                 lblMensaje.Text = string.Empty;
+
+                // En el arranque normal el menu principal ya existe detras del Login.
+                // Al confirmar, se cierra solo este dialogo y se habilita el menu segun los permisos.
+                if (Owner is frmMenuPrincipal)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                    return;
+                }
+
                 frmMenuPrincipal menu = new frmMenuPrincipal();
 
                 // ELogin no debe recibir notificaciones de cambio de idioma:
@@ -208,7 +220,7 @@ namespace UI
                     if (!esAdmin)
                     {
                         // El sistema queda inaccesible hasta que entre alguien con permisos.
-                        MessageBox.Show(t.Traducir("frmLogin.MsgIntegridadSinPermiso"), t.Traducir("frmLogin.LblSubtitulo"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(t.Traducir("frmLogin.MsgIntegridadSinPermiso"), t.Traducir("frmLogin.LblSubtitulo"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         txtContrasenia.Clear();
                         txtEmail.Focus();
                         return;

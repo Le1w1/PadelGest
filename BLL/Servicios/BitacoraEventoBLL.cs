@@ -1,4 +1,5 @@
 ﻿using DAL.Servicios;
+using Microsoft.Data.SqlClient;
 using Servicios;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,22 @@ namespace BLL.Servicios
             };
 
             _bitacoraEventoDAL.Registrar(evento);
+        }
+
+
+        // Registra el evento dentro de la misma transacción de facturación.
+        public void RegistrarEventoEnTransaccion(BitacoraEvento evento, SqlConnection conexion, SqlTransaction tx)
+        {
+            if (evento == null) throw new ArgumentNullException(nameof(evento));
+            _bitacoraEventoDAL.Registrar(evento, conexion, tx);
+        }
+
+        // Recupera los modulos, acciones, criticidades o resultados existentes.
+        // El combo Evento puede restringirse al modulo seleccionado.
+        public List<string> ObtenerValoresFiltro(string campo, string modulo = "")
+        {
+            SM.Instancia.RequierePermiso("BIT_AUDITAR");
+            return _bitacoraEventoDAL.ObtenerValoresFiltro(campo, modulo);
         }
 
 

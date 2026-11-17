@@ -2,6 +2,7 @@ using BE;
 using BLL;
 using Servicios;
 using System.Text.RegularExpressions;
+using UI.Servicios;
 
 namespace UI
 {
@@ -15,6 +16,7 @@ namespace UI
         public frmRegistrarCliente(string dniInicial = "")
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _clienteBLL = new ClienteBLL();
             _dniInicial = (dniInicial ?? string.Empty).Trim();
 

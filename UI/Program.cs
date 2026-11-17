@@ -19,7 +19,7 @@ namespace UI
             // los textos se mostraran como las claves crudas, lo cual hace evidente el problema.
             try { Traductor.Instancia.CargarIdioma("ES"); } catch { }
 
-            Application.Run(new frmLogin());
+            Application.Run(new frmMenuPrincipal());
         }
     }
 }

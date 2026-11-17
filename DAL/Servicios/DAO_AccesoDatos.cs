@@ -20,7 +20,7 @@ namespace DAL.Servicios
         {
             var entorno = Environment.GetEnvironmentVariable("PADELGEST_ENTORNO");
             // Si la variable de entorno no está definida o está vacía, usar "LEO" como valor por defecto
-            var entornoNormalizado = (string.IsNullOrWhiteSpace(entorno) ? "LEO" : entorno).ToUpperInvariant();
+            var entornoNormalizado = (string.IsNullOrWhiteSpace(entorno) ? "UAI" : entorno).ToUpperInvariant();
 
             _cadenaConexion = entornoNormalizado switch
             {

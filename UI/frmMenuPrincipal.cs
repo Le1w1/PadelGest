@@ -9,18 +9,67 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL.Servicios;
+using UI.Servicios;
 
 namespace UI
 {
     public partial class frmMenuPrincipal : Form, IObservadorIdioma
     {
         private readonly UsuarioBLL _usuarioBLL = new UsuarioBLL();
+        private readonly ToolStripMenuItem mnuReportes = new ToolStripMenuItem();
+        private readonly ToolStripMenuItem reportePredictivoToolStripMenuItem = new ToolStripMenuItem();
 
         public frmMenuPrincipal()
         {
             InitializeComponent();
+            mnuReportes.Name = "mnuReportes";
+            mnuReportes.BackColor = Color.FromArgb(214, 246, 36);
+            mnuReportes.ForeColor = Color.Black;
+            mnuReportes.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            reportePredictivoToolStripMenuItem.Name = "reportePredictivoToolStripMenuItem";
+            reportePredictivoToolStripMenuItem.BackColor = Color.FromArgb(24, 70, 138);
+            reportePredictivoToolStripMenuItem.ForeColor = Color.White;
+            reportePredictivoToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            reportePredictivoToolStripMenuItem.Click += reportePredictivoToolStripMenuItem_Click;
+            mnuReportes.DropDownItems.Add(reportePredictivoToolStripMenuItem);
+            menuPrincipal.Items.Add(mnuReportes);
+            AyudaContextual.Configurar(this);
             // Traducir antes de que el form se cargue.
             ActualizarIdioma();
+            // El menu se muestra detras del Login, pero no se puede usar sin autenticar.
+            menuPrincipal.Enabled = false;
+            OcultarMenus();
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            SolicitarInicioSesion();
+        }
+
+        // Durante el Login no debe quedar visible ninguna opcion de la sesion anterior.
+        private void OcultarMenus()
+        {
+            foreach (ToolStripItem item in menuPrincipal.Items)
+                item.Visible = false;
+        }
+
+        private void SolicitarInicioSesion()
+        {
+            menuPrincipal.Enabled = false;
+            OcultarMenus();
+            using (frmLogin login = new frmLogin())
+            {
+                if (login.ShowDialog(this) != DialogResult.OK)
+                {
+                    Close();
+                    return;
+                }
+            }
+
+            CargarDatosSesion();
+            AplicarPermisos();
+            menuPrincipal.Enabled = true;
         }
 
 
@@ -30,55 +79,61 @@ namespace UI
             // Suscripcion al Observer de idioma.
             SM.Instancia.Suscribir(this);
             CargarDatosSesion();
-            AplicarPermisos();
+            if (SM.Instancia.HaySesionActiva())
+                AplicarPermisos();
+            else
+                OcultarMenus();
         }
 
    
         
-        /// Recorre los items del menu y los habilita/deshabilita segun los permisos del usuario logueado. 
-        /// Excepcion: "Cerrar Sesion" SIEMPRE habilitado por seguridad operativa, sin importar los permisos del rol.
+        /// Muestra exclusivamente las opciones para las que el usuario tiene permiso.
+        /// Los menus padre se ocultan cuando no hay opciones visibles.
         private void AplicarPermisos()
         {
             var sm = SM.Instancia;
 
-            // --- Menu Usuario (sesion) ---
-            reLoginToolStripMenuItem.Enabled = sm.TienePermiso("SES_RELOGIN");
-            cambiarClaveToolStripMenuItem.Enabled = sm.TienePermiso("SES_CAMBIAR_CLAVE");
-            cambiarIdiomaToolStripMenuItem.Enabled = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
-            cerrarSesionToolStripMenuItem.Enabled = true; // siempre habilitado
+            // Calcular permisos antes de asignar Visible: la visibilidad efectiva
+            // de un item hijo depende tambien de la visibilidad de su menu padre.
+            bool buffet = sm.TienePermiso("BUF_VENDER");
+            bool reportePredictivo = sm.TienePermiso("REP_PREDICTIVO");
+            bool maestroProductos = sm.TienePermiso("PRO_GESTIONAR");
+            bool maestroClientes = sm.TienePermiso("CLI_MODIFICAR");
+            bool reservas = sm.TienePermiso("RES_CREAR");
+            bool usuarios = sm.TienePermiso("USR_LISTAR") ||
+                sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
+            bool bitacora = sm.TienePermiso("BIT_AUDITAR");
+            bool perfiles = sm.TienePermiso("ROL_GESTIONAR") ||
+                sm.TienePermiso("FAM_GESTIONAR");
+            bool respaldos = sm.TienePermiso("BAK_GESTIONAR");
 
-            // Vendedor de Buffet
-            vendedorBuffetToolStripMenuItem.Enabled = sm.TienePermiso("BUF_VENDER") || sm.TienePermiso("BUF_CONSULTAR_STOCK");
+            mnuSesion.Visible = true;
+            reLoginToolStripMenuItem.Visible = sm.TienePermiso("SES_RELOGIN");
+            cambiarClaveToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_CLAVE");
+            cambiarIdiomaToolStripMenuItem.Visible = sm.TienePermiso("SES_CAMBIAR_IDIOMA");
+            cerrarSesionToolStripMenuItem.Visible = true;
 
-            // Recepcionista
-            generarReservaToolStripMenuItem.Enabled = sm.TienePermiso("RES_CREAR");
+            vendedorBuffetToolStripMenuItem.Visible = buffet;
+            mnuReportes.Visible = reportePredictivo;
+            mnuMaestros.Visible = maestroProductos || maestroClientes;
+            generarCarritoToolStripMenuItem.Visible = buffet;
+            reportePredictivoToolStripMenuItem.Visible = reportePredictivo;
+            gestionarProductosToolStripMenuItem.Visible = maestroProductos;
+            auditarCambiosToolStripMenuItem.Visible = maestroProductos;
+            gestionarClientesToolStripMenuItem.Visible = maestroClientes;
 
-            // Menu Recepcionista: habilitado si tiene permisos de recepcionista o de cliente (para consultar sus reservas)
-            RecepcionistaToolStripMenuItem.Enabled = generarReservaToolStripMenuItem.Enabled ||
-                sm.TienePermiso("RES_CONSULTAR") || sm.TienePermiso("RES_CONFIRMAR") ||
-                sm.TienePermiso("RES_REPROGRAMAR") || sm.TienePermiso("RES_CANCELAR") || sm.TienePermiso("CLI_CONSULTAR") ||
-                sm.TienePermiso("CLI_REGISTRAR") || sm.TienePermiso("CLI_MODIFICAR");
+            RecepcionistaToolStripMenuItem.Visible = reservas;
+            generarReservaToolStripMenuItem.Visible = reservas;
 
-            // Encargado de Canchas
-            encargadoDeCanchasToolStripMenuItem.Enabled = sm.TienePermiso("CAN_CONSULTAR_AGENDA");
 
-            // Dueño Hecho Privisorio
-            dueñoToolStripMenuItem.Enabled =sm.TienePermiso("RES_CREAR") &&sm.TienePermiso("BUF_VENDER") && sm.TienePermiso("CAN_CONSULTAR_AGENDA");
-            // --- Menu Administrador ---
-            usuariosToolStripMenuItem.Enabled = sm.TienePermiso("USR_LISTAR") || sm.TienePermiso("USR_CREAR") || sm.TienePermiso("USR_MODIFICAR");
-
-            bitacoraEventosToolStripMenuItem.Enabled = sm.TienePermiso("BIT_AUDITAR");
-
-            gestionarPerfilToolStripMenuItem.Enabled = sm.TienePermiso("ROL_GESTIONAR") || sm.TienePermiso("FAM_GESTIONAR");
-
-            gestionDeRespaldoToolStripMenuItem.Enabled = sm.TienePermiso("BAK_GESTIONAR");
-
-            // Menus padre: deshabilitados si TODOS sus hijos estan deshabilitados 
-            mnuAdministrador.Enabled = usuariosToolStripMenuItem.Enabled || bitacoraEventosToolStripMenuItem.Enabled || gestionarPerfilToolStripMenuItem.Enabled || gestionDeRespaldoToolStripMenuItem.Enabled;
-
+            mnuAdministrador.Visible = usuarios || bitacora || perfiles || respaldos;
+            usuariosToolStripMenuItem.Visible = usuarios;
+            bitacoraEventosToolStripMenuItem.Visible = bitacora;
+            gestionarPerfilToolStripMenuItem.Visible = perfiles;
+            gestionDeRespaldoToolStripMenuItem.Visible = respaldos;
         }
 
-     
+
         private void frmMenuPrincipal_FormClosed(object sender, FormClosedEventArgs e)
         {
             SM.Instancia.Desuscribir(this);
@@ -102,9 +157,14 @@ namespace UI
             // Menus principales
             RecepcionistaToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuRecepcionista");
             generarReservaToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGenerarReserva");
-            encargadoDeCanchasToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuEncargadoCanchas");
-            dueñoToolStripMenuItem.Text =t.Traducir("frmMenuPrincipal.MenuDueño");
             vendedorBuffetToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuVendedorBuffet");
+            generarCarritoToolStripMenuItem.Text = t.Traducir("frmGenerarCarrito.Menu");
+            mnuReportes.Text = t.Traducir("frmMenuPrincipal.MenuReportes");
+            reportePredictivoToolStripMenuItem.Text = t.Traducir("frmReportePredictivo.Menu");
+            gestionarProductosToolStripMenuItem.Text = t.Traducir("frmGestionProductos.Menu");
+            auditarCambiosToolStripMenuItem.Text = t.Traducir("frmAuditarCambios.Menu");
+            gestionarClientesToolStripMenuItem.Text = t.Traducir("frmGestionClientes.Menu");
+            mnuMaestros.Text = t.Traducir("frmMenuPrincipal.MenuMaestros");
 
             // Menu Administrador
             mnuAdministrador.Text = t.Traducir("frmMenuPrincipal.MenuAdministrador");
@@ -113,8 +173,7 @@ namespace UI
             gestionarPerfilToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGestionPerfiles");
             gestionDeRespaldoToolStripMenuItem.Text = t.Traducir("frmMenuPrincipal.MenuGestionRespaldo");
             // Panel central
-            lblTituloInicio.Text = t.Traducir("frmMenuPrincipal.Titulo");
-            lblDescripcionInicio.Text = t.Traducir("frmMenuPrincipal.Descripcion");
+           
 
             // Status bar (depende de la sesion)
             CargarDatosSesion();
@@ -152,7 +211,8 @@ namespace UI
                 try
                 {
                     _usuarioBLL.Logout();
-                    this.Close();
+                    CargarDatosSesion();
+                    SolicitarInicioSesion();
                 }
                 catch (Exception ex)
                 {
@@ -179,6 +239,36 @@ namespace UI
         {
             frmCambiarIdioma cambiarIdioma = new frmCambiarIdioma();
             cambiarIdioma.ShowDialog();
+        }
+
+        private void generarCarritoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmGenerarFactura formCarrito = new frmGenerarFactura();
+            formCarrito.ShowDialog(this);
+        }
+
+        private void reportePredictivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmReportePredictivo reporte = new frmReportePredictivo();
+            reporte.ShowDialog(this);
+        }
+
+        private void gestionarClientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmGestionClientes gestion = new frmGestionClientes();
+            gestion.ShowDialog(this);
+        }
+
+        private void gestionarProductosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmGestionProductos gestion = new frmGestionProductos();
+            gestion.ShowDialog(this);
+        }
+
+        private void auditarCambiosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using frmAuditarCambios auditoria = new frmAuditarCambios();
+            auditoria.ShowDialog(this);
         }
 
         private void generarReservaToolStripMenuItem_Click(object sender, EventArgs e)

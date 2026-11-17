@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.Servicios;
 
 namespace UI
 {
@@ -39,6 +40,8 @@ namespace UI
         public frmGestionarRolesYFamilias()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
+            AyudaContextual.Configurar(this);
             _familiaBLL = new FamiliaBLL();
             _rolBLL = new RolBLL();
             _permisoSimpleBLL = new PermisoSimpleBLL();

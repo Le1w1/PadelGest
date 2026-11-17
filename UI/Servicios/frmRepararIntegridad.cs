@@ -1,6 +1,7 @@
 using BLL.Servicios;
 using Servicios;
 using Servicios.DigitoVerificador;
+using UI.Servicios;
 
 namespace UI
 {
@@ -25,6 +26,7 @@ namespace UI
             _digitoVerificadorBLL = new DigitoVerificadorBLL();
 
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             ActualizarIdioma();
             CargarInconsistenciasEnGrilla();
 
@@ -154,6 +156,11 @@ namespace UI
             {
                 Cursor.Current = Cursors.WaitCursor;
                 _digitoVerificadorBLL.RecalcularTodo();
+                // La bitacora no tiene DVH/DVV: registrar despues del recalculo exitoso.
+                new BitacoraEventoBLL().Registrar(
+                    _adminReparador.IdUsuario, _adminReparador.NombreUsuario,
+                    "Integridad", "Recalcular digitos verificadores", "Alta", "Exitoso",
+                    "Se reparo la integridad recalculando los digitos verificadores de las tablas protegidas.");
                 Cursor.Current = Cursors.Default;
 
                 MessageBox.Show(t.Traducir("frmRepararIntegridad.RecalcularExitoso"),t.Traducir("frmRepararIntegridad.Title"),MessageBoxButtons.OK,MessageBoxIcon.Information);

@@ -1,7 +1,7 @@
-using System.Globalization;
 using BE;
 using BLL;
 using Servicios;
+using UI.Servicios;
 
 namespace UI
 {
@@ -27,6 +27,7 @@ namespace UI
         public frmAgregarEquipamiento(DateTime fecha,TimeSpan horario,int cantidadPaletasInicial = 0,int cantidadPelotasInicial = 0)
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _equipamientoBLL = new EquipamientoBLL();
             _fecha = fecha.Date;
             _horario = horario;
@@ -108,7 +109,7 @@ namespace UI
 
             lblStockPaletasValor.Text = stock.ToString();
             // Muestra el importe unitario de la paleta o un guion si no hay paletas disponibles
-            lblImportePaletasValor.Text = _paleta == null ? "-" : _paleta.Importe.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
+            lblImportePaletasValor.Text = _paleta == null ? "-" : _paleta.Importe.ToString("C");
             nudPaletas.Enabled = _paleta != null && stock > 0;
         }
 
@@ -125,7 +126,7 @@ namespace UI
 
             lblStockPelotasValor.Text = stock.ToString();
             // Muestra el importe unitario de la pelota o un guion si no hay pelotas disponibles
-            lblImportePelotasValor.Text = _pelota == null ? "-" : _pelota.Importe.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
+            lblImportePelotasValor.Text = _pelota == null ? "-" : _pelota.Importe.ToString("C");
             nudPelotas.Enabled = _pelota != null && stock > 0;
         }
 
@@ -154,7 +155,7 @@ namespace UI
                 total += nudPelotas.Value * _pelota.Importe;
             }
 
-            lblTotalValor.Text = total.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
+            lblTotalValor.Text = total.ToString("C");
         }
 
 

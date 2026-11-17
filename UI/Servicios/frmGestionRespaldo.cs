@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.Servicios;
 
 namespace UI
 {
@@ -34,6 +35,7 @@ namespace UI
             _soloRestore = soloRestore;
 
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _respaldoBLL = new RespaldoBLL();
 
             AplicarPermisos();
@@ -171,7 +173,7 @@ namespace UI
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                _respaldoBLL.EjecutarRestore(txtArchivoBak.Text,txtDescripcionRestore.Text);
+                _respaldoBLL.EjecutarRestore(txtArchivoBak.Text,txtDescripcionRestore.Text, _soloRestore);
 
                 Cursor.Current = Cursors.Default;
 

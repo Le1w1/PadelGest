@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.Servicios;
 
 namespace UI
 {
@@ -21,6 +22,8 @@ namespace UI
         public frmGestionDeUsuario()
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
+            AyudaContextual.Configurar(this);
             dgvUsuarios.ClearSelection();
             txtNombre.Focus();
             _usuarioBLL = new UsuarioBLL();

@@ -127,6 +127,12 @@ namespace Servicios
             _rolesUsuario = roles ?? new List<Rol>();
         }
 
+        // El acceso al telefono legible se administra con el permiso simple RBAC.
+        public bool PuedeDesencriptarTelefono()
+        {
+            return _usuarioActual != null && TienePermiso("CLI_DESENCRIPTAR_TELEFONO");
+        }
+
         /// Pregunta a cada Rol asignado si contiene el codigo solicitado.
         /// El recorrido recursivo lo hace cada Componente por si mismo(TienePermiso esta declarado abstract en Componente).
         public bool TienePermiso(string codigo)

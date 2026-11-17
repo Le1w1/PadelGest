@@ -1,6 +1,50 @@
-﻿USE [PadelGestDB]
+/* PADELGEST - SQL Server 2019+ - INSTALACION LIMPIA
+ SOLO primera instalacion, no ejecutar sobre PadelGestDB existente.
+ Contiene estructura, datos iniciales, permisos y admin1. Sin operaciones.
+ Archivo armado a partir del esquema ScriptBD.sql de entrega-3.
+*/
+USE [master];
 GO
-/****** Object:  Table [dbo].[BitacoraEvento]    Script Date: 12/10/2026 13:32:57 ******/
+IF DB_ID(N'PadelGestDB') IS NOT NULL
+    THROW 51000, 'La base PadelGestDB ya existe; no la sobrescriba.', 1;
+GO
+-- La instancia puede tener otra base asociada a archivos llamados
+-- PadelGestDB.mdf / PadelGestDB_log.ldf (por ejemplo, una base de pruebas).
+-- Se crean archivos fisicos NUEVOS con nombres unicos, sin tocar esos archivos.
+-- El nombre LOGICO de la base permanece PadelGestDB.
+DECLARE @RutaDatos nvarchar(4000) =
+    CONVERT(nvarchar(4000), SERVERPROPERTY('InstanceDefaultDataPath'));
+DECLARE @RutaLog nvarchar(4000) =
+    CONVERT(nvarchar(4000), SERVERPROPERTY('InstanceDefaultLogPath'));
+DECLARE @Sufijo varchar(32) = REPLACE(CONVERT(varchar(36), NEWID()), '-', '');
+DECLARE @ArchivoDatos nvarchar(4000);
+DECLARE @ArchivoLog nvarchar(4000);
+DECLARE @Comando nvarchar(max);
+
+IF @RutaDatos IS NULL OR @RutaLog IS NULL
+    THROW 51001, 'SQL Server no informa las carpetas predeterminadas de datos y logs.', 1;
+
+IF RIGHT(@RutaDatos, 1) NOT IN (N'\', N'/')
+    SET @RutaDatos = @RutaDatos + N'\';
+IF RIGHT(@RutaLog, 1) NOT IN (N'\', N'/')
+    SET @RutaLog = @RutaLog + N'\';
+
+SET @ArchivoDatos = @RutaDatos + N'PadelGestDB_' + @Sufijo + N'.mdf';
+SET @ArchivoLog = @RutaLog + N'PadelGestDB_' + @Sufijo + N'_log.ldf';
+
+SET @Comando =
+    N'CREATE DATABASE [PadelGestDB] ON PRIMARY (' +
+    N'NAME = N''PadelGestDB_Data'', FILENAME = N''' +
+    REPLACE(@ArchivoDatos, N'''', N'''''') +
+    N''') LOG ON (' +
+    N'NAME = N''PadelGestDB_Log'', FILENAME = N''' +
+    REPLACE(@ArchivoLog, N'''', N'''''') + N''')';
+
+EXEC sys.sp_executesql @Comando;
+GO
+USE [PadelGestDB];
+GO
+/****** Object:  Table [dbo].[BitacoraEvento]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -21,7 +65,7 @@ CREATE TABLE [dbo].[BitacoraEvento](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Cancha]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Cancha]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -37,7 +81,7 @@ CREATE TABLE [dbo].[Cancha](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Cliente]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Cliente]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -46,7 +90,7 @@ CREATE TABLE [dbo].[Cliente](
 	[DNI] [nvarchar](8) NOT NULL,
 	[Nombre] [nvarchar](50) NOT NULL,
 	[Apellido] [nvarchar](50) NOT NULL,
-	[Telefono] [nvarchar](30) NOT NULL,
+	[Telefono] [nvarchar](100) NOT NULL,
 	[CorreoElectronico] [nvarchar](150) NOT NULL,
 	[DVH] [varchar](64) NULL,
  CONSTRAINT [PK_Cliente] PRIMARY KEY CLUSTERED 
@@ -55,7 +99,26 @@ CREATE TABLE [dbo].[Cliente](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DigitoVerificador]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[DetalleFactura]    Script Date: 3/11/2026 21:27:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DetalleFactura](
+	[IdDetalleFactura] [int] IDENTITY(1,1) NOT NULL,
+	[IdFactura] [int] NOT NULL,
+	[CodigoProducto] [int] NOT NULL,
+	[Cantidad] [int] NOT NULL,
+	[PrecioUnitario] [decimal](12, 2) NOT NULL,
+	[Subtotal]  AS (CONVERT([decimal](18,2),CONVERT([decimal](18,2),[Cantidad])*[PrecioUnitario])) PERSISTED,
+	[DVH] [varchar](64) NULL,
+ CONSTRAINT [PK_DetalleFactura] PRIMARY KEY CLUSTERED 
+(
+	[IdDetalleFactura] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DigitoVerificador]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -69,7 +132,7 @@ CREATE TABLE [dbo].[DigitoVerificador](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Equipamiento]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Equipamiento]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -87,14 +150,13 @@ CREATE TABLE [dbo].[Equipamiento](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Factura]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Factura]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Factura](
 	[IdFactura] [int] IDENTITY(1,1) NOT NULL,
-	[IdCliente] [int] NOT NULL,
 	[IdCancha] [int] NOT NULL,
 	[IdTarifa] [int] NOT NULL,
 	[FechaHoraEmision] [datetime2](7) NOT NULL,
@@ -114,7 +176,31 @@ CREATE TABLE [dbo].[Factura](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Familia]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[FacturaBuffet]    Script Date: 3/11/2026 21:27:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FacturaBuffet](
+	[IdFactura] [int] IDENTITY(1,1) NOT NULL,
+	[NumeroFactura] [nvarchar](30) NOT NULL,
+	[DNI] [nvarchar](8) NOT NULL,
+	[IdVendedor] [int] NOT NULL,
+	[FechaHoraEmision] [datetime2](7) NOT NULL,
+	[ImporteTotal] [decimal](12, 2) NOT NULL,
+	[Estado] [nvarchar](20) NOT NULL,
+	[Banco] [nvarchar](80) NOT NULL,
+	[Ultimos4Tarjeta] [char](4) NOT NULL,
+	[FechaHoraPago] [datetime2](7) NOT NULL,
+	[CodigoAutorizacion] [nvarchar](50) NOT NULL,
+	[DVH] [varchar](64) NULL,
+ CONSTRAINT [PK_FacturaBuffet] PRIMARY KEY CLUSTERED 
+(
+	[IdFactura] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Familia]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -129,7 +215,7 @@ CREATE TABLE [dbo].[Familia](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Familia_Familia]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Familia_Familia]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -145,7 +231,7 @@ CREATE TABLE [dbo].[Familia_Familia](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Idioma]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Idioma]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -161,28 +247,7 @@ CREATE TABLE [dbo].[Idioma](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Pago]    Script Date: 20/9/2026 23:02:01 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Pago](
-	[IdPago] [int] IDENTITY(1,1) NOT NULL,
-	[IdFactura] [int] NOT NULL,
-	[Banco] [nvarchar](80) NOT NULL,
-	[Ultimos4Tarjeta] [char](4) NOT NULL,
-	[Importe] [decimal](12, 2) NOT NULL,
-	[FechaHora] [datetime2](7) NOT NULL,
-	[Estado] [nvarchar](20) NOT NULL,
-	[CodigoAutorizacion] [nvarchar](50) NOT NULL,
-	[DVH] [varchar](64) NULL,
- CONSTRAINT [PK_Pago] PRIMARY KEY CLUSTERED 
-(
-	[IdPago] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[PermisoSimple]    Script Date: 20/9/2026 23:02:01 ******/
+/****** Object:  Table [dbo].[PermisoSimple]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -198,7 +263,7 @@ CREATE TABLE [dbo].[PermisoSimple](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PermisoSimple_Familia]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[PermisoSimple_Familia]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -214,7 +279,50 @@ CREATE TABLE [dbo].[PermisoSimple_Familia](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Reserva]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Producto]    Script Date: 3/11/2026 21:27:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Producto](
+	[CodigoProducto] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](120) NOT NULL,
+	[Categoria] [nvarchar](80) NOT NULL,
+	[PrecioUnitario] [decimal](12, 2) NOT NULL,
+	[StockDisponible] [int] NOT NULL,
+	[StockMinimo] [int] NOT NULL,
+	[Activo] [bit] NOT NULL,
+	[DVH] [varchar](64) NULL,
+ CONSTRAINT [PK_Producto] PRIMARY KEY CLUSTERED 
+(
+	[CodigoProducto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Producto_C]    Script Date: 3/11/2026 21:27:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Producto_C](
+	[IdCambio] [bigint] IDENTITY(1,1) NOT NULL,
+	[CodigoProducto] [int] NOT NULL,
+	[FechaHora] [datetime2](3) NOT NULL,
+	[Nombre] [nvarchar](120) NOT NULL,
+	[Categoria] [nvarchar](80) NOT NULL,
+	[PrecioUnitario] [decimal](12, 2) NOT NULL,
+	[StockDisponible] [int] NOT NULL,
+	[StockMinimo] [int] NOT NULL,
+	[ActivoProducto] [bit] NOT NULL,
+	[Act] [bit] NOT NULL,
+	[TipoCambio] [nvarchar](25) NOT NULL,
+ CONSTRAINT [PK_Producto_C] PRIMARY KEY CLUSTERED 
+(
+	[IdCambio] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Reserva]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -228,17 +336,23 @@ CREATE TABLE [dbo].[Reserva](
 	[Estado] [nvarchar](30) NOT NULL,
 	[DVH] [varchar](64) NULL,
 	[Codigo] [nvarchar](30) NOT NULL,
-	[IdCliente] [int] NOT NULL,
 	[IdFactura] [int] NOT NULL,
 	[CantidadPaletas] [int] NOT NULL,
 	[CantidadPelotas] [int] NOT NULL,
+	[DNI] [nvarchar](8) NOT NULL,
+	[Banco] [nvarchar](80) NOT NULL,
+	[Ultimos4Tarjeta] [char](4) NOT NULL,
+	[ImportePago] [decimal](12, 2) NOT NULL,
+	[FechaHoraPago] [datetime2](7) NOT NULL,
+	[EstadoPago] [nvarchar](20) NOT NULL,
+	[CodigoAutorizacion] [nvarchar](50) NOT NULL,
  CONSTRAINT [PK_Reserva] PRIMARY KEY CLUSTERED 
 (
 	[IdReserva] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RespaldoBD]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[RespaldoBD]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -259,7 +373,7 @@ CREATE TABLE [dbo].[RespaldoBD](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Rol]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Rol]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -274,7 +388,7 @@ CREATE TABLE [dbo].[Rol](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Rol_Familia]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Rol_Familia]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -290,7 +404,7 @@ CREATE TABLE [dbo].[Rol_Familia](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Rol_PermisoSimple]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Rol_PermisoSimple]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -306,7 +420,7 @@ CREATE TABLE [dbo].[Rol_PermisoSimple](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Tarifa]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Tarifa]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -325,7 +439,7 @@ CREATE TABLE [dbo].[Tarifa](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Usuario]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Table [dbo].[Usuario]    Script Date: 3/11/2026 21:27:19 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -351,77 +465,36 @@ CREATE TABLE [dbo].[Usuario](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-SET IDENTITY_INSERT [dbo].[BitacoraEvento] ON 
-
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (1, NULL, N'recepcionista@padelgest.com', CAST(N'2026-10-04T14:44:51.8551037' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla RespaldoBD: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (2, NULL, N'recepcionista@padelgest.com', CAST(N'2026-10-04T14:44:51.8743094' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Reserva: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (3, NULL, N'recepcionista@padelgest.com', CAST(N'2026-10-04T14:44:51.8750155' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Cliente: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (4, NULL, N'recepcionista@padelgest.com', CAST(N'2026-10-04T14:44:51.8752942' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Factura: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (5, NULL, N'recepcionista@padelgest.com', CAST(N'2026-10-04T14:44:51.8755895' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Pago: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (6, NULL, N'admin1@cinegest.com', CAST(N'2026-10-04T14:45:03.4699321' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla RespaldoBD: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (7, NULL, N'admin1@cinegest.com', CAST(N'2026-10-04T14:45:03.4705100' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Reserva: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (8, NULL, N'admin1@cinegest.com', CAST(N'2026-10-04T14:45:03.4708423' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Cliente: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (9, NULL, N'admin1@cinegest.com', CAST(N'2026-10-04T14:45:03.4711789' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Factura: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (10, NULL, N'admin1@cinegest.com', CAST(N'2026-10-04T14:45:03.4714605' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Pago: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (11, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:08.9183893' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla RespaldoBD: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (12, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:08.9190223' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Reserva: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (13, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:08.9193116' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Cliente: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (14, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:08.9195863' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Factura: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (15, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:08.9201010' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Pago: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (16, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:21.8933583' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla RespaldoBD: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (17, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:21.8937942' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Reserva: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (18, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:21.8941620' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Cliente: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (19, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:21.8946014' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Factura: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (20, NULL, N'admin1@padelgest.com', CAST(N'2026-10-04T14:45:21.8948569' AS DateTime2), N'Integridad', N'Verificacion de integridad', N'Alta', N'Fallido', N'Tabla Pago: se detecto al menos un registro eliminado fuera del sistema.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (21, 4, N'Carlos12344444', CAST(N'2026-10-04T14:48:12.7571361' AS DateTime2), N'Usuario', N'Inicio de sesión', N'Alta', N'Exitoso', N'El usuario inició sesión correctamente')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (22, 4, N'Carlos12344444', CAST(N'2026-10-04T14:49:50.3264218' AS DateTime2), N'Idioma', N'Cambio de idioma', N'Baja', N'Exitoso', N'El usuario cambió el idioma a Español (en memoria, se persiste al cerrar sesión).')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (23, 4, N'Carlos12344444', CAST(N'2026-10-04T14:57:33.3052016' AS DateTime2), N'Idioma', N'Persistir idioma', N'Baja', N'Exitoso', N'Se persistió el idioma del usuario al cerrar sesión: Español.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (24, 4, N'Carlos12344444', CAST(N'2026-10-04T14:57:33.3117041' AS DateTime2), N'Usuario', N'Cierre de sesión', N'Baja', N'Exitoso', N'El usuario cerró sesión correctamente')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (25, 4, N'Carlos12344444', CAST(N'2026-10-04T15:00:13.2200707' AS DateTime2), N'Usuario', N'Inicio de sesión', N'Alta', N'Exitoso', N'El usuario inició sesión correctamente')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (26, 4, N'Carlos12344444', CAST(N'2026-10-04T15:00:42.4379914' AS DateTime2), N'Cliente', N'Registrar cliente', N'Media', N'Exitoso', N'Se registró el cliente DNI 12345678 con IdCliente 1.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (27, 4, N'Carlos12344444', CAST(N'2026-10-04T15:01:17.4456170' AS DateTime2), N'Reserva', N'Registrar reserva', N'Alta', N'Exitoso', N'Reserva RES-20261004-313D60 registrada para el Cliente DNI 12345678. Cancha: Cancha 1. Fecha: 04/10/2026. Horario: 16:00. Paletas: 0. Pelotas: 0. Importe abonado: $ 30.000,00.')
-INSERT [dbo].[BitacoraEvento] ([IdEvento], [IdUsuario], [Usuario], [FechaHora], [Modulo], [Accion], [Criticidad], [Resultado], [Descripcion]) VALUES (28, 4, N'Carlos12344444', CAST(N'2026-10-04T15:01:29.2503804' AS DateTime2), N'Usuario', N'Cierre de sesión', N'Baja', N'Exitoso', N'El usuario cerró sesión correctamente')
-SET IDENTITY_INSERT [dbo].[BitacoraEvento] OFF
-GO
-SET IDENTITY_INSERT [dbo].[Cancha] ON 
-
+SET IDENTITY_INSERT [dbo].[Cancha] ON;
 INSERT [dbo].[Cancha] ([IdCancha], [Nombre], [Estado], [DVH]) VALUES (1, N'Cancha 1', N'Disponible', N'e6e8bcf57788150e413e016d20f8de662b731665f5b7e1071025cb1919d07ce3')
 INSERT [dbo].[Cancha] ([IdCancha], [Nombre], [Estado], [DVH]) VALUES (2, N'Cancha 2', N'Disponible', N'0aaac307006e492dabf3cfdbe1bc09849eaf4a9947d3753ec0a26bc94a3cc329')
 INSERT [dbo].[Cancha] ([IdCancha], [Nombre], [Estado], [DVH]) VALUES (3, N'Cancha 3', N'Disponible', N'e76a1e12447a651bd0aa24debb03ca1a4df00165df4fa548c51fa6f4fcd9d128')
-SET IDENTITY_INSERT [dbo].[Cancha] OFF
+SET IDENTITY_INSERT [dbo].[Cancha] OFF;
 GO
-INSERT [dbo].[Cliente] ([DNI], [Nombre], [Apellido], [Telefono], [CorreoElectronico], [DVH]) VALUES (N'12345678', N'Leo', N'Rod', N'11223344', N'leo@gmail.com', N'cdcc6763b1c89b568b83c035d6e8b6d99eede4e64213704242e3e85717a187e9')
-GO
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cancha', N'91129657cbb5230efd409301669fd05b677f7331542c2192547bd4da1b7bd1bd')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cliente', N'2ea79f20d5d7e80ee41ecab829b85fae69c15c6b7c9f6f37a8c91110e14da100')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Equipamiento', N'1fb47453d7dee2f1e004895302f0abd6dcaa3a456f677af737b2669d1fe365f5')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Factura', N'cad4f5e5921434418f52af0fc729d8500f4317577951b62d6aad87aa534d2957')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia', N'fdd294e73b3531a63b8e55aff07cf3c5d17090230a00fa065860d52642a31e97')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia_Familia', N'18c42e63ad2b66da1312f3417e15d5d971f8a253fbfb4897fbeb267656f4be79')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Idioma', N'b8206deae9aaca74a25998ec9d26c6b2b41fdf430ccc455979a8aed7a298a234')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple', N'bdd33eb30c868e8dea0a3268656a388942cf038d457db6a596486e066931a614')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple_Familia', N'e24973fe7c5a5b5c5d929cabb8f8f3f36f6b314a62bb488c51f1d145ac5c9467')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', N'11effdf3f88bf36a4103cb4974d4ad802ba95424dd03904c20ac2e35393843ae')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', N'7ffbb033773d4d430b1caa8689b542d3ee1673c0dca70cd4367477fbfda9b383')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', N'700ba87ff88d54c32d59eac310a40e63e20df37bb09a5a3f7191354a747a30d3')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', N'a1b7ac1cedd808c373f78ba8a157a7d1c823d56cd6a447d89dce682ddb323b22')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', N'9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', N'161a8edb1f52eabd4bda9294b36ace3cec0c41c79b92b2e34627034f59f780a9')
-GO
-SET IDENTITY_INSERT [dbo].[Equipamiento] ON 
-
+SET IDENTITY_INSERT [dbo].[Equipamiento] ON;
 INSERT [dbo].[Equipamiento] ([IdEquipamiento], [Tipo], [Importe], [StockDisponible], [Activo], [DVH]) VALUES (1, N'Paleta', CAST(8000.00 AS Decimal(12, 2)), 8, 1, N'345646ab25ac506c73da5a5ecdcd9dd10858d9a5d96d33c46ab6ccf715f6a6f1')
 INSERT [dbo].[Equipamiento] ([IdEquipamiento], [Tipo], [Importe], [StockDisponible], [Activo], [DVH]) VALUES (2, N'Pelota', CAST(1500.00 AS Decimal(12, 2)), 12, 1, N'27f8a517152ae46590b19ac12c70883c73339a1f60d04dc994ed76d8b754c9c6')
-SET IDENTITY_INSERT [dbo].[Equipamiento] OFF
+SET IDENTITY_INSERT [dbo].[Equipamiento] OFF;
 GO
-SET IDENTITY_INSERT [dbo].[Factura] ON 
-
-INSERT [dbo].[Factura] ([IdFactura], [IdCancha], [IdTarifa], [FechaHoraEmision], [FechaReserva], [Horario], [CantidadPaletas], [CantidadPelotas], [ImporteTarifa], [ImporteEquipamiento], [ImporteTotal], [Estado], [DVH], [DNI]) VALUES (1, 1, 1, CAST(N'2026-10-04T15:01:17.4393736' AS DateTime2), CAST(N'2026-10-04' AS Date), CAST(N'16:00:00' AS Time), 0, 0, CAST(30000.00 AS Decimal(12, 2)), CAST(0.00 AS Decimal(12, 2)), CAST(30000.00 AS Decimal(12, 2)), N'Pagada', N'89fd7e3336346cca437c79c873d00f5ace7e0b89f51ab71ec74d0e2da0dee44c', N'12345678')
-SET IDENTITY_INSERT [dbo].[Factura] OFF
+SET IDENTITY_INSERT [dbo].[Tarifa] ON;
+INSERT [dbo].[Tarifa] ([IdTarifa], [TipoTarifa], [Importe], [HoraDesde], [HoraHasta], [Activo], [DVH]) VALUES (1, N'Diurna', CAST(30000.00 AS Decimal(12, 2)), CAST(N'08:30:00' AS Time), CAST(N'17:30:00' AS Time), 1, N'01d171f677f4fac8f86c9e8a44e8f8903a9ffaff7adf787d72c19f2bafdb3642')
+INSERT [dbo].[Tarifa] ([IdTarifa], [TipoTarifa], [Importe], [HoraDesde], [HoraHasta], [Activo], [DVH]) VALUES (2, N'Nocturna', CAST(45000.00 AS Decimal(12, 2)), CAST(N'17:30:00' AS Time), CAST(N'22:00:00' AS Time), 1, N'dc1b62070c4361943e0b14a1c93dd2f52d3b09fb7532d1a091871ad7a4bcda3a')
+SET IDENTITY_INSERT [dbo].[Tarifa] OFF;
 GO
-SET IDENTITY_INSERT [dbo].[Familia] ON 
-
+SET IDENTITY_INSERT [dbo].[Idioma] ON;
+INSERT [dbo].[Idioma] ([IdIdioma], [Codigo], [Nombre], [DVH]) VALUES (1, N'ES', N'Español', N'1f83a4462935948663a6223389e13dab529e0db28bbf75ad071f08d161654e73')
+INSERT [dbo].[Idioma] ([IdIdioma], [Codigo], [Nombre], [DVH]) VALUES (2, N'EN', N'English', N'b98cc3676414c0928ab8a26a2e721b1400a585267b969cd4b35b87a2b6d88b9f')
+SET IDENTITY_INSERT [dbo].[Idioma] OFF;
+GO
+SET IDENTITY_INSERT [dbo].[Rol] ON;
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (1, N'Administrador', N'e968303d5a0735207eb00fd12bf270e9d83f5e269fd9bab80a26424e3954441f')
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (2, N'Vendedor de Buffet', N'8fcd2473f9162ea7f574ab6fda26376b775efd5a2a7188d53648104f8d5ff67b')
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (3, N'Recepcionista', N'9d65b912fda8c9906289143693ab2b3999de7c6430c4a6e001e7f57188e24b8c')
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Dueño', N'08f785674ea0f3e5871d825ef0977cf95f484245afc3195e7b5f82a014031d92')
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (5, N'Encargado de Canchas', N'714816c1e538b87ea88b9540cce7d1f1afaf7eb6e5888ca34bf904630261ba56')
+SET IDENTITY_INSERT [dbo].[Rol] OFF;
+GO
+SET IDENTITY_INSERT [dbo].[Familia] ON;
 INSERT [dbo].[Familia] ([IdFamilia], [Nombre], [DVH]) VALUES (1, N'Sesión', N'8e7a9630253803d9fabd34ed9f974b1478805cac0f83f50375d7111f1ed2a39f')
 INSERT [dbo].[Familia] ([IdFamilia], [Nombre], [DVH]) VALUES (2, N'Gestión de Usuarios', N'88cb8da76653546918837cb79f7e5ae674e369c099953018b3b5eaccd3bba807')
 INSERT [dbo].[Familia] ([IdFamilia], [Nombre], [DVH]) VALUES (3, N'Bitácora', N'0ccc7005cfabb92cbac4fadf23553a1a26953dbf6b1cb5b0e33d614591ee8be5')
@@ -431,20 +504,13 @@ INSERT [dbo].[Familia] ([IdFamilia], [Nombre], [DVH]) VALUES (6, N'Clientes', N'
 INSERT [dbo].[Familia] ([IdFamilia], [Nombre], [DVH]) VALUES (7, N'Buffet', N'c3dada9b953d968c56dc27ea8d503f3988caf4db6fda9473b672a49c4e265ea9')
 INSERT [dbo].[Familia] ([IdFamilia], [Nombre], [DVH]) VALUES (8, N'Administración Total', N'2bcfc06f48977987ce2108e3e6b623735737b1976191816c53ed8ba93b5ab278')
 INSERT [dbo].[Familia] ([IdFamilia], [Nombre], [DVH]) VALUES (13, N'Canchas', N'e9d02c0a64e7727f9380cb3a264ceb60fedfa9918d25e562c735da7d2648f63e')
-SET IDENTITY_INSERT [dbo].[Familia] OFF
+SET IDENTITY_INSERT [dbo].[Familia] OFF;
 GO
 INSERT [dbo].[Familia_Familia] ([IdFamiliaPadre], [IdFamiliaHija], [DVH]) VALUES (8, 2, N'a9e264cb4c953f958e10a18334af28d3229562f48c1ec33c0a5f94df26dcb5d9')
 INSERT [dbo].[Familia_Familia] ([IdFamiliaPadre], [IdFamiliaHija], [DVH]) VALUES (8, 3, N'29694ce63ca04a055a1f6284f59acd208be2cb74edc443689f231def0f55c18e')
 INSERT [dbo].[Familia_Familia] ([IdFamiliaPadre], [IdFamiliaHija], [DVH]) VALUES (8, 4, N'9ccad5595eaedbf07fc1ada91dcd2805c6c544430424ce91c69f709c02a52103')
 GO
-SET IDENTITY_INSERT [dbo].[Idioma] ON 
-
-INSERT [dbo].[Idioma] ([IdIdioma], [Codigo], [Nombre], [DVH]) VALUES (1, N'ES', N'Español', N'1f83a4462935948663a6223389e13dab529e0db28bbf75ad071f08d161654e73')
-INSERT [dbo].[Idioma] ([IdIdioma], [Codigo], [Nombre], [DVH]) VALUES (2, N'EN', N'English', N'b98cc3676414c0928ab8a26a2e721b1400a585267b969cd4b35b87a2b6d88b9f')
-SET IDENTITY_INSERT [dbo].[Idioma] OFF
-GO
-SET IDENTITY_INSERT [dbo].[PermisoSimple] ON 
-
+SET IDENTITY_INSERT [dbo].[PermisoSimple] ON;
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (1, N'USR_LISTAR', N'Listar Usuarios', N'9273818afb62c8ba73903ec8c9b417e26e24dbec3354cc8deb13d28ce063b328')
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (2, N'USR_CREAR', N'Crear Usuario', N'4cf1d161bc5843d1a550b686ff489f2c9eae275cfaaacccb3bec924e1b341ad0')
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (3, N'USR_MODIFICAR', N'Modificar Usuario', N'ffbdd81fee417dcabab9fe699945cb49ce2579f958b2677168ca6376d6798521')
@@ -474,7 +540,11 @@ INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALU
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (27, N'BUF_CONSULTAR_STOCK', N'Consultar Stock del Buffet', N'8316f15bbc562e8a4b02c2bf51173c13f16bb84973963aba7de4af7202a4f579')
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (28, N'CAN_CONSULTAR_AGENDA', N'Consultar Agenda de Canchas', N'25eecef2df69e2458691670354b2ea9b5527e54b5dc51c934eeaa2fd3cef5053')
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (29, N'BAK_GESTIONAR', N'Gestionar Respaldos (backup/restore)', N'a150b27a8d8e9fc3719ccc14c2e1c514709558f14332f4416441e9f6399c4eab')
-SET IDENTITY_INSERT [dbo].[PermisoSimple] OFF
+INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (30, N'PRO_GESTIONAR', N'Gestionar Productos (ABM)', N'fb18f409aa4a5c6c407473b60cab68adcb4c9da195c71277c8df19d0e923ec10')
+INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (31, N'CLI_ELIMINAR', N'Eliminar Cliente sin operaciones asociadas', N'da471fc2ea1ab0140eec18058b1355c0a80f74ebb3f61100db8ecbe77251eb54')
+INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (32, N'CLI_DESENCRIPTAR_TELEFONO', N'Desencriptar telefono de cliente', N'53d00f1f67f0c09841fda4a5e2972562c0f1b417da4be0889075e19868d3ffd7')
+INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (33, N'REP_PREDICTIVO', N'Consultar reporte predictivo de buffet', N'b30e2e9aeed3e7c8fadff598f52836bbd4015d59334376c2698aa0f23cebe4a0')
+SET IDENTITY_INSERT [dbo].[PermisoSimple] OFF;
 GO
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (1, 14, N'0a23a5f1bb3666753e1bd12f1101c4d1c0ab9689208d2740d5b1a5249e742453')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (1, 15, N'0b6dee7de65773d3d568a1a762afcca89fc60b5f78bfeee0a22959bafd33100e')
@@ -501,24 +571,10 @@ INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VAL
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (6, 23, N'df08a08a029d54adb2b88c3ba28a8723d881cfc63b107a55a3a17dd3e516c005')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (6, 24, N'4378837d3436e6162074a4fec1af3d1001c7b37c3bd6e977e717c6d6e3e4bf4b')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (6, 25, N'b4e746256717b4b06ffccfb298eb390e16f086b4ef32d45bf7af360991419e04')
+INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (6, 31, N'10c4ff1b3937f5c85bb7a036bdc3be48a1ee144bc045aa74f5ae0f1a7fdeeb1b')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (7, 26, N'7f155abfca97e134f158f3c6b4d04d6707ff181ae78c16cde5732d96186d022e')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (7, 27, N'43751bc31fa90e39010c41ca3956b248442525c24376a578e8584b6faabb978d')
-INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (8, 29, N'e3c65737f4c3a978fdab7ffb65ff727596a48ef2233745b1c863acfe4ebe1deb')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (13, 28, N'90f395f0b6f1de9c74af4eab4a3a4aac2927f091fe479344113ba1c9355a976b')
-GO
-SET IDENTITY_INSERT [dbo].[Reserva] ON 
-
-INSERT [dbo].[Reserva] ([IdReserva], [IdCancha], [IdTarifa], [Fecha], [Horario], [Estado], [DVH], [Codigo], [IdFactura], [CantidadPaletas], [CantidadPelotas], [DNI], [Banco], [Ultimos4Tarjeta], [ImportePago], [FechaHoraPago], [EstadoPago], [CodigoAutorizacion]) VALUES (1, 1, 1, CAST(N'2026-10-04' AS Date), CAST(N'16:00:00' AS Time), N'Reservada', N'8d615750faa723df1ad859773d9ecb6fa5c2b1ec1a9b4bf5958deeba74f2fd40', N'RES-20261004-313D60', 1, 0, 0, N'12345678', N'banco prov', N'5678', CAST(30000.00 AS Decimal(12, 2)), CAST(N'2026-10-04T15:01:16.0544578' AS DateTime2), N'Aprobado', N'RES-4377B783E263')
-SET IDENTITY_INSERT [dbo].[Reserva] OFF
-GO
-SET IDENTITY_INSERT [dbo].[Rol] ON 
-
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (1, N'Administrador', N'e968303d5a0735207eb00fd12bf270e9d83f5e269fd9bab80a26424e3954441f')
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (2, N'Vendedor de Buffet', N'8fcd2473f9162ea7f574ab6fda26376b775efd5a2a7188d53648104f8d5ff67b')
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (3, N'Recepcionista', N'9d65b912fda8c9906289143693ab2b3999de7c6430c4a6e001e7f57188e24b8c')
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Dueño', N'08f785674ea0f3e5871d825ef0977cf95f484245afc3195e7b5f82a014031d92')
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (5, N'Encargado de Canchas', N'714816c1e538b87ea88b9540cce7d1f1afaf7eb6e5888ca34bf904630261ba56')
-SET IDENTITY_INSERT [dbo].[Rol] OFF
 GO
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (1, 1, N'3f22d6d875f4e1635c6b9f02ac6ef85c76fa33ca7a7593ea6bed1ef2c9997414')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (1, 8, N'444abbca8de8dc89ae7445fe27afc743f74ddfd2fae5be74c464b587e10198cc')
@@ -526,49 +582,74 @@ INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (2, 1, N'ab8acbe
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (2, 7, N'61bc29ecfce8757bde6fbb33b61ecd759f744bc1c1f53db4ea5f2ae0059838ae')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (3, 1, N'81e96b53ef6b10d23617ec3286caaefa081820565aae60315ccab78733478d71')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (3, 5, N'a6dad5d245abd5061945ce56b487542e3233969b36a260e85a4c09556aab60de')
-INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (3, 6, N'1c0852ab9781b5dacfab79eac19733d9e86f1cb6c359fd1657de29797d547c18')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 1, N'b6d71685bd9ab5b3cd6aa85bc38ee89f8d4c6d8c9d7afb87b0a4ff1b0915027f')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 5, N'cebc03007ff90caa5f14b0d24681820822c75b97db9a3658fd2c06b796794c97')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 6, N'13ab4ed36916168913964f52b4b98215893947f7540ef25ad80ed34593f97b1f')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 7, N'a7c9457857e60130f01a26bed4d4d64249afbbf8f2e041ca4d8d74fd6098d0b7')
+INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 8, N'a96c9eb63a01b9fd39e82288d2de9d814102466f8c0684da35cc22919adb435e')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (4, 13, N'8c35684bf37f290ed4e35e4eb8e7fd2a5ec035e188191f443d0c11c6c969c9b8')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (5, 1, N'cac33d2c18b2084313c957a5641e259f69b9f0d5afa2cc4b825b585d6534ccdc')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (5, 13, N'8ec99bdedaf4cc509dabae02553a61d2e49c4969309086f082fcc956568aa859')
+INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (1, 6, N'2baee7362a0b8cf0d1054da7236a64097d98870dda36504bf743ff89f475930e')
 GO
-SET IDENTITY_INSERT [dbo].[Tarifa] ON 
-
-INSERT [dbo].[Tarifa] ([IdTarifa], [TipoTarifa], [Importe], [HoraDesde], [HoraHasta], [Activo], [DVH]) VALUES (1, N'Diurna', CAST(30000.00 AS Decimal(12, 2)), CAST(N'08:30:00' AS Time), CAST(N'17:30:00' AS Time), 1, N'01d171f677f4fac8f86c9e8a44e8f8903a9ffaff7adf787d72c19f2bafdb3642')
-INSERT [dbo].[Tarifa] ([IdTarifa], [TipoTarifa], [Importe], [HoraDesde], [HoraHasta], [Activo], [DVH]) VALUES (2, N'Nocturna', CAST(45000.00 AS Decimal(12, 2)), CAST(N'17:30:00' AS Time), CAST(N'22:00:00' AS Time), 1, N'dc1b62070c4361943e0b14a1c93dd2f52d3b09fb7532d1a091871ad7a4bcda3a')
-SET IDENTITY_INSERT [dbo].[Tarifa] OFF
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (1, 29, N'32c556fb186927442698fd68ca98c72da34ae2c3a8a5ddf4d05e0dca9f4da5b9')
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (1, 30, N'b10f6285b7a31102d191a7f4ea6812baab6f313d257a92154487a5988ac05cae')
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 30, N'96866a4ce8b4f0299246ba15185965f942ab653dd00f06c743b4dc521f759266')
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 32, N'e40dbfc826024b8cfad402a6d4b21b1817f6a8ea535fa239d14cb2e1c9556c26')
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 33, N'5ac69ddc4dc620d0fa43b9c6ebcc7e34c18b18a99a3d9fed74acd7c609ca1842')
 GO
-SET IDENTITY_INSERT [dbo].[Usuario] ON 
-
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Leonel', N'Rodriguez', N'46631736', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 0, 1, 1, N'1b3f2113a555df030e928e242671cf13e21859f3a7acf1aba2b9ddb31f8c9a87')
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (3, N'Seba', N'Mariolani', N'11223344', N'dueño@padelgest.com', N'Seba11223344', N'27ef5a3bc40eb5df6cb01d9d911c4ade3e247fa4d68d1b2ab6db2d2fd9f71d8a', 1, 0, 0, 1, 1, 4, N'2f0d1ed945b023e60d84f14394c2f3b77f376871cac1c8439b0d05803beb583b')
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (4, N'Carlos', N'Gonzalez', N'12344444', N'recepcionista@padelgest.com', N'Carlos12344444', N'a55a9ea338452b2b5d9eee49633700eb451bf9b855a7de816d0fbf40b4b993d7', 1, 0, 0, 0, 1, 3, N'7dc44470973d91703ffecb8ef1c349235971d19669d2ff4232c7045588d3b8dd')
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (5, N'Jorge', N'Pereyra', N'22224444', N'vendedor@padelgest.com', N'Jorge22224444', N'3f941ccc5c5773b0a3b0e831aabb9ead199e7b9d001e56178d7495d3413e1f44', 1, 0, 0, 1, 1, 2, N'23c84b299a579145a69ace570ddf67ff833a88df0c5525d8424f411bbc127552')
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (6, N'Bruno', N'Roca', N'10101010', N'canchero@padelgest.com', N'Bruno10101010', N'e5dc9e54502940bac6a9b65c1de3129fdc35ff4a4b4cc7f7bc968edec973fcd7', 1, 0, 0, 1, 1, 5, N'd4754c4d1d212358e9b6051c86c8ad3e2b84ee3766c742b80f01e42520d4285a')
-SET IDENTITY_INSERT [dbo].[Usuario] OFF
+-- Instalacion limpia: el catalogo de productos comienza vacio.
+-- Los productos se crean desde PadelGest, y TR_Producto_RegistrarCambio
+-- registra automaticamente su primera version en dbo.Producto_C.
+GO
+SET IDENTITY_INSERT [dbo].[Usuario] ON;
+INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Inicial', N'99999999', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 1, 1, 1, N'a0aaad8687f78ad82c5ab61b29cfc3a029d0af07558072b50ebaee15d2d82d69')
+SET IDENTITY_INSERT [dbo].[Usuario] OFF;
+GO
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cancha', '91129657cbb5230efd409301669fd05b677f7331542c2192547bd4da1b7bd1bd');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cliente', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'DetalleFactura', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Equipamiento', '1fb47453d7dee2f1e004895302f0abd6dcaa3a456f677af737b2669d1fe365f5');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Factura', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'FacturaBuffet', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia', 'fdd294e73b3531a63b8e55aff07cf3c5d17090230a00fa065860d52642a31e97');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia_Familia', '18c42e63ad2b66da1312f3417e15d5d971f8a253fbfb4897fbeb267656f4be79');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Idioma', 'b8206deae9aaca74a25998ec9d26c6b2b41fdf430ccc455979a8aed7a298a234');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple', '2b08d33a277ea163b8e4334c7224848afd8895113a4b0320a33d1cb75068904d');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple_Familia', '8496bff4c54c5423709a684e099814700c2f68eda600a6295a0fd158cbf8e73c');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', '700ba87ff88d54c32d59eac310a40e63e20df37bb09a5a3f7191354a747a30d3');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', '32b5356d0241e9fa61aec0d6b60e4ce854b7b877378c67761cb47c05d0cae856');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', 'b4a4f9d950d5fbb6f84ca498a7f9c67bf4085e9f86b168a522282789a79dbb8d');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', '9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', '043d767ba5095982bf68a31b3335097f338526cee72669584b4f34e035eefa30');
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Cancha_Nombre]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [UQ_Cancha_Nombre]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Cancha] ADD  CONSTRAINT [UQ_Cancha_Nombre] UNIQUE NONCLUSTERED 
 (
 	[Nombre] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ_Cliente_DNI]    Script Date: 20/9/2026 23:02:02 ******/
-ALTER TABLE [dbo].[Cliente] ADD  CONSTRAINT [UQ_Cliente_DNI] UNIQUE NONCLUSTERED 
+/****** Object:  Index [UQ_DetalleFactura_FacturaProducto]    Script Date: 3/11/2026 21:27:19 ******/
+ALTER TABLE [dbo].[DetalleFactura] ADD  CONSTRAINT [UQ_DetalleFactura_FacturaProducto] UNIQUE NONCLUSTERED 
 (
-	[DNI] ASC
+	[IdFactura] ASC,
+	[CodigoProducto] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
+/****** Object:  Index [IX_DetalleFactura_Producto]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE NONCLUSTERED INDEX [IX_DetalleFactura_Producto] ON [dbo].[DetalleFactura]
+(
+	[CodigoProducto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Equipamiento_Tipo]    Script Date: 20/9/2026 23:02:02 ******/
+/****** Object:  Index [UQ_Equipamiento_Tipo]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Equipamiento] ADD  CONSTRAINT [UQ_Equipamiento_Tipo] UNIQUE NONCLUSTERED 
 (
 	[Tipo] ASC
@@ -576,7 +657,39 @@ ALTER TABLE [dbo].[Equipamiento] ADD  CONSTRAINT [UQ_Equipamiento_Tipo] UNIQUE N
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Familia_Nombre]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [UQ_FacturaBuffet_CodigoAutorizacion]    Script Date: 3/11/2026 21:27:19 ******/
+ALTER TABLE [dbo].[FacturaBuffet] ADD  CONSTRAINT [UQ_FacturaBuffet_CodigoAutorizacion] UNIQUE NONCLUSTERED 
+(
+	[CodigoAutorizacion] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ_FacturaBuffet_NumeroFactura]    Script Date: 3/11/2026 21:27:19 ******/
+ALTER TABLE [dbo].[FacturaBuffet] ADD  CONSTRAINT [UQ_FacturaBuffet_NumeroFactura] UNIQUE NONCLUSTERED 
+(
+	[NumeroFactura] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_FacturaBuffet_DNI_Fecha]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE NONCLUSTERED INDEX [IX_FacturaBuffet_DNI_Fecha] ON [dbo].[FacturaBuffet]
+(
+	[DNI] ASC,
+	[FechaHoraEmision] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_FacturaBuffet_Vendedor_Fecha]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE NONCLUSTERED INDEX [IX_FacturaBuffet_Vendedor_Fecha] ON [dbo].[FacturaBuffet]
+(
+	[IdVendedor] ASC,
+	[FechaHoraEmision] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ_Familia_Nombre]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Familia] ADD  CONSTRAINT [UQ_Familia_Nombre] UNIQUE NONCLUSTERED 
 (
 	[Nombre] ASC
@@ -584,7 +697,7 @@ ALTER TABLE [dbo].[Familia] ADD  CONSTRAINT [UQ_Familia_Nombre] UNIQUE NONCLUSTE
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Idioma_Codigo]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [UQ_Idioma_Codigo]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Idioma] ADD  CONSTRAINT [UQ_Idioma_Codigo] UNIQUE NONCLUSTERED 
 (
 	[Codigo] ASC
@@ -592,7 +705,7 @@ ALTER TABLE [dbo].[Idioma] ADD  CONSTRAINT [UQ_Idioma_Codigo] UNIQUE NONCLUSTERE
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_PermisoSimple_Codigo]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [UQ_PermisoSimple_Codigo]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[PermisoSimple] ADD  CONSTRAINT [UQ_PermisoSimple_Codigo] UNIQUE NONCLUSTERED 
 (
 	[Codigo] ASC
@@ -600,7 +713,58 @@ ALTER TABLE [dbo].[PermisoSimple] ADD  CONSTRAINT [UQ_PermisoSimple_Codigo] UNIQ
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Rol_Nombre]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [IX_Producto_ActivoCategoriaNombre]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE NONCLUSTERED INDEX [IX_Producto_ActivoCategoriaNombre] ON [dbo].[Producto]
+(
+	[Activo] ASC,
+	[Categoria] ASC,
+	[Nombre] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ProductoC_Consulta]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE NONCLUSTERED INDEX [IX_ProductoC_Consulta] ON [dbo].[Producto_C]
+(
+	[CodigoProducto] ASC,
+	[FechaHora] DESC,
+	[IdCambio] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [UX_ProductoC_VersionVigente]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [UX_ProductoC_VersionVigente] ON [dbo].[Producto_C]
+(
+	[CodigoProducto] ASC
+)
+WHERE ([Act]=(1))
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Reserva_Disponibilidad]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE NONCLUSTERED INDEX [IX_Reserva_Disponibilidad] ON [dbo].[Reserva]
+(
+	[IdCancha] ASC,
+	[Fecha] ASC,
+	[Horario] ASC,
+	[Estado] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ_Reserva_Codigo]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_Reserva_Codigo] ON [dbo].[Reserva]
+(
+	[Codigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [UQ_Reserva_IdFactura]    Script Date: 3/11/2026 21:27:19 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_Reserva_IdFactura] ON [dbo].[Reserva]
+(
+	[IdFactura] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ_Rol_Nombre]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Rol] ADD  CONSTRAINT [UQ_Rol_Nombre] UNIQUE NONCLUSTERED 
 (
 	[Nombre] ASC
@@ -608,7 +772,7 @@ ALTER TABLE [dbo].[Rol] ADD  CONSTRAINT [UQ_Rol_Nombre] UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Usuario_DNI]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [UQ_Usuario_DNI]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [UQ_Usuario_DNI] UNIQUE NONCLUSTERED 
 (
 	[DNI] ASC
@@ -616,7 +780,7 @@ ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [UQ_Usuario_DNI] UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Usuario_Email]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [UQ_Usuario_Email]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [UQ_Usuario_Email] UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -624,7 +788,7 @@ ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [UQ_Usuario_Email] UNIQUE NONCLUSTER
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_Usuario_NombreUsuario]    Script Date: 12/10/2026 13:32:57 ******/
+/****** Object:  Index [UQ_Usuario_NombreUsuario]    Script Date: 3/11/2026 21:27:19 ******/
 ALTER TABLE [dbo].[Usuario] ADD  CONSTRAINT [UQ_Usuario_NombreUsuario] UNIQUE NONCLUSTERED 
 (
 	[NombreUsuario] ASC
@@ -633,6 +797,20 @@ GO
 ALTER TABLE [dbo].[BitacoraEvento] ADD  CONSTRAINT [DF_BitacoraEvento_FechaHora]  DEFAULT (sysdatetime()) FOR [FechaHora]
 GO
 ALTER TABLE [dbo].[Equipamiento] ADD  CONSTRAINT [DF_Equipamiento_Activo]  DEFAULT ((1)) FOR [Activo]
+GO
+ALTER TABLE [dbo].[FacturaBuffet] ADD  CONSTRAINT [DF_FacturaBuffet_FechaHoraEmision]  DEFAULT (sysdatetime()) FOR [FechaHoraEmision]
+GO
+ALTER TABLE [dbo].[FacturaBuffet] ADD  CONSTRAINT [DF_FacturaBuffet_Estado]  DEFAULT (N'Pagada') FOR [Estado]
+GO
+ALTER TABLE [dbo].[Producto] ADD  CONSTRAINT [DF_Producto_Stock]  DEFAULT ((0)) FOR [StockDisponible]
+GO
+ALTER TABLE [dbo].[Producto] ADD  CONSTRAINT [DF_Producto_StockMinimo]  DEFAULT ((0)) FOR [StockMinimo]
+GO
+ALTER TABLE [dbo].[Producto] ADD  CONSTRAINT [DF_Producto_Activo]  DEFAULT ((1)) FOR [Activo]
+GO
+ALTER TABLE [dbo].[Producto_C] ADD  CONSTRAINT [DF_ProductoC_FechaHora]  DEFAULT (sysdatetime()) FOR [FechaHora]
+GO
+ALTER TABLE [dbo].[Producto_C] ADD  CONSTRAINT [DF_ProductoC_Act]  DEFAULT ((1)) FOR [Act]
 GO
 ALTER TABLE [dbo].[Tarifa] ADD  CONSTRAINT [DF_Tarifa_Activo]  DEFAULT ((1)) FOR [Activo]
 GO
@@ -651,6 +829,16 @@ REFERENCES [dbo].[Usuario] ([IdUsuario])
 GO
 ALTER TABLE [dbo].[BitacoraEvento] CHECK CONSTRAINT [FK_BitacoraEvento_Usuario]
 GO
+ALTER TABLE [dbo].[DetalleFactura]  WITH CHECK ADD  CONSTRAINT [FK_DetalleFactura_FacturaBuffet] FOREIGN KEY([IdFactura])
+REFERENCES [dbo].[FacturaBuffet] ([IdFactura])
+GO
+ALTER TABLE [dbo].[DetalleFactura] CHECK CONSTRAINT [FK_DetalleFactura_FacturaBuffet]
+GO
+ALTER TABLE [dbo].[DetalleFactura]  WITH CHECK ADD  CONSTRAINT [FK_DetalleFactura_Producto] FOREIGN KEY([CodigoProducto])
+REFERENCES [dbo].[Producto] ([CodigoProducto])
+GO
+ALTER TABLE [dbo].[DetalleFactura] CHECK CONSTRAINT [FK_DetalleFactura_Producto]
+GO
 ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [FK_Factura_Cancha] FOREIGN KEY([IdCancha])
 REFERENCES [dbo].[Cancha] ([IdCancha])
 GO
@@ -666,6 +854,16 @@ ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [FK_Factura_Tarifa] FORE
 REFERENCES [dbo].[Tarifa] ([IdTarifa])
 GO
 ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [FK_Factura_Tarifa]
+GO
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [FK_FacturaBuffet_Cliente] FOREIGN KEY([DNI])
+REFERENCES [dbo].[Cliente] ([DNI])
+GO
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [FK_FacturaBuffet_Cliente]
+GO
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [FK_FacturaBuffet_Vendedor] FOREIGN KEY([IdVendedor])
+REFERENCES [dbo].[Usuario] ([IdUsuario])
+GO
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [FK_FacturaBuffet_Vendedor]
 GO
 ALTER TABLE [dbo].[Familia_Familia]  WITH CHECK ADD  CONSTRAINT [FK_FamFam_Hija] FOREIGN KEY([IdFamiliaHija])
 REFERENCES [dbo].[Familia] ([IdFamilia])
@@ -686,6 +884,11 @@ ALTER TABLE [dbo].[PermisoSimple_Familia]  WITH CHECK ADD  CONSTRAINT [FK_PsFam_
 REFERENCES [dbo].[PermisoSimple] ([IdPermisoSimple])
 GO
 ALTER TABLE [dbo].[PermisoSimple_Familia] CHECK CONSTRAINT [FK_PsFam_PermisoSimple]
+GO
+ALTER TABLE [dbo].[Producto_C]  WITH CHECK ADD  CONSTRAINT [FK_Producto_C_Producto] FOREIGN KEY([CodigoProducto])
+REFERENCES [dbo].[Producto] ([CodigoProducto])
+GO
+ALTER TABLE [dbo].[Producto_C] CHECK CONSTRAINT [FK_Producto_C_Producto]
 GO
 ALTER TABLE [dbo].[Reserva]  WITH CHECK ADD  CONSTRAINT [FK_Reserva_Cancha] FOREIGN KEY([IdCancha])
 REFERENCES [dbo].[Cancha] ([IdCancha])
@@ -747,6 +950,14 @@ ALTER TABLE [dbo].[Cliente]  WITH CHECK ADD  CONSTRAINT [CK_Cliente_DNI] CHECK  
 GO
 ALTER TABLE [dbo].[Cliente] CHECK CONSTRAINT [CK_Cliente_DNI]
 GO
+ALTER TABLE [dbo].[DetalleFactura]  WITH CHECK ADD  CONSTRAINT [CK_DetalleFactura_Cantidad] CHECK  (([Cantidad]>(0)))
+GO
+ALTER TABLE [dbo].[DetalleFactura] CHECK CONSTRAINT [CK_DetalleFactura_Cantidad]
+GO
+ALTER TABLE [dbo].[DetalleFactura]  WITH CHECK ADD  CONSTRAINT [CK_DetalleFactura_Precio] CHECK  (([PrecioUnitario]>(0)))
+GO
+ALTER TABLE [dbo].[DetalleFactura] CHECK CONSTRAINT [CK_DetalleFactura_Precio]
+GO
 ALTER TABLE [dbo].[Equipamiento]  WITH CHECK ADD  CONSTRAINT [CK_Equipamiento_Importe] CHECK  (([Importe]>=(0)))
 GO
 ALTER TABLE [dbo].[Equipamiento] CHECK CONSTRAINT [CK_Equipamiento_Importe]
@@ -783,19 +994,63 @@ ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [CK_Factura_ImporteTotal
 GO
 ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [CK_Factura_ImporteTotal]
 GO
-ALTER TABLE [dbo].[Pago]  WITH CHECK ADD  CONSTRAINT [CK_Pago_Estado] CHECK  (([Estado]=N'Aprobado'))
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [CK_FacturaBuffet_Autorizacion] CHECK  ((len(ltrim(rtrim([CodigoAutorizacion])))>(0)))
 GO
-ALTER TABLE [dbo].[Pago] CHECK CONSTRAINT [CK_Pago_Estado]
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [CK_FacturaBuffet_Autorizacion]
 GO
-ALTER TABLE [dbo].[Pago]  WITH CHECK ADD  CONSTRAINT [CK_Pago_Importe] CHECK  (([Importe]>(0)))
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [CK_FacturaBuffet_Banco] CHECK  ((len(ltrim(rtrim([Banco])))>(0)))
 GO
-ALTER TABLE [dbo].[Pago] CHECK CONSTRAINT [CK_Pago_Importe]
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [CK_FacturaBuffet_Banco]
 GO
-ALTER TABLE [dbo].[Pago]  WITH CHECK ADD  CONSTRAINT [CK_Pago_Ultimos4] CHECK  ((len([Ultimos4Tarjeta])=(4) AND NOT [Ultimos4Tarjeta] like '%[^0-9]%'))
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [CK_FacturaBuffet_Estado] CHECK  (([Estado]=N'Anulada' OR [Estado]=N'Pagada'))
 GO
-ALTER TABLE [dbo].[Pago] CHECK CONSTRAINT [CK_Pago_Ultimos4]
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [CK_FacturaBuffet_Estado]
+GO
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [CK_FacturaBuffet_Importe] CHECK  (([ImporteTotal]>(0)))
+GO
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [CK_FacturaBuffet_Importe]
+GO
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [CK_FacturaBuffet_Numero] CHECK  ((len(ltrim(rtrim([NumeroFactura])))>(0)))
+GO
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [CK_FacturaBuffet_Numero]
+GO
+ALTER TABLE [dbo].[FacturaBuffet]  WITH CHECK ADD  CONSTRAINT [CK_FacturaBuffet_Tarjeta] CHECK  ((len([Ultimos4Tarjeta])=(4) AND NOT [Ultimos4Tarjeta] like '%[^0-9]%'))
+GO
+ALTER TABLE [dbo].[FacturaBuffet] CHECK CONSTRAINT [CK_FacturaBuffet_Tarjeta]
+GO
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_Categoria] CHECK  ((len(ltrim(rtrim([Categoria])))>(0)))
+GO
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [CK_Producto_Categoria]
+GO
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_Nombre] CHECK  ((len(ltrim(rtrim([Nombre])))>(0)))
+GO
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [CK_Producto_Nombre]
+GO
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_Precio] CHECK  (([PrecioUnitario]>(0)))
+GO
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [CK_Producto_Precio]
+GO
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_Stock] CHECK  (([StockDisponible]>=(0)))
+GO
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [CK_Producto_Stock]
+GO
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_StockMinimo] CHECK  (([StockMinimo]>=(0)))
+GO
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [CK_Producto_StockMinimo]
 GO
 ALTER TABLE [dbo].[Reserva]  WITH CHECK ADD  CONSTRAINT [CK_Reserva_CantidadPaletas] CHECK  (([CantidadPaletas]>=(0)))
+GO
+ALTER TABLE [dbo].[Reserva] CHECK CONSTRAINT [CK_Reserva_CantidadPaletas]
+GO
+ALTER TABLE [dbo].[Reserva]  WITH CHECK ADD  CONSTRAINT [CK_Reserva_CantidadPelotas] CHECK  (([CantidadPelotas]>=(0)))
+GO
+ALTER TABLE [dbo].[Reserva] CHECK CONSTRAINT [CK_Reserva_CantidadPelotas]
+GO
+ALTER TABLE [dbo].[Reserva]  WITH CHECK ADD  CONSTRAINT [CK_Reserva_EstadoPago] CHECK  (([EstadoPago]=N'Aprobado'))
+GO
+ALTER TABLE [dbo].[Reserva] CHECK CONSTRAINT [CK_Reserva_EstadoPago]
+GO
+ALTER TABLE [dbo].[Reserva]  WITH CHECK ADD  CONSTRAINT [CK_Reserva_ImportePago] CHECK  (([ImportePago]>(0)))
 GO
 ALTER TABLE [dbo].[Reserva] CHECK CONSTRAINT [CK_Reserva_ImportePago]
 GO
@@ -815,13 +1070,134 @@ ALTER TABLE [dbo].[Usuario]  WITH CHECK ADD  CONSTRAINT [CK_Usuario_IntentosFall
 GO
 ALTER TABLE [dbo].[Usuario] CHECK CONSTRAINT [CK_Usuario_IntentosFallidos]
 GO
+/****** Object:  Trigger [dbo].[TR_Producto_RegistrarCambio]    Script Date: 3/11/2026 21:27:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 
-/****** PN1: relación única Factura-Reserva y controles del pago incorporado ******/
-ALTER TABLE [dbo].[Reserva] ADD CONSTRAINT [UQ_Reserva_IdFactura] UNIQUE ([IdFactura])
+CREATE   TRIGGER [dbo].[TR_Producto_RegistrarCambio]
+ON [dbo].[Producto]
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Multirregistro: un UPDATE puede cambiar varios productos.
+    DECLARE @Cambios table (CodigoProducto int NOT NULL PRIMARY KEY);
+
+    INSERT INTO @Cambios (CodigoProducto)
+    SELECT i.CodigoProducto
+    FROM inserted i
+    LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto
+    WHERE d.CodigoProducto IS NULL
+       OR EXISTS
+       (
+           SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
+                  i.StockDisponible, i.StockMinimo, i.Activo
+           EXCEPT
+           SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
+                  d.StockDisponible, d.StockMinimo, d.Activo
+       );
+
+    IF NOT EXISTS (SELECT 1 FROM @Cambios)
+        RETURN;
+
+    -- La version anterior deja de estar vigente. Nunca se borra.
+    UPDATE historial
+       SET Act = 0
+    FROM dbo.Producto_C historial
+    INNER JOIN @Cambios c ON c.CodigoProducto = historial.CodigoProducto
+    WHERE historial.Act = 1;
+
+    -- Nueva instantanea del producto dentro de la MISMA transaccion.
+    INSERT INTO dbo.Producto_C
+    (
+        CodigoProducto, FechaHora, Nombre, Categoria, PrecioUnitario,
+        StockDisponible, StockMinimo, ActivoProducto, Act, TipoCambio
+    )
+    SELECT
+        i.CodigoProducto, SYSDATETIME(),
+        i.Nombre, i.Categoria, i.PrecioUnitario,
+        i.StockDisponible, i.StockMinimo, i.Activo, 1,
+        CASE
+            WHEN d.CodigoProducto IS NULL THEN N'Alta'
+            WHEN i.Activo <> d.Activo AND i.Activo = 0
+                THEN N'Desactivacion'
+            WHEN i.Activo <> d.Activo AND i.Activo = 1
+                THEN N'Reactivacion'
+            WHEN i.StockDisponible <> d.StockDisponible
+                 AND i.Nombre = d.Nombre
+                 AND i.Categoria = d.Categoria
+                 AND i.PrecioUnitario = d.PrecioUnitario
+                 AND i.StockMinimo = d.StockMinimo
+                 AND i.Activo = d.Activo
+                THEN N'Stock'
+            ELSE N'Modificacion'
+        END
+    FROM inserted i
+    INNER JOIN @Cambios c ON c.CodigoProducto = i.CodigoProducto
+    LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto;
+END;
 GO
-ALTER TABLE [dbo].[Reserva] WITH CHECK ADD CONSTRAINT [CK_Reserva_ImportePago] CHECK ([ImportePago] > (0))
+ALTER TABLE [dbo].[Producto] ENABLE TRIGGER [TR_Producto_RegistrarCambio]
 GO
-ALTER TABLE [dbo].[Reserva] WITH CHECK ADD CONSTRAINT [CK_Reserva_EstadoPago] CHECK ([EstadoPago] = N'Aprobado')
+/****** Object:  Trigger [dbo].[TR_ProductoC_RestaurarVersion]    Script Date: 3/11/2026 21:27:19 ******/
+SET ANSI_NULLS ON
 GO
-ALTER TABLE [dbo].[Reserva] WITH CHECK ADD CONSTRAINT [CK_Reserva_Ultimos4Tarjeta] CHECK (LEN([Ultimos4Tarjeta]) = (4) AND [Ultimos4Tarjeta] NOT LIKE '%[^0-9]%')
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   TRIGGER [dbo].[TR_ProductoC_RestaurarVersion]
+ON [dbo].[Producto_C]
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Solo se restaura una version cuando Act cambia de 0 a 1.
+    -- Los cambios de 1 a 0 generados por la auditoria no restauran.
+    DECLARE @Restauradas TABLE
+    (
+        CodigoProducto int NOT NULL PRIMARY KEY,
+        IdCambio bigint NOT NULL
+    );
+
+    INSERT INTO @Restauradas (CodigoProducto, IdCambio)
+    SELECT i.CodigoProducto, i.IdCambio
+    FROM inserted i
+    INNER JOIN deleted d ON d.IdCambio = i.IdCambio
+    WHERE i.Act = 1 AND d.Act = 0;
+
+    IF NOT EXISTS (SELECT 1 FROM @Restauradas)
+        RETURN;
+
+    -- Esta operacion dispara TR_Producto_RegistrarCambio. El trigger de
+    -- Producto agrega una NUEVA version y desactiva la anterior.
+    -- El trabajo se ejecuta dentro de la misma transaccion del usuario.
+    UPDATE p
+       SET p.Nombre = h.Nombre,
+           p.Categoria = h.Categoria,
+           p.PrecioUnitario = h.PrecioUnitario,
+           p.StockDisponible = h.StockDisponible,
+           p.StockMinimo = h.StockMinimo,
+           p.Activo = h.ActivoProducto
+    FROM dbo.Producto AS p
+    INNER JOIN @Restauradas AS r ON r.CodigoProducto = p.CodigoProducto
+    INNER JOIN dbo.Producto_C AS h ON h.IdCambio = r.IdCambio;
+
+    -- Producto_C se mantiene historica: solamente insertamos nuevos registros
+    -- o modificamos Act. No se reescriben nombres, stock ni tipos anteriores.
+END;
+GO
+-- El historial de productos comienza vacio en una instalacion nueva.
+-- El trigger TR_Producto_RegistrarCambio registra las futuras altas y cambios.
+-- Conteos iniciales
+SELECT 'Rol' AS Tabla, COUNT(*) AS Registros FROM dbo.Rol
+UNION ALL SELECT 'PermisoSimple', COUNT(*) FROM dbo.PermisoSimple
+UNION ALL SELECT 'Usuario', COUNT(*) FROM dbo.Usuario
+UNION ALL SELECT 'Producto', COUNT(*) FROM dbo.Producto
+UNION ALL SELECT 'Producto_C', COUNT(*) FROM dbo.Producto_C
+UNION ALL SELECT 'Cliente', COUNT(*) FROM dbo.Cliente
+UNION ALL SELECT 'Reserva', COUNT(*) FROM dbo.Reserva;
 GO

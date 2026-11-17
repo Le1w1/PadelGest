@@ -1,6 +1,7 @@
 using BE;
 using BLL;
 using Servicios;
+using UI.Servicios;
 
 namespace UI
 {
@@ -14,6 +15,7 @@ namespace UI
         public frmSeleccionarCliente()
         {
             InitializeComponent();
+            AyudaContextual.Configurar(this);
             _clienteBLL = new ClienteBLL();
             ActualizarIdioma();
         }
@@ -65,6 +67,11 @@ namespace UI
             errorProvider.SetError(txtDNI, string.Empty);
             lblMensaje.Text = string.Empty;
             LimpiarClienteEncontrado();
+
+            // PN1 y PN2: buscar automaticamente al completar los ocho digitos.
+            // El boton Buscar sigue disponible para DNI de siete digitos.
+            if (txtDNI.Text.Length == 8 && txtDNI.Text.All(char.IsDigit))
+                btnBuscar_Click(sender, e);
         }
 
 
@@ -95,8 +102,15 @@ namespace UI
                 {
                     lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgNoRegistrado");
 
-                    btnRegistrarCliente.Visible = true;
-                    btnRegistrarCliente.Enabled =SM.Instancia.TienePermiso("CLI_REGISTRAR");
+                    btnRegistrarCliente.Visible = SM.Instancia.TienePermiso("CLI_REGISTRAR") ||
+                                                SM.Instancia.TienePermiso("RES_CREAR") ||
+                                                SM.Instancia.TienePermiso("BUF_VENDER");
+                    btnRegistrarCliente.Enabled = btnRegistrarCliente.Visible;
+
+                    // Si el cliente no existe, abrir inmediatamente el registro,
+                    // respetando los permisos del usuario que esta operando.
+                    if (btnRegistrarCliente.Enabled)
+                        btnRegistrarCliente_Click(sender, e);
                     return;
                 }
 
@@ -116,7 +130,7 @@ namespace UI
             lblDNIValor.Text = cliente.DNI;
             lblNombreValor.Text = cliente.Nombre;
             lblApellidoValor.Text = cliente.Apellido;
-            lblTelefonoValor.Text = cliente.Telefono;
+            lblTelefonoValor.Text = SM.Instancia.PuedeDesencriptarTelefono() ? cliente.Telefono : "****";
             lblCorreoValor.Text = cliente.CorreoElectronico;
         }
 
@@ -141,19 +155,17 @@ namespace UI
         private void btnRegistrarCliente_Click(object sender, EventArgs e)
         {
             string dni = txtDNI.Text.Trim();
-
             using frmRegistrarCliente formRegistrar = new frmRegistrarCliente(dni);
-
             if (formRegistrar.ShowDialog(this) == DialogResult.OK && formRegistrar.ClienteRegistrado != null)
             {
-                _clienteEncontrado = formRegistrar.ClienteRegistrado;
-
+                // Volver a consultar para aplicar la visibilidad del telefono segun el rol.
+                _clienteEncontrado = _clienteBLL.BuscarPorDNI(formRegistrar.ClienteRegistrado.DNI);
+                if (_clienteEncontrado == null) return;
                 MostrarCliente(_clienteEncontrado);
                 btnRegistrarCliente.Visible = false;
                 btnRegistrarCliente.Enabled = false;
                 btnConfirmar.Enabled = true;
-
-                lblMensaje.Text =Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgRegistradoIdentificado");
+                lblMensaje.Text = Traductor.Instancia.Traducir("frmSeleccionarCliente.MsgRegistradoIdentificado");
             }
         }
 

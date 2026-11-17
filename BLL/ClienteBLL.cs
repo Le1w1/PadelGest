@@ -19,13 +19,27 @@ namespace BLL
             _bitacoraEventoBLL = new BitacoraEventoBLL();
         }
 
+        // Migra telefonos anteriores cuando una operacion autorizada trabaja con clientes.
+        private void MigrarTelefonosSiEsNecesario()
+        {
+            int cantidadMigrada = _clienteDAL.MigrarTelefonosExistentes();
+            if (cantidadMigrada > 0)
+                _digitoVerificadorBLL.RecalcularDV("Cliente");
+        }
+
         private static string T (string clave) => Traductor.Instancia.Traducir(clave);
 
         /// Busca un Cliente por DNI luego de validar el dato ingresado.
         public ClienteBE? BuscarPorDNI(string dni)
         {
-            SM.Instancia.RequierePermiso("CLI_CONSULTAR");
+            // El Maestro usa CLI_CONSULTAR; PN1 y PN2 tambien consultan clientes
+            // durante sus operaciones, sin dar acceso al Maestro de Clientes.
+            if (!SM.Instancia.TienePermiso("CLI_CONSULTAR") &&
+                !SM.Instancia.TienePermiso("RES_CREAR") &&
+                !SM.Instancia.TienePermiso("BUF_VENDER"))
+                SM.Instancia.RequierePermiso("CLI_CONSULTAR");
 
+            MigrarTelefonosSiEsNecesario();
             dni = (dni ?? string.Empty).Trim();
 
             if (string.IsNullOrWhiteSpace(dni))
@@ -45,8 +59,14 @@ namespace BLL
         /// Registra un nuevo Cliente luego de validar todos los datos ingresados.
         public ClienteBE RegistrarCliente(string dni,string nombre,string apellido,string telefono,string correoElectronico)
         {
-            SM.Instancia.RequierePermiso("CLI_REGISTRAR");
+            // El Maestro usa CLI_REGISTRAR; PN1 y PN2 pueden registrar
+            // clientes nuevos durante una reserva o una venta, respectivamente.
+            if (!SM.Instancia.TienePermiso("CLI_REGISTRAR") &&
+                !SM.Instancia.TienePermiso("RES_CREAR") &&
+                !SM.Instancia.TienePermiso("BUF_VENDER"))
+                SM.Instancia.RequierePermiso("CLI_REGISTRAR");
 
+            MigrarTelefonosSiEsNecesario();
             Usuario usuarioActual = SM.Instancia.UsuarioActual;
             if (usuarioActual == null)
             {
@@ -111,7 +131,61 @@ namespace BLL
 
             _bitacoraEventoBLL.Registrar(usuarioActual.IdUsuario,usuarioActual.NombreUsuario,"Cliente","Registrar cliente","Media","Exitoso",$"Se registró el cliente DNI {clienteRegistrado.DNI}.");
 
-            return clienteRegistrado;
+            // Devolver los datos con la visibilidad del rol de la sesion.
+            return _clienteDAL.BuscarPorDNI(clienteRegistrado.DNI) ?? clienteRegistrado;
+        }
+
+        public List<ClienteBE> ListarTodos()
+        {
+            SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            MigrarTelefonosSiEsNecesario();
+            return _clienteDAL.ListarTodos();
+        }
+
+        public void ModificarCliente(string dni, string nombre, string apellido, string telefono, string correo)
+        {
+            SM.Instancia.RequierePermiso("CLI_MODIFICAR");
+            MigrarTelefonosSiEsNecesario();
+            dni = (dni ?? "").Trim();
+            nombre = (nombre ?? "").Trim();
+            apellido = (apellido ?? "").Trim();
+            telefono = (telefono ?? "").Trim();
+            correo = (correo ?? "").Trim();
+            bool esAdministrador = SM.Instancia.PuedeDesencriptarTelefono();
+            if (!EsDNIValido(dni) || !EsNombreOApellidoValido(nombre) ||
+                !EsNombreOApellidoValido(apellido) || (esAdministrador && !EsTelefonoValido(telefono)) ||
+                !EsCorreoValido(correo))
+                throw new Exception("Datos de cliente invalidos.");
+
+            // Un rol no administrador no puede reemplazar el telefono por texto legible
+            // ni alterar el valor cifrado que recibio del sistema.
+            if (!esAdministrador)
+            {
+                ClienteBE? clienteActual = _clienteDAL.BuscarPorDNI(dni);
+                if (clienteActual == null)
+                    throw new Exception("Cliente no encontrado.");
+                if (telefono != clienteActual.Telefono)
+                    throw new UnauthorizedAccessException("Solo el Administrador puede modificar el telefono.");
+            }
+
+            if (!_clienteDAL.Modificar(new ClienteBE { DNI = dni, Nombre = nombre, Apellido = apellido,
+                Telefono = telefono, CorreoElectronico = correo }))
+                throw new Exception("Cliente no encontrado.");
+            _digitoVerificadorBLL.RecalcularDV("Cliente");
+            var u = SM.Instancia.UsuarioActual;
+            _bitacoraEventoBLL.Registrar(u.IdUsuario, u.NombreUsuario, "Cliente", "Modificar cliente", "Media", "Exitoso", "Se modifico cliente DNI " + dni);
+        }
+
+        public void EliminarCliente(string dni)
+        {
+            SM.Instancia.RequierePermiso("CLI_ELIMINAR");
+            dni = (dni ?? "").Trim();
+            if (!EsDNIValido(dni)) throw new Exception("DNI invalido.");
+            if (!_clienteDAL.EliminarSinOperaciones(dni))
+                throw new Exception("No se puede eliminar: el cliente no existe o tiene reservas o facturas asociadas.");
+            _digitoVerificadorBLL.RecalcularDV("Cliente");
+            var u = SM.Instancia.UsuarioActual;
+            _bitacoraEventoBLL.Registrar(u.IdUsuario, u.NombreUsuario, "Cliente", "Eliminar cliente", "Alta", "Exitoso", "Se elimino cliente DNI " + dni);
         }
 
         #region Validaciones

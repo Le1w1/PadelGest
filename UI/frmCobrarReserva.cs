@@ -1,8 +1,8 @@
-using System.Globalization;
 using BE;
 using BLL;
 using Servicios;
 using System.Text.RegularExpressions;
+using UI.Servicios;
 
 namespace UI
 {
@@ -25,6 +25,8 @@ namespace UI
         public frmCobrarReserva(ClienteBE cliente,CanchaBE cancha,TarifaBE tarifa,DateTime fechaReserva,TimeSpan horario,int cantidadPaletas,int cantidadPelotas,decimal importeEquipamiento)
         {
             InitializeComponent();
+            AjustePantalla.HabilitarDesplazamiento(this);
+            AyudaContextual.Configurar(this);
             _cobroBLL = new CobroReservaBLL();
             _cliente = cliente;
             _cancha = cancha;
@@ -101,19 +103,29 @@ namespace UI
             lblTurnoValor.Text =_factura.FechaReserva.ToString("d") + " " + _factura.Horario.ToString(@"hh\:mm");
 
             lblCanchaValor.Text = _cancha.Nombre;
-            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_factura.ImporteTarifa.ToString("C", CultureInfo.GetCultureInfo("es-AR"))}";
+            lblTarifaValor.Text = $"{_tarifa.TipoTarifa} - {_factura.ImporteTarifa:C}";
 
-            lblEquipamientoValor.Text = $"Paletas: {_factura.CantidadPaletas} | " + $"Pelotas: {_factura.CantidadPelotas} | " + $"{_factura.ImporteEquipamiento.ToString("C", CultureInfo.GetCultureInfo("es-AR"))}";
+            lblEquipamientoValor.Text = $"Paletas: {_factura.CantidadPaletas} | " + $"Pelotas: {_factura.CantidadPelotas} | " + $"{_factura.ImporteEquipamiento:C}";
 
-            lblTotalValor.Text = _factura.ImporteTotal.ToString("C", CultureInfo.GetCultureInfo("es-AR"));
+            lblTotalValor.Text = _factura.ImporteTotal.ToString("C");
         }
 
 
-        // Valida que solo se puedan ingresar números y espacios en los campos de texto correspondientes
+        // Solo permite los digitos 0-9 y teclas de control como retroceso.
+        // Los datos pegados tambien se validan antes de simular el cobro.
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permite solo dígitos, espacios y teclas de control (como retroceso)
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ' ')
+            if (!char.IsControl(e.KeyChar) && (e.KeyChar < '0' || e.KeyChar > '9'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        // En el numero de tarjeta se admiten espacios entre grupos de digitos.
+        // El codigo de seguridad continua usando SoloNumeros_KeyPress.
+        private void NumerosTarjeta_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && (e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != ' ')
             {
                 e.Handled = true;
             }
@@ -137,10 +149,11 @@ namespace UI
                 return false;
             }
 
-            string tarjeta = Regex.Replace(txtNumeroTarjeta.Text ?? string.Empty, @"[\s-]", "");
-
-            // Valida que el número de tarjeta tenga entre 13 y 19 dígitos y que solo contenga números
-            if (!Regex.IsMatch(tarjeta, @"^\d{13,19}$"))
+            string tarjeta = txtNumeroTarjeta.Text ?? string.Empty;
+            // Solo numeros y espacios en el campo; se cuentan 13 a 19 digitos,
+            // sin tener en cuenta los espacios que separan los grupos.
+            if (!Regex.IsMatch(tarjeta, @"^[0-9 ]+$") ||
+                !Regex.IsMatch(tarjeta.Replace(" ", ""), @"^[0-9]{13,19}$"))
             {
                 MostrarError(txtNumeroTarjeta, "Errores.Cobro.TarjetaInvalida");
                 return false;

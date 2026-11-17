@@ -68,7 +68,14 @@ namespace BLL
             }
 
             banco = (banco ?? string.Empty).Trim();
-            numeroTarjeta = NormalizarNumeroTarjeta(numeroTarjeta);
+            numeroTarjeta = numeroTarjeta ?? string.Empty;
+            // Se admiten espacios para separar grupos (ej.: 1111 2222 3333 4444),
+            // pero no letras, guiones ni otros simbolos.
+            if (!Regex.IsMatch(numeroTarjeta, @"^[0-9 ]+$"))
+                throw new Exception(T("Errores.Cobro.TarjetaInvalida"));
+
+            // BancoServicio y PagoBE reciben siempre los digitos sin espacios.
+            numeroTarjeta = numeroTarjeta.Replace(" ", "");
             codigoSeguridad = (codigoSeguridad ?? string.Empty).Trim();
 
             
@@ -123,7 +130,7 @@ namespace BLL
 
         private void ValidarNumeroTarjeta(string numeroTarjeta)
         {
-            if (!Regex.IsMatch(numeroTarjeta, @"^\d{13,19}$"))
+            if (!Regex.IsMatch(numeroTarjeta, @"^[0-9]{13,19}$"))
                 throw new Exception(T("Errores.Cobro.TarjetaInvalida"));
         }
 
@@ -141,10 +148,6 @@ namespace BLL
                 throw new Exception(T("Errores.Cobro.CodigoSeguridadInvalido"));
         }
 
-        private string NormalizarNumeroTarjeta(string numeroTarjeta)
-        {
-            return Regex.Replace(numeroTarjeta ?? string.Empty, @"[\s-]", string.Empty);
-        }
         #endregion
 
     }
