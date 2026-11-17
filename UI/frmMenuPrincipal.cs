@@ -67,7 +67,9 @@ namespace UI
                 }
             }
 
-            CargarDatosSesion();
+            // El formulario del menu puede seguir abierto entre usuarios:
+            // refrescar todos sus textos con el idioma del usuario que acaba de ingresar.
+            ActualizarIdioma();
             AplicarPermisos();
             menuPrincipal.Enabled = true;
         }
