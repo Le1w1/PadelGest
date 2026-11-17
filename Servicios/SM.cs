@@ -56,8 +56,10 @@ namespace Servicios
             _idiomaActual = null;
             _rolesUsuario = new List<Rol>();
 
-            // Restaurar idioma por defecto del sistema (Español) para la pantalla pre-sesion (Login).
+            // Restaurar el idioma de la pantalla pre-sesion y actualizar los
+            // formularios que sigan abiertos (por ejemplo, el menu principal).
             Traductor.Instancia.CargarIdioma("ES");
+            NotificarCambioIdioma();
         }
 
         #endregion
@@ -69,7 +71,8 @@ namespace Servicios
 
         /// Fija el idioma con el que el usuario inicio sesion.
         /// Se llama UNA SOLA VEZ desde el Login (BLL) despues de IniciarSesion.
-        /// Carga el JSON pero NO notifica observadores (todavia no hay forms abiertos).
+        /// Carga el JSON y notifica observadores: el menu principal puede
+        /// permanecer abierto al cambiar de usuario.
         public void EstablecerIdiomaInicial(Idioma idioma)
         {
             if (idioma == null) throw new Exception("Debe indicar un idioma valido.");
@@ -78,6 +81,7 @@ namespace Servicios
             _idiomaActual = idioma;
 
             Traductor.Instancia.CargarIdioma(idioma.Codigo);
+            NotificarCambioIdioma();
         }
 
 
