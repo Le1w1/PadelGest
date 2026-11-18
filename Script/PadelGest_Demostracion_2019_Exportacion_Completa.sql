@@ -1580,3 +1580,199 @@ UNION ALL SELECT N'Producto_C', COUNT(*) FROM dbo.Producto_C
 UNION ALL SELECT N'FacturaBuffet', COUNT(*) FROM dbo.FacturaBuffet
 UNION ALL SELECT N'DetalleFactura', COUNT(*) FROM dbo.DetalleFactura;
 GO
+
+-- ============================================================================
+-- VENTAS DEMO AMPLIADAS - ULTIMOS 28 DIAS
+-- SOLO BASE DE DEMOSTRACION. No se incluye en el instalador limpio.
+-- Genera 336 facturas pagadas (12 por dia) con 3 renglones cada una.
+-- La distribucion cubre los 30 productos originales (codigos 1 a 30);
+-- los productos 33 y 34 quedan sin ventas para probar el caso "Sin historial".
+-- Los stocks de Producto representan el inventario actual de la demostracion:
+-- estas ventas son historicas y NO deben descontarse otra vez del stock.
+-- DVH: SHA-256 del texto normalizado con "|" del servicio .NET.
+-- DVV: SHA-256 de los DVH ordenados por clave primaria y unidos con "|".
+-- ============================================================================
+
+SET XACT_ABORT ON;
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    DECLARE @FechaInicial date = DATEADD(day, -28, CONVERT(date, GETDATE()));
+    DECLARE @IdFacturaBase int = ISNULL((SELECT MAX(IdFactura) FROM dbo.FacturaBuffet), 0);
+    DECLARE @IdDetalleBase int = ISNULL((SELECT MAX(IdDetalleFactura) FROM dbo.DetalleFactura), 0);
+
+    CREATE TABLE #SeedVentas
+    (
+        n int NOT NULL PRIMARY KEY,
+        IdFactura int NOT NULL UNIQUE,
+        DNI nvarchar(8) NOT NULL,
+        FechaHora datetime2(7) NOT NULL
+    );
+    CREATE TABLE #SeedDetalles
+    (
+        IdDetalleFactura int NOT NULL PRIMARY KEY,
+        IdFactura int NOT NULL,
+        CodigoProducto int NOT NULL,
+        Cantidad int NOT NULL,
+        PrecioUnitario decimal(12, 2) NOT NULL,
+        Subtotal decimal(18, 2) NOT NULL
+    );
+
+    ;WITH Numeros AS
+    (
+        SELECT 1 AS n
+        UNION ALL
+        SELECT n + 1 FROM Numeros WHERE n < 336
+    )
+    INSERT INTO #SeedVentas (n, IdFactura, DNI, FechaHora)
+    SELECT
+        n,
+        @IdFacturaBase + n,
+        N'410000' + RIGHT(N'00' + CONVERT(nvarchar(2), 1 + ((n - 1) % 10)), 2),
+        DATEADD(
+            minute, (n * 7 % 4) * 10,
+            DATEADD(hour, 9 + ((n - 1) % 12),
+                DATEADD(day, (n - 1) / 12, CONVERT(datetime2(7), @FechaInicial)))
+        )
+    FROM Numeros
+    OPTION (MAXRECURSION 0);
+
+    -- Dos productos de demanda alta (1..10) y uno de demanda media/baja
+    -- (11..30) por factura. Ningun producto se duplica dentro de la factura.
+    INSERT INTO #SeedDetalles
+        (IdDetalleFactura, IdFactura, CodigoProducto, Cantidad, PrecioUnitario, Subtotal)
+    SELECT
+        @IdDetalleBase + CONVERT(int, ROW_NUMBER() OVER (ORDER BY v.n, linea.Orden)),
+        v.IdFactura,
+        linea.CodigoProducto,
+        linea.Cantidad,
+        p.PrecioUnitario,
+        CONVERT(decimal(18, 2), linea.Cantidad * p.PrecioUnitario)
+    FROM #SeedVentas AS v
+    CROSS APPLY
+    (
+        VALUES
+          (1, 1 + ((v.n - 1) % 10),      1 + ((v.n * 3) % 3)),
+          (2, 11 + ((v.n - 1) % 20),    1 + ((v.n + 1) % 4)),
+          (3, 1 + ((v.n * 7 + 4) % 10), 1 + ((v.n + 2) % 2))
+    ) AS linea (Orden, CodigoProducto, Cantidad)
+    INNER JOIN dbo.Producto p ON p.CodigoProducto = linea.CodigoProducto;
+
+    IF (SELECT COUNT(*) FROM #SeedVentas) <> 336
+       OR (SELECT COUNT(*) FROM #SeedDetalles) <> 1008
+       OR EXISTS (SELECT CodigoProducto FROM #SeedDetalles GROUP BY CodigoProducto HAVING COUNT(*) = 0)
+       OR (SELECT COUNT(DISTINCT CodigoProducto) FROM #SeedDetalles) <> 30
+        THROW 51010, 'No se pudo generar la cobertura esperada de ventas de demostracion.', 1;
+
+    SET IDENTITY_INSERT dbo.FacturaBuffet ON;
+    INSERT INTO dbo.FacturaBuffet
+      (IdFactura, NumeroFactura, DNI, IdVendedor, FechaHoraEmision, ImporteTotal,
+       Estado, Banco, Ultimos4Tarjeta, FechaHoraPago, CodigoAutorizacion, DVH)
+    SELECT
+      v.IdFactura,
+      N'DEMO-R-' + RIGHT(N'000000' + CONVERT(nvarchar(6), v.n), 6),
+      v.DNI, 1, v.FechaHora, SUM(d.Subtotal),
+      N'Pagada', N'Banco Demo', '1234', v.FechaHora,
+      N'AUT-R-' + RIGHT(N'000000' + CONVERT(nvarchar(6), v.n), 6), NULL
+    FROM #SeedVentas v
+    INNER JOIN #SeedDetalles d ON d.IdFactura = v.IdFactura
+    GROUP BY v.n, v.IdFactura, v.DNI, v.FechaHora;
+    SET IDENTITY_INSERT dbo.FacturaBuffet OFF;
+
+    SET IDENTITY_INSERT dbo.DetalleFactura ON;
+    INSERT INTO dbo.DetalleFactura
+      (IdDetalleFactura, IdFactura, CodigoProducto, Cantidad, PrecioUnitario, DVH)
+    SELECT IdDetalleFactura, IdFactura, CodigoProducto, Cantidad, PrecioUnitario, NULL
+    FROM #SeedDetalles;
+    SET IDENTITY_INSERT dbo.DetalleFactura OFF;
+
+    -- El servicio calcula el hash sobre UTF-8. Los datos generados aqui son ASCII,
+    -- por lo que el varchar de SQL Server produce exactamente los mismos bytes.
+    -- Fechas: formato invariante MM/dd/yyyy HH:mm:ss, con ceros a la izquierda.
+    UPDATE f
+       SET DVH = LOWER(CONVERT(varchar(64), HASHBYTES('SHA2_256',
+                    CONVERT(varchar(max), CONCAT(
+                     f.IdFactura, '|', f.NumeroFactura, '|', f.DNI, '|', f.IdVendedor, '|',
+                     CONVERT(varchar(10), f.FechaHoraEmision, 101), ' ',
+                     CONVERT(varchar(8), f.FechaHoraEmision, 108), '|',
+                     CONVERT(varchar(40), f.ImporteTotal), '|', f.Estado, '|',
+                     f.Banco, '|', f.Ultimos4Tarjeta, '|',
+                     CONVERT(varchar(10), f.FechaHoraPago, 101), ' ',
+                     CONVERT(varchar(8), f.FechaHoraPago, 108), '|',
+                     f.CodigoAutorizacion))), 2))
+    FROM dbo.FacturaBuffet AS f
+    INNER JOIN #SeedVentas AS v ON v.IdFactura = f.IdFactura;
+
+    UPDATE d
+       SET DVH = LOWER(CONVERT(varchar(64), HASHBYTES('SHA2_256',
+                    CONVERT(varchar(max), CONCAT(
+                      d.IdDetalleFactura, '|', d.IdFactura, '|', d.CodigoProducto, '|',
+                      d.Cantidad, '|', CONVERT(varchar(40), d.PrecioUnitario), '|',
+                      CONVERT(varchar(40), d.Subtotal)))), 2))
+    FROM dbo.DetalleFactura AS d
+    INNER JOIN #SeedDetalles AS sd ON sd.IdDetalleFactura = d.IdDetalleFactura;
+
+    -- Incluir todas las filas (tanto las preexistentes como las nuevas).
+    UPDATE dbo.DigitoVerificador
+       SET DVV = LOWER(CONVERT(varchar(64), HASHBYTES('SHA2_256',
+          CONVERT(varchar(max), ISNULL((
+             SELECT STRING_AGG(CONVERT(varchar(max), DVH), '|')
+                    WITHIN GROUP (ORDER BY IdFactura)
+             FROM dbo.FacturaBuffet
+          ), ''))), 2))
+     WHERE NombreTabla = N'FacturaBuffet';
+
+    UPDATE dbo.DigitoVerificador
+       SET DVV = LOWER(CONVERT(varchar(64), HASHBYTES('SHA2_256',
+          CONVERT(varchar(max), ISNULL((
+             SELECT STRING_AGG(CONVERT(varchar(max), DVH), '|')
+                    WITHIN GROUP (ORDER BY IdDetalleFactura)
+             FROM dbo.DetalleFactura
+          ), ''))), 2))
+     WHERE NombreTabla = N'DetalleFactura';
+
+    IF EXISTS (
+        SELECT f.IdFactura
+        FROM dbo.FacturaBuffet f
+        INNER JOIN #SeedVentas v ON v.IdFactura = f.IdFactura
+        LEFT JOIN dbo.DetalleFactura d ON d.IdFactura = f.IdFactura
+        GROUP BY f.IdFactura, f.ImporteTotal
+        HAVING f.ImporteTotal <> ISNULL(SUM(d.Subtotal), 0)
+    )
+        THROW 51011, 'Hay facturas de demostracion con importes inconsistentes.', 1;
+
+    IF (SELECT COUNT(*)
+        FROM dbo.Producto p
+        WHERE p.Activo = 1 AND NOT EXISTS (
+            SELECT 1
+            FROM dbo.DetalleFactura d
+            INNER JOIN dbo.FacturaBuffet f ON f.IdFactura = d.IdFactura
+            WHERE d.CodigoProducto = p.CodigoProducto
+              AND f.Estado = N'Pagada'
+              AND f.FechaHoraEmision >= @FechaInicial
+              AND f.FechaHoraEmision < CONVERT(date, GETDATE())
+        )) > 2
+        THROW 51012, 'Hay mas de dos productos activos sin ventas en 28 dias.', 1;
+
+    COMMIT TRANSACTION;
+    PRINT N'Ventas demo ampliadas: 336 facturas y 1008 detalles; 30 productos vendidos.';
+END TRY
+BEGIN CATCH
+    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;
+GO
+
+-- Control visual del mismo periodo que utiliza ReportePredictivoBLL.
+SELECT p.CodigoProducto, p.Nombre,
+       COALESCE(SUM(CASE WHEN f.Estado = N'Pagada'
+                  AND f.FechaHoraEmision >= DATEADD(day, -28, CONVERT(date, GETDATE()))
+                  AND f.FechaHoraEmision < CONVERT(date, GETDATE())
+                 THEN d.Cantidad ELSE 0 END), 0) AS UnidadesVendidas28Dias
+FROM dbo.Producto p
+LEFT JOIN dbo.DetalleFactura d ON d.CodigoProducto = p.CodigoProducto
+LEFT JOIN dbo.FacturaBuffet f ON f.IdFactura = d.IdFactura
+WHERE p.Activo = 1
+GROUP BY p.CodigoProducto, p.Nombre
+ORDER BY UnidadesVendidas28Dias DESC, p.CodigoProducto;
+GO
