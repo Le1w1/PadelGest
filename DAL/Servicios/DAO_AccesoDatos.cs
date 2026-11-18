@@ -27,7 +27,8 @@ namespace DAL.Servicios
             string? entorno = null;
             try
             {
-                using RegistryKey? clave = Registry.CurrentUser.OpenSubKey("Environment");
+                
+                using RegistryKey? clave = Registry.CurrentUser.OpenSubKey("Environment");// Abrir la clave de entorno del usuario actual
                 entorno = clave?.GetValue("PADELGEST_ENTORNO") as string;
             }
             catch (System.Security.SecurityException)
