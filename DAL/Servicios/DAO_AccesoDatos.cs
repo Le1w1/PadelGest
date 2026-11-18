@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Win32;
 
 namespace DAL.Servicios
 {
@@ -6,8 +7,10 @@ namespace DAL.Servicios
     {
         private readonly string _cadenaConexion;
 
-        // La eleccion se hace en tiempo de instalacion via variable de entorno
-        // PADELGEST_ENTORNO ("UAI" o "LEO").
+        // La eleccion de SQL Server se guarda por usuario durante la instalacion
+        // en HKCU\\Environment\\PADELGEST_ENTORNO ("UAI" o "LEO").
+        // Se conserva la variable de entorno como alternativa para
+        // instalaciones anteriores y ejecucion directa desde Visual Studio.
         private const string CADENA_LEO =
          @"Data Source=localhost\SQLEXPRESS;Initial Catalog=PadelGestDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
@@ -18,9 +21,26 @@ namespace DAL.Servicios
 
         public DAO_AccesoDatos()
         {
-            var entorno = Environment.GetEnvironmentVariable("PADELGEST_ENTORNO");
-            // Si la variable de entorno no está definida o está vacía, usar "LEO" como valor por defecto
-            var entornoNormalizado = (string.IsNullOrWhiteSpace(entorno) ? "UAI" : entorno).ToUpperInvariant();
+            // Leer primero la configuracion persistida de este usuario.
+            // No depender de que Windows haya propagado variables de entorno
+            // a procesos nuevos tras una instalacion sin elevacion.
+            string? entorno = null;
+            try
+            {
+                using RegistryKey? clave = Registry.CurrentUser.OpenSubKey("Environment");
+                entorno = clave?.GetValue("PADELGEST_ENTORNO") as string;
+            }
+            catch (System.Security.SecurityException)
+            {
+                // En contextos restringidos, usar la variable de entorno.
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // En contextos restringidos, usar la variable de entorno.
+            }
+            if (string.IsNullOrWhiteSpace(entorno))
+                entorno = Environment.GetEnvironmentVariable("PADELGEST_ENTORNO");
+            var entornoNormalizado = (string.IsNullOrWhiteSpace(entorno) ? "UAI" : entorno.Trim()).ToUpperInvariant();
 
             _cadenaConexion = entornoNormalizado switch
             {
