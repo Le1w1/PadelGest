@@ -112,6 +112,7 @@ namespace UI
 
             MostrarIndicadores();
             pnlGrafico.Invalidate();
+            pnlDistribucion.Invalidate();
             dgvReporte.Invalidate();
             dgvReposicion.Invalidate();
         }
@@ -231,6 +232,7 @@ namespace UI
 
                 MostrarIndicadores();
                 pnlGrafico.Invalidate();
+                pnlDistribucion.Invalidate();
             }
             catch (Exception ex)
             {
@@ -267,7 +269,12 @@ namespace UI
 
         // Mantiene las cuatro tarjetas distribuidas uniformemente cuando cambia
         // la resolucion del monitor. No depende de Anchor de cada etiqueta.
-        private void frmReportePredictivo_Resize(object? sender, EventArgs e) => AjustarIndicadores();
+        private void frmReportePredictivo_Resize(object? sender, EventArgs e)
+        {
+            AjustarIndicadores();
+            pnlGrafico.Invalidate();
+            pnlDistribucion.Invalidate();
+        }
 
         private void AjustarIndicadores()
         {
@@ -280,15 +287,111 @@ namespace UI
                 kpis[i].Location = new Point(margen + i * (ancho + separacion), 97);
                 kpis[i].Size = new Size(ancho, 76);
             }
-            // Reservar espacio para que la lectura de resultados no quede cortada
-            // en monitores con menor altura, manteniendo el grafico legible.
-            if (tabPanorama != null && pnlGrafico != null)
-                pnlGrafico.Height = Math.Max(185, Math.Min(272, tabPanorama.ClientSize.Height - 190));
+            // La altura de las 8 barras permanece fija. En pantallas bajas
+            // tabPanorama habilita scroll vertical en lugar de ocultar barras.
         }
 
         private void btnActualizar_Click(object? sender, EventArgs e) => CargarReporte();
         private void btnVolver_Click(object? sender, EventArgs e) => Close();
 
+        // Torta de participacion en la demanda estimada semanal por categoria.
+        // Muestra las 5 categorias de mayor proyeccion y agrupa el resto en Otros.
+        // No representa ventas cobradas ni probabilidades.
+        private void pnlDistribucion_Paint(object? sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.Clear(Color.FromArgb(24, 70, 138));
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            using Font titulo = new Font("Segoe UI", 11F, FontStyle.Bold);
+            using Font texto = new Font("Segoe UI", 9F);
+            using Font textoNegrita = new Font("Segoe UI", 9F, FontStyle.Bold);
+            using SolidBrush blanco = new SolidBrush(Color.White);
+            using SolidBrush subtitulo = new SolidBrush(Color.Gainsboro);
+            g.DrawString(T("frmReportePredictivo.Distribucion"), titulo, blanco, 14, 12);
+            g.DrawString(T("frmReportePredictivo.DistribucionNota"), texto, subtitulo, 14, 40);
+
+            var categorias = _datos
+                .Where(x => x.Estimadas7Dias > 0)
+                .GroupBy(x => string.IsNullOrWhiteSpace(x.Categoria)
+                    ? T("frmReportePredictivo.SinCategoria") : x.Categoria)
+                .Select(x => new { Nombre = x.Key, Cantidad = x.Sum(p => (long)p.Estimadas7Dias) })
+                .OrderByDescending(x => x.Cantidad)
+                .ThenBy(x => x.Nombre)
+                .ToList();
+            long total = categorias.Sum(x => x.Cantidad);
+            if (total == 0)
+            {
+                g.DrawString(T("frmReportePredictivo.SinEstimacion"), texto, blanco, 20, 105);
+                return;
+            }
+
+            var datos = categorias.Take(5).Select(x => (x.Nombre, x.Cantidad)).ToList();
+            long otros = categorias.Skip(5).Sum(x => x.Cantidad);
+            if (otros > 0)
+                datos.Add((T("frmReportePredictivo.Otros"), otros));
+
+            Color[] colores =
+            {
+                Color.FromArgb(214, 246, 36),
+                Color.FromArgb(73, 200, 233),
+                Color.FromArgb(255, 181, 79),
+                Color.FromArgb(186, 147, 255),
+                Color.FromArgb(101, 224, 162),
+                Color.FromArgb(185, 193, 208)
+            };
+
+            int lado = Math.Max(100, Math.Min(190, Math.Min(pnlDistribucion.ClientSize.Height - 92,
+                (pnlDistribucion.ClientSize.Width - 65) / 3)));
+            int xTorta = 24;
+            int yTorta = 77;
+            Rectangle rect = new Rectangle(xTorta, yTorta, lado, lado);
+            float inicio = -90f;
+            for (int i = 0; i < datos.Count; i++)
+            {
+                float angulo = (float)(360.0 * datos[i].Cantidad / total);
+                using SolidBrush pincel = new SolidBrush(colores[i]);
+                g.FillPie(pincel, rect, inicio, angulo);
+                inicio += angulo;
+            }
+
+            // Centro de la dona. La participacion se calcula en unidades, no dinero.
+            int interior = (int)(lado * .55);
+            Rectangle agujero = new Rectangle(xTorta + (lado - interior) / 2,
+                yTorta + (lado - interior) / 2, interior, interior);
+            using (SolidBrush fondo = new SolidBrush(Color.FromArgb(24, 70, 138)))
+                g.FillEllipse(fondo, agujero);
+            string totalTexto = total.ToString("N0");
+            SizeF tam = g.MeasureString(totalTexto, textoNegrita);
+            g.DrawString(totalTexto, textoNegrita, blanco,
+                xTorta + (lado - tam.Width) / 2, yTorta + lado / 2f - 18);
+            string unidades = T("frmReportePredictivo.Unidades");
+            tam = g.MeasureString(unidades, texto);
+            g.DrawString(unidades, texto, blanco,
+                xTorta + (lado - tam.Width) / 2, yTorta + lado / 2f + 1);
+
+            int xLeyenda = xTorta + lado + 35;
+            float anchoLeyenda = Math.Max(85, pnlDistribucion.ClientSize.Width - xLeyenda - 15);
+            for (int i = 0; i < datos.Count; i++)
+            {
+                float y = 79 + i * 31;
+                using SolidBrush pincel = new SolidBrush(colores[i]);
+                g.FillRectangle(pincel, xLeyenda, y + 4, 13, 13);
+                decimal porcentaje = 100m * datos[i].Cantidad / total;
+                string nombre = datos[i].Nombre;
+                string valor = $"{porcentaje:0.#}%  ({datos[i].Cantidad:N0})";
+                float valorAncho = g.MeasureString(valor, textoNegrita).Width;
+                float nombreMaximo = Math.Max(35, anchoLeyenda - valorAncho - 31);
+                while (nombre.Length > 4 && g.MeasureString(nombre, texto).Width > nombreMaximo)
+                    nombre = nombre.Substring(0, nombre.Length - 2);
+                if (nombre != datos[i].Nombre) nombre = nombre.TrimEnd() + "...";
+                g.DrawString(nombre, texto, blanco, xLeyenda + 21, y);
+                g.DrawString(valor, textoNegrita, blanco,
+                    xLeyenda + anchoLeyenda - valorAncho, y);
+            }
+        }
+
+        // Las ocho barras se dibujan en un panel de altura fija, desplazable
+        // desde tabPanorama cuando la pantalla no ofrece altura suficiente.
         // Escala una sola barra por producto y limita el dibujo al area del panel.
         // El ancho de barra y sus numeros siempre quedan dentro de los bordes.
         private void pnlGrafico_Paint(object? sender, PaintEventArgs e)
@@ -301,8 +404,9 @@ namespace UI
             using SolidBrush blanco = new SolidBrush(Color.White);
             using SolidBrush verde = new SolidBrush(Color.FromArgb(214, 246, 36));
 
-            g.DrawString(T("frmReportePredictivo.Grafico"), titulo, blanco, 14, 12);
             List<ReportePredictivoBE> productos = _datos.Where(x => x.Estimadas7Dias > 0).OrderByDescending(x => x.Estimadas7Dias).ThenBy(x => x.Producto).Take(8).ToList();
+            g.DrawString(string.Format(T("frmReportePredictivo.Grafico"), productos.Count), titulo, blanco, 14, 12);
+            g.DrawString(T("frmReportePredictivo.GraficoNota"), texto, blanco, 14, 36);
 
             if (productos.Count == 0)
             {
@@ -313,11 +417,12 @@ namespace UI
             int mayor = Math.Max(1, productos.Max(x => x.Estimadas7Dias));
             const int margenIzquierdo = 225;
             int anchoGrafico = Math.Max(10, pnlGrafico.ClientSize.Width - margenIzquierdo - 78);
-            int paso = Math.Max(20, Math.Min(24, (pnlGrafico.ClientSize.Height - 64) / productos.Count));
+            // 265px permiten 8 filas de 22px, con titulo y subtitulo.
+            int paso = Math.Max(16, Math.Min(24, (pnlGrafico.ClientSize.Height - 76) / productos.Count));
             for (int i = 0; i < productos.Count; i++)
             {
                 ReportePredictivoBE p = productos[i];
-                int y = 49 + i * paso;
+                int y = 61 + i * paso;
                 if (y + paso > pnlGrafico.ClientSize.Height) break;
                 string nombre = p.Producto.Length > 27? p.Producto.Substring(0, 24) + "..." : p.Producto;
                 g.DrawString(nombre, texto, blanco, 14, y);
