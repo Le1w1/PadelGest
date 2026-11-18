@@ -36,10 +36,15 @@ namespace UI
             InitializeComponent();
             kpis = new[] { kpiVentas, kpiEstimacion, kpiAlertas, kpiReponer };
 
-            // El reporte se utiliza exclusivamente maximizado.
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
-            MinimizeBox = false;
+            // Permitir minimizar, maximizar y restaurar con los botones nativos.
+            // Al restaurar, la ventana debe entrar en el area util de la pantalla.
+            FormBorderStyle = FormBorderStyle.Sizable;
+            MaximizeBox = true;
+            MinimizeBox = true;
+            Rectangle area = Screen.FromControl(this).WorkingArea;
+            Size = new Size(Math.Min(Width, area.Width - 40),
+                            Math.Min(Height, area.Height - 40));
+            StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Maximized;
 
             // Los importes siempre son pesos argentinos, sin depender del idioma de Windows.
@@ -370,7 +375,7 @@ namespace UI
                 xTorta + (lado - tam.Width) / 2, yTorta + lado / 2f + 1);
 
             int xLeyenda = xTorta + lado + 35;
-            float anchoLeyenda = Math.Max(85, pnlDistribucion.ClientSize.Width - xLeyenda - 15);
+            float anchoDisponible = Math.Max(85, pnlDistribucion.ClientSize.Width - xLeyenda - 15);
             for (int i = 0; i < datos.Count; i++)
             {
                 float y = 79 + i * 31;
@@ -378,15 +383,19 @@ namespace UI
                 g.FillRectangle(pincel, xLeyenda, y + 4, 13, 13);
                 decimal porcentaje = 100m * datos[i].Cantidad / total;
                 string nombre = datos[i].Nombre;
-                string valor = $"{porcentaje:0.#}%  ({datos[i].Cantidad:N0})";
-                float valorAncho = g.MeasureString(valor, textoNegrita).Width;
-                float nombreMaximo = Math.Max(35, anchoLeyenda - valorAncho - 31);
-                while (nombre.Length > 4 && g.MeasureString(nombre, texto).Width > nombreMaximo)
+                string valor = $"{porcentaje:0.#}% ({datos[i].Cantidad:N0})";
+                float anchoValor = g.MeasureString(valor, textoNegrita).Width;
+                float xNombre = xLeyenda + 21;
+                float anchoNombreMaximo = Math.Max(30, anchoDisponible - anchoValor - 33);
+                while (nombre.Length > 4 && g.MeasureString(nombre, texto).Width > anchoNombreMaximo)
                     nombre = nombre.Substring(0, nombre.Length - 2);
                 if (nombre != datos[i].Nombre) nombre = nombre.TrimEnd() + "...";
-                g.DrawString(nombre, texto, blanco, xLeyenda + 21, y);
-                g.DrawString(valor, textoNegrita, blanco,
-                    xLeyenda + anchoLeyenda - valorAncho, y);
+                g.DrawString(nombre, texto, blanco, xNombre, y);
+                // El valor acompaña al nombre en vez de quedar pegado
+                // al extremo derecho del panel en pantallas anchas.
+                float xValor = xNombre + Math.Min(
+                    g.MeasureString(nombre, texto).Width, anchoNombreMaximo) + 15;
+                g.DrawString(valor, textoNegrita, blanco, xValor, y);
             }
         }
 
