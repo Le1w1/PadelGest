@@ -62,12 +62,9 @@ namespace UI
             ConfigurarOrdenamiento(dgvReporte);
             ConfigurarOrdenamiento(dgvReposicion);
             ConfigurarOrdenamiento(dgvCategorias);
-            dgvReporte.ColumnHeaderMouseClick += (sender, e) =>
-                OrdenarGrilla<ReportePredictivoBE>(dgvReporte, e.ColumnIndex);
-            dgvReposicion.ColumnHeaderMouseClick += (sender, e) =>
-                OrdenarGrilla<ReportePredictivoBE>(dgvReposicion, e.ColumnIndex);
-            dgvCategorias.ColumnHeaderMouseClick += (sender, e) =>
-                OrdenarGrilla<ResumenCategoria>(dgvCategorias, e.ColumnIndex);
+            dgvReporte.ColumnHeaderMouseClick += (sender, e) =>OrdenarGrilla<ReportePredictivoBE>(dgvReporte, e.ColumnIndex);
+            dgvReposicion.ColumnHeaderMouseClick += (sender, e) =>OrdenarGrilla<ReportePredictivoBE>(dgvReposicion, e.ColumnIndex);
+            dgvCategorias.ColumnHeaderMouseClick += (sender, e) =>OrdenarGrilla<ResumenCategoria>(dgvCategorias, e.ColumnIndex);
         }
 
         private void frmReportePredictivo_Load(object? sender, EventArgs e)
@@ -97,25 +94,21 @@ namespace UI
             tabCategorias.Text = T("frmReportePredictivo.TabCategorias");
 
             string[] columnas = {
-                "Producto", "Categoria", "Ventas", "Promedio", "Estimacion", "Stock",
-                "Minimo", "Cobertura", "Reposicion", "Prioridad", "Ingreso"
+                "Producto", "Categoria", "Ventas", "Promedio", "Estimacion", "Stock","Minimo", "Cobertura", "Reposicion", "Prioridad", "Ingreso"
             };
             foreach (string columna in columnas)
                 dgvReporte.Columns["col" + columna]!.HeaderText =
                     T("frmReportePredictivo.Col" + columna);
 
             string[] columnasRep = {
-                "Producto", "Categoria", "Prioridad", "Stock", "Minimo",
-                "Estimacion", "Cobertura", "Cantidad"
+                "Producto", "Categoria", "Prioridad", "Stock", "Minimo","Estimacion", "Cobertura", "Cantidad"
             };
             foreach (string columna in columnasRep)
-                dgvReposicion.Columns["rep" + columna]!.HeaderText =
-                    T("frmReportePredictivo.Col" + (columna == "Cantidad" ? "Reposicion" : columna));
+                dgvReposicion.Columns["rep" + columna]!.HeaderText =T("frmReportePredictivo.Col" + (columna == "Cantidad" ? "Reposicion" : columna));
 
             string[] columnasCat = { "Nombre", "Productos", "Ventas", "Estimacion", "Reposicion", "Valor" };
             foreach (string columna in columnasCat)
-                dgvCategorias.Columns["cat" + columna]!.HeaderText =
-                    T("frmReportePredictivo.Cat" + columna);
+                dgvCategorias.Columns["cat" + columna]!.HeaderText =T("frmReportePredictivo.Cat" + columna);
 
             MostrarIndicadores();
             pnlGrafico.Invalidate();
@@ -164,8 +157,7 @@ namespace UI
                 return;
 
             DataGridViewColumn columna = grilla.Columns[indiceColumna];
-            PropertyDescriptor? propiedad =
-                TypeDescriptor.GetProperties(typeof(T))[columna.DataPropertyName];
+            PropertyDescriptor? propiedad =TypeDescriptor.GetProperties(typeof(T))[columna.DataPropertyName];
 
             if (propiedad == null) return;
 
@@ -198,9 +190,7 @@ namespace UI
 
             foreach (DataGridViewColumn otra in grilla.Columns)
                 otra.HeaderCell.SortGlyphDirection = SortOrder.None;
-            columna.HeaderCell.SortGlyphDirection = ascendente
-                ? SortOrder.Ascending : SortOrder.Descending;
-
+            columna.HeaderCell.SortGlyphDirection = ascendente? SortOrder.Ascending : SortOrder.Descending;
             _ordenGrillas[grilla] = (indiceColumna, ascendente);
         }
 
@@ -213,10 +203,7 @@ namespace UI
                 dgvReporte.DataSource = _datos;
                 dgvReporte.ClearSelection();
 
-                List<ReportePredictivoBE> urgentes = _datos
-                    .Where(x => x.ReposicionSugerida > 0)
-                    .OrderBy(x => x.Prioridad == "Critica" ? 0 : 1)
-                    .ThenByDescending(x => x.ReposicionSugerida).ToList();
+                List<ReportePredictivoBE> urgentes = _datos.Where(x => x.ReposicionSugerida > 0).OrderBy(x => x.Prioridad == "Critica" ? 0 : 1).ThenByDescending(x => x.ReposicionSugerida).ToList();
                 dgvReposicion.DataSource = null;
                 dgvReposicion.DataSource = urgentes;
                 dgvReposicion.ClearSelection();
@@ -267,21 +254,13 @@ namespace UI
             kpis[2].Text = string.Format(T("frmReportePredictivo.KpiAlertas"), alertas);
             kpis[3].Text = string.Format(T("frmReportePredictivo.KpiReponer"), reponer);
 
-            lblResumen.Text = string.Format(T("frmReportePredictivo.ResumenAmpliado"),
-                _datos.Count, criticos, sinVentas);
-            lblReposicion.Text = string.Format(T("frmReportePredictivo.TextoReposicion"),
-                alertas, reponer, criticos);
-            lblCategorias.Text = string.Format(T("frmReportePredictivo.TextoCategorias"),
-                _datos.Select(x => x.Categoria).Distinct().Count(), ingresoEstimado);
+            lblResumen.Text = string.Format(T("frmReportePredictivo.ResumenAmpliado"),_datos.Count, criticos, sinVentas);
+            lblReposicion.Text = string.Format(T("frmReportePredictivo.TextoReposicion"),alertas, reponer, criticos);
+            lblCategorias.Text = string.Format(T("frmReportePredictivo.TextoCategorias"),_datos.Select(x => x.Categoria).Distinct().Count(), ingresoEstimado);
 
-            string productoMayor = _datos.OrderByDescending(x => x.Estimadas7Dias)
-                .ThenBy(x => x.Producto).Select(x => x.Producto).FirstOrDefault()
-                ?? T("frmReportePredictivo.SinDatos");
-            string urgencia = _datos.Where(x => x.ReposicionSugerida > 0)
-                .OrderByDescending(x => x.ReposicionSugerida).Select(x => x.Producto)
-                .FirstOrDefault() ?? T("frmReportePredictivo.SinUrgencias");
-            lblAnalisis.Text = string.Format(T("frmReportePredictivo.Analisis"),
-                productoMayor, urgencia, ingresoEstimado, sinVentas);
+            string productoMayor = _datos.OrderByDescending(x => x.Estimadas7Dias).ThenBy(x => x.Producto).Select(x => x.Producto).FirstOrDefault()?? T("frmReportePredictivo.SinDatos");
+            string urgencia = _datos.Where(x => x.ReposicionSugerida > 0).OrderByDescending(x => x.ReposicionSugerida).Select(x => x.Producto).FirstOrDefault() ?? T("frmReportePredictivo.SinUrgencias");
+            lblAnalisis.Text = string.Format(T("frmReportePredictivo.Analisis"),productoMayor, urgencia, ingresoEstimado, sinVentas);
         }
 
         private void pnlGrafico_Resize(object? sender, EventArgs e) => pnlGrafico.Invalidate();
@@ -323,11 +302,7 @@ namespace UI
             using SolidBrush verde = new SolidBrush(Color.FromArgb(214, 246, 36));
 
             g.DrawString(T("frmReportePredictivo.Grafico"), titulo, blanco, 14, 12);
-            List<ReportePredictivoBE> productos = _datos
-                .Where(x => x.Estimadas7Dias > 0)
-                .OrderByDescending(x => x.Estimadas7Dias)
-                .ThenBy(x => x.Producto)
-                .Take(8).ToList();
+            List<ReportePredictivoBE> productos = _datos.Where(x => x.Estimadas7Dias > 0).OrderByDescending(x => x.Estimadas7Dias).ThenBy(x => x.Producto).Take(8).ToList();
 
             if (productos.Count == 0)
             {
@@ -344,13 +319,11 @@ namespace UI
                 ReportePredictivoBE p = productos[i];
                 int y = 49 + i * paso;
                 if (y + paso > pnlGrafico.ClientSize.Height) break;
-                string nombre = p.Producto.Length > 27
-                    ? p.Producto.Substring(0, 24) + "..." : p.Producto;
+                string nombre = p.Producto.Length > 27? p.Producto.Substring(0, 24) + "..." : p.Producto;
                 g.DrawString(nombre, texto, blanco, 14, y);
                 float longitud = anchoGrafico * (float)p.Estimadas7Dias / mayor;
                 g.FillRectangle(verde, margenIzquierdo, y + 2, longitud, paso - 5);
-                g.DrawString(p.Estimadas7Dias.ToString(), texto, blanco,
-                    margenIzquierdo + longitud + 9, y);
+                g.DrawString(p.Estimadas7Dias.ToString(), texto, blanco,margenIzquierdo + longitud + 9, y);
             }
         }
     }
