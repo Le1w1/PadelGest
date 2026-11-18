@@ -43,7 +43,8 @@ Name: "{group}\Desinstalar PadelGest"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\PadelGest"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 
 [Registry]
-Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: string; ValueName: "PADELGEST_ENTORNO"; ValueData: "{code:EntornoSeleccionado}"; Flags: uninsdeletevalue
+; El instalador se ejecuta sin elevacion: la configuracion es por usuario.
+Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "PADELGEST_ENTORNO"; ValueData: "{code:EntornoSeleccionado}"; Flags: uninsdeletevalue
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Iniciar PadelGest"; BeforeInstall: ConfigurarEntornoProceso; Flags: nowait postinstall skipifsilent
@@ -122,8 +123,8 @@ begin
   PaginaServidor.Add('SQL Server Express (localhost\SQLEXPRESS)');
   PaginaServidor.Add('SQL Server predeterminado (.)');
   PaginaServidor.SelectedValueIndex := 0;
-  if RegQueryStringValue(HKLM,
-    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
+  if RegQueryStringValue(HKCU,
+    'Environment',
     'PADELGEST_ENTORNO', EntornoGuardado) then
     if EntornoGuardado = 'UAI' then
       PaginaServidor.SelectedValueIndex := 1;
@@ -213,8 +214,8 @@ var
   Entorno: String;
 begin
   Result := False;
-  if not RegQueryStringValue(HKLM,
-    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
+  if not RegQueryStringValue(HKCU,
+    'Environment',
     'PADELGEST_ENTORNO', Entorno) then
   begin
     MsgBox('No se encontro la configuracion de SQL Server. ' +
