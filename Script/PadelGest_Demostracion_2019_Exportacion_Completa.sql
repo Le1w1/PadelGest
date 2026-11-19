@@ -1469,15 +1469,34 @@ BEGIN
     SELECT i.CodigoProducto
     FROM inserted i
     LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto
-    WHERE d.CodigoProducto IS NULL
-       OR EXISTS
-       (
-           SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
-                  i.StockDisponible, i.StockMinimo, i.Activo
-           EXCEPT
-           SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
-                  d.StockDisponible, d.StockMinimo, d.Activo
-       );
+    WHERE
+    (
+        d.CodigoProducto IS NULL
+        OR EXISTS
+        (
+            SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
+                   i.StockDisponible, i.StockMinimo, i.Activo
+            EXCEPT
+            SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
+                   d.StockDisponible, d.StockMinimo, d.Activo
+        )
+    )
+    -- Si la version historica ya fue marcada como vigente y sus valores
+    -- coinciden con Producto, se trata de una restauracion: no insertar
+    -- otra fila ni alterar la fecha original de Producto_C.
+    AND NOT EXISTS
+    (
+        SELECT 1
+        FROM dbo.Producto_C AS h
+        WHERE h.CodigoProducto = i.CodigoProducto
+          AND h.Act = 1
+          AND h.Nombre = i.Nombre
+          AND h.Categoria = i.Categoria
+          AND h.PrecioUnitario = i.PrecioUnitario
+          AND h.StockDisponible = i.StockDisponible
+          AND h.StockMinimo = i.StockMinimo
+          AND h.ActivoProducto = i.Activo
+    );
 
     IF NOT EXISTS (SELECT 1 FROM @Cambios)
         RETURN;
@@ -1551,9 +1570,10 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM @Restauradas)
         RETURN;
 
-    -- Esta operacion dispara TR_Producto_RegistrarCambio. El trigger de
-    -- Producto agrega una NUEVA version y desactiva la anterior.
-    -- El trabajo se ejecuta dentro de la misma transaccion del usuario.
+    -- Actualiza los datos actuales del producto con la version elegida.
+    -- TR_Producto_RegistrarCambio detecta que ya existe esa version vigente
+    -- y no crea otra fila en Producto_C: se conserva su fecha historica.
+    -- Todo ocurre dentro de la misma transaccion.
     UPDATE p
        SET p.Nombre = h.Nombre,
            p.Categoria = h.Categoria,
