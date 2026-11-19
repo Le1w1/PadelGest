@@ -134,6 +134,50 @@ namespace DAL
             });
         }
 
+        // Una sola operacion de negocio para modificar datos y reponer stock.
+        // El stock se suma en SQL sobre el valor actual para evitar perder ventas
+        // realizadas mientras el formulario estaba abierto.
+        public void ModificarProductoYReponer(int codigo, string nombre, string categoria,
+            decimal precio, int stockMinimo, int cantidadReponer, int idUsuario, string usuario)
+        {
+            EjecutarCambio("Modificar producto y stock", idUsuario, usuario, (conexion, tx) =>
+            {
+                ProductoBE anterior = ObtenerProductoBloqueado(conexion, tx, codigo);
+                ComprobarDuplicado(conexion, tx, nombre, categoria, codigo);
+                if (cantidadReponer < 0)
+                    throw new ArgumentException("La reposicion no puede ser negativa.");
+                if (cantidadReponer > 0 && !anterior.Activo)
+                    throw new InvalidOperationException("No se puede reponer un producto desactivado.");
+
+                bool modificaDatos = anterior.Nombre != nombre
+                    || anterior.Categoria != categoria
+                    || anterior.PrecioUnitario != precio
+                    || anterior.StockMinimo != stockMinimo;
+                if (!modificaDatos && cantidadReponer == 0)
+                    throw new InvalidOperationException("No hay cambios para guardar.");
+                const string sql = @"
+                    UPDATE dbo.Producto
+                    SET Nombre = @Nombre,
+                        Categoria = @Categoria,
+                        PrecioUnitario = @Precio,
+                        StockMinimo = @Minimo,
+                        StockDisponible = StockDisponible + @Cantidad
+                    WHERE CodigoProducto = @Codigo
+                      AND StockDisponible <= 2147483647 - @Cantidad";
+                using SqlCommand cmd = new SqlCommand(sql, conexion, tx);
+                AgregarNombreCategoria(cmd, nombre, categoria);
+                AgregarPrecio(cmd, precio);
+                cmd.Parameters.Add("@Minimo", SqlDbType.Int).Value = stockMinimo;
+                cmd.Parameters.Add("@Cantidad", SqlDbType.Int).Value = cantidadReponer;
+                cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value = codigo;
+                if (cmd.ExecuteNonQuery() != 1)
+                    throw new InvalidOperationException("No se pudo actualizar el producto. Revise el stock.");
+                return $"Producto {codigo}: datos modificados y {cantidadReponer} unidades agregadas. "
+                    + $"Precio {anterior.PrecioUnitario:N2} -> {precio:N2}. "
+                    + $"Stock {anterior.StockDisponible} -> {(long)anterior.StockDisponible + cantidadReponer}.";
+            });
+        }
+
         public void CambiarEstado(int codigo, bool activar, int idUsuario, string usuario)
         {
             EjecutarCambio(activar ? "Reactivar producto" : "Desactivar producto",

@@ -641,11 +641,11 @@ INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple_
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', N'f50c0f3d19196e16ad5e1e72f3b094a3288912fcd4850ad461d96fba0b40accf')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', N'700ba87ff88d54c32d59eac310a40e63e20df37bb09a5a3f7191354a747a30d3')
+INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', N'd1cb232072612a6fabd52d2c409c777956f9c95be7668a971e4dcd13c97ec2ea')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', N'32b5356d0241e9fa61aec0d6b60e4ce854b7b877378c67761cb47c05d0cae856')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', N'b4a4f9d950d5fbb6f84ca498a7f9c67bf4085e9f86b168a522282789a79dbb8d')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', N'9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', N'8b09a6c60fd8ac39ffc1aed8b54876ef3876e97ebabca0644a48cf1c674c7569')
+INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', N'94b24e538cf64749f9fd4500c42d232624c46a838ec32c6bc09fb6735856a89a')
 GO
 SET IDENTITY_INSERT [dbo].[Equipamiento] ON 
 
@@ -967,7 +967,7 @@ SET IDENTITY_INSERT [dbo].[Rol] ON
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (1, N'Administrador', N'e968303d5a0735207eb00fd12bf270e9d83f5e269fd9bab80a26424e3954441f')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (2, N'Vendedor de Buffet', N'8fcd2473f9162ea7f574ab6fda26376b775efd5a2a7188d53648104f8d5ff67b')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (3, N'Recepcionista', N'9d65b912fda8c9906289143693ab2b3999de7c6430c4a6e001e7f57188e24b8c')
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Dueño', N'08f785674ea0f3e5871d825ef0977cf95f484245afc3195e7b5f82a014031d92')
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Supervisor', N'77f52042ee0c9f4eafc80b63fe08383efe3cdf607d53c9046b873415d4af4538')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (5, N'Encargado de Canchas', N'714816c1e538b87ea88b9540cce7d1f1afaf7eb6e5888ca34bf904630261ba56')
 SET IDENTITY_INSERT [dbo].[Rol] OFF
 GO
@@ -1003,6 +1003,7 @@ SET IDENTITY_INSERT [dbo].[Usuario] ON
 
 INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Rodriguez', N'46631736', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 1, 1, 1, N'94ef1989755456eb707b9131fabc1b94669af3268fd46d6ea60859fe9f678c23')
 INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (2, N'Leonel', N'Mariolani', N'11113333', N'dueño@padelgest.com', N'dueño11113333', N'9d3c8c6731e909c1d2319294c0466d66ffd0e21d04532f5c8a2776b5d9c33acf', 1, 0, 0, 1, 1, 4, N'89570df43f1004c1addcb19e5bc5d69fb490221b84eadf529129ba28b755e130')
+INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (3, N'Lucas', N'Pereyra', N'22224444', N'Vendedor@padelgest.com', N'vendedor22224444', N'c7590093354662bb25b897f60ee09c54a9bc5f31e22c495ba629258dd3ecf906', 1, 0, 0, 1, 1, 2, N'e315dfae6467463d582df5bceede27926f20775be04b775d81ace02a1295c9eb')
 SET IDENTITY_INSERT [dbo].[Usuario] OFF
 GO
 SET ANSI_PADDING ON
@@ -1469,15 +1470,34 @@ BEGIN
     SELECT i.CodigoProducto
     FROM inserted i
     LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto
-    WHERE d.CodigoProducto IS NULL
-       OR EXISTS
-       (
-           SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
-                  i.StockDisponible, i.StockMinimo, i.Activo
-           EXCEPT
-           SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
-                  d.StockDisponible, d.StockMinimo, d.Activo
-       );
+    WHERE
+    (
+        d.CodigoProducto IS NULL
+        OR EXISTS
+        (
+            SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
+                   i.StockDisponible, i.StockMinimo, i.Activo
+            EXCEPT
+            SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
+                   d.StockDisponible, d.StockMinimo, d.Activo
+        )
+    )
+    -- Si la version historica ya fue marcada como vigente y sus valores
+    -- coinciden con Producto, se trata de una restauracion: no insertar
+    -- otra fila ni alterar la fecha original de Producto_C.
+    AND NOT EXISTS
+    (
+        SELECT 1
+        FROM dbo.Producto_C AS h
+        WHERE h.CodigoProducto = i.CodigoProducto
+          AND h.Act = 1
+          AND h.Nombre = i.Nombre
+          AND h.Categoria = i.Categoria
+          AND h.PrecioUnitario = i.PrecioUnitario
+          AND h.StockDisponible = i.StockDisponible
+          AND h.StockMinimo = i.StockMinimo
+          AND h.ActivoProducto = i.Activo
+    );
 
     IF NOT EXISTS (SELECT 1 FROM @Cambios)
         RETURN;
@@ -1551,9 +1571,10 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM @Restauradas)
         RETURN;
 
-    -- Esta operacion dispara TR_Producto_RegistrarCambio. El trigger de
-    -- Producto agrega una NUEVA version y desactiva la anterior.
-    -- El trabajo se ejecuta dentro de la misma transaccion del usuario.
+    -- Actualiza los datos actuales del producto con la version elegida.
+    -- TR_Producto_RegistrarCambio detecta que ya existe esa version vigente
+    -- y no crea otra fila en Producto_C: se conserva su fecha historica.
+    -- Todo ocurre dentro de la misma transaccion.
     UPDATE p
        SET p.Nombre = h.Nombre,
            p.Categoria = h.Categoria,

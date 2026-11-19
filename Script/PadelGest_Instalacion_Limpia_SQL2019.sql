@@ -490,7 +490,7 @@ SET IDENTITY_INSERT [dbo].[Rol] ON;
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (1, N'Administrador', N'e968303d5a0735207eb00fd12bf270e9d83f5e269fd9bab80a26424e3954441f')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (2, N'Vendedor de Buffet', N'8fcd2473f9162ea7f574ab6fda26376b775efd5a2a7188d53648104f8d5ff67b')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (3, N'Recepcionista', N'9d65b912fda8c9906289143693ab2b3999de7c6430c4a6e001e7f57188e24b8c')
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Dueño', N'08f785674ea0f3e5871d825ef0977cf95f484245afc3195e7b5f82a014031d92')
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Supervisor', N'77f52042ee0c9f4eafc80b63fe08383efe3cdf607d53c9046b873415d4af4538')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (5, N'Encargado de Canchas', N'714816c1e538b87ea88b9540cce7d1f1afaf7eb6e5888ca34bf904630261ba56')
 SET IDENTITY_INSERT [dbo].[Rol] OFF;
 GO
@@ -620,7 +620,7 @@ INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSi
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', '700ba87ff88d54c32d59eac310a40e63e20df37bb09a5a3f7191354a747a30d3');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', 'd1cb232072612a6fabd52d2c409c777956f9c95be7668a971e4dcd13c97ec2ea');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', '32b5356d0241e9fa61aec0d6b60e4ce854b7b877378c67761cb47c05d0cae856');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', 'b4a4f9d950d5fbb6f84ca498a7f9c67bf4085e9f86b168a522282789a79dbb8d');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', '9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13');
@@ -1090,15 +1090,34 @@ BEGIN
     SELECT i.CodigoProducto
     FROM inserted i
     LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto
-    WHERE d.CodigoProducto IS NULL
-       OR EXISTS
-       (
-           SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
-                  i.StockDisponible, i.StockMinimo, i.Activo
-           EXCEPT
-           SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
-                  d.StockDisponible, d.StockMinimo, d.Activo
-       );
+    WHERE
+    (
+        d.CodigoProducto IS NULL
+        OR EXISTS
+        (
+            SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
+                   i.StockDisponible, i.StockMinimo, i.Activo
+            EXCEPT
+            SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
+                   d.StockDisponible, d.StockMinimo, d.Activo
+        )
+    )
+    -- Si la version historica ya fue marcada como vigente y sus valores
+    -- coinciden con Producto, se trata de una restauracion: no insertar
+    -- otra fila ni alterar la fecha original de Producto_C.
+    AND NOT EXISTS
+    (
+        SELECT 1
+        FROM dbo.Producto_C AS h
+        WHERE h.CodigoProducto = i.CodigoProducto
+          AND h.Act = 1
+          AND h.Nombre = i.Nombre
+          AND h.Categoria = i.Categoria
+          AND h.PrecioUnitario = i.PrecioUnitario
+          AND h.StockDisponible = i.StockDisponible
+          AND h.StockMinimo = i.StockMinimo
+          AND h.ActivoProducto = i.Activo
+    );
 
     IF NOT EXISTS (SELECT 1 FROM @Cambios)
         RETURN;
@@ -1172,9 +1191,10 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM @Restauradas)
         RETURN;
 
-    -- Esta operacion dispara TR_Producto_RegistrarCambio. El trigger de
-    -- Producto agrega una NUEVA version y desactiva la anterior.
-    -- El trabajo se ejecuta dentro de la misma transaccion del usuario.
+    -- Actualiza los datos actuales del producto con la version elegida.
+    -- TR_Producto_RegistrarCambio detecta que ya existe esa version vigente
+    -- y no crea otra fila en Producto_C: se conserva su fecha historica.
+    -- Todo ocurre dentro de la misma transaccion.
     UPDATE p
        SET p.Nombre = h.Nombre,
            p.Categoria = h.Categoria,

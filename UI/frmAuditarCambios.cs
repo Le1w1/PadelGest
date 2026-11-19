@@ -10,6 +10,7 @@ namespace UI
     public partial class frmAuditarCambios : Form, IObservadorIdioma
     {
         private readonly ProductoCambioBLL _cambiosBLL = new ProductoCambioBLL();
+        private readonly ProductoBLL _productoBLL = new ProductoBLL();
 
         // Evita ejecutar una consulta SQL por cada tecla mientras se escribe.
         private readonly System.Windows.Forms.Timer _temporizadorFiltros = new System.Windows.Forms.Timer
@@ -32,6 +33,11 @@ namespace UI
             AjustePantalla.HabilitarDesplazamiento(this);
             AyudaContextual.Configurar(this);
             dgvCambios.AutoGenerateColumns = false;
+
+            // El mismo campo Nombre sugiere productos activos desde ProductoBLL.
+            // No se agrega ninguna grilla: el DGV sigue mostrando solo el historial.
+            txtNombre.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txtNombre.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
             _temporizadorFiltros.Tick += (sender, e) =>
             {
@@ -61,6 +67,7 @@ namespace UI
             try
             {
                 SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+                CargarProductosActivos();
             }
             catch (Exception ex)
             {
@@ -71,6 +78,22 @@ namespace UI
 
             _filtrosInicializados = true;
             Consultar();
+        }
+
+        // ProductoBLL -> ProductoDAL -> dbo.Producto.
+        // Solo proporciona sugerencias para el campo de nombre; no restringe
+        // la consulta histórica de Producto_C (incluye productos desactivados).
+        private void CargarProductosActivos()
+        {
+            List<ProductoBE> productos = _productoBLL.ObtenerProductosActivosParaAuditoria();
+            AutoCompleteStringCollection nombres = new AutoCompleteStringCollection();
+            nombres.AddRange(productos
+                .Select(p => p.Nombre)
+                .Where(nombre => !string.IsNullOrWhiteSpace(nombre))
+                .Distinct(StringComparer.CurrentCultureIgnoreCase)
+                .OrderBy(nombre => nombre)
+                .ToArray());
+            txtNombre.AutoCompleteCustomSource = nombres;
         }
 
         private void frmAuditarCambios_FormClosed(object sender, FormClosedEventArgs e)
@@ -211,6 +234,7 @@ namespace UI
             try
             {
                 _cambiosBLL.RestaurarVersion(cambio.IdCambio);
+                CargarProductosActivos();
                 Consultar();
                 MessageBox.Show(T("frmAuditarCambios.RestauracionCorrecta"), Text,MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

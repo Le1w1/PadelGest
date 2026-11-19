@@ -6,14 +6,14 @@ using System.Data;
 
 namespace DAL
 {
-    // Consultas historicas: la escritura se realiza exclusivamente con
-    // TR_Producto_RegistrarCambio, no desde el formulario de auditoria.
+    // Las versiones se registran automáticamente desde Producto.
+    // Al restaurar, se reactiva la fila histórica original sin duplicarla.
     public class ProductoCambioDAL
     {
         private readonly DAO_AccesoDatos _accesoDatos = new DAO_AccesoDatos();
 
-        // La restauracion activa una version historica; el trigger de SQL Server
-        // sincroniza Producto y crea la nueva version del historial.
+        // La restauracion activa una version historica; el trigger SQL
+        // sincroniza Producto sin crear otra fila en el historial.
         // Las DVH/DVV y la bitacora de eventos se guardan en la misma transaccion.
         public void RestaurarVersion(long idCambio, int idUsuario, string usuario,Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
         {
@@ -62,8 +62,7 @@ namespace DAL
                         throw new InvalidOperationException("La version ya esta vigente.");
                 }
 
-                // Evitar reactivar una version que ya coincide con el producto:
-                // no generaria una nueva modificacion historica.
+                // No tiene sentido restaurar una version idéntica a la actual.
                 const string comparar = @"
                     SELECT COUNT(*) FROM dbo.Producto
                     WHERE CodigoProducto = @Codigo
@@ -100,8 +99,9 @@ namespace DAL
                 }
 
 
-                // Dispara el trigger de Producto_C que actualiza Producto y crea una NUEVA version historica vigente.
-                //dispara el trigger de producto 
+                // Al pasar Act de 0 a 1 se ejecuta TR_ProductoC_RestaurarVersion:
+                // copia el estado historico a Producto. El trigger de Producto
+                // detecta que esta version ya existe y no crea una fila nueva. 
                 const string activar = @"
                     UPDATE dbo.Producto_C SET Act = 1
                     WHERE IdCambio = @IdCambio AND CodigoProducto = @Codigo
@@ -114,14 +114,25 @@ namespace DAL
                         throw new InvalidOperationException("No se pudo activar la version seleccionada.");
                 }
 
-                // Verificar que el trigger haya creado una NUEVA version historica vigente.
+                // Debe quedar vigente exactamente la versión seleccionada.
+                // Esta verificación también detecta si un trigger introdujera
+                // incorrectamente una nueva versión en lugar de conservarla.
                 const string verificar = @"
                     SELECT COUNT(*) FROM dbo.Producto_C
-                    WHERE CodigoProducto = @Codigo AND Act = 1";
+                    WHERE CodigoProducto = @Codigo AND Act = 1 AND IdCambio = @IdCambio";
                 using (SqlCommand cmd = new SqlCommand(verificar, conexion, tx))
                 {
                     cmd.Parameters.Add("@Codigo", SqlDbType.Int).Value = codigo;
+                    cmd.Parameters.Add("@IdCambio", SqlDbType.BigInt).Value = idCambio;
                     if (Convert.ToInt32(cmd.ExecuteScalar()) != 1)
+                        throw new InvalidOperationException("La version historica seleccionada no quedo vigente.");
+
+                    const string verificarUnica = @"
+                        SELECT COUNT(*) FROM dbo.Producto_C
+                        WHERE CodigoProducto = @Codigo AND Act = 1";
+                    using SqlCommand control = new SqlCommand(verificarUnica, conexion, tx);
+                    control.Parameters.Add("@Codigo", SqlDbType.Int).Value = codigo;
+                    if (Convert.ToInt32(control.ExecuteScalar()) != 1)
                         throw new InvalidOperationException("No quedo una unica version vigente del producto.");
                 }
 
@@ -149,7 +160,7 @@ namespace DAL
         }
 
 
-        // Consultas historicas: la escritura se realiza exclusivamente con TR_Producto_RegistrarCambio, no desde el formulario de auditoria.
+        // Consulta las versiones originales; una restauracion conserva su FechaHora.
         public List<ProductoCambioBE> Consultar(int? codigoProducto, string nombre,DateTime? fechaDesde, DateTime? fechaHasta,bool soloVigentes)
         {
             
