@@ -506,7 +506,7 @@
   "frmGestionProductos.Precio": "Price:",
   "frmGestionProductos.Minimo": "Minimum stock:",
   "frmGestionProductos.StockInicial": "Initial stock:",
-  "frmGestionProductos.Reposicion": "Units to restock:",
+  "frmGestionProductos.Reposicion": "Units to add:",
   "frmGestionProductos.Nuevo": "New",
   "frmGestionProductos.Crear": "Create",
   "frmGestionProductos.Modificar": "Save changes",
