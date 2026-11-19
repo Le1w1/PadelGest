@@ -29,8 +29,7 @@ namespace BLL
             // despues de restaurar el producto, pero ANTES del Commit().
             // Las BLL de servicios utilizan la misma conexion y transaccion.
             // Si falla el DV o el registro del evento, la DAL ejecuta Rollback().
-            _productoCambioDAL.RestaurarVersion(idCambio, usuario.IdUsuario, usuario.NombreUsuario,
-                (evento, conexion, tx) =>
+            _productoCambioDAL.RestaurarVersion(idCambio, usuario.IdUsuario, usuario.NombreUsuario,(evento, conexion, tx) =>
                 {
                     _dvBLL.RecalcularDVEnTransaccion(new[] { "Producto" }, conexion, tx);
                     _bitacoraBLL.RegistrarEventoEnTransaccion(evento, conexion, tx);

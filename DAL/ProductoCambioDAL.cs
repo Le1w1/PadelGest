@@ -15,8 +15,7 @@ namespace DAL
         // La restauracion activa una version historica; el trigger de SQL Server
         // sincroniza Producto y crea la nueva version del historial.
         // Las DVH/DVV y la bitacora de eventos se guardan en la misma transaccion.
-        public void RestaurarVersion(long idCambio, int idUsuario, string usuario,
-            Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
+        public void RestaurarVersion(long idCambio, int idUsuario, string usuario,Action<BitacoraEvento, SqlConnection, SqlTransaction> registrarServicios)
         {
             if (registrarServicios == null)
                 throw new ArgumentNullException(nameof(registrarServicios));
@@ -100,9 +99,9 @@ namespace DAL
                         throw new InvalidOperationException("No se encontro una version vigente del producto.");
                 }
 
-                // Al marcar Act=1 el trigger de Producto_C actualiza Producto.
-                // El trigger de Producto desactiva la version seleccionada
-                // y crea una instantanea NUEVA con Act=1.
+
+                // Dispara el trigger de Producto_C que actualiza Producto y crea una NUEVA version historica vigente.
+                //dispara el trigger de producto 
                 const string activar = @"
                     UPDATE dbo.Producto_C SET Act = 1
                     WHERE IdCambio = @IdCambio AND CodigoProducto = @Codigo
