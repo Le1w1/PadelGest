@@ -41,7 +41,6 @@ namespace UI
             btnCrear = new Button();
             btnModificar = new Button();
             btnEstado = new Button();
-            btnReponer = new Button();
             btnVolver = new Button();
             lblMensaje = new Label();
 
@@ -235,12 +234,12 @@ namespace UI
             lblReposicion.Location = new Point(579, 103);
             lblReposicion.Size = new Size(158, 28);
             lblReposicion.Name = "lblReposicion";
-            lblReposicion.Text = "Unidades a reponer:";
+            lblReposicion.Text = "Unidades a agregar:";
             nudReposicion.Location = new Point(746, 102);
             nudReposicion.Size = new Size(130, 29);
-            nudReposicion.Minimum = 1;
+            nudReposicion.Minimum = 0;
             nudReposicion.Maximum = 2147483647M;
-            nudReposicion.Value = 1;
+            nudReposicion.Value = 0;
             nudReposicion.BackColor = Color.White;
             nudReposicion.ForeColor = Color.Black;
             nudReposicion.Name = "nudReposicion";
@@ -260,16 +259,11 @@ namespace UI
             btnModificar.Name = "btnModificar";
             btnModificar.Text = "Guardar cambios";
             btnModificar.Click += btnModificar_Click;
-            btnEstado.Location = new Point(540, 614);
+            btnEstado.Location = new Point(565, 614);
             btnEstado.Size = new Size(172, 42);
             btnEstado.Name = "btnEstado";
             btnEstado.Text = "Desactivar";
             btnEstado.Click += btnEstado_Click;
-            btnReponer.Location = new Point(725, 614);
-            btnReponer.Size = new Size(172, 42);
-            btnReponer.Name = "btnReponer";
-            btnReponer.Text = "Reponer stock";
-            btnReponer.Click += btnReponer_Click;
             btnVolver.Location = new Point(986, 614);
             btnVolver.Size = new Size(154, 42);
             btnVolver.Name = "btnVolver";
@@ -296,11 +290,6 @@ namespace UI
             btnEstado.FlatStyle = FlatStyle.Flat;
             btnEstado.FlatAppearance.BorderSize = 0;
             btnEstado.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnReponer.BackColor = Color.FromArgb(214, 246, 36);
-            btnReponer.ForeColor = Color.Black;
-            btnReponer.FlatStyle = FlatStyle.Flat;
-            btnReponer.FlatAppearance.BorderSize = 0;
-            btnReponer.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnVolver.BackColor = Color.FromArgb(214, 246, 36);
             btnVolver.ForeColor = Color.Black;
             btnVolver.FlatStyle = FlatStyle.Flat;
@@ -329,7 +318,7 @@ namespace UI
             {
                 lblTitulo, lblBuscar, txtBuscar, chkMostrarInactivos, btnActualizar,
                 lblCantidad, dgvProductos, gbDatos, btnNuevo, btnCrear, btnModificar,
-                btnEstado, btnReponer, btnVolver, lblMensaje
+                btnEstado, btnVolver, lblMensaje
             });
             Load += frmGestionProductos_Load;
             FormClosed += frmGestionProductos_FormClosed;
@@ -375,7 +364,6 @@ namespace UI
         private Button btnCrear;
         private Button btnModificar;
         private Button btnEstado;
-        private Button btnReponer;
         private Button btnVolver;
         private Label lblMensaje;
     }
