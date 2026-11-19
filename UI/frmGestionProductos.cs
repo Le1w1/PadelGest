@@ -140,7 +140,7 @@ namespace UI
             nudPrecio.Value = Math.Clamp(p.PrecioUnitario, nudPrecio.Minimum, nudPrecio.Maximum);
             nudMinimo.Value = Math.Clamp(p.StockMinimo, 0, (int)nudMinimo.Maximum);
             nudStockInicial.Value = 0;
-            nudReposicion.Value = 1;
+            nudReposicion.Value = 0;
             lblMensaje.Text = string.Empty;
             ActualizarBotones();
         }
