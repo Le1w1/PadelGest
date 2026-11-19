@@ -63,7 +63,6 @@ namespace UI
             btnNuevo.Text = T("frmGestionProductos.Nuevo");
             btnCrear.Text = T("frmGestionProductos.Crear");
             btnModificar.Text = T("frmGestionProductos.Modificar");
-            btnReponer.Text = T("frmGestionProductos.Reponer");
             btnVolver.Text = T("frmGestionProductos.Volver");
 
             // Los nombres de columna proceden del Designer, nunca se autogeneran.
@@ -124,7 +123,7 @@ namespace UI
             nudPrecio.Value = nudPrecio.Minimum;
             nudMinimo.Value = 0;
             nudStockInicial.Value = 0;
-            nudReposicion.Value = 1;
+            nudReposicion.Value = 0;
             lblMensaje.Text = T("frmGestionProductos.ModoNuevo");
             ActualizarBotones();
             txtNombre.Focus();
@@ -154,7 +153,6 @@ namespace UI
             btnModificar.Enabled = gestion && elegido;
             btnEstado.Enabled = gestion && elegido;
             btnEstado.Text = elegido && !_seleccionado!.Activo? T("frmGestionProductos.Reactivar"): T("frmGestionProductos.Desactivar");
-            btnReponer.Enabled = gestion && elegido && _seleccionado!.Activo;
             nudStockInicial.Enabled = !elegido;
             nudReposicion.Enabled = gestion && elegido && _seleccionado!.Activo;
         }
@@ -195,7 +193,10 @@ namespace UI
         {
             if (_seleccionado == null) return;
             int codigo = _seleccionado.CodigoProducto;
-            EjecutarCambio(() => _productoBLL.ModificarProducto(codigo, txtNombre.Text, cmbCategoria.Text, nudPrecio.Value,(int)nudMinimo.Value),"frmGestionProductos.Modificado");
+            int unidades = (int)nudReposicion.Value;
+            EjecutarCambio(() => _productoBLL.ModificarProductoYReponer(
+                codigo, txtNombre.Text, cmbCategoria.Text, nudPrecio.Value,
+                (int)nudMinimo.Value, unidades), "frmGestionProductos.Modificado");
         }
 
         private void btnEstado_Click(object sender, EventArgs e)
@@ -209,17 +210,6 @@ namespace UI
 
             int codigo = _seleccionado.CodigoProducto;
             EjecutarCambio(() => _productoBLL.CambiarEstado(codigo, activar),activar ? "frmGestionProductos.Reactivado": "frmGestionProductos.Desactivado");
-        }
-
-        private void btnReponer_Click(object sender, EventArgs e)
-        {
-            if (_seleccionado == null) return;
-            int codigo = _seleccionado.CodigoProducto;
-            int cantidad = (int)nudReposicion.Value;
-            DialogResult respuesta = MessageBox.Show(string.Format(T("frmGestionProductos.ConfirmarReposicion"),cantidad, _seleccionado.Nombre),Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (respuesta != DialogResult.Yes) return;
-
-            EjecutarCambio(() => _productoBLL.ReponerStock(codigo, cantidad),"frmGestionProductos.Repuesto");
         }
 
         private void EjecutarCambio(Action operacion, string claveMensaje)
