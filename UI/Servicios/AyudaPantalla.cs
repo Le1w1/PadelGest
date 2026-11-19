@@ -83,7 +83,7 @@ namespace UI.Servicios
         {
             bool ingles = Ingles();
             string[] frases = System.Text.RegularExpressions.Regex
-                .Split(descripcion.Trim(), @"(?<=[.!?])\\s+(?=[A-ZÁÉÍÓÚÑ])");
+                .Split(descripcion.Trim(), @"(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ])");
             using Form ventana = new Form
             {
                 Text = TituloAyuda(),
