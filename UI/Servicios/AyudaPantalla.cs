@@ -68,13 +68,107 @@ namespace UI.Servicios
                 botonAyuda.Click += (_, _) =>
                 {
                     string texto = Ingles() ? descripcion[1] : descripcion[0];
-                    MessageBox.Show(formulario, texto, TituloAyuda(),
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MostrarAyuda(formulario, texto);
+
                 };
                 formulario.Controls.Add(botonAyuda);
                 botonAyuda.BringToFront();
                 formulario.FormClosed += (_, _) => tooltip.Dispose();
             };
+        }
+
+        // Ventana de ayuda legible: secciones, texto separado y scroll.
+        // Se conserva el contenido traducido de cada pantalla.
+        private static void MostrarAyuda(Form propietario, string descripcion)
+        {
+            bool ingles = Ingles();
+            string[] frases = System.Text.RegularExpressions.Regex
+                .Split(descripcion.Trim(), @"(?<=[.!?])\\s+(?=[A-ZÁÉÍÓÚÑ])");
+            using Form ventana = new Form
+            {
+                Text = TituloAyuda(),
+                StartPosition = FormStartPosition.CenterParent,
+                Size = new Size(660, 540),
+                MinimumSize = new Size(480, 380),
+                BackColor = Color.White,
+                Font = new Font("Segoe UI", 10F),
+                FormBorderStyle = FormBorderStyle.Sizable,
+                MinimizeBox = false,
+                MaximizeBox = false,
+                ShowIcon = false
+            };
+            TableLayoutPanel disposicion = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                RowCount = 3,
+                ColumnCount = 1,
+                Padding = new Padding(20, 16, 20, 14)
+            };
+            disposicion.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
+            disposicion.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            disposicion.RowStyles.Add(new RowStyle(SizeType.Absolute, 52));
+            Label encabezado = new Label
+            {
+                Text = ingles ? "SCREEN GUIDE" : "GUÍA DE LA PANTALLA",
+                Dock = DockStyle.Fill,
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(24, 70, 138),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+            RichTextBox contenido = new RichTextBox
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(35, 44, 60),
+                Font = new Font("Segoe UI", 11F),
+                ScrollBars = RichTextBoxScrollBars.Vertical,
+                DetectUrls = false,
+                TabStop = false
+            };
+            void Titulo(string titulo)
+            {
+                contenido.SelectionFont = new Font("Segoe UI", 11F, FontStyle.Bold);
+                contenido.SelectionColor = Color.FromArgb(24, 70, 138);
+                contenido.AppendText(titulo + Environment.NewLine + Environment.NewLine);
+            }
+            contenido.SelectionFont = new Font("Segoe UI", 11F);
+            if (frases.Length > 0)
+            {
+                Titulo(ingles ? "OVERVIEW" : "¿PARA QUÉ SIRVE?");
+                contenido.SelectionFont = new Font("Segoe UI", 11F);
+                contenido.SelectionColor = Color.FromArgb(35, 44, 60);
+                contenido.AppendText(frases[0] + Environment.NewLine + Environment.NewLine);
+            }
+            if (frases.Length > 1)
+            {
+                Titulo(ingles ? "HOW TO USE IT" : "FUNCIONES Y PASOS");
+                contenido.SelectionFont = new Font("Segoe UI", 11F);
+                contenido.SelectionColor = Color.FromArgb(35, 44, 60);
+                for (int i = 1; i < frases.Length; i++)
+                    contenido.AppendText("•  " + frases[i] + Environment.NewLine + Environment.NewLine);
+            }
+            contenido.SelectionStart = 0;
+            contenido.ScrollToCaret();
+            Button cerrar = new Button
+            {
+                Text = ingles ? "Close" : "Entendido",
+                Dock = DockStyle.Right,
+                Width = 135,
+                BackColor = Color.FromArgb(24, 70, 138),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+            };
+            cerrar.FlatAppearance.BorderSize = 0;
+            cerrar.Click += (_, _) => ventana.Close();
+            disposicion.Controls.Add(encabezado, 0, 0);
+            disposicion.Controls.Add(contenido, 0, 1);
+            disposicion.Controls.Add(cerrar, 0, 2);
+            ventana.Controls.Add(disposicion);
+            ventana.AcceptButton = cerrar;
+            ventana.ShowDialog(propietario);
         }
 
         private static bool Ingles()
