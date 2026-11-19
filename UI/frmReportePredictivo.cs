@@ -14,6 +14,7 @@ namespace UI
 {
     public partial class frmReportePredictivo : Form, IObservadorIdioma
     {
+        private Button btnExportarPdf = null!;
         private readonly ReportePredictivoBLL _reporteBLL = new ReportePredictivoBLL();
         private List<ReportePredictivoBE> _datos = new List<ReportePredictivoBE>();
         private static string T(string clave) => Traductor.Instancia.Traducir(clave);
@@ -35,6 +36,23 @@ namespace UI
         {
             InitializeComponent();
             kpis = new[] { kpiVentas, kpiEstimacion, kpiAlertas, kpiReponer };
+            // Se agrega sin modificar los cálculos ni los controles del informe.
+            btnActualizar.Location = new Point(btnActualizar.Left - 142, btnActualizar.Top);
+            btnExportarPdf = new Button
+            {
+                Name = "btnExportarPdf",
+                Text = "Exportar PDF",
+                Location = new Point(898, 772),
+                Size = new Size(130, 34),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                BackColor = Color.FromArgb(214, 246, 36),
+                ForeColor = Color.Black,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+            };
+            btnExportarPdf.FlatAppearance.BorderSize = 0;
+            btnExportarPdf.Click += btnExportarPdf_Click;
+            Controls.Add(btnExportarPdf);
 
             // Permitir minimizar, maximizar y restaurar con los botones nativos.
             // Al restaurar, la ventana debe entrar en el area util de la pantalla.
@@ -92,6 +110,8 @@ namespace UI
                 DateTime.Today.AddDays(-1).ToShortDateString());
             lblNota.Text = T("frmReportePredictivo.Nota");
             btnActualizar.Text = T("frmReportePredictivo.Actualizar");
+            btnExportarPdf.Text = string.Equals(Traductor.Instancia.CodigoIdiomaActual, "EN",
+                StringComparison.OrdinalIgnoreCase) ? "Export PDF" : "Exportar PDF";
             btnVolver.Text = T("frmReportePredictivo.Volver");
             tabPanorama.Text = T("frmReportePredictivo.TabPanorama");
             tabProductos.Text = T("frmReportePredictivo.TabProductos");
@@ -294,6 +314,42 @@ namespace UI
             }
             // La altura de las 8 barras permanece fija. En pantallas bajas
             // tabPanorama habilita scroll vertical en lugar de ocultar barras.
+        }
+
+        private void btnExportarPdf_Click(object? sender, EventArgs e)
+        {
+            if (_datos.Count == 0)
+            {
+                MessageBox.Show(this, "No hay datos para exportar.", Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            using SaveFileDialog dialogo = new SaveFileDialog
+            {
+                Filter = "Documento PDF (*.pdf)|*.pdf",
+                DefaultExt = "pdf",
+                AddExtension = true,
+                FileName = "PadelGest_ReporteInteligente_" + DateTime.Today.ToString("yyyyMMdd")
+            };
+            if (dialogo.ShowDialog(this) != DialogResult.OK) return;
+            bool exitoso = false;
+            try
+            {
+                ReportePredictivoPdf.Exportar(dialogo.FileName, _datos, DateTime.Now);
+                exitoso = true;
+                MessageBox.Show(this, "El reporte se exportó correctamente.", Text,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "No se pudo exportar el PDF: " + ex.Message,
+                    Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                AuditoriaExportacionPdf.Registrar("Reporte inteligente",
+                    "Buffet", exitoso);
+            }
         }
 
         private void btnActualizar_Click(object? sender, EventArgs e) => CargarReporte();
