@@ -75,7 +75,7 @@ namespace UI.Servicios
                 var sectores = grupos.Take(5).Select(x => (x.Nombre, x.Cantidad)).ToList();
                 long otros = grupos.Skip(5).Sum(x => x.Cantidad);
                 if (otros > 0) sectores.Add(("Otros", otros));
-                Rectangle rect = new Rectangle(36, 36, 268, 268);
+                System.Drawing.Rectangle rect = new System.Drawing.Rectangle(36, 36, 268, 268);
                 float inicio = -90f;
                 for (int i = 0; i < sectores.Count; i++)
                 {
