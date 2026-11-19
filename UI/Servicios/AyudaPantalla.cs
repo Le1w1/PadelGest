@@ -9,33 +9,33 @@ namespace UI.Servicios
     // Ayuda general por pantalla. No modifica el Designer.
     internal static class AyudaPantalla
     {
-        // Cada idioma tiene secciones explicitamente redactadas para usuarios no tecnicos.
-        // Formato: Titulo|Explicacion, una seccion por linea.
+        // Título ES, título EN, instrucciones ES e instrucciones EN.
+        // Cada línea es una viñeta independiente, sin secciones adicionales.
         private static readonly Dictionary<string, string[]> Textos =
             new Dictionary<string, string[]>(StringComparer.Ordinal)
         {
-            { "frmMenuPrincipal", new[] { "Inicio|Desde acá podés abrir las distintas funciones de PadelGest.\nQué podés hacer|Elegí una opción del menú para trabajar con reservas, buffet, clientes o reportes.\nTené en cuenta|Vas a ver solamente las opciones disponibles para tu cuenta.", "Home|Open the different PadelGest features from here.\nWhat you can do|Choose a menu option to manage bookings, buffet sales, customers or reports.\nGood to know|You will only see features available to your account." } },
-            { "frmLogin", new[] { "Cómo ingresar|Escribí tu usuario y contraseña.\nDespués|Presioná Ingresar para abrir el programa.\n¿No podés entrar?|Revisá los datos que escribiste. Si el problema continúa, consultá al responsable del sistema.", "How to sign in|Enter your username and password.\nNext|Select Sign in to open the program.\nHaving trouble?|Check the information you entered. If the problem continues, contact the person in charge." } },
-            { "frmCambiarClave", new[] { "Cambiar tu contraseña|Ingresá tu contraseña actual y la nueva contraseña.\nPara terminar|Confirmá la nueva contraseña y presioná Guardar.\nRecordá|Si volvés sin guardar, tu contraseña seguirá siendo la misma.", "Change your password|Enter your current password and the new one.\nTo finish|Confirm the new password and select Save.\nRemember|If you go back without saving, your password stays the same." } },
-            { "frmCambiarIdioma", new[] { "Elegir el idioma|Seleccioná Español o Inglés.\nPara terminar|Presioná Guardar para aplicar el cambio.\nRecordá|Las ayudas también aparecerán en el idioma que elijas.", "Choose a language|Select Spanish or English.\nTo finish|Select Save to apply the change.\nRemember|Help messages will also appear in your chosen language." } },
-            { "frmGestionDeUsuario", new[] { "¿Para qué sirve?|Permite administrar las personas que pueden usar el programa.\nQué podés hacer|Crear o modificar cuentas, asignar funciones y habilitar o bloquear el acceso.\nCómo empezar|Seleccioná una persona de la lista o elegí crear una cuenta nueva.", "What is this for?|Manage the people who can use the program.\nWhat you can do|Create or edit accounts, assign responsibilities and allow or restrict access.\nGetting started|Choose a person from the list or create a new account." } },
-            { "frmGestionarRolesYFamilias", new[] { "¿Para qué sirve?|Permite decidir qué opciones del programa puede utilizar cada grupo de usuarios.\nCómo usarlo|Seleccioná un grupo, revisá sus opciones y realizá los cambios necesarios.\nPara terminar|Guardá los cambios antes de salir.", "What is this for?|Choose which features each group of users can access.\nHow to use it|Select a group, review its options and make the necessary changes.\nTo finish|Save your changes before leaving." } },
-            { "frmAuditarEventos", new[] { "Consultar actividades|Esta pantalla permite ver las acciones realizadas en el programa.\nCómo buscar|Elegí los filtros que necesites y presioná Buscar.\nOtras opciones|Podés limpiar la búsqueda o guardar un informe de los resultados.", "Review activity|See actions carried out in the program.\nHow to search|Choose the filters you need and select Search.\nOther options|Clear the search or save a report of the results." } },
-            { "frmGestionarRespaldo", new[] { "Guardar una copia|Elegí una carpeta y presioná Realizar respaldo para guardar una copia de los datos.\nRecuperar una copia|Seleccioná un respaldo guardado anteriormente y elegí Restaurar.\nImportante|Restaurar reemplaza los datos actuales. Usá esta opción solamente cuando sea necesario.", "Save a copy|Choose a folder and select Back up to save a copy of your information.\nRestore a copy|Choose a previously saved backup and select Restore.\nImportant|Restoring replaces current information. Use this option only when necessary." } },
-            { "frmRepararIntegridad", new[] { "¿Cuándo usar esta pantalla?|Cuando el programa avisa que hay un problema con la información guardada.\nQué podés hacer|Intentar corregir el problema o recuperar una copia de seguridad.\nImportante|Si no sabés qué opción elegir, consultá al responsable antes de continuar.", "When should you use this screen?|When the program warns you about a problem with saved information.\nWhat you can do|Try to fix the problem or recover a backup.\nImportant|If you are unsure which option to choose, ask the person in charge before continuing." } },
-            { "frmGestionClientes", new[] { "Consultar clientes|Buscá y seleccioná una persona de la lista.\nQué podés hacer|Agregar clientes nuevos, corregir sus datos o realizar otras acciones disponibles.\nOtras opciones|Podés guardar o consultar listas de clientes cuando tengas permiso.", "Find customers|Search for and select someone from the list.\nWhat you can do|Add new customers, update their details or use other available options.\nOther options|You may save or view customer lists if you have permission." } },
-            { "frmSeleccionarCliente", new[] { "Buscar un cliente|Ingresá los ocho números del DNI.\nDespués|Elegí al cliente encontrado y confirmá para continuar.\nSi no aparece|Podés registrarlo si tu cuenta tiene esa opción habilitada.", "Find a customer|Enter the customer's eight-digit ID number.\nNext|Select the customer and confirm to continue.\nIf you cannot find them|You can register a new customer if your account allows it." } },
-            { "frmRegistrarCliente", new[] { "Agregar un cliente|Completá DNI, nombre, apellido, teléfono y correo electrónico.\nPara terminar|Revisá los datos y presioná Registrar.\nImportante|Cada cliente debe tener su propio DNI. Revisalo antes de guardar.", "Add a customer|Enter their ID number, first name, last name, phone number and email.\nTo finish|Check the details and select Register.\nImportant|Each customer must have a unique ID number. Check it before saving." } },
-            { "frmGenerarReserva", new[] { "Elegir un turno|Seleccioná la fecha, el horario y la cancha disponible.\nCompletar la reserva|Elegí al cliente y, si lo necesita, agregá paletas o pelotas.\nAntes de seguir|Revisá todos los datos y continuá con el pago.", "Choose a time slot|Select an available date, time and court.\nComplete the booking|Choose the customer and add rackets or balls if needed.\nBefore continuing|Check all details and proceed to payment." } },
-            { "frmAgregarEquipamiento", new[] { "Agregar equipamiento|Indicá cuántas paletas y pelotas necesita el cliente.\nPara terminar|Revisá las cantidades y presioná Confirmar.\nTené en cuenta|Solo podés agregar equipamiento que esté disponible.", "Add equipment|Enter how many rackets and balls the customer needs.\nTo finish|Check the quantities and select Confirm.\nGood to know|You can only add equipment that is available." } },
-            { "frmCobrarReserva", new[] { "Cobrar una reserva|Revisá el importe que debe pagar el cliente.\nPara continuar|Ingresá los datos de la tarjeta y confirmá el pago.\nImportante|Cuando el pago sea aprobado, continuá hasta completar el registro de la reserva.", "Charge a booking|Check the amount the customer needs to pay.\nTo continue|Enter the card details and confirm payment.\nImportant|Once payment is approved, continue until the booking is fully registered." } },
-            { "frmRegistrarReserva", new[] { "Finalizar la reserva|Esta pantalla permite completar una reserva que ya fue pagada.\nQué hacer|Revisá los datos y finalizá el registro.\nImportante|No cierres la operación sin registrar la reserva. Si está disponible, también podés guardar el comprobante en PDF.", "Finish the booking|Complete a booking that has already been paid for.\nWhat to do|Review the details and finish registration.\nImportant|Do not close this step without registering the booking. You may also save a PDF receipt if available." } },
-            { "frmGenerarFactura", new[] { "Preparar una venta|Seleccioná los productos del buffet y las cantidades que pidió el cliente.\nRevisar el pedido|Podés agregar, cambiar o quitar productos antes de cobrar.\nPara continuar|Comprobá el total y seguí con el pago.", "Prepare a sale|Choose the buffet products and quantities the customer requested.\nReview the order|You can add, change or remove products before charging.\nTo continue|Check the total and proceed to payment." } },
-            { "frmCobrarFactura", new[] { "Cobrar una venta|Revisá los productos y el importe total.\nPara continuar|Ingresá los datos de la tarjeta y confirmá el pago.\nDespués|El programa completará la venta y actualizará las cantidades disponibles.", "Charge a sale|Check the products and the total amount.\nTo continue|Enter the card details and confirm payment.\nAfterward|The program completes the sale and updates the available quantities." } },
-            { "frmFacturaRegistrada", new[] { "Venta finalizada|La venta del buffet ya quedó registrada.\nGuardar un comprobante|Presioná Exportar PDF si querés conservar una copia.\nPara terminar|Cerrá esta pantalla cuando hayas finalizado.", "Sale completed|The buffet sale has been recorded.\nSave a receipt|Select Export PDF if you would like to keep a copy.\nTo finish|Close this screen when you are done." } },
-            { "frmGestionProductos", new[] { "Administrar productos|Consultá los artículos y las cantidades disponibles del buffet.\nQué podés hacer|Agregar o modificar productos, cambiar su disponibilidad y reponer mercadería.\nCómo empezar|Seleccioná un producto de la lista o elegí agregar uno nuevo.", "Manage products|View buffet items and their available quantities.\nWhat you can do|Add or edit products, change availability and restock items.\nGetting started|Choose a product from the list or add a new one." } },
-            { "frmAuditarCambios", new[] { "Consultar cambios|Revisá qué datos de productos se modificaron anteriormente.\nCómo buscar|Usá los filtros para encontrar un cambio.\nOtras opciones|Si tenés permiso, podés recuperar información anterior de un producto.", "Review changes|See which product details were changed in the past.\nHow to search|Use the filters to find a change.\nOther options|If you have permission, you can restore previous product information." } },
-            { "frmReportePredictivo", new[] { "¿Para qué sirve?|Ayuda a decidir qué productos del buffet conviene reponer.\nPanorama|Muestra un resumen de las ventas y de lo que podría necesitarse durante la próxima semana.\nProductos y prioridades|Consultá las cantidades disponibles y los productos que conviene reponer primero.\nCategorías|Compará las ventas y las estimaciones entre grupos de productos.\nGuardar el informe|Usá Exportar PDF para conservar una copia con los gráficos y resultados.\nRecordá|Las cantidades futuras son estimadas. El informe no realiza compras.", "What is this for?|Helps you decide which buffet products may need restocking.\nOverview|Shows recent sales and what may be needed over the next week.\nProducts and priorities|Check available quantities and see which products should be restocked first.\nCategories|Compare sales and estimates across product groups.\nSave the report|Select Export PDF to keep a copy with charts and results.\nRemember|Future quantities are estimates. This report does not place orders." } },
+            { "frmMenuPrincipal", new[] { "Menú principal", "Main menu", "Desde este formulario podés acceder a las distintas funciones del programa.\nSeleccioná una opción del menú para trabajar con reservas, buffet, clientes o reportes.\nLas opciones disponibles dependen de tu cuenta.", "Use this screen to access the different features of the program.\nSelect a menu option to manage bookings, buffet sales, customers or reports.\nAvailable options depend on your account." } },
+            { "frmLogin", new[] { "Inicio de sesión", "Sign in", "Este formulario se utiliza para ingresar a PadelGest.\nEscribí tu usuario y contraseña y presioná el botón Ingresar.", "Use this screen to sign in to PadelGest.\nEnter your username and password and select Sign in." } },
+            { "frmCambiarClave", new[] { "Cambiar contraseña", "Change password", "Este formulario permite cambiar la contraseña de tu cuenta.\nIngresá tu contraseña actual y la nueva contraseña, confirmala y presioná Guardar.", "Use this screen to change your account password.\nEnter your current password and the new password, confirm it and select Save." } },
+            { "frmCambiarIdioma", new[] { "Cambiar idioma", "Change language", "Este formulario permite cambiar el idioma del programa.\nSeleccioná Español o Inglés y presioná Guardar.", "Use this screen to change the program language.\nSelect Spanish or English and choose Save." } },
+            { "frmGestionDeUsuario", new[] { "Gestión de usuarios", "User management", "Este formulario permite administrar las cuentas de las personas que usan el programa.\nPodés crear o modificar usuarios, asignarles funciones y habilitar o bloquear su acceso.\nSeleccioná un usuario de la lista para realizar cambios.", "Use this screen to manage the accounts of people who use the program.\nYou can create or edit users, assign roles and enable or block access.\nSelect a user from the list to make changes." } },
+            { "frmGestionarRolesYFamilias", new[] { "Gestión de roles y permisos", "Roles and permissions", "Este formulario permite elegir qué funciones puede utilizar cada grupo de usuarios.\nSeleccioná un rol o grupo, realizá los cambios necesarios y presioná Guardar.", "Use this screen to choose which features each group of users can access.\nSelect a role or group, make the changes you need and choose Save." } },
+            { "frmAuditarEventos", new[] { "Consulta de actividades", "Activity history", "Este formulario permite consultar las actividades realizadas en el programa.\nSeleccioná los filtros y presioná Buscar para ver los resultados.\nTambién podés guardar un informe de las actividades encontradas.", "Use this screen to review activities carried out in the program.\nChoose the filters and select Search to view results.\nYou can also save a report of the activities found." } },
+            { "frmGestionarRespaldo", new[] { "Copias de seguridad", "Backups", "Este formulario permite guardar una copia de seguridad de los datos del programa.\nPara crear una copia, elegí una carpeta y presioná Realizar respaldo.\nPara recuperar una copia anterior, seleccioná el archivo y presioná Restaurar. Esto reemplaza los datos actuales.", "Use this screen to save a backup copy of your program information.\nTo create a backup, choose a folder and select Back up.\nTo recover an earlier copy, choose the file and select Restore. This replaces current information." } },
+            { "frmRepararIntegridad", new[] { "Reparar información", "Repair information", "Este formulario permite solucionar problemas detectados en la información guardada.\nPodés intentar repararla o recuperar una copia de seguridad.\nSi no sabés cuál opción utilizar, consultá al responsable antes de continuar.", "Use this screen to fix problems found in saved information.\nYou can try to repair the information or restore a backup.\nIf you are unsure which option to use, ask the person in charge before continuing." } },
+            { "frmGestionClientes", new[] { "Gestión de clientes", "Customer management", "Este formulario permite consultar y administrar los clientes registrados.\nPodés buscar un cliente, agregar uno nuevo o modificar sus datos.\nTambién podés guardar o consultar una lista de clientes cuando tengas permiso.", "Use this screen to view and manage registered customers.\nYou can search for a customer, add a new one or update their details.\nYou can also save or view a customer list when permitted." } },
+            { "frmSeleccionarCliente", new[] { "Seleccionar cliente", "Select customer", "Este formulario permite encontrar al cliente que realizará la operación.\nIngresá su DNI para buscarlo y confirmá el cliente encontrado.\nSi todavía no está registrado, podés agregarlo si tenés permiso.", "Use this screen to find the customer for the current operation.\nEnter their ID number to search, then confirm the matching customer.\nIf they are not registered, you can add them when permitted." } },
+            { "frmRegistrarCliente", new[] { "Registrar cliente", "Register customer", "Este formulario permite agregar un nuevo cliente al programa.\nCompletá su DNI, nombre, apellido, teléfono y correo electrónico.\nRevisá la información y presioná Registrar.", "Use this screen to add a new customer.\nEnter their ID number, first name, last name, phone number and email.\nReview the information and select Register." } },
+            { "frmGenerarReserva", new[] { "Generar reserva", "Create booking", "Este formulario permite preparar una reserva de cancha.\nSeleccioná la fecha, el horario y la cancha disponible.\nElegí al cliente, agregá paletas o pelotas si las necesita y continuá con el pago.", "Use this screen to prepare a court booking.\nChoose an available date, time and court.\nSelect the customer, add rackets or balls if needed and continue to payment." } },
+            { "frmAgregarEquipamiento", new[] { "Agregar equipamiento", "Add equipment", "Este formulario permite agregar paletas y pelotas a una reserva.\nIndicá las cantidades que necesita el cliente y presioná Confirmar.\nSolo se puede seleccionar equipamiento disponible.", "Use this screen to add rackets and balls to a booking.\nEnter the quantities the customer needs and select Confirm.\nOnly available equipment can be selected." } },
+            { "frmCobrarReserva", new[] { "Cobrar reserva", "Charge booking", "Este formulario permite cobrar una reserva con tarjeta.\nVerificá el total, ingresá los datos de la tarjeta y confirmá el cobro.\nSi el pago se aprueba, continuá con el registro de la reserva.", "Use this screen to charge a booking by card.\nCheck the total, enter the card details and confirm payment.\nOnce payment is approved, continue to register the booking." } },
+            { "frmRegistrarReserva", new[] { "Registrar reserva", "Register booking", "Este formulario permite registrar una reserva que ya fue pagada.\nRevisá los datos y completá el registro de la reserva.\nSi está disponible, podés guardar una copia del comprobante en PDF.", "Use this screen to register a booking that has already been paid for.\nCheck the details and complete the booking registration.\nIf available, you can save a PDF copy of the receipt." } },
+            { "frmGenerarFactura", new[] { "Venta de buffet", "Buffet sale", "Este formulario permite preparar una venta de productos del buffet.\nSeleccioná los productos y las cantidades solicitadas.\nRevisá el pedido y el total antes de continuar con el cobro.", "Use this screen to prepare a buffet sale.\nSelect the products and quantities requested.\nCheck the order and total before proceeding to payment." } },
+            { "frmCobrarFactura", new[] { "Cobrar venta de buffet", "Charge buffet sale", "Este formulario permite cobrar una venta de buffet con tarjeta.\nRevisá el importe, ingresá los datos de la tarjeta y confirmá el pago.\nAl completar la venta, el programa actualiza las cantidades disponibles.", "Use this screen to charge a buffet sale by card.\nCheck the amount, enter the card details and confirm payment.\nAfter the sale, the program updates the available quantities." } },
+            { "frmFacturaRegistrada", new[] { "Factura registrada", "Registered invoice", "Este formulario muestra una venta de buffet que ya fue registrada.\nPodés guardar el comprobante en PDF mediante el botón Exportar PDF.\nCuando termines, cerrá la pantalla para finalizar.", "This screen shows a buffet sale that has already been registered.\nYou can save the receipt using the Export PDF button.\nWhen finished, close the screen." } },
+            { "frmGestionProductos", new[] { "Gestión de productos", "Product management", "Este formulario permite administrar los productos del buffet.\nPodés consultar las cantidades disponibles, agregar productos o modificar sus datos.\nSeleccioná un producto para realizar cambios o reponer mercadería.", "Use this screen to manage buffet products.\nYou can check available quantities, add products or edit their information.\nSelect a product to make changes or restock it." } },
+            { "frmAuditarCambios", new[] { "Historial de cambios", "Change history", "Este formulario permite consultar los cambios realizados en los productos.\nUtilizá los filtros para buscar un cambio y revisar sus detalles.\nSi tenés permiso, podés recuperar los datos anteriores de un producto.", "Use this screen to review changes made to products.\nUse the filters to find a change and view its details.\nIf permitted, you can restore previous product details." } },
+            { "frmReportePredictivo", new[] { "Reporte inteligente", "Smart report", "Este formulario permite consultar las ventas del buffet y estimar qué productos conviene reponer.\nEn las pestañas podés ver el resumen, los productos, las prioridades de reposición y las categorías.\nPresioná Exportar PDF para guardar una copia del informe con sus gráficos y resultados.\nLas cantidades futuras son estimaciones: el informe no realiza compras.", "Use this screen to review buffet sales and estimate which products may need restocking.\nUse the tabs to view the overview, products, restocking priorities and categories.\nSelect Export PDF to save a copy of the report with its charts and results.\nFuture quantities are estimates: the report does not place orders." } },
         };
 
         public static void Configurar(Form formulario)
@@ -69,8 +69,9 @@ namespace UI.Servicios
                 botonAyuda.MouseEnter += (_, _) => tooltip.SetToolTip(botonAyuda, TituloAyuda());
                 botonAyuda.Click += (_, _) =>
                 {
-                    string texto = Ingles() ? descripcion[1] : descripcion[0];
-                    MostrarAyuda(formulario, texto);
+                    bool ingles = Ingles();
+                    MostrarAyuda(formulario, ingles ? descripcion[1] : descripcion[0],
+                        ingles ? descripcion[3] : descripcion[2]);
 
                 };
                 formulario.Controls.Add(botonAyuda);
@@ -79,22 +80,24 @@ namespace UI.Servicios
             };
         }
 
-        // Ventana compacta, con altura calculada segun el contenido y scroll si hace falta.
-        private static void MostrarAyuda(Form propietario, string descripcion)
+        // Muestra el nombre del formulario y sus indicaciones en una ventana compacta.
+        private static void MostrarAyuda(Form propietario, string titulo, string descripcion)
         {
             bool ingles = Ingles();
-            string[] secciones = descripcion.Split(new[] { '\n' },
+            string[] puntos = descripcion.Split(new[] { '\n' },
                 StringSplitOptions.RemoveEmptyEntries);
-            const int ancho = 620;
-            const int anchoTexto = 544;
-            int altoContenido = 0;
+            const int ancho = 600;
+            const int anchoTexto = 525;
+            int altoContenido = 12;
+            using Font fuenteTitulo = new Font("Segoe UI", 15F, FontStyle.Bold);
+            using Font fuenteTexto = new Font("Segoe UI", 10F);
 
             using Form ventana = new Form
             {
                 Text = TituloAyuda(),
                 StartPosition = FormStartPosition.CenterParent,
                 BackColor = Color.White,
-                Font = new Font("Segoe UI", 10F),
+                Font = fuenteTexto,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 MinimizeBox = false,
                 MaximizeBox = false,
@@ -105,16 +108,16 @@ namespace UI.Servicios
                 Dock = DockStyle.Fill,
                 RowCount = 3,
                 ColumnCount = 1,
-                Padding = new Padding(20, 12, 20, 10)
+                Padding = new Padding(20, 10, 20, 10)
             };
-            disposicion.RowStyles.Add(new RowStyle(SizeType.Absolute, 45));
+            disposicion.RowStyles.Add(new RowStyle(SizeType.Absolute, 48));
             disposicion.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            disposicion.RowStyles.Add(new RowStyle(SizeType.Absolute, 47));
+            disposicion.RowStyles.Add(new RowStyle(SizeType.Absolute, 45));
             Label encabezado = new Label
             {
-                Text = ingles ? "HELP" : "AYUDA",
+                Text = titulo,
                 Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 15F, FontStyle.Bold),
+                Font = fuenteTitulo,
                 ForeColor = Color.FromArgb(24, 70, 138),
                 TextAlign = ContentAlignment.MiddleLeft
             };
@@ -125,31 +128,23 @@ namespace UI.Servicios
                 BorderStyle = BorderStyle.None,
                 BackColor = Color.White,
                 ForeColor = Color.FromArgb(35, 44, 60),
-                Font = new Font("Segoe UI", 10F),
+                Font = fuenteTexto,
                 ScrollBars = RichTextBoxScrollBars.Vertical,
                 DetectUrls = false,
                 TabStop = false
             };
-            using Font fuenteTitulo = new Font("Segoe UI", 10F, FontStyle.Bold);
-            using Font fuenteTexto = new Font("Segoe UI", 10F);
-            foreach (string seccion in secciones)
+            foreach (string punto in puntos)
             {
-                string[] partes = seccion.Split(new[] { '|' }, 2);
-                if (partes.Length != 2) continue;
-                contenido.SelectionFont = fuenteTitulo;
-                contenido.SelectionColor = Color.FromArgb(24, 70, 138);
-                contenido.AppendText(partes[0] + Environment.NewLine);
-                contenido.SelectionFont = fuenteTexto;
-                contenido.SelectionColor = Color.FromArgb(35, 44, 60);
-                contenido.AppendText(partes[1] + Environment.NewLine + Environment.NewLine);
-                int altoTexto = TextRenderer.MeasureText(partes[1], fuenteTexto,
-                    new Size(anchoTexto, 1000),
+                string linea = "•  " + punto;
+                contenido.AppendText(linea + Environment.NewLine + Environment.NewLine);
+                int altura = TextRenderer.MeasureText(linea, fuenteTexto,
+                    new Size(anchoTexto, 2000),
                     TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height;
-                altoContenido += 23 + Math.Max(23, altoTexto) + 12;
+                altoContenido += Math.Max(23, altura) + 10;
             }
-
             contenido.SelectionStart = 0;
             contenido.ScrollToCaret();
+
             Button cerrar = new Button
             {
                 Text = ingles ? "Close" : "Entendido",
@@ -166,11 +161,12 @@ namespace UI.Servicios
             disposicion.Controls.Add(contenido, 0, 1);
             disposicion.Controls.Add(cerrar, 0, 2);
             ventana.Controls.Add(disposicion);
-            System.Drawing.Rectangle area = Screen.FromControl(propietario).WorkingArea;
-            int altoMaximo = Math.Max(250, area.Height - 80);
-            int altoDeseado = altoContenido + 45 + 47 + 22 + 38;
+
+            Rectangle area = Screen.FromControl(propietario).WorkingArea;
+            int altoMaximo = Math.Max(230, area.Height - 80);
+            int altoDeseado = altoContenido + 48 + 45 + 20 + 32;
             ventana.ClientSize = new Size(ancho, Math.Min(altoMaximo,
-                Math.Max(215, altoDeseado)));
+                Math.Max(180, altoDeseado)));
             ventana.AcceptButton = cerrar;
             ventana.ShowDialog(propietario);
         }
