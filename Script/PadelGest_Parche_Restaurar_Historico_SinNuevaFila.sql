@@ -10,6 +10,8 @@
 -- 3. Verificar que COUNT(*) no aumento, IdCambio/FechaHora no cambiaron,
 --    la version elegida tiene Act=1 y el producto actual coincide.
 -- 4. Modificar normalmente el precio: debe crear una version nueva.
+USE [PadelGestDB];
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
