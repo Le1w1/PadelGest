@@ -26,6 +26,14 @@ namespace BLL
             return _productoDAL.ObtenerProductosActivos();
         }
 
+        // Consulta de productos activos para el filtro de la bitacora de cambios.
+        // Se utiliza el permiso de gestion, sin habilitar operaciones de venta.
+        public List<ProductoBE> ObtenerProductosActivosParaAuditoria()
+        {
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            return _productoDAL.ObtenerProductosActivos();
+        }
+
         // El mantenimiento de productos requiere un permiso independiente de la venta.
         // La consulta tambien puede utilizar BUF_CONSULTAR_STOCK.
         public List<ProductoBE> ObtenerTodos()
