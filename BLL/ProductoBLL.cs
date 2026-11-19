@@ -72,6 +72,24 @@ namespace BLL
                 SM.Instancia.UsuarioActual.NombreUsuario);
         }
 
+        // Guarda los datos del producto y suma, si corresponde, unidades de stock
+        // en una sola transaccion y con un unico registro historico.
+        public void ModificarProductoYReponer(int codigo, string nombre, string categoria,
+            decimal precio, int stockMinimo, int cantidadReponer)
+        {
+            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            if (codigo <= 0)
+                throw new Exception(T("Errores.Buffet.CodigoProductoInvalido"));
+            ValidarDatos(nombre, categoria, precio, stockMinimo);
+            if (cantidadReponer < 0)
+                throw new ArgumentException("Las unidades a agregar no pueden ser negativas.");
+
+            _productoDAL.ModificarProductoYReponer(codigo, nombre.Trim(), categoria.Trim(),
+                precio, stockMinimo, cantidadReponer,
+                SM.Instancia.UsuarioActual.IdUsuario,
+                SM.Instancia.UsuarioActual.NombreUsuario);
+        }
+
         public void CambiarEstado(int codigo, bool activar)
         {
             SM.Instancia.RequierePermiso("PRO_GESTIONAR");
