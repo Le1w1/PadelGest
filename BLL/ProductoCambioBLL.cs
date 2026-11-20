@@ -6,7 +6,7 @@ using Servicios;
 
 namespace BLL
 {
-    // El permiso PRO_GESTIONAR es el mismo que protege el Maestro de Productos.
+    // La auditoria requiere un permiso independiente del Maestro de Productos.
     public class ProductoCambioBLL
     {
         private readonly ProductoCambioDAL _productoCambioDAL = new ProductoCambioDAL();
@@ -17,7 +17,7 @@ namespace BLL
         // El formulario debe pedir confirmacion antes de invocar este metodo.
         public void RestaurarVersion(long idCambio)
         {
-            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            SM.Instancia.RequierePermiso("PRO_AUDITAR_CAMBIOS");
             if (idCambio <= 0)
                 throw new ArgumentException("Debe seleccionar una version valida.");
 
@@ -38,7 +38,7 @@ namespace BLL
 
         public List<ProductoCambioBE> ConsultarCambios(int? codigoProducto = null, string nombre = "",DateTime? fechaDesde = null, DateTime? fechaHasta = null,bool soloVigentes = false)
         {
-            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            SM.Instancia.RequierePermiso("PRO_AUDITAR_CAMBIOS");
             if (codigoProducto.HasValue && codigoProducto.Value <= 0)
                 throw new ArgumentException("El codigo de producto debe ser positivo.");
 
