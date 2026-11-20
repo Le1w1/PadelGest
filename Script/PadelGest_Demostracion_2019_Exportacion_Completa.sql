@@ -645,7 +645,7 @@ INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', N'd1cb23
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', N'32b5356d0241e9fa61aec0d6b60e4ce854b7b877378c67761cb47c05d0cae856')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', N'b4a4f9d950d5fbb6f84ca498a7f9c67bf4085e9f86b168a522282789a79dbb8d')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', N'9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', N'94b24e538cf64749f9fd4500c42d232624c46a838ec32c6bc09fb6735856a89a')
+INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', N'cb104242878ba00aa9af524102767f0b92eee923379d93cf0ab1666f411773d2')
 GO
 SET IDENTITY_INSERT [dbo].[Equipamiento] ON 
 
@@ -1003,7 +1003,7 @@ SET IDENTITY_INSERT [dbo].[Usuario] ON
 
 INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Rodriguez', N'46631736', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 1, 1, 1, N'94ef1989755456eb707b9131fabc1b94669af3268fd46d6ea60859fe9f678c23')
 INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (2, N'Leonel', N'Mariolani', N'11113333', N'dueño@padelgest.com', N'dueño11113333', N'9d3c8c6731e909c1d2319294c0466d66ffd0e21d04532f5c8a2776b5d9c33acf', 1, 0, 0, 1, 1, 4, N'89570df43f1004c1addcb19e5bc5d69fb490221b84eadf529129ba28b755e130')
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (3, N'Lucas', N'Pereyra', N'22224444', N'Vendedor@padelgest.com', N'vendedor22224444', N'c7590093354662bb25b897f60ee09c54a9bc5f31e22c495ba629258dd3ecf906', 1, 0, 0, 1, 1, 2, N'e315dfae6467463d582df5bceede27926f20775be04b775d81ace02a1295c9eb')
+INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (3, N'Lucas', N'Pereyra', N'22224444', N'Vendedor@padelgest.com', N'vendedor22224444', N'3f941ccc5c5773b0a3b0e831aabb9ead199e7b9d001e56178d7495d3413e1f44', 1, 0, 0, 1, 1, 2, N'1b9c734ff6e0f070d6ed4348b580eb3325dc6fe9f2270285cc1767657ea0845d')
 SET IDENTITY_INSERT [dbo].[Usuario] OFF
 GO
 SET ANSI_PADDING ON
