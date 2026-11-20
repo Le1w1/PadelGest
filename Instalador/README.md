@@ -39,6 +39,8 @@ Importante: no subir ni ejecutar una carpeta `publish` de CineGest. Publicar la 
 - El respaldo previo queda guardado en la carpeta de backups de SQL Server. Conservarlo si se necesita recuperar los datos anteriores.
 - Una falla durante la creacion de la nueva base, despues del `DROP DATABASE`, puede dejar la instalacion sin una base operativa. Recuperar el backup verificado antes de reintentar.
 
+- Al finalizar correctamente la instalacion completa, el asistente muestra las credenciales iniciales del unico usuario creado: `admin1@padelgest.com` / `Rodriguez46631736`. No se muestran al reinstalar.
+
 **Reinstalar (solo programa):**
 - Exige que `PadelGestDB` exista, sea accesible y contenga al menos las tablas `Usuario`, `Cliente` y `Producto`.
 - No ejecuta el script de instalacion, ni `BACKUP`, `DROP`, `ALTER`, `INSERT` o `UPDATE` sobre la base.
