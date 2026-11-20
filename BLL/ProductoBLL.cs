@@ -30,7 +30,7 @@ namespace BLL
         // Se utiliza el permiso de gestion, sin habilitar operaciones de venta.
         public List<ProductoBE> ObtenerProductosActivosParaAuditoria()
         {
-            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            SM.Instancia.RequierePermiso("PRO_AUDITAR_CAMBIOS");
             return _productoDAL.ObtenerProductosActivos();
         }
 
