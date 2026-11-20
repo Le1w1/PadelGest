@@ -267,6 +267,23 @@ begin
       'el acceso a PadelGestDB y los permisos de tu usuario.';
 end;
 
+// Mostrar credenciales iniciales solamente tras una instalacion completa
+// exitosa. La reinstalacion no crea usuarios y no debe mostrar estas claves.
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if (CurStep = ssPostInstall) and (PaginaModo.SelectedValueIndex = 0) and
+     (not WizardSilent) then
+  begin
+    MsgBox(
+      'INSTALACION COMPLETADA - ACCESO INICIAL' + #13#10 + #13#10 +
+      'Se creo el usuario administrador de PadelGest.' + #13#10 + #13#10 +
+      'Email: admin1@padelgest.com' + #13#10 +
+      'Contrasena: Rodriguez46631736' + #13#10 + #13#10 +
+      'Guarda estas credenciales para iniciar sesion.',
+      mbInformation, MB_OK);
+  end;
+end;
+
 // ModalResult pertenece a TNewButton, no a TSetupForm.
 // ShowModal devuelve el ModalResult del boton elegido.
 procedure AgregarBoton(Caption: String; X, Ancho, ResultadoModal: Integer);
