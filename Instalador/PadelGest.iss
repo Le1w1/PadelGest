@@ -258,7 +258,7 @@ begin
     end;
     ExtractTemporaryFile('PadelGest_Instalacion_Limpia_SQL2019.sql');
     ResultadoSQL := EjecutarHelper('Instalar', ServidorSeleccionado,
-      ExpandConstant('{tmp}\\PadelGest_Instalacion_Limpia_SQL2019.sql'));
+      ExpandConstant('{tmp}\PadelGest_Instalacion_Limpia_SQL2019.sql'));
   end;
 
   if ResultadoSQL <> 0 then
