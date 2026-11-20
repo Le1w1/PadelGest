@@ -121,7 +121,7 @@ namespace UI
             generarCarritoToolStripMenuItem.Visible = buffet;
             reportePredictivoToolStripMenuItem.Visible = reportePredictivo;
             gestionarProductosToolStripMenuItem.Visible = maestroProductos;
-            auditarCambiosToolStripMenuItem.Visible = maestroProductos;
+            auditarCambiosToolStripMenuItem.Visible = sm.TienePermiso("PRO_AUDITAR_CAMBIOS");
             gestionarClientesToolStripMenuItem.Visible = maestroClientes;
 
             RecepcionistaToolStripMenuItem.Visible = reservas;
