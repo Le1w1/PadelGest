@@ -140,7 +140,7 @@ begin
     'Conexion con SQL Server', 'Selecciona la instancia de la base de datos',
     'La instancia seleccionada debe ser local. SQL Server y sqlcmd deben estar ' +
     'instalados y accesibles con tu cuenta de Windows.', True, False);
-  PaginaServidor.Add('SQL Server Express (localhost\\SQLEXPRESS)');
+  PaginaServidor.Add('SQL Server Express (localhost\SQLEXPRESS)');
   PaginaServidor.Add('SQL Server predeterminado (.)');
   PaginaServidor.SelectedValueIndex := 0;
   if RegQueryStringValue(HKCU,
@@ -163,7 +163,7 @@ begin
   ServidorConfirmado := '';
   ModoConfirmado := -1;
   ExtractTemporaryFile('OperacionesSQL.ps1');
-  Servidor := ServidorSeleccionado();
+  Servidor := ServidorSeleccionado;
   EstadoBase := EjecutarHelper('Consultar', Servidor, '');
 
   if (EstadoBase <> 10) and (EstadoBase <> 11) then
@@ -221,7 +221,7 @@ var
   EstadoBase, ResultadoSQL: Integer;
 begin
   Result := '';
-  if (ServidorConfirmado <> ServidorSeleccionado()) or
+  if (ServidorConfirmado <> ServidorSeleccionado) or
      (ModoConfirmado <> PaginaModo.SelectedValueIndex) then
   begin
     Result := 'Se modifico la seleccion de instalacion. Vuelve a la pantalla ' +
@@ -230,7 +230,7 @@ begin
   end;
 
   ExtractTemporaryFile('OperacionesSQL.ps1');
-  EstadoBase := EjecutarHelper('Consultar', ServidorSeleccionado(), '');
+  EstadoBase := EjecutarHelper('Consultar', ServidorSeleccionado, '');
   if (EstadoBase <> 10) and (EstadoBase <> 11) then
   begin
     Result := 'No se pudo verificar el estado de PadelGestDB. No se instalaron archivos.';
@@ -244,7 +244,7 @@ begin
       Result := 'La base ya no existe. La reinstalacion solo actualiza el programa.';
       Exit;
     end;
-    ResultadoSQL := EjecutarHelper('Reinstalar', ServidorSeleccionado(), '');
+    ResultadoSQL := EjecutarHelper('Reinstalar', ServidorSeleccionado, '');
   end
   else
   begin
@@ -257,7 +257,7 @@ begin
       Exit;
     end;
     ExtractTemporaryFile('PadelGest_Instalacion_Limpia_SQL2019.sql');
-    ResultadoSQL := EjecutarHelper('Instalar', ServidorSeleccionado(),
+    ResultadoSQL := EjecutarHelper('Instalar', ServidorSeleccionado,
       ExpandConstant('{tmp}\\PadelGest_Instalacion_Limpia_SQL2019.sql'));
   end;
 
