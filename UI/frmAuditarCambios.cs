@@ -66,7 +66,7 @@ namespace UI
             SM.Instancia.Suscribir(this);
             try
             {
-                SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+                SM.Instancia.RequierePermiso("PRO_AUDITAR_CAMBIOS");
                 CargarProductosActivos();
             }
             catch (Exception ex)
@@ -218,7 +218,7 @@ namespace UI
 
         private void dgvCambios_SelectionChanged(object sender, EventArgs e)
         {
-            btnRestaurar.Enabled =dgvCambios.CurrentRow?.Selected == true &&dgvCambios.CurrentRow.DataBoundItem is ProductoCambioBE cambio &&!cambio.Act && SM.Instancia.TienePermiso("PRO_GESTIONAR");
+            btnRestaurar.Enabled =dgvCambios.CurrentRow?.Selected == true &&dgvCambios.CurrentRow.DataBoundItem is ProductoCambioBE cambio &&!cambio.Act && SM.Instancia.TienePermiso("PRO_AUDITAR_CAMBIOS");
         }
 
         private void btnRestaurar_Click(object sender, EventArgs e)
