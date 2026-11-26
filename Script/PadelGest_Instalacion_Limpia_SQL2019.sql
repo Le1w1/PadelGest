@@ -608,7 +608,9 @@ GO
 -- registra automaticamente su primera version en dbo.Producto_C.
 GO
 SET IDENTITY_INSERT [dbo].[Usuario] ON;
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Inicial', N'99999999', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 1, 1, 1, N'a0aaad8687f78ad82c5ab61b29cfc3a029d0af07558072b50ebaee15d2d82d69')
+INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Rodriguez', N'46631736', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 0, 1, 1, N'a41ee631585a381fadea84b7fe2d32db3e765bb08879a1a1cc2d26e580459102')
+INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (2, N'Leonel', N'Mariolani', N'11113333', N'supervisor@padelgest.com', N'dueño11113333', N'9d3c8c6731e909c1d2319294c0466d66ffd0e21d04532f5c8a2776b5d9c33acf', 1, 0, 0, 0, 1, 4, N'2cf54c4e8ec6a0c28d345a125767ae23beaa6fac2c071e9454d1cd9531b7dfd2')
+INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (3, N'Lucas', N'Pereyra', N'22224444', N'Vendedor@padelgest.com', N'vendedor22224444', N'3f941ccc5c5773b0a3b0e831aabb9ead199e7b9d001e56178d7495d3413e1f44', 1, 0, 0, 0, 1, 2, N'89cb4e221d852f16f00afa63ce6447868b38083e119b4176c1b5c02ca6eab7b3')
 SET IDENTITY_INSERT [dbo].[Usuario] OFF;
 GO
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cancha', '91129657cbb5230efd409301669fd05b677f7331542c2192547bd4da1b7bd1bd');
@@ -629,7 +631,7 @@ INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', 'd1
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', '32b5356d0241e9fa61aec0d6b60e4ce854b7b877378c67761cb47c05d0cae856');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', '8269a31763bc4f2080e492cb816d67802190cc2bca0335d19114a8f60dde3bd4');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', '9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', '043d767ba5095982bf68a31b3335097f338526cee72669584b4f34e035eefa30');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', '520a02749a026cf74181912bc4b5927a9d80ee7fe15e7000b407db5766146820');
 GO
 SET ANSI_PADDING ON
 GO
