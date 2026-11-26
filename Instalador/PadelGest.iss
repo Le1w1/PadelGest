@@ -1,6 +1,4 @@
-; PadelGest - instalador/reinstalador basado en CineGest.
-; Requiere Windows x64, SQL Server 2019+ y sqlcmd (Windows Authentication).
-; Instalar crea una BD nueva (con reemplazo confirmado); Reinstalar conserva la BD.
+
 #define AppName "PadelGest"
 #define AppVersion "1.0"
 #define AppExe "UI.exe"
@@ -57,6 +55,7 @@ var
   PaginaModo: TInputOptionWizardPage;
   PaginaServidor: TInputOptionWizardPage;
   ReemplazoConfirmado: Boolean;
+  CarpetaRespaldoConfirmada: String;
   ServidorConfirmado: String;
   ModoConfirmado: Integer;
   VentanaEleccion: TSetupForm;
@@ -95,12 +94,27 @@ begin
   if RutaSQL <> '' then
     Parametros := Parametros + ' -ScriptSQL "' + RutaSQL + '"';
   if (Accion = 'Instalar') and ReemplazoConfirmado then
-    Parametros := Parametros + ' -PermitirReemplazo';
+    Parametros := Parametros + ' -PermitirReemplazo -ArchivoDestinoRespaldo "' +
+      ExpandConstant('{tmp}\PadelGestBackupDestino.txt') + '"';
   if Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'),
           Parametros, '', SW_HIDE, ewWaitUntilTerminated, Codigo) then
     Result := Codigo
   else
     Result := -1;
+end;
+
+function GuardarDestinoRespaldo(Carpeta: String): Boolean;
+var
+  Lineas: TArrayOfString;
+  ArchivoDestino: String;
+begin
+  ArchivoDestino := ExpandConstant('{tmp}\PadelGestBackupDestino.txt');
+  DeleteFile(ArchivoDestino);
+  SetArrayLength(Lineas, 1);
+  Lineas[0] := Carpeta;
+  // La ruta elegida nunca se concatena en la linea de comandos. Se guarda
+  // como UTF-8 en un archivo temporal cuyo nombre controla el instalador.
+  Result := SaveStringsToUTF8File(ArchivoDestino, Lineas, False);
 end;
 
 function EjecutarHelperDesinstalacion(Accion, Servidor: String): Integer;
@@ -122,6 +136,7 @@ var
   EntornoGuardado: String;
 begin
   ReemplazoConfirmado := False;
+  CarpetaRespaldoConfirmada := '';
   ServidorConfirmado := '';
   ModoConfirmado := -1;
 
@@ -152,7 +167,7 @@ end;
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   EstadoBase: Integer;
-  Servidor: String;
+  Servidor, CarpetaElegida: String;
 begin
   Result := True;
   if CurPageID <> PaginaServidor.ID then
@@ -160,6 +175,7 @@ begin
 
   // No se modifica ni se elimina ninguna BD en esta comprobacion.
   ReemplazoConfirmado := False;
+  CarpetaRespaldoConfirmada := '';
   ServidorConfirmado := '';
   ModoConfirmado := -1;
   ExtractTemporaryFile('OperacionesSQL.ps1');
@@ -202,12 +218,36 @@ begin
       'Si continuas con INSTALAR, se eliminara la base actual y se creara ' +
       'una nueva. Se perderan los usuarios, clientes, reservas, productos, ' +
       'ventas e historiales actuales.' + #13#10 +
-      'Antes de reemplazarla se generara y verificara un respaldo .bak ' +
-      'en la carpeta predeterminada de SQL Server.' + #13#10 + #13#10 +
+      'Antes de reemplazarla deberas elegir una carpeta. Se generara y ' +
+      'verificara alli un respaldo .bak.' + #13#10 + #13#10 +
       '¿Confirmas que deseas REEMPLAZAR la base de datos existente?',
       mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
     if not Result then
       Exit;
+
+    MsgBox(
+      'Selecciona la carpeta donde se guardara el respaldo .bak.' + #13#10 +
+      'SQL Server debe tener permiso de escritura en esa carpeta.' + #13#10 +
+      'Si cancelas o el respaldo falla, la base existente no se eliminara.',
+      mbInformation, MB_OK);
+    CarpetaElegida := '';
+    if not BrowseForFolder('Destino del respaldo de PadelGestDB',
+      CarpetaElegida, True) then
+    begin
+      MsgBox('Se cancelo la seleccion de la carpeta. No se reemplazara la base.',
+        mbInformation, MB_OK);
+      Result := False;
+      Exit;
+    end;
+    if (CarpetaElegida = '') or (not DirExists(CarpetaElegida)) then
+    begin
+      MsgBox('La carpeta seleccionada no existe. No se reemplazara la base.',
+        mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+
+    CarpetaRespaldoConfirmada := CarpetaElegida;
     ReemplazoConfirmado := True;
   end;
 
@@ -256,9 +296,26 @@ begin
         'su reemplazo antes de continuar con Instalar.';
       Exit;
     end;
+    if EstadoBase = 10 then
+    begin
+      if (CarpetaRespaldoConfirmada = '') or
+         (not DirExists(CarpetaRespaldoConfirmada)) then
+      begin
+        Result := 'La carpeta elegida para el respaldo ya no esta disponible. ' +
+          'Retrocede y selecciona otra carpeta. La base no fue modificada.';
+        Exit;
+      end;
+      if not GuardarDestinoRespaldo(CarpetaRespaldoConfirmada) then
+      begin
+        Result := 'No se pudo preparar de forma segura el destino del respaldo. ' +
+          'La base no fue modificada.';
+        Exit;
+      end;
+    end;
     ExtractTemporaryFile('PadelGest_Instalacion_Limpia_SQL2019.sql');
     ResultadoSQL := EjecutarHelper('Instalar', ServidorSeleccionado,
       ExpandConstant('{tmp}\PadelGest_Instalacion_Limpia_SQL2019.sql'));
+    DeleteFile(ExpandConstant('{tmp}\PadelGestBackupDestino.txt'));
   end;
 
   if ResultadoSQL <> 0 then

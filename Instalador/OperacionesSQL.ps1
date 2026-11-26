@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory=$true)][ValidateSet('Consultar','Instalar','Reinstalar','Eliminar','BackupEliminar')][string]$Accion,
     [Parameter(Mandatory=$true)][ValidateSet('.','localhost\SQLEXPRESS')][string]$Servidor,
     [string]$ScriptSQL = '',
+    [string]$ArchivoDestinoRespaldo = '',
     [switch]$PermitirReemplazo
 )
 $ErrorActionPreference = 'Stop'
@@ -57,15 +58,35 @@ try {
                 throw 'Ya existe PadelGestDB. No se permite reemplazarla sin confirmacion explicita del asistente.'
             }
 
-            # Preservar una copia recuperable ANTES de eliminar la base.
-            # El servidor es local y elegimos la carpeta predeterminada de SQL Server.
-            $rutaRespaldo = (Ejecutar-Sql "SET NOCOUNT ON; SELECT CONVERT(nvarchar(4000), SERVERPROPERTY('InstanceDefaultBackupPath'));").Trim()
-            if ([string]::IsNullOrWhiteSpace($rutaRespaldo)) {
-                throw 'No se pudo obtener la carpeta predeterminada de backups de SQL Server. Se conserva la base.'
+            # La carpeta elegida no se recibe como texto en la linea de comandos:
+            # Inno Setup la escribe en UTF-8 en un archivo temporal controlado.
+            if ([string]::IsNullOrWhiteSpace($ArchivoDestinoRespaldo) -or
+                -not (Test-Path -LiteralPath $ArchivoDestinoRespaldo -PathType Leaf)) {
+                throw 'No se recibio de forma valida la carpeta elegida para el respaldo. Se conserva la base.'
             }
+
+            $carpetaRespaldo = [string](Get-Content -LiteralPath $ArchivoDestinoRespaldo -Encoding UTF8 | Select-Object -First 1)
+            if ([string]::IsNullOrWhiteSpace($carpetaRespaldo)) {
+                throw 'La carpeta elegida para el respaldo esta vacia. Se conserva la base.'
+            }
+            try {
+                $rutaRespaldo = [System.IO.Path]::GetFullPath($carpetaRespaldo)
+            }
+            catch {
+                throw 'La carpeta elegida para el respaldo no es una ruta valida. Se conserva la base.'
+            }
+            if (-not [System.IO.Path]::IsPathRooted($rutaRespaldo) -or
+                -not (Test-Path -LiteralPath $rutaRespaldo -PathType Container)) {
+                throw 'La carpeta elegida para el respaldo no existe o no es una ruta absoluta. Se conserva la base.'
+            }
+
             $archivoRespaldo = Join-Path $rutaRespaldo ('PadelGestDB_AntesDeInstalar_' + (Get-Date -Format 'yyyyMMdd_HHmmss') + '_' + [guid]::NewGuid().ToString('N') + '.bak')
             $sqlArchivo = $archivoRespaldo.Replace("'", "''")
             Ejecutar-Sql "BACKUP DATABASE [$base] TO DISK = N'$sqlArchivo' WITH COPY_ONLY, CHECKSUM;" | Out-Null
+            if (-not (Test-Path -LiteralPath $archivoRespaldo -PathType Leaf) -or
+                (Get-Item -LiteralPath $archivoRespaldo).Length -le 0) {
+                throw 'SQL Server indico que termino el backup, pero no se encontro un archivo .bak valido. Se conserva la base.'
+            }
             Ejecutar-Sql "RESTORE VERIFYONLY FROM DISK = N'$sqlArchivo' WITH CHECKSUM;" | Out-Null
             Write-Output "Respaldo SQL verificado en: $archivoRespaldo"
 
