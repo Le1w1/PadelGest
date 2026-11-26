@@ -39,7 +39,7 @@ Importante: no subir ni ejecutar una carpeta `publish` de CineGest. Publicar la 
 - El respaldo previo queda guardado en la carpeta de backups de SQL Server. Conservarlo si se necesita recuperar los datos anteriores.
 - Una falla durante la creacion de la nueva base, despues del `DROP DATABASE`, puede dejar la instalacion sin una base operativa. Recuperar el backup verificado antes de reintentar.
 
-- Al finalizar correctamente la instalacion completa, el asistente muestra las credenciales del administrador inicial: `admin1@padelgest.com` / `Rodriguez46631736`. La base tambien incluye usuarios de demostracion para los roles Supervisor y Vendedor de Buffet, con sus permisos y DVH/DVV correspondientes. Las credenciales no se muestran al reinstalar.
+- Al finalizar correctamente la instalacion completa, el asistente muestra las credenciales del administrador inicial: `admin1@padelgest.com` / `Rodriguez46631736`. La instalacion limpia crea unicamente al administrador; los roles Supervisor y Vendedor de Buffet y sus permisos quedan disponibles para asignarlos a usuarios creados posteriormente. El script de demostracion si incluye usuarios adicionales. Las credenciales no se muestran al reinstalar.
 
 **Reinstalar (solo programa):**
 - Exige que `PadelGestDB` exista, sea accesible y contenga al menos las tablas `Usuario`, `Cliente` y `Producto`.
