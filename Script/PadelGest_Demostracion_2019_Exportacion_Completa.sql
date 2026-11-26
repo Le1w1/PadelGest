@@ -638,7 +638,7 @@ INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia_Famili
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Idioma', N'b8206deae9aaca74a25998ec9d26c6b2b41fdf430ccc455979a8aed7a298a234')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple', N'af6008fbd952c323fa30abdd2116fa5565f0feed87b967afc09efe275e28ee13')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple_Familia', N'f1cf327dc70b0c1b359b6acbf39448b57883f5ec01ef7bb011d86214cdb56711')
-INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', N'f50c0f3d19196e16ad5e1e72f3b094a3288912fcd4850ad461d96fba0b40accf')
+INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', N'5951b72acdcd926b13387e508cd59921894849a1d6fe6e4d1ceb575901888e8a')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', N'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 INSERT [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', N'd1cb232072612a6fabd52d2c409c777956f9c95be7668a971e4dcd13c97ec2ea')
@@ -924,7 +924,6 @@ INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitari
 INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (29, N'Galletitas Toddy', N'Snacks', CAST(2400.00 AS Decimal(12, 2)), 6, 5, 1, N'bea57c69f0a31f93e72d70d5ef4f658ea7731d9e7841d721dd204b5bbab586d4')
 INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (30, N'Coca Cola', N'Bebidas', CAST(2100.00 AS Decimal(12, 2)), 10, 5, 1, N'8e6dcacd7008d9dbae7e47d3d0f47aa56e10bc36bb3777e1058650142640ce5d')
 INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (33, N'Gaseosa Pepsi', N'Bebidas', CAST(3100.00 AS Decimal(12, 2)), 9, 5, 1, N'ec267048b8d5c1d1384790cf628dbe2a86b04791f0f4fc87836672a56edd8b51')
-INSERT [dbo].[Producto] ([CodigoProducto], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [Activo], [DVH]) VALUES (34, N'Prueba', N'Bebidas', CAST(2000.00 AS Decimal(12, 2)), 20, 5, 1, N'8748bb097e7f71aec345fbe793b5cdbbadf0e3d0ef525f82e5ce7ef3eb6e92c9')
 SET IDENTITY_INSERT [dbo].[Producto] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Producto_C] ON 
@@ -959,7 +958,6 @@ INSERT [dbo].[Producto_C] ([IdCambio], [CodigoProducto], [FechaHora], [Nombre], 
 INSERT [dbo].[Producto_C] ([IdCambio], [CodigoProducto], [FechaHora], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [ActivoProducto], [Act]) VALUES (29, 29, CAST(N'2026-11-09T12:35:34.1520000' AS DateTime2), N'Galletitas Toddy', N'Snacks', CAST(2400.00 AS Decimal(12, 2)), 6, 5, 1, 1)
 INSERT [dbo].[Producto_C] ([IdCambio], [CodigoProducto], [FechaHora], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [ActivoProducto], [Act]) VALUES (30, 30, CAST(N'2026-11-09T12:35:34.1520000' AS DateTime2), N'Coca Cola', N'Bebidas', CAST(2100.00 AS Decimal(12, 2)), 10, 5, 1, 1)
 INSERT [dbo].[Producto_C] ([IdCambio], [CodigoProducto], [FechaHora], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [ActivoProducto], [Act]) VALUES (31, 33, CAST(N'2026-11-09T12:35:34.1520000' AS DateTime2), N'Gaseosa Pepsi', N'Bebidas', CAST(3100.00 AS Decimal(12, 2)), 9, 5, 1, 1)
-INSERT [dbo].[Producto_C] ([IdCambio], [CodigoProducto], [FechaHora], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [ActivoProducto], [Act]) VALUES (32, 34, CAST(N'2026-11-09T12:35:34.1520000' AS DateTime2), N'Prueba', N'Bebidas', CAST(2000.00 AS Decimal(12, 2)), 20, 5, 1, 1)
 INSERT [dbo].[Producto_C] ([IdCambio], [CodigoProducto], [FechaHora], [Nombre], [Categoria], [PrecioUnitario], [StockDisponible], [StockMinimo], [ActivoProducto], [Act]) VALUES (33, 3, CAST(N'2026-11-09T12:43:21.5900000' AS DateTime2), N'Agua con gas 500 ml', N'Bebidas', CAST(1600.00 AS Decimal(12, 2)), 10, 4, 1, 1)
 SET IDENTITY_INSERT [dbo].[Producto_C] OFF
 GO
@@ -1601,22 +1599,22 @@ BEGIN TRY
      CodigoAutorizacion, DVH)
     VALUES
     (142, N'DEMO-EX-0142', N'41000001', 3, CAST(N'2026-10-30T09:00:00.0000000' AS datetime2(7)), CAST(5800.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T09:00:00.0000000' AS datetime2(7)), N'AUT-EX-142', NULL),
-    (143, N'DEMO-EX-0143', N'41000002', 3, CAST(N'2026-10-30T11:00:00.0000000' AS datetime2(7)), CAST(21100.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T11:00:00.0000000' AS datetime2(7)), N'AUT-EX-143', NULL),
+    (143, N'DEMO-EX-0143', N'41000002', 3, CAST(N'2026-10-30T11:00:00.0000000' AS datetime2(7)), CAST(32700.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T11:00:00.0000000' AS datetime2(7)), N'AUT-EX-143', NULL),
     (144, N'DEMO-EX-0144', N'41000003', 3, CAST(N'2026-10-30T13:00:00.0000000' AS datetime2(7)), CAST(6100.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T13:00:00.0000000' AS datetime2(7)), N'AUT-EX-144', NULL),
     (145, N'DEMO-EX-0145', N'41000004', 3, CAST(N'2026-10-30T15:00:00.0000000' AS datetime2(7)), CAST(9000.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T15:00:00.0000000' AS datetime2(7)), N'AUT-EX-145', NULL),
     (146, N'DEMO-EX-0146', N'41000005', 3, CAST(N'2026-10-30T17:00:00.0000000' AS datetime2(7)), CAST(25100.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T17:00:00.0000000' AS datetime2(7)), N'AUT-EX-146', NULL),
-    (147, N'DEMO-EX-0147', N'41000006', 3, CAST(N'2026-10-30T19:00:00.0000000' AS datetime2(7)), CAST(8500.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T19:00:00.0000000' AS datetime2(7)), N'AUT-EX-147', NULL),
-    (148, N'DEMO-EX-0148', N'41000007', 3, CAST(N'2026-10-31T09:00:00.0000000' AS datetime2(7)), CAST(16600.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T09:00:00.0000000' AS datetime2(7)), N'AUT-EX-148', NULL),
+    (147, N'DEMO-EX-0147', N'41000006', 3, CAST(N'2026-10-30T19:00:00.0000000' AS datetime2(7)), CAST(20100.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-30T19:00:00.0000000' AS datetime2(7)), N'AUT-EX-147', NULL),
+    (148, N'DEMO-EX-0148', N'41000007', 3, CAST(N'2026-10-31T09:00:00.0000000' AS datetime2(7)), CAST(28200.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T09:00:00.0000000' AS datetime2(7)), N'AUT-EX-148', NULL),
     (149, N'DEMO-EX-0149', N'41000008', 3, CAST(N'2026-10-31T11:00:00.0000000' AS datetime2(7)), CAST(7100.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T11:00:00.0000000' AS datetime2(7)), N'AUT-EX-149', NULL),
     (150, N'DEMO-EX-0150', N'41000009', 3, CAST(N'2026-10-31T13:00:00.0000000' AS datetime2(7)), CAST(7000.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T13:00:00.0000000' AS datetime2(7)), N'AUT-EX-150', NULL),
     (151, N'DEMO-EX-0151', N'41000010', 3, CAST(N'2026-10-31T15:00:00.0000000' AS datetime2(7)), CAST(14700.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T15:00:00.0000000' AS datetime2(7)), N'AUT-EX-151', NULL),
     (152, N'DEMO-EX-0152', N'41000001', 3, CAST(N'2026-10-31T17:00:00.0000000' AS datetime2(7)), CAST(11200.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T17:00:00.0000000' AS datetime2(7)), N'AUT-EX-152', NULL),
-    (153, N'DEMO-EX-0153', N'41000002', 3, CAST(N'2026-10-31T19:00:00.0000000' AS datetime2(7)), CAST(9700.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T19:00:00.0000000' AS datetime2(7)), N'AUT-EX-153', NULL),
+    (153, N'DEMO-EX-0153', N'41000002', 3, CAST(N'2026-10-31T19:00:00.0000000' AS datetime2(7)), CAST(21300.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-10-31T19:00:00.0000000' AS datetime2(7)), N'AUT-EX-153', NULL),
     (154, N'DEMO-EX-0154', N'41000003', 3, CAST(N'2026-11-01T09:00:00.0000000' AS datetime2(7)), CAST(9000.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T09:00:00.0000000' AS datetime2(7)), N'AUT-EX-154', NULL),
     (155, N'DEMO-EX-0155', N'41000004', 3, CAST(N'2026-11-01T11:00:00.0000000' AS datetime2(7)), CAST(10900.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T11:00:00.0000000' AS datetime2(7)), N'AUT-EX-155', NULL),
     (156, N'DEMO-EX-0156', N'41000005', 3, CAST(N'2026-11-01T13:00:00.0000000' AS datetime2(7)), CAST(21000.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T13:00:00.0000000' AS datetime2(7)), N'AUT-EX-156', NULL),
-    (157, N'DEMO-EX-0157', N'41000006', 3, CAST(N'2026-11-01T15:00:00.0000000' AS datetime2(7)), CAST(10700.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T15:00:00.0000000' AS datetime2(7)), N'AUT-EX-157', NULL),
-    (158, N'DEMO-EX-0158', N'41000007', 3, CAST(N'2026-11-01T17:00:00.0000000' AS datetime2(7)), CAST(21400.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T17:00:00.0000000' AS datetime2(7)), N'AUT-EX-158', NULL),
+    (157, N'DEMO-EX-0157', N'41000006', 3, CAST(N'2026-11-01T15:00:00.0000000' AS datetime2(7)), CAST(22300.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T15:00:00.0000000' AS datetime2(7)), N'AUT-EX-157', NULL),
+    (158, N'DEMO-EX-0158', N'41000007', 3, CAST(N'2026-11-01T17:00:00.0000000' AS datetime2(7)), CAST(33000.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T17:00:00.0000000' AS datetime2(7)), N'AUT-EX-158', NULL),
     (159, N'DEMO-EX-0159', N'41000008', 3, CAST(N'2026-11-01T19:00:00.0000000' AS datetime2(7)), CAST(5850.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-01T19:00:00.0000000' AS datetime2(7)), N'AUT-EX-159', NULL),
     (160, N'DEMO-EX-0160', N'41000009', 3, CAST(N'2026-11-02T09:00:00.0000000' AS datetime2(7)), CAST(10400.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-02T09:00:00.0000000' AS datetime2(7)), N'AUT-EX-160', NULL),
     (161, N'DEMO-EX-0161', N'41000010', 3, CAST(N'2026-11-02T11:00:00.0000000' AS datetime2(7)), CAST(17500.00 AS decimal(12,2)), N'Pagada', N'Banco Demo', '4321', CAST(N'2026-11-02T11:00:00.0000000' AS datetime2(7)), N'AUT-EX-161', NULL),
@@ -1776,7 +1774,7 @@ BEGIN TRY
     VALUES
     (142, 142, 29, 2, CAST(2400.00 AS decimal(12,2)), NULL),
     (143, 142, 27, 2, CAST(500.00 AS decimal(12,2)), NULL),
-    (144, 143, 26, 3, CAST(5800.00 AS decimal(12,2)), NULL),
+    (144, 143, 26, 5, CAST(5800.00 AS decimal(12,2)), NULL),
     (145, 143, 12, 1, CAST(3200.00 AS decimal(12,2)), NULL),
     (146, 143, 27, 1, CAST(500.00 AS decimal(12,2)), NULL),
     (147, 144, 28, 1, CAST(900.00 AS decimal(12,2)), NULL),
@@ -1788,8 +1786,8 @@ BEGIN TRY
     (153, 146, 23, 2, CAST(7900.00 AS decimal(12,2)), NULL),
     (154, 147, 17, 1, CAST(1800.00 AS decimal(12,2)), NULL),
     (155, 147, 28, 1, CAST(900.00 AS decimal(12,2)), NULL),
-    (156, 147, 26, 1, CAST(5800.00 AS decimal(12,2)), NULL),
-    (157, 148, 26, 2, CAST(5800.00 AS decimal(12,2)), NULL),
+    (156, 147, 26, 3, CAST(5800.00 AS decimal(12,2)), NULL),
+    (157, 148, 26, 4, CAST(5800.00 AS decimal(12,2)), NULL),
     (158, 148, 11, 2, CAST(2500.00 AS decimal(12,2)), NULL),
     (159, 149, 27, 3, CAST(500.00 AS decimal(12,2)), NULL),
     (160, 149, 8, 1, CAST(3600.00 AS decimal(12,2)), NULL),
@@ -1801,7 +1799,7 @@ BEGIN TRY
     (166, 151, 19, 1, CAST(2600.00 AS decimal(12,2)), NULL),
     (167, 152, 20, 3, CAST(3400.00 AS decimal(12,2)), NULL),
     (168, 152, 27, 2, CAST(500.00 AS decimal(12,2)), NULL),
-    (169, 153, 26, 1, CAST(5800.00 AS decimal(12,2)), NULL),
+    (169, 153, 26, 3, CAST(5800.00 AS decimal(12,2)), NULL),
     (170, 153, 14, 1, CAST(3400.00 AS decimal(12,2)), NULL),
     (171, 153, 27, 1, CAST(500.00 AS decimal(12,2)), NULL),
     (172, 154, 28, 2, CAST(900.00 AS decimal(12,2)), NULL),
@@ -1813,8 +1811,8 @@ BEGIN TRY
     (178, 156, 23, 2, CAST(7900.00 AS decimal(12,2)), NULL),
     (179, 157, 15, 2, CAST(2000.00 AS decimal(12,2)), NULL),
     (180, 157, 28, 1, CAST(900.00 AS decimal(12,2)), NULL),
-    (181, 157, 26, 1, CAST(5800.00 AS decimal(12,2)), NULL),
-    (182, 158, 26, 3, CAST(5800.00 AS decimal(12,2)), NULL),
+    (181, 157, 26, 3, CAST(5800.00 AS decimal(12,2)), NULL),
+    (182, 158, 26, 5, CAST(5800.00 AS decimal(12,2)), NULL),
     (183, 158, 13, 2, CAST(2000.00 AS decimal(12,2)), NULL),
     (184, 159, 27, 1, CAST(500.00 AS decimal(12,2)), NULL),
     (185, 159, 6, 1, CAST(2850.00 AS decimal(12,2)), NULL),
