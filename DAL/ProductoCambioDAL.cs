@@ -168,7 +168,7 @@ namespace DAL
                 SELECT TOP (500)
                        IdCambio, CodigoProducto, FechaHora, Nombre, Categoria,
                        PrecioUnitario, StockDisponible, StockMinimo,
-                       ActivoProducto, Act, TipoCambio
+                       ActivoProducto, Act
                 FROM dbo.Producto_C
                 WHERE (@Codigo IS NULL OR CodigoProducto = @Codigo)
                   AND (@Nombre = N'' OR Nombre LIKE N'%' + @Nombre + N'%')
@@ -203,8 +203,7 @@ namespace DAL
                     StockDisponible = reader.GetInt32(reader.GetOrdinal("StockDisponible")),
                     StockMinimo = reader.GetInt32(reader.GetOrdinal("StockMinimo")),
                     ActivoProducto = reader.GetBoolean(reader.GetOrdinal("ActivoProducto")),
-                    Act = reader.GetBoolean(reader.GetOrdinal("Act")),
-                    TipoCambio = reader.GetString(reader.GetOrdinal("TipoCambio"))
+                    Act = reader.GetBoolean(reader.GetOrdinal("Act"))
                 });
             }
             return cambios;
