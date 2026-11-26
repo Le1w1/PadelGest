@@ -315,7 +315,7 @@ CREATE TABLE [dbo].[Producto_C](
 	[StockMinimo] [int] NOT NULL,
 	[ActivoProducto] [bit] NOT NULL,
 	[Act] [bit] NOT NULL,
-	[TipoCambio] [nvarchar](25) NOT NULL,
+
  CONSTRAINT [PK_Producto_C] PRIMARY KEY CLUSTERED 
 (
 	[IdCambio] ASC
@@ -1138,27 +1138,12 @@ BEGIN
     INSERT INTO dbo.Producto_C
     (
         CodigoProducto, FechaHora, Nombre, Categoria, PrecioUnitario,
-        StockDisponible, StockMinimo, ActivoProducto, Act, TipoCambio
+        StockDisponible, StockMinimo, ActivoProducto, Act
     )
     SELECT
         i.CodigoProducto, SYSDATETIME(),
         i.Nombre, i.Categoria, i.PrecioUnitario,
-        i.StockDisponible, i.StockMinimo, i.Activo, 1,
-        CASE
-            WHEN d.CodigoProducto IS NULL THEN N'Alta'
-            WHEN i.Activo <> d.Activo AND i.Activo = 0
-                THEN N'Desactivacion'
-            WHEN i.Activo <> d.Activo AND i.Activo = 1
-                THEN N'Reactivacion'
-            WHEN i.StockDisponible <> d.StockDisponible
-                 AND i.Nombre = d.Nombre
-                 AND i.Categoria = d.Categoria
-                 AND i.PrecioUnitario = d.PrecioUnitario
-                 AND i.StockMinimo = d.StockMinimo
-                 AND i.Activo = d.Activo
-                THEN N'Stock'
-            ELSE N'Modificacion'
-        END
+        i.StockDisponible, i.StockMinimo, i.Activo, 1
     FROM inserted i
     INNER JOIN @Cambios c ON c.CodigoProducto = i.CodigoProducto
     LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto;
