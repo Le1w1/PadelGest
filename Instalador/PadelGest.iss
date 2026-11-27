@@ -1,6 +1,4 @@
-; PadelGest - instalador/reinstalador basado en CineGest.
-; Requiere Windows x64, SQL Server 2019+ y sqlcmd (Windows Authentication).
-; El script SQL se aplica SOLO si PadelGestDB no existe.
+
 #define AppName "PadelGest"
 #define AppVersion "1.0"
 #define AppExe "UI.exe"
@@ -17,13 +15,14 @@ OutputBaseFilename=PadelGest_Setup_{#AppVersion}
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
-PrivilegesRequired=admin
+PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\{#AppExe}
 CloseApplications=yes
 
 [Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Tasks]
@@ -42,7 +41,8 @@ Name: "{group}\Desinstalar PadelGest"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\PadelGest"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 
 [Registry]
-Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: string; ValueName: "PADELGEST_ENTORNO"; ValueData: "{code:EntornoSeleccionado}"; Flags: uninsdeletevalue
+; El instalador se ejecuta sin elevacion: la configuracion es por usuario.
+Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "PADELGEST_ENTORNO"; ValueData: "{code:EntornoSeleccionado}"; Flags: uninsdeletevalue
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Iniciar PadelGest"; BeforeInstall: ConfigurarEntornoProceso; Flags: nowait postinstall skipifsilent
@@ -52,8 +52,12 @@ function SetEnvironmentVariableW(Nombre: String; Valor: String): Boolean;
   external 'SetEnvironmentVariableW@kernel32.dll stdcall';
 
 var
+  PaginaModo: TInputOptionWizardPage;
   PaginaServidor: TInputOptionWizardPage;
-  EleccionEliminar: Integer;
+  ReemplazoConfirmado: Boolean;
+  CarpetaRespaldoConfirmada: String;
+  ServidorConfirmado: String;
+  ModoConfirmado: Integer;
   VentanaEleccion: TSetupForm;
 
 function EntornoSeleccionado(Parametro: String): String;
@@ -89,11 +93,28 @@ begin
     '" -Accion "' + Accion + '" -Servidor "' + Servidor + '"';
   if RutaSQL <> '' then
     Parametros := Parametros + ' -ScriptSQL "' + RutaSQL + '"';
+  if (Accion = 'Instalar') and ReemplazoConfirmado then
+    Parametros := Parametros + ' -PermitirReemplazo -ArchivoDestinoRespaldo "' +
+      ExpandConstant('{tmp}\PadelGestBackupDestino.txt') + '"';
   if Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'),
           Parametros, '', SW_HIDE, ewWaitUntilTerminated, Codigo) then
     Result := Codigo
   else
     Result := -1;
+end;
+
+function GuardarDestinoRespaldo(Carpeta: String): Boolean;
+var
+  Lineas: TArrayOfString;
+  ArchivoDestino: String;
+begin
+  ArchivoDestino := ExpandConstant('{tmp}\PadelGestBackupDestino.txt');
+  DeleteFile(ArchivoDestino);
+  SetArrayLength(Lineas, 1);
+  Lineas[0] := Carpeta;
+  // La ruta elegida nunca se concatena en la linea de comandos. Se guarda
+  // como UTF-8 en un archivo temporal cuyo nombre controla el instalador.
+  Result := SaveStringsToUTF8File(ArchivoDestino, Lineas, False);
 end;
 
 function EjecutarHelperDesinstalacion(Accion, Servidor: String): Integer;
@@ -114,79 +135,209 @@ procedure InitializeWizard();
 var
   EntornoGuardado: String;
 begin
-  PaginaServidor := CreateInputOptionPage(wpSelectDir,
-    'Conexion con SQL Server', 'Selecciona donde se guardaran los datos',
-    'El sistema utilizara la cuenta de Windows para conectarse. ' +
-    'SQL Server y sqlcmd deben estar instalados en este equipo.', True, False);
+  ReemplazoConfirmado := False;
+  CarpetaRespaldoConfirmada := '';
+  ServidorConfirmado := '';
+  ModoConfirmado := -1;
+
+  // La operacion aparece ANTES de elegir el directorio de instalacion.
+  PaginaModo := CreateInputOptionPage(wpWelcome,
+    'Tipo de instalacion', 'Selecciona la operacion que deseas realizar',
+    'Instalar: instala PadelGest y crea una base nueva. Si ya existe PadelGestDB, ' +
+    'podras autorizar su reemplazo tras una advertencia.' + Chr(13) + Chr(10) +
+    'Reinstalar: actualiza solo el programa; requiere una base PadelGestDB existente.',
+    True, False);
+  PaginaModo.Add('Instalar (programa + base de datos nueva)');
+  PaginaModo.Add('Reinstalar (solo programa; conservar base de datos)');
+  PaginaModo.SelectedValueIndex := 1;
+
+  PaginaServidor := CreateInputOptionPage(PaginaModo.ID,
+    'Conexion con SQL Server', 'Selecciona la instancia de la base de datos',
+    'La instancia seleccionada debe ser local. SQL Server y sqlcmd deben estar ' +
+    'instalados y accesibles con tu cuenta de Windows.', True, False);
   PaginaServidor.Add('SQL Server Express (localhost\SQLEXPRESS)');
   PaginaServidor.Add('SQL Server predeterminado (.)');
   PaginaServidor.SelectedValueIndex := 0;
-  if RegQueryStringValue(HKLM,
-    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
-    'PADELGEST_ENTORNO', EntornoGuardado) then
+  if RegQueryStringValue(HKCU,
+    'Environment', 'PADELGEST_ENTORNO', EntornoGuardado) then
     if EntornoGuardado = 'UAI' then
       PaginaServidor.SelectedValueIndex := 1;
 end;
 
-// Antes de comenzar, informar si es instalacion nueva o reinstalacion.
-// Esta consulta solo lee SQL Server; la decision no modifica registros.
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   EstadoBase: Integer;
+  Servidor, CarpetaElegida: String;
 begin
   Result := True;
-  if CurPageID <> wpReady then
+  if CurPageID <> PaginaServidor.ID then
     Exit;
 
+  // No se modifica ni se elimina ninguna BD en esta comprobacion.
+  ReemplazoConfirmado := False;
+  CarpetaRespaldoConfirmada := '';
+  ServidorConfirmado := '';
+  ModoConfirmado := -1;
   ExtractTemporaryFile('OperacionesSQL.ps1');
-  EstadoBase := EjecutarHelper('Consultar', ServidorSeleccionado, '');
+  Servidor := ServidorSeleccionado;
+  EstadoBase := EjecutarHelper('Consultar', Servidor, '');
 
-  if EstadoBase = 10 then
+  if (EstadoBase <> 10) and (EstadoBase <> 11) then
   begin
-    Result := MsgBox(
-      'Se detecto una base de datos PadelGestDB existente en la instancia ' +
-      ServidorSeleccionado + '.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
-      'REINSTALACION DE PADELGEST' + Chr(13) + Chr(10) +
-      'Se actualizaran los archivos del programa.' + Chr(13) + Chr(10) +
-      'Se conservaran clientes, usuarios, reservas, ventas, productos, ' +
-      'historiales y demas datos de la base.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
-      '¿Deseas continuar con la reinstalacion?',
-      mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
-  end
-  else if EstadoBase = 11 then
-  begin
-    Result := MsgBox(
-      'No se encontro PadelGestDB en la instancia ' +
-      ServidorSeleccionado + '.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
-      'INSTALACION INICIAL' + Chr(13) + Chr(10) +
-      'Se instalaran los archivos del programa y se creara una ' +
-      'base de datos nueva con la configuracion inicial.' + Chr(13) + Chr(10) + Chr(13) + Chr(10) +
-      '¿Deseas continuar?',
-      mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
-  end
-  else
-  begin
-    MsgBox(
-      'No se pudo verificar si PadelGestDB existe.' + Chr(13) + Chr(10) +
-      'Comprueba la instancia seleccionada, SQL Server, sqlcmd y los permisos.' +
-      Chr(13) + Chr(10) +
-      'La instalacion no continuara hasta resolver la conexion.',
+    MsgBox('No se pudo comprobar PadelGestDB en ' + Servidor +
+      '. Verifica SQL Server, sqlcmd y los permisos de Windows.',
       mbError, MB_OK);
     Result := False;
+    Exit;
   end;
+
+  if PaginaModo.SelectedValueIndex = 1 then
+  begin
+    // La reinstalacion NUNCA crea ni elimina la base.
+    if EstadoBase <> 10 then
+    begin
+      MsgBox('No se puede reinstalar: no existe PadelGestDB en ' + Servidor +
+        '. Selecciona Instalar para crear una base nueva.',
+        mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+    if EjecutarHelper('Reinstalar', Servidor, '') <> 0 then
+    begin
+      MsgBox('La base encontrada no esta accesible o no contiene las tablas ' +
+        'principales de PadelGest. No se puede reinstalar.',
+        mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+  end
+  else if EstadoBase = 10 then
+  begin
+    Result := MsgBox(
+      'ATENCION: ya existe PadelGestDB en ' + Servidor + '.' + #13#10 + #13#10 +
+      'Si continuas con INSTALAR, se eliminara la base actual y se creara ' +
+      'una nueva. Se perderan los usuarios, clientes, reservas, productos, ' +
+      'ventas e historiales actuales.' + #13#10 +
+      'Antes de reemplazarla deberas elegir una carpeta. Se generara y ' +
+      'verificara alli un respaldo .bak.' + #13#10 + #13#10 +
+      '¿Confirmas que deseas REEMPLAZAR la base de datos existente?',
+      mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
+    if not Result then
+      Exit;
+
+    MsgBox(
+      'Selecciona la carpeta donde se guardara el respaldo .bak.' + #13#10 +
+      'SQL Server debe tener permiso de escritura en esa carpeta.' + #13#10 +
+      'Si cancelas o el respaldo falla, la base existente no se eliminara.',
+      mbInformation, MB_OK);
+    CarpetaElegida := '';
+    if not BrowseForFolder('Destino del respaldo de PadelGestDB',
+      CarpetaElegida, True) then
+    begin
+      MsgBox('Se cancelo la seleccion de la carpeta. No se reemplazara la base.',
+        mbInformation, MB_OK);
+      Result := False;
+      Exit;
+    end;
+    if (CarpetaElegida = '') or (not DirExists(CarpetaElegida)) then
+    begin
+      MsgBox('La carpeta seleccionada no existe. No se reemplazara la base.',
+        mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+
+    CarpetaRespaldoConfirmada := CarpetaElegida;
+    ReemplazoConfirmado := True;
+  end;
+
+  // La confirmacion solo es valida para la instancia y modo consultados.
+  ServidorConfirmado := Servidor;
+  ModoConfirmado := PaginaModo.SelectedValueIndex;
 end;
 
 function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  EstadoBase, ResultadoSQL: Integer;
 begin
   Result := '';
-  ExtractTemporaryFile('OperacionesSQL.ps1');
-  ExtractTemporaryFile('PadelGest_Instalacion_Limpia_SQL2019.sql');
-  if EjecutarHelper('Instalar', ServidorSeleccionado,
-       ExpandConstant('{tmp}\PadelGest_Instalacion_Limpia_SQL2019.sql')) <> 0 then
+  if (ServidorConfirmado <> ServidorSeleccionado) or
+     (ModoConfirmado <> PaginaModo.SelectedValueIndex) then
   begin
-    Result := 'No se pudo preparar la base de datos. Verifica que SQL Server ' +
-      'este iniciado, que sqlcmd este instalado y que tu usuario de Windows ' +
-      'tenga permisos. La instalacion se detuvo para evitar un estado incompleto.';
+    Result := 'Se modifico la seleccion de instalacion. Vuelve a la pantalla ' +
+      'de SQL Server y confirma la operacion nuevamente.';
+    Exit;
+  end;
+
+  ExtractTemporaryFile('OperacionesSQL.ps1');
+  EstadoBase := EjecutarHelper('Consultar', ServidorSeleccionado, '');
+  if (EstadoBase <> 10) and (EstadoBase <> 11) then
+  begin
+    Result := 'No se pudo verificar el estado de PadelGestDB. No se instalaron archivos.';
+    Exit;
+  end;
+
+  if PaginaModo.SelectedValueIndex = 1 then
+  begin
+    if EstadoBase <> 10 then
+    begin
+      Result := 'La base ya no existe. La reinstalacion solo actualiza el programa.';
+      Exit;
+    end;
+    ResultadoSQL := EjecutarHelper('Reinstalar', ServidorSeleccionado, '');
+  end
+  else
+  begin
+    // Puede haberse creado otra BD mientras se navegaba el asistente.
+    // Sin consentimiento explicito, no permitimos reemplazarla.
+    if (EstadoBase = 10) and (not ReemplazoConfirmado) then
+    begin
+      Result := 'Se detecto una base nueva en el servidor. Retrocede y autoriza ' +
+        'su reemplazo antes de continuar con Instalar.';
+      Exit;
+    end;
+    if EstadoBase = 10 then
+    begin
+      if (CarpetaRespaldoConfirmada = '') or
+         (not DirExists(CarpetaRespaldoConfirmada)) then
+      begin
+        Result := 'La carpeta elegida para el respaldo ya no esta disponible. ' +
+          'Retrocede y selecciona otra carpeta. La base no fue modificada.';
+        Exit;
+      end;
+      if not GuardarDestinoRespaldo(CarpetaRespaldoConfirmada) then
+      begin
+        Result := 'No se pudo preparar de forma segura el destino del respaldo. ' +
+          'La base no fue modificada.';
+        Exit;
+      end;
+    end;
+    ExtractTemporaryFile('PadelGest_Instalacion_Limpia_SQL2019.sql');
+    ResultadoSQL := EjecutarHelper('Instalar', ServidorSeleccionado,
+      ExpandConstant('{tmp}\PadelGest_Instalacion_Limpia_SQL2019.sql'));
+    DeleteFile(ExpandConstant('{tmp}\PadelGestBackupDestino.txt'));
+  end;
+
+  if ResultadoSQL <> 0 then
+    Result := 'No se pudo completar la operacion SQL. No se instalaron archivos ' +
+      'nuevos. Revisa el mensaje de error y comprueba SQL Server, sqlcmd, ' +
+      'el acceso a PadelGestDB y los permisos de tu usuario.';
+end;
+
+// Mostrar credenciales iniciales solamente tras una instalacion completa
+// exitosa. La reinstalacion no crea usuarios y no debe mostrar estas claves.
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if (CurStep = ssPostInstall) and (PaginaModo.SelectedValueIndex = 0) and
+     (not WizardSilent) then
+  begin
+    MsgBox(
+      'INSTALACION COMPLETADA - ACCESO INICIAL' + #13#10 + #13#10 +
+      'Se creo el usuario administrador de PadelGest.' + #13#10 + #13#10 +
+      'Email: admin1@padelgest.com' + #13#10 +
+      'Contrasena: Rodriguez46631736' + #13#10 + #13#10 +
+      'Guarda estas credenciales para iniciar sesion.',
+      mbInformation, MB_OK);
   end;
 end;
 
@@ -212,8 +363,8 @@ var
   Entorno: String;
 begin
   Result := False;
-  if not RegQueryStringValue(HKLM,
-    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
+  if not RegQueryStringValue(HKCU,
+    'Environment',
     'PADELGEST_ENTORNO', Entorno) then
   begin
     MsgBox('No se encontro la configuracion de SQL Server. ' +

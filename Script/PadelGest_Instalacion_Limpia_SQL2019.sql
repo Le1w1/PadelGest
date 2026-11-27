@@ -315,7 +315,7 @@ CREATE TABLE [dbo].[Producto_C](
 	[StockMinimo] [int] NOT NULL,
 	[ActivoProducto] [bit] NOT NULL,
 	[Act] [bit] NOT NULL,
-	[TipoCambio] [nvarchar](25) NOT NULL,
+
  CONSTRAINT [PK_Producto_C] PRIMARY KEY CLUSTERED 
 (
 	[IdCambio] ASC
@@ -490,7 +490,7 @@ SET IDENTITY_INSERT [dbo].[Rol] ON;
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (1, N'Administrador', N'e968303d5a0735207eb00fd12bf270e9d83f5e269fd9bab80a26424e3954441f')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (2, N'Vendedor de Buffet', N'8fcd2473f9162ea7f574ab6fda26376b775efd5a2a7188d53648104f8d5ff67b')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (3, N'Recepcionista', N'9d65b912fda8c9906289143693ab2b3999de7c6430c4a6e001e7f57188e24b8c')
-INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Dueño', N'08f785674ea0f3e5871d825ef0977cf95f484245afc3195e7b5f82a014031d92')
+INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (4, N'Supervisor', N'77f52042ee0c9f4eafc80b63fe08383efe3cdf607d53c9046b873415d4af4538')
 INSERT [dbo].[Rol] ([IdRol], [Nombre], [DVH]) VALUES (5, N'Encargado de Canchas', N'714816c1e538b87ea88b9540cce7d1f1afaf7eb6e5888ca34bf904630261ba56')
 SET IDENTITY_INSERT [dbo].[Rol] OFF;
 GO
@@ -544,6 +544,7 @@ INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALU
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (31, N'CLI_ELIMINAR', N'Eliminar Cliente sin operaciones asociadas', N'da471fc2ea1ab0140eec18058b1355c0a80f74ebb3f61100db8ecbe77251eb54')
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (32, N'CLI_DESENCRIPTAR_TELEFONO', N'Desencriptar telefono de cliente', N'53d00f1f67f0c09841fda4a5e2972562c0f1b417da4be0889075e19868d3ffd7')
 INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (33, N'REP_PREDICTIVO', N'Consultar reporte predictivo de buffet', N'b30e2e9aeed3e7c8fadff598f52836bbd4015d59334376c2698aa0f23cebe4a0')
+INSERT [dbo].[PermisoSimple] ([IdPermisoSimple], [Codigo], [Nombre], [DVH]) VALUES (34, N'PRO_AUDITAR_CAMBIOS', N'Auditar y restaurar versiones de productos', N'8a2775d6e7a733c14a9157c3b50ad3c50085882bd991b48a3642938160606b8a')
 SET IDENTITY_INSERT [dbo].[PermisoSimple] OFF;
 GO
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (1, 14, N'0a23a5f1bb3666753e1bd12f1101c4d1c0ab9689208d2740d5b1a5249e742453')
@@ -575,6 +576,7 @@ INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VAL
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (7, 26, N'7f155abfca97e134f158f3c6b4d04d6707ff181ae78c16cde5732d96186d022e')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (7, 27, N'43751bc31fa90e39010c41ca3956b248442525c24376a578e8584b6faabb978d')
 INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (13, 28, N'90f395f0b6f1de9c74af4eab4a3a4aac2927f091fe479344113ba1c9355a976b')
+INSERT [dbo].[PermisoSimple_Familia] ([IdFamilia], [IdPermisoSimple], [DVH]) VALUES (8, 34, N'041d41a229f1cd12788911d22580fe3cf17fa0a293f168cbd630c1c0fddf60c1')
 GO
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (1, 1, N'3f22d6d875f4e1635c6b9f02ac6ef85c76fa33ca7a7593ea6bed1ef2c9997414')
 INSERT [dbo].[Rol_Familia] ([IdRol], [IdFamilia], [DVH]) VALUES (1, 8, N'444abbca8de8dc89ae7445fe27afc743f74ddfd2fae5be74c464b587e10198cc')
@@ -597,13 +599,16 @@ INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (1, 
 INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 30, N'96866a4ce8b4f0299246ba15185965f942ab653dd00f06c743b4dc521f759266')
 INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 32, N'e40dbfc826024b8cfad402a6d4b21b1817f6a8ea535fa239d14cb2e1c9556c26')
 INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (4, 33, N'5ac69ddc4dc620d0fa43b9c6ebcc7e34c18b18a99a3d9fed74acd7c609ca1842')
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (2, 30, N'f3cd24ffdc1062aea60502bb1528190b2314b91a0415eb0db7f232f1a214bd6b')
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (2, 25, N'd0147af625798484c4e263f6efa3c3c1e886fc774832aa65dabee1b3a150d85f')
+INSERT [dbo].[Rol_PermisoSimple] ([IdRol], [IdPermisoSimple], [DVH]) VALUES (3, 25, N'c28d843778d6313eca5e15ea77ffbb3e05cc745a5b6eb4172c338f19069c1c26')
 GO
 -- Instalacion limpia: el catalogo de productos comienza vacio.
 -- Los productos se crean desde PadelGest, y TR_Producto_RegistrarCambio
 -- registra automaticamente su primera version en dbo.Producto_C.
 GO
 SET IDENTITY_INSERT [dbo].[Usuario] ON;
-INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Inicial', N'99999999', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 1, 1, 1, N'a0aaad8687f78ad82c5ab61b29cfc3a029d0af07558072b50ebaee15d2d82d69')
+INSERT [dbo].[Usuario] ([IdUsuario], [Nombre], [Apellido], [DNI], [Email], [NombreUsuario], [PasswordHash], [Activo], [Bloqueado], [IntentosFallidos], [DebeCambiarClave], [IdIdioma], [IdRol], [DVH]) VALUES (1, N'Administrador', N'Rodriguez', N'46631736', N'admin1@padelgest.com', N'admin1', N'5456cc85efead5b7762b131e99389aa4b861199686c6a38f1f2bd4154c61b409', 1, 0, 0, 0, 1, 1, N'a41ee631585a381fadea84b7fe2d32db3e765bb08879a1a1cc2d26e580459102')
 SET IDENTITY_INSERT [dbo].[Usuario] OFF;
 GO
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Cancha', '91129657cbb5230efd409301669fd05b677f7331542c2192547bd4da1b7bd1bd');
@@ -615,16 +620,16 @@ INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'FacturaBu
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia', 'fdd294e73b3531a63b8e55aff07cf3c5d17090230a00fa065860d52642a31e97');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Familia_Familia', '18c42e63ad2b66da1312f3417e15d5d971f8a253fbfb4897fbeb267656f4be79');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Idioma', 'b8206deae9aaca74a25998ec9d26c6b2b41fdf430ccc455979a8aed7a298a234');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple', '2b08d33a277ea163b8e4334c7224848afd8895113a4b0320a33d1cb75068904d');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple_Familia', '8496bff4c54c5423709a684e099814700c2f68eda600a6295a0fd158cbf8e73c');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple', 'af6008fbd952c323fa30abdd2116fa5565f0feed87b967afc09efe275e28ee13');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'PermisoSimple_Familia', 'f1cf327dc70b0c1b359b6acbf39448b57883f5ec01ef7bb011d86214cdb56711');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Producto', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Reserva', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'RespaldoBD', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', '700ba87ff88d54c32d59eac310a40e63e20df37bb09a5a3f7191354a747a30d3');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol', 'd1cb232072612a6fabd52d2c409c777956f9c95be7668a971e4dcd13c97ec2ea');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_Familia', '32b5356d0241e9fa61aec0d6b60e4ce854b7b877378c67761cb47c05d0cae856');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', 'b4a4f9d950d5fbb6f84ca498a7f9c67bf4085e9f86b168a522282789a79dbb8d');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Rol_PermisoSimple', '8269a31763bc4f2080e492cb816d67802190cc2bca0335d19114a8f60dde3bd4');
 INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Tarifa', '9cc41aa9db8a17e67681d251c2d21eb70e08af85b8f741319d72704670345d13');
-INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', '043d767ba5095982bf68a31b3335097f338526cee72669584b4f34e035eefa30');
+INSERT INTO [dbo].[DigitoVerificador] ([NombreTabla], [DVV]) VALUES (N'Usuario', '21e53eae5da671ab103cb198e447dd76a897c624a80ee36fe2de7d319826698e');
 GO
 SET ANSI_PADDING ON
 GO
@@ -1090,15 +1095,34 @@ BEGIN
     SELECT i.CodigoProducto
     FROM inserted i
     LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto
-    WHERE d.CodigoProducto IS NULL
-       OR EXISTS
-       (
-           SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
-                  i.StockDisponible, i.StockMinimo, i.Activo
-           EXCEPT
-           SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
-                  d.StockDisponible, d.StockMinimo, d.Activo
-       );
+    WHERE
+    (
+        d.CodigoProducto IS NULL
+        OR EXISTS
+        (
+            SELECT i.Nombre, i.Categoria, i.PrecioUnitario,
+                   i.StockDisponible, i.StockMinimo, i.Activo
+            EXCEPT
+            SELECT d.Nombre, d.Categoria, d.PrecioUnitario,
+                   d.StockDisponible, d.StockMinimo, d.Activo
+        )
+    )
+    -- Si la version historica ya fue marcada como vigente y sus valores
+    -- coinciden con Producto, se trata de una restauracion: no insertar
+    -- otra fila ni alterar la fecha original de Producto_C.
+    AND NOT EXISTS
+    (
+        SELECT 1
+        FROM dbo.Producto_C AS h
+        WHERE h.CodigoProducto = i.CodigoProducto
+          AND h.Act = 1
+          AND h.Nombre = i.Nombre
+          AND h.Categoria = i.Categoria
+          AND h.PrecioUnitario = i.PrecioUnitario
+          AND h.StockDisponible = i.StockDisponible
+          AND h.StockMinimo = i.StockMinimo
+          AND h.ActivoProducto = i.Activo
+    );
 
     IF NOT EXISTS (SELECT 1 FROM @Cambios)
         RETURN;
@@ -1114,27 +1138,12 @@ BEGIN
     INSERT INTO dbo.Producto_C
     (
         CodigoProducto, FechaHora, Nombre, Categoria, PrecioUnitario,
-        StockDisponible, StockMinimo, ActivoProducto, Act, TipoCambio
+        StockDisponible, StockMinimo, ActivoProducto, Act
     )
     SELECT
         i.CodigoProducto, SYSDATETIME(),
         i.Nombre, i.Categoria, i.PrecioUnitario,
-        i.StockDisponible, i.StockMinimo, i.Activo, 1,
-        CASE
-            WHEN d.CodigoProducto IS NULL THEN N'Alta'
-            WHEN i.Activo <> d.Activo AND i.Activo = 0
-                THEN N'Desactivacion'
-            WHEN i.Activo <> d.Activo AND i.Activo = 1
-                THEN N'Reactivacion'
-            WHEN i.StockDisponible <> d.StockDisponible
-                 AND i.Nombre = d.Nombre
-                 AND i.Categoria = d.Categoria
-                 AND i.PrecioUnitario = d.PrecioUnitario
-                 AND i.StockMinimo = d.StockMinimo
-                 AND i.Activo = d.Activo
-                THEN N'Stock'
-            ELSE N'Modificacion'
-        END
+        i.StockDisponible, i.StockMinimo, i.Activo, 1
     FROM inserted i
     INNER JOIN @Cambios c ON c.CodigoProducto = i.CodigoProducto
     LEFT JOIN deleted d ON d.CodigoProducto = i.CodigoProducto;
@@ -1172,9 +1181,10 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM @Restauradas)
         RETURN;
 
-    -- Esta operacion dispara TR_Producto_RegistrarCambio. El trigger de
-    -- Producto agrega una NUEVA version y desactiva la anterior.
-    -- El trabajo se ejecuta dentro de la misma transaccion del usuario.
+    -- Actualiza los datos actuales del producto con la version elegida.
+    -- TR_Producto_RegistrarCambio detecta que ya existe esa version vigente
+    -- y no crea otra fila en Producto_C: se conserva su fecha historica.
+    -- Todo ocurre dentro de la misma transaccion.
     UPDATE p
        SET p.Nombre = h.Nombre,
            p.Categoria = h.Categoria,

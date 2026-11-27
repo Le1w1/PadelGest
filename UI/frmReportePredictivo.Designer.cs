@@ -23,6 +23,7 @@ namespace UI
         private TabPage tabReposicion = null!;
         private TabPage tabCategorias = null!;
         private Panel pnlGrafico = null!;
+        private Panel pnlDistribucion = null!;
         private Button btnActualizar = null!;
         private Button btnVolver = null!;
         private DataGridView dgvReporte = null!;
@@ -79,6 +80,7 @@ namespace UI
             tabReposicion = new TabPage();
             tabCategorias = new TabPage();
             pnlGrafico = new Panel();
+            pnlDistribucion = new Panel();
             btnActualizar = new Button();
             btnVolver = new Button();
             dgvReporte = new DataGridView();
@@ -153,6 +155,10 @@ namespace UI
             tabPanorama.Name = "tabPanorama";
             tabPanorama.Text = "Panorama";
             tabPanorama.BackColor = Color.FromArgb(18, 18, 18);
+            tabPanorama.AutoScroll = true;
+            // Orden inverso de agregado para DockStyle.Top: resumen, ranking,
+            // lectura y distribucion. El contenido puede desplazarse en notebooks.
+            tabPanorama.Controls.Add(pnlDistribucion);
             tabPanorama.Controls.Add(lblAnalisis);
             tabPanorama.Controls.Add(pnlGrafico);
             tabPanorama.Controls.Add(lblResumen);
@@ -181,15 +187,22 @@ namespace UI
             lblResumen.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             // pnlGrafico
             pnlGrafico.Dock = DockStyle.Top;
-            pnlGrafico.Height = 272;
+            pnlGrafico.Height = 265;
             pnlGrafico.BackColor = Color.FromArgb(24, 70, 138);
             pnlGrafico.Paint += pnlGrafico_Paint;
             pnlGrafico.Resize += pnlGrafico_Resize;
             // lblAnalisis
-            lblAnalisis.Dock = DockStyle.Fill;
-            lblAnalisis.Padding = new Padding(14, 18, 14, 10);
+            lblAnalisis.Dock = DockStyle.Top;
+            lblAnalisis.Height = 150;
+            lblAnalisis.Padding = new Padding(14, 14, 14, 10);
             lblAnalisis.ForeColor = Color.White;
             lblAnalisis.Font = new Font("Segoe UI", 10F);
+            // pnlDistribucion: torta de demanda estimada por categoria y leyenda.
+            pnlDistribucion.Name = "pnlDistribucion";
+            pnlDistribucion.Dock = DockStyle.Top;
+            pnlDistribucion.Height = 300;
+            pnlDistribucion.BackColor = Color.FromArgb(24, 70, 138);
+            pnlDistribucion.Paint += pnlDistribucion_Paint;
             // lblReposicion
             lblReposicion.Dock = DockStyle.Top;
             lblReposicion.Height = 65;

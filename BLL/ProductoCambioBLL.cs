@@ -6,7 +6,7 @@ using Servicios;
 
 namespace BLL
 {
-    // El permiso PRO_GESTIONAR es el mismo que protege el Maestro de Productos.
+    // La auditoria requiere un permiso independiente del Maestro de Productos.
     public class ProductoCambioBLL
     {
         private readonly ProductoCambioDAL _productoCambioDAL = new ProductoCambioDAL();
@@ -17,7 +17,7 @@ namespace BLL
         // El formulario debe pedir confirmacion antes de invocar este metodo.
         public void RestaurarVersion(long idCambio)
         {
-            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            SM.Instancia.RequierePermiso("PRO_AUDITAR_CAMBIOS");
             if (idCambio <= 0)
                 throw new ArgumentException("Debe seleccionar una version valida.");
 
@@ -29,8 +29,7 @@ namespace BLL
             // despues de restaurar el producto, pero ANTES del Commit().
             // Las BLL de servicios utilizan la misma conexion y transaccion.
             // Si falla el DV o el registro del evento, la DAL ejecuta Rollback().
-            _productoCambioDAL.RestaurarVersion(idCambio, usuario.IdUsuario, usuario.NombreUsuario,
-                (evento, conexion, tx) =>
+            _productoCambioDAL.RestaurarVersion(idCambio, usuario.IdUsuario, usuario.NombreUsuario,(evento, conexion, tx) =>
                 {
                     _dvBLL.RecalcularDVEnTransaccion(new[] { "Producto" }, conexion, tx);
                     _bitacoraBLL.RegistrarEventoEnTransaccion(evento, conexion, tx);
@@ -39,7 +38,7 @@ namespace BLL
 
         public List<ProductoCambioBE> ConsultarCambios(int? codigoProducto = null, string nombre = "",DateTime? fechaDesde = null, DateTime? fechaHasta = null,bool soloVigentes = false)
         {
-            SM.Instancia.RequierePermiso("PRO_GESTIONAR");
+            SM.Instancia.RequierePermiso("PRO_AUDITAR_CAMBIOS");
             if (codigoProducto.HasValue && codigoProducto.Value <= 0)
                 throw new ArgumentException("El codigo de producto debe ser positivo.");
 

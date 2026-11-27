@@ -18,6 +18,5 @@ namespace BE
         public int StockMinimo { get; set; }
         public bool ActivoProducto { get; set; }
         public bool Act { get; set; }
-        public string TipoCambio { get; set; } = string.Empty;
     }
 }

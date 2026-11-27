@@ -67,7 +67,9 @@ namespace UI
                 }
             }
 
-            CargarDatosSesion();
+            // El formulario del menu puede seguir abierto entre usuarios:
+            // refrescar todos sus textos con el idioma del usuario que acaba de ingresar.
+            ActualizarIdioma();
             AplicarPermisos();
             menuPrincipal.Enabled = true;
         }
@@ -119,7 +121,7 @@ namespace UI
             generarCarritoToolStripMenuItem.Visible = buffet;
             reportePredictivoToolStripMenuItem.Visible = reportePredictivo;
             gestionarProductosToolStripMenuItem.Visible = maestroProductos;
-            auditarCambiosToolStripMenuItem.Visible = maestroProductos;
+            auditarCambiosToolStripMenuItem.Visible = sm.TienePermiso("PRO_AUDITAR_CAMBIOS");
             gestionarClientesToolStripMenuItem.Visible = maestroClientes;
 
             RecepcionistaToolStripMenuItem.Visible = reservas;

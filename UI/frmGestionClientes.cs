@@ -138,7 +138,8 @@ namespace UI
             grilla.DataSource = clientes;
             btnRegistrar.Enabled = true;
             btnModificar.Enabled = true;
-            btnEliminar.Enabled = true;
+            // Solo habilitar la eliminacion a roles con el permiso especifico.
+            btnEliminar.Enabled = SM.Instancia.TienePermiso("CLI_ELIMINAR");
             Limpiar();
         }
 
